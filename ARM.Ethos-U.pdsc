@@ -30,6 +30,7 @@
         #define ETHOSU_ARCH u55
       </Pre_Include_Global_h>
       <files>
+        <file category="header"  name="source/config/ethosu_config_u55.h" attr="config" version="1.0.0"/>
         <file category="sourceC" name="source/src/ethosu_device_u55_u65.c"/>
         <file category="sourceC" name="source/src/ethosu_driver.c"/>
         <file category="sourceC" name="source/src/ethosu_pmu.c"/>
@@ -48,6 +49,7 @@
         #define ETHOSU_ARCH u65
       </Pre_Include_Global_h>
       <files>
+        <file category="header"  name="source/config/ethosu_config_u65.h" attr="config" version="1.0.0"/>
         <file category="sourceC" name="source/src/ethosu_device_u55_u65.c"/>
         <file category="sourceC" name="source/src/ethosu_driver.c"/>
         <file category="sourceC" name="source/src/ethosu_pmu.c"/>
@@ -66,6 +68,7 @@
         #define ETHOSU_ARCH u85
       </Pre_Include_Global_h>
       <files>
+        <file category="header"  name="source/config/ethosu_config_u85.h" attr="config" version="1.0.0"/>
         <file category="sourceC" name="source/src/ethosu_device_u85.c"/>
         <file category="sourceC" name="source/src/ethosu_driver.c"/>
         <file category="sourceC" name="source/src/ethosu_pmu.c"/>
