@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package schemaVersion="1.7.57" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Open-CMSIS-Pack/Open-CMSIS-Pack-Spec/v1.7.57/schema/PACK.xsd">
+  <vendor>ARM</vendor>
+  <name>Ethos-U</name>
+  <description overview="overview/README.md">Arm Ethos-U NPU Device Driver.</description>
+  <url>https://www.keil.com/pack/</url>
+  <license>LICENSE</license>
+  <licenseSets>
+    <licenseSet id="all" default="true" gating="true">
+      <license name="LICENSE" title="Apache 2.0 open-source license" spdx="Apache-2.0"/>
+    </licenseSet>
+  </licenseSets>
+  <repository type="git">https://github.com/VladimirUmek/Ethos-U.git</repository>
+
+  <releases>
+    <release version="1.0.0-dev">
+      Active development...
+    </release>
+  </releases>
+
+  <components>
+    <component Cclass="Machine Learning" Cgroup="NPU Support" Csub="Ethos-U Driver" Cvariant="Generic U55" Cversion="1.26.2">
+      <description>Generic Driver for Ethos-U55</description>
+      <RTE_Components_h>
+        #define RTE_ETHOS_U_CORE_DRIVER
+      </RTE_Components_h>
+      <Pre_Include_Global_h>
+        // enabling global pre includes
+        #define ETHOSU_ARCH u55
+      </Pre_Include_Global_h>
+      <files>
+        <file category="sourceC" name="source/src/ethosu_device_u55_u65.c"/>
+        <file category="sourceC" name="source/src/ethosu_driver.c"/>
+        <file category="sourceC" name="source/src/ethosu_pmu.c"/>
+        <file category="include" name="source/src/"/>
+        <file category="include" name="source/include/"/>
+      </files>
+    </component>
+    <component Cclass="Machine Learning" Cgroup="NPU Support" Csub="Ethos-U Driver" Cvariant="Generic U65" Cversion="1.26.2">
+      <description>Generic Driver for Ethos-U65</description>
+      <RTE_Components_h>
+        #define RTE_ETHOS_U_CORE_DRIVER
+      </RTE_Components_h>
+      <Pre_Include_Global_h>
+        // enabling global pre includes
+        #define ETHOSU_ARCH u65
+      </Pre_Include_Global_h>
+      <files>
+        <file category="sourceC" name="source/src/ethosu_device_u55_u65.c"/>
+        <file category="sourceC" name="source/src/ethosu_driver.c"/>
+        <file category="sourceC" name="source/src/ethosu_pmu.c"/>
+        <file category="include" name="source/src/"/>
+        <file category="include" name="source/include/"/>
+      </files>
+    </component>
+    <component Cclass="Machine Learning" Cgroup="NPU Support" Csub="Ethos-U Driver" Cvariant="Generic U85" Cversion="1.26.2">
+      <description>Generic Driver for Ethos-U85</description>
+      <RTE_Components_h>
+        #define RTE_ETHOS_U_CORE_DRIVER
+      </RTE_Components_h>
+      <Pre_Include_Global_h>
+        // enabling global pre includes
+        #define ETHOSU_ARCH u85
+      </Pre_Include_Global_h>
+      <files>
+        <file category="sourceC" name="source/src/ethosu_device_u85.c"/>
+        <file category="sourceC" name="source/src/ethosu_driver.c"/>
+        <file category="sourceC" name="source/src/ethosu_pmu.c"/>
+        <file category="include" name="source/src/"/>
+        <file category="include" name="source/include/"/>
+      </files>
+    </component>
+  </components>
+</package>
