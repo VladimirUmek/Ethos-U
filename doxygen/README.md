@@ -38,15 +38,18 @@ To generate documentation execute `./gen_doc.sh` in a bash shell.
 
 ## Folder structure
 
-Directory      | Description
-:--------------|:--------------------------------------------------
-.\Doxygen\                        | Doxygen documentation of Arm Virtual Targets
-.\Doxygen\gen_doc.sh              | Script for building documentation
-.\Doxygen\Doxygen_Templates\      | Additional files defining styles and appearance
-.\Doxygen\\&lt;<i>component</i>&gt;\\&lt;<i>component&gt;</i>.dxy | Doxygen configuration for <i>&lt;component</i>&gt;
-.\Doxygen\\&lt;<i>component</i>&gt;\\src\        | Text files describing the <i>&lt;component</i>&gt;
-.\Doxygen\\&lt;<i>component</i>&gt;\\src\images\ | Graphic files used by *.txt files
-.\Documentation\                  | Documentation output folder
+Directory | Description
+:-- | :--
+.\Doxygen\ | Doxygen documentation for Ethos-U
+.\Doxygen\gen_doc.sh | Script for building documentation
+.\Doxygen\Doxygen_Templates\ | Additional files defining styles and appearance
+.\Doxygen\general\general.dxy | Doxygen configuration for the General section
+.\Doxygen\drivers\drivers.dxy | Doxygen configuration for the Drivers section
+.\Doxygen\integration\integration.dxy | Doxygen configuration for the Integration section
+.\Doxygen\&lt;section&gt;\src\ | Markdown sources for each section
+.\Doxygen\&lt;section&gt;\src\images\ | Image assets for each section
+.\Documentation\ | Documentation output folder
 
 ### Notes
+
 - Check [additional PlantUML documentation](https://plantuml-documentation.readthedocs.io/en/latest/index.html)

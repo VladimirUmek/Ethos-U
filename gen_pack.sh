@@ -29,7 +29,7 @@ DEFAULT_ARGS=(-c "v")
 # Default: empty (all folders)
 #
 PACK_DIRS="
-  documentation
+  Documentation
   overview
   source
 "
@@ -45,7 +45,7 @@ PACK_BASE_FILES="
 # Default: empty
 #
 PACK_DELETE_FILES="
-  documentation/doxygen
+  doxygen
 "
 
 # Specify patches to be applied
@@ -97,7 +97,7 @@ PACK_CHANGELOG_MODE="tag"
 function preprocess() {
   # add custom steps here to be executed
   # before populating the pack build folder
-  ./documentation/doxygen/gen_doc.sh
+  ./doxygen/gen_doc.sh
   return 0
 }
 
