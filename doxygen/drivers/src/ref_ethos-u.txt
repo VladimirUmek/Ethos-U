@@ -1,0 +1,280 @@
+/**
+\defgroup ethosu_driver_structs Structures
+\brief Ethos-U Driver Structures.
+@{
+*/
+
+/**
+  \struct ethosu_driver
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \struct ethosu_driver_version
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \struct ethosu_job
+
+  \todo This structure should probably be removed.
+
+  \details
+*/
+
+/**
+@}
+*/
+
+
+/**
+\defgroup ethosu_public_api Functions
+\brief Ethos-U driver public API functions.
+@{
+*/
+
+/**
+  \fn int ethosu_init(struct ethosu_driver *drv, void *const base_address, const void *fast_memory, const size_t fast_memory_size, uint32_t secure_enable, uint32_t privilege_enable)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_deinit(struct ethosu_driver *drv)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_soft_reset(struct ethosu_driver *drv)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_request_power(struct ethosu_driver *drv)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_release_power(struct ethosu_driver *drv)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_get_driver_version(struct ethosu_driver_version *ver)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_get_hw_info(struct ethosu_driver *drv, struct ethosu_hw_info *hw)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_invoke_v3(struct ethosu_driver *drv, const void *custom_data_ptr, const int custom_data_size, uint64_t *const base_addr, const size_t *base_addr_size, const int num_base_addr, void *user_arg)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_invoke_async(struct ethosu_driver *drv, const void *custom_data_ptr, const int custom_data_size, uint64_t *const base_addr, const size_t *base_addr_size, const int num_base_addr, void *user_arg)
+
+  \todo Add details
+
+  \details
+
+  \param drv              Pointer to driver handle.
+  \param custom_data_ptr  Pointer to the command stream payload.
+  \param custom_data_size Size in bytes of the command stream payload.
+  \param base_addr        Array of base address pointers for tensor arenas and weight buffers.
+  \param base_addr_size   Array of sizes in bytes, one entry per base address.
+  \param num_base_addr    Number of entries in base_addr and base_addr_size.
+  \param user_arg         User argument passed to ethosu_inference_begin() and ethosu_inference_end().
+  \return 0 on success, else negative error code.
+*/
+
+/**
+  \fn int ethosu_wait(struct ethosu_driver *drv, bool block)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn struct ethosu_driver *ethosu_reserve_driver(void)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_release_driver(struct ethosu_driver *drv)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_irq_handler(struct ethosu_driver *drv)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+@}
+*/
+
+/**
+\defgroup ethosu_callback_api Callbacks
+\brief Platform adaptation functions with default baremetal implementations that
+  can be overridden to integrate with an RTOS or custom platform.
+@{
+*/
+
+/**
+  \fn void ethosu_flush_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_invalidate_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void *ethosu_mutex_create(void)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_mutex_destroy(void *mutex)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void *ethosu_semaphore_create(void)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_semaphore_destroy(void *sem)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_mutex_lock(void *mutex)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_mutex_unlock(void *mutex)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_semaphore_take(void *sem, uint64_t timeout)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn int ethosu_semaphore_give(void *sem)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn uint64_t ethosu_address_remap(uint64_t address, int index)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+  \fn unsigned int ethosu_config_select(uint64_t address, int index)
+
+  \todo Add details
+
+  \details
+*/
+
+/**
+@}
+*/
