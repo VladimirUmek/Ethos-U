@@ -2,11 +2,9 @@
 
 This documentation is structured into following chapters:
 
-Chapter                                                    | Description
-:----------------------------------------------------------|:--------------------
-[General](index.html)                                      | Overview and general information.
-[Drivers](../../drivers/html/index.html)                   | Driver interfaces and usage.
-[Integration](../../integration/html/index.html)           | Integration notes and workflows.
+- [General](index.html): Overview and general information.
+- [Drivers](../../drivers/html/index.html): Driver interfaces and usage.
+- [Integration](../../integration/html/index.html): Integration notes and workflows.
 
 This chapter provides an overview and general information for integrating an Ethos-U NPU into a Cortex-M processor-based system.
 

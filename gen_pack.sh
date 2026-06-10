@@ -29,7 +29,7 @@ DEFAULT_ARGS=(-c "v")
 # Default: empty (all folders)
 #
 PACK_DIRS="
-  Documentation
+  documentation
   overview
   source
 "
