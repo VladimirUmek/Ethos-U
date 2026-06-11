@@ -10,7 +10,7 @@
 set -o pipefail
 
 # Set version of gen pack library
-REQUIRED_GEN_PACK_LIB="0.13.0"
+REQUIRED_GEN_PACK_LIB="0.14.0"
 
 DIRNAME=$(dirname $(readlink -f $0))
 GENDIR=../html
