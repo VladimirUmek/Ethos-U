@@ -45,7 +45,8 @@ PACK_BASE_FILES="
 # Default: empty
 #
 PACK_DELETE_FILES="
-  doxygen
+  documentation/doxygen
+  documentation/README.md
 "
 
 # Specify patches to be applied
@@ -97,7 +98,7 @@ PACK_CHANGELOG_MODE="tag"
 function preprocess() {
   # add custom steps here to be executed
   # before populating the pack build folder
-  ./doxygen/gen_doc.sh
+  ./documentation/doxygen/gen_doc.sh
   return 0
 }
 
