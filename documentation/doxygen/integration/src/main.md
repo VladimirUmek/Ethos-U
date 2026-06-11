@@ -4,8 +4,8 @@ This section is reserved for integration documentation and workflows.
 
 See also:
 
-- [General](../../general/html/index.html)
-- [Drivers](../../drivers/html/index.html)
+- [General](../general/index.html)
+- [Drivers](../drivers/index.html)
 
 
 ## General integration guidance

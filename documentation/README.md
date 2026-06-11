@@ -48,7 +48,7 @@ Directory | Description
 .\doxygen\integration\integration.dxy | Doxygen configuration for the Integration section
 .\doxygen\&lt;section&gt;\src\ | Markdown sources for each section
 .\doxygen\&lt;section&gt;\src\images\ | Image assets for each section
-.\html\ | Documentation output folder
+.\documentation\ | html output folder
 
 ### Notes
 
