@@ -27,10 +27,10 @@ jobs:
 
       - uses: Open-CMSIS-Pack/gen-pack-action@main
         with:
-          doxygen-version: 1.17.0
+          doxygen-version: 1.13.2
           packchk-version: 1.4.5
-          # gen-doc-script: ./doxygen/gen_doc.sh
-          # doc-path: ./documentation/html
+          gen-doc-script: ./documentation/doxygen/gen_doc.sh
+          doc-path: ./documentation/html
           gen-pack-script: ./gen_pack.sh --no-preprocess
           gen-pack-output: ./output
           gh-pages-branch: gh-pages
