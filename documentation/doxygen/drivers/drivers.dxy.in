@@ -991,7 +991,9 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ./src/main.md
+INPUT                  = ./src/main.md \
+                         ./src/ref_ethos-u.txt \
+                         ../../../source/include/ethosu_driver.h
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses
@@ -2571,7 +2573,7 @@ TAGFILES               =
 # tag file that is based on the input files it reads. See section "Linking to
 # external documentation" for more information about the usage of tag files.
 
-GENERATE_TAGFILE       = ../../Documentation/drivers/drivers.tag
+GENERATE_TAGFILE       = ../../html/drivers/drivers.tag
 
 # If the ALLEXTERNALS tag is set to YES, all external classes and namespaces
 # will be listed in the class and namespace index. If set to NO, only the

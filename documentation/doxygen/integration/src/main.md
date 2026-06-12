@@ -285,29 +285,110 @@ the project builds separate variants or adds a platform-specific selection
 mechanism.
 
 With CMSIS Toolbox, select the required mode by providing the driver compile
-definitions in the relevant build context, layer, or target configuration. For
-example. The exact numeric values are target and integration specific:
+definitions in the relevant build context, layer, or target configuration. The
+values used for `NPU_QCONFIG` and `NPU_REGIONCFG_x` tell the driver which NPU
+access path to use for the command stream and for each base pointer region:
+
+| Driver define | Used for | Vela memory area in the examples below |
+| --- | --- | --- |
+| `NPU_QCONFIG` | command stream | usually placed with model constants |
+| `NPU_REGIONCFG_0` | base pointer region 0 | `const_mem_area` |
+| `NPU_REGIONCFG_1` | base pointer region 1 | `arena_mem_area` |
+| `NPU_REGIONCFG_2` | base pointer region 2 | `cache_mem_area` |
+
+Additional `NPU_REGIONCFG_3` to `NPU_REGIONCFG_7` definitions exist for command
+streams that use more base pointer regions. Configure them with the same rule if
+they are used by the generated model.
+
+For the default driver configuration, the practical mapping is:
+
+| Value | Ethos-U55/U65 meaning | Ethos-U85 meaning with the default `NPU_MEM_ATTR_0` to `NPU_MEM_ATTR_3` |
+| --- | --- | --- |
+| `0` or `1` | use AXI0 | use AXI_SRAM |
+| `2` or `3` | use AXI1 | use AXI_EXT |
+
+This lets the same region values give the same intended behavior across
+Ethos-U55, Ethos-U65, and Ethos-U85: use `0` or `1` for regions that Vela placed
+on `Axi0`, and use `2` or `3` for regions that Vela placed on `Axi1`.
+
+The value does not name a physical memory by itself. It selects the NPU access
+path and the attributes programmed for that path. The platform integration must
+still ensure that the linker placement, MPU/SAU attributes, cache policy, and
+driver AXI limit settings match the real SRAM, Flash, MRAM, DRAM, or TCM behind
+that path.
+
+For example, a shared-SRAM memory mode may place the command stream and
+constants on the higher-latency path, and activations on the low-latency path:
+
+```ini
+[Memory_Mode.Shared_Sram]
+const_mem_area=Axi1
+arena_mem_area=Axi0
+cache_mem_area=Axi0
+```
+
+The corresponding build definitions can therefore use `2` or `3` for the
+command stream and constants, and `0` or `1` for activations:
 
 ```yaml
-# Example shape for an Ethos-U85 build.
 defines:
-  - NPU_QCONFIG: 1
+  - NPU_QCONFIG: 2
+  - NPU_REGIONCFG_0: 3
+  - NPU_REGIONCFG_1: 0
+  - NPU_REGIONCFG_2: 1
+```
+
+For a dedicated-SRAM memory mode, where supported, activations may move to the
+higher-latency path while the cache region remains on the low-latency path:
+
+```ini
+[Memory_Mode.Dedicated_Sram]
+const_mem_area=Axi1
+arena_mem_area=Axi1
+cache_mem_area=Axi0
+```
+
+The build definitions then follow that placement:
+
+```yaml
+defines:
+  - NPU_QCONFIG: 2
+  - NPU_REGIONCFG_0: 3
+  - NPU_REGIONCFG_1: 2
+  - NPU_REGIONCFG_2: 1
+```
+
+For an SRAM-only memory mode, all regions can use the low-latency path:
+
+```ini
+[Memory_Mode.Sram_Only]
+const_mem_area=Axi0
+arena_mem_area=Axi0
+cache_mem_area=Axi0
+```
+
+```yaml
+defines:
+  - NPU_QCONFIG: 0
   - NPU_REGIONCFG_0: 1
   - NPU_REGIONCFG_1: 0
   - NPU_REGIONCFG_2: 1
 ```
 
-For Ethos-U85, `NPU_MEM_ATTR_0` to `NPU_MEM_ATTR_3` define the MEM_ATTR entries
-programmed into the NPU. `NPU_QCONFIG` selects the default MEM_ATTR index used
-for the command stream, and `NPU_REGIONCFG_0` to `NPU_REGIONCFG_7` select the
-default MEM_ATTR index used for each NPU region. In other words, for Ethos-U85
-the region configuration values are indexes into the configured MEM_ATTR table.
+The distinction between `0` and `1`, or between `2` and `3`, is target and
+system specific. On Ethos-U55 and Ethos-U65 the value is the REGIONCFG encoding
+and selects one of the AXI limit entries: `0` and `1` use the AXI0-side limit
+settings, while `2` and `3` use the AXI1-side limit settings. On Ethos-U85 the
+value is a MEM_ATTR index; the driver defaults make MEM_ATTR0 and MEM_ATTR1 use
+AXI_SRAM, and MEM_ATTR2 and MEM_ATTR3 use AXI_EXT. Change `NPU_MEM_ATTR_0` to
+`NPU_MEM_ATTR_3` only when the platform needs different U85 memory attributes.
 
-For Ethos-U55 and Ethos-U65, the same macro names exist, but the numeric values
-are REGIONCFG encodings for those targets and must not be assumed to have the
-same meaning as Ethos-U85 MEM_ATTR indexes. The driver configuration for those
-targets also includes AXI limit and memory type settings such as
-`AXI_LIMIT0_MEM_TYPE`.
+The AXI limit values are separate platform-tuning settings. Simplified,
+`AXI_LIMIT0` and `AXI_LIMIT1` on Ethos-U55 and Ethos-U65 correspond to the
+AXI0-side configuration, while `AXI_LIMIT2` and `AXI_LIMIT3` correspond to the
+AXI1-side configuration. On Ethos-U85 the equivalent limit settings are grouped
+as AXI_SRAM and AXI_EXT. The exact outstanding transaction and burst settings
+depend on the SoC interconnect and memory system.
 
 Keep these definitions synchronized with the `Memory_Mode` used to compile the
 model with Vela and with the linker sections used by the application. The driver
