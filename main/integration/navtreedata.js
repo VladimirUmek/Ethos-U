@@ -25,7 +25,15 @@
 var NAVTREE =
 [
   [ "Integration", "index.html", [
-    [ "General integration guidance", "index.html#autotoc_md0", null ]
+    [ "Introduction", "index.html#autotoc_md0", null ],
+    [ "Vela system configuration names", "index.html#autotoc_md1", null ],
+    [ "Vela memory modes and memory areas", "index.html#autotoc_md2", [
+      [ "Arena cache size", "index.html#autotoc_md3", null ]
+    ] ],
+    [ "Linker script relationship", "index.html#autotoc_md4", null ],
+    [ "Driver weak hooks", "index.html#autotoc_md5", null ],
+    [ "Driver build configuration", "index.html#autotoc_md6", null ],
+    [ "General integration guidance", "index.html#autotoc_md7", null ]
   ] ]
 ];
 

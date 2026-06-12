@@ -24,12 +24,14 @@
 */
 var NAVTREE =
 [
-  [ "Drivers", "index.html", ]
+  [ "Drivers", "index.html", [
+    [ "API Reference", "topics.html", "topics" ]
+  ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"index.html"
+"group__ethosu__callback__api.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';
