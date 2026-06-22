@@ -1,31 +1,19 @@
 /**
 \defgroup ethosu_driver_structs Structures
-\brief Ethos-U Driver Structures.
 @{
 */
 
 /**
   \struct ethosu_driver
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \struct ethosu_driver_version
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \struct ethosu_job
-
   \todo This structure should probably be removed.
-
-  \details
 */
 
 /**
@@ -35,121 +23,101 @@
 
 /**
 \defgroup ethosu_public_api Functions
-\brief Ethos-U driver public API functions.
 @{
 */
 
 /**
   \fn int ethosu_init(struct ethosu_driver *drv, void *const base_address, const void *fast_memory, const size_t fast_memory_size, uint32_t secure_enable, uint32_t privilege_enable)
-
-  \todo Add details
-
-  \details
+  \details In platform startup flow, this is typically called from target setup
+  before main() starts running application logic.
+  \details Fast memory is used for Ethos-U65/U85 spilling use cases.
+  \details Initialization registers the driver instance in the internal list of
+  available drivers.
+  \details Expected mapping is one driver instance per NPU device.
 */
 
 /**
   \fn void ethosu_deinit(struct ethosu_driver *drv)
-
-  \todo Add details
-
-  \details
+  \details Deinitialization removes the driver instance from the internal list
+  of available drivers.
 */
 
 /**
   \fn int ethosu_soft_reset(struct ethosu_driver *drv)
-
-  \todo Add details
-
-  \details
+  \details Useful for clearing error conditions without affecting the host system state.
 */
 
 /**
   \fn int ethosu_request_power(struct ethosu_driver *drv)
-
-  \todo Add details
-
-  \details
+  \details Power requests are reference counted. Increments the counter to keep
+  NPU powered while work is pending.
 */
 
 /**
   \fn void ethosu_release_power(struct ethosu_driver *drv)
-
-  \todo Add details
-
-  \details
+  \details Power requests are reference counted. Decrements the counter; NPU may
+  be powered down when count reaches zero.
 */
 
 /**
   \fn void ethosu_get_driver_version(struct ethosu_driver_version *ver)
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \fn void ethosu_get_hw_info(struct ethosu_driver *drv, struct ethosu_hw_info *hw)
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \fn int ethosu_invoke_v3(struct ethosu_driver *drv, const void *custom_data_ptr, const int custom_data_size, uint64_t *const base_addr, const size_t *base_addr_size, const int num_base_addr, void *user_arg)
-
-  \todo Add details
-
-  \details
+  \details Blocks until inference completes.
+  \details In driver unit test usage, base addresses are passed as indexed
+  arrays (for example ETHOSU_BASEP_INDEXES entries) and each entry has a
+  matching size in base_addr_size.
+  \details user_arg is forwarded to ethosu_inference_begin() and
+  ethosu_inference_end().
+  \details Synchronous and asynchronous invocation styles can be mixed in one
+  application.
 */
 
 /**
   \fn int ethosu_invoke_async(struct ethosu_driver *drv, const void *custom_data_ptr, const int custom_data_size, uint64_t *const base_addr, const size_t *base_addr_size, const int num_base_addr, void *user_arg)
-
-  \todo Add details
-
-  \details
-
-  \param drv              Pointer to driver handle.
-  \param custom_data_ptr  Pointer to the command stream payload.
-  \param custom_data_size Size in bytes of the command stream payload.
-  \param base_addr        Array of base address pointers for tensor arenas and weight buffers.
-  \param base_addr_size   Array of sizes in bytes, one entry per base address.
-  \param num_base_addr    Number of entries in base_addr and base_addr_size.
-  \param user_arg         User argument passed to ethosu_inference_begin() and ethosu_inference_end().
-  \return 0 on success, else negative error code.
+  \details Returns immediately and does not complete the inference lifecycle by
+  itself.
+  \details Must be followed by ethosu_wait() polling or blocking calls.
+  \details Synchronous and asynchronous invocation styles can be mixed in one
+  application.
 */
 
 /**
   \fn int ethosu_wait(struct ethosu_driver *drv, bool block)
-
-  \todo Add details
-
-  \details
+  \details Used with ethosu_invoke_async(). When block=true, waits for completion; when block=false, polls without blocking.
+  \details If called from another thread concurrently with
+  ethosu_invoke_async(), caller ordering must guarantee wait is entered only
+  after successful async invoke completion.
+  \return -2: not invoked, -1: error, 0: success, 1: still running.
 */
 
 /**
   \fn struct ethosu_driver *ethosu_reserve_driver(void)
-
-  \todo Add details
-
-  \details
+  \details In multi-NPU usage, this call is serialized with mutex operations
+  and may block on a semaphore when no driver instance is free.
+  \details Waiting for an available driver instance uses the global driver
+  semaphore with forever-wait semantics.
+  \details Used with ethosu_invoke_v2() wrapper for backwards compatibility.
 */
 
 /**
   \fn void ethosu_release_driver(struct ethosu_driver *drv)
-
-  \todo Add details
-
-  \details
+  \details Marks the driver available for other inference tasks.
+  \details In multi-NPU usage, this is paired with semaphore signaling to wake
+  tasks blocked while waiting for a free driver.
 */
 
 /**
   \fn void ethosu_irq_handler(struct ethosu_driver *drv)
-
-  \todo Add details
-
-  \details
+  \details Called from target IRQ glue (for example, vector-table entry wired
+  with NVIC_SetVector/NVIC_EnableIRQ in platform setup).
+  \details Processes NPU interrupt completion and updates job state.
 */
 
 /**
@@ -158,121 +126,105 @@
 
 /**
 \defgroup ethosu_callback_api Callbacks
-\brief Platform adaptation functions with default baremetal implementations that
-  can be overridden to integrate with an RTOS or custom platform.
 @{
 */
 
 /**
   \fn void ethosu_flush_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
-
-  \todo Add details
-
-  \details
+  \details Ensures data written by CPU is visible to NPU.
+  \details The application is expected to ensure cache coherency before
+  inference. This weak hook exists for integration convenience.
+  \details Target implementations commonly map this to architecture cache APIs
+  such as SCB_CleanDCache_by_Addr on Cortex-M.
 */
 
 /**
   \fn void ethosu_invalidate_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
-
-  \todo Add details
-
-  \details
+  \details Ensures CPU reads fresh data written by NPU.
+  \details Target implementations commonly map this to architecture cache APIs
+  such as SCB_InvalidateDCache_by_Addr on Cortex-M.
 */
 
 /**
   \fn void *ethosu_mutex_create(void)
-
-  \todo Add details
-
-  \details
+  \details Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c.
 */
 
 /**
   \fn void ethosu_mutex_destroy(void *mutex)
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \fn void *ethosu_semaphore_create(void)
-
-  \todo Add details
-
-  \details
+  \details Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c.
 */
 
 /**
   \fn void ethosu_semaphore_destroy(void *sem)
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \fn int ethosu_mutex_lock(void *mutex)
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \fn int ethosu_mutex_unlock(void *mutex)
-
-  \todo Add details
-
-  \details
 */
 
 /**
   \fn int ethosu_semaphore_take(void *sem, uint64_t timeout)
-
-  \todo Add details
-
-  \details
+  \details Timeout is implementation-defined. Use
+  ETHOSU_SEMAPHORE_WAIT_FOREVER for infinite timeout.
+  \details In multi-NPU flows this primitive is used to sleep while waiting for
+  a free driver instance.
+  \details Inference semaphore timeout can be configured via
+  ETHOSU_INFERENCE_TIMEOUT (build-time) and is forwarded as-is to this API.
 */
 
 /**
   \fn int ethosu_semaphore_give(void *sem)
-
-  \todo Add details
-
-  \details
+  \details In multi-NPU flows this primitive wakes tasks waiting for a free
+  driver instance.
 */
 
 /**
   \fn void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg)
-
-  \todo Add details
-
-  \details
+  \details Weak callback hook for custom behavior (for example PMU setup,
+  profiling start, monitor setup).
+  \details In reference applications this callback configures PMU events and
+  can start timer-based sampling.
+  \details user_arg comes from ethosu_invoke_v3()/ethosu_invoke_async().
+  \details Any allocations performed here should be released in
+  ethosu_inference_end().
 */
 
 /**
   \fn void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg)
-
-  \todo Add details
-
-  \details
+  \details Weak callback hook for custom behavior (for example PMU readout,
+  profiler stop, monitor release).
+  \details Reference implementations use this to collect PMU counters and then
+  disable PMU resources.
+  \details user_arg comes from ethosu_invoke_v3()/ethosu_invoke_async().
+  \details If begin callback has run, end callback is expected to run as well,
+  including interrupt semaphore timeout paths.
 */
 
 /**
   \fn uint64_t ethosu_address_remap(uint64_t address, int index)
-
-  \todo Add details
-
-  \details
+  \details \todo Implementation-specific address remapping.
+  \details index convention: -1 for command stream and 0..n for base pointer
+  entries.
 */
 
 /**
   \fn unsigned int ethosu_config_select(uint64_t address, int index)
-
-  \todo Add details
-
-  \details
+  \details Default implementation is based on NPU_QCONFIG and NPU_REGIONCFG_n.
+  \details Platform guidance: memory routing should avoid mixing slow and fast
+  transactions on the same AXI interface.
+  \details For Ethos-U65, NPU_REGIONCFG values 0/1 map to AXI0 and 2/3 map to
+  AXI1.
+  \details \todo Ethos-U85 mapping is based on NPU_MEM_ATTR_[0-3] and must be
+  configured per target memory-attribute setup.
 */
 
 /**
