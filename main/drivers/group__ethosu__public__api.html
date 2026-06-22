@@ -128,9 +128,6 @@ $(function(){initNavTree('group__ethosu__public__api.html',''); initResizable(tr
   <div class="headertitle"><div class="title">Functions</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p>Ethos-U driver public API functions.  
-<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -162,7 +159,6 @@ Functions</h2></td></tr>
 <tr class="separator:ga55fec2a7ca5b5b51dc7c3d18914a3f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Description</h2>
-<p>Ethos-U driver public API functions. </p>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="gae021e7e1e40a33303dcc17041a1f2911" name="gae021e7e1e40a33303dcc17041a1f2911"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gae021e7e1e40a33303dcc17041a1f2911">&#9670;&#160;</a></span>ethosu_init()</h2>
@@ -215,6 +211,10 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<p>In platform startup flow, this is typically called from target setup before main() starts running application logic.</p>
+<p>Fast memory is used for Ethos-U65/U85 spilling use cases.</p>
+<p>Initialization registers the driver instance in the internal list of available drivers.</p>
+<p>Expected mapping is one driver instance per NPU device. </p>
 
 </div>
 </div>
@@ -239,6 +239,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Deinitialization removes the driver instance from the internal list of available drivers. </p>
 
 </div>
 </div>
@@ -264,6 +265,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<p>Useful for clearing error conditions without affecting the host system state. </p>
 
 </div>
 </div>
@@ -289,6 +291,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<p>Power requests are reference counted. Increments the counter to keep NPU powered while work is pending. </p>
 
 </div>
 </div>
@@ -313,6 +316,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Power requests are reference counted. Decrements the counter; NPU may be powered down when count reaches zero. </p>
 
 </div>
 </div>
@@ -333,7 +337,7 @@ Functions</h2></td></tr>
 <p>Get Ethos-U driver version.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ver</td><td>Driver version struct</td></tr>
+    <tr><td class="paramname">ver</td><td>Driver version struct </td></tr>
   </table>
   </dd>
 </dl>
@@ -362,7 +366,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">drv</td><td>Pointer to driver handle </td></tr>
-    <tr><td class="paramname">hw</td><td>Hardware information struct</td></tr>
+    <tr><td class="paramname">hw</td><td>Hardware information struct </td></tr>
   </table>
   </dd>
 </dl>
@@ -426,6 +430,10 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<p>Blocks until inference completes.</p>
+<p>In driver unit test usage, base addresses are passed as indexed arrays (for example ETHOSU_BASEP_INDEXES entries) and each entry has a matching size in base_addr_size.</p>
+<p>user_arg is forwarded to <a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a> and <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>.</p>
+<p>Synchronous and asynchronous invocation styles can be mixed in one application. </p>
 
 </div>
 </div>
@@ -474,19 +482,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Invoke command stream using async interface. Must be followed by call(s) to <a class="el" href="#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> upon successful return.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3</a> for documentation.</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">drv</td><td>Pointer to driver handle. </td></tr>
-    <tr><td class="paramname">custom_data_ptr</td><td>Pointer to the command stream payload. </td></tr>
-    <tr><td class="paramname">custom_data_size</td><td>Size in bytes of the command stream payload. </td></tr>
-    <tr><td class="paramname">base_addr</td><td>Array of base address pointers for tensor arenas and weight buffers. </td></tr>
-    <tr><td class="paramname">base_addr_size</td><td>Array of sizes in bytes, one entry per base address. </td></tr>
-    <tr><td class="paramname">num_base_addr</td><td>Number of entries in base_addr and base_addr_size. </td></tr>
-    <tr><td class="paramname">user_arg</td><td>User argument passed to <a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a> and <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code. </dd></dl>
+<p>Returns immediately and does not complete the inference lifecycle by itself.</p>
+<p>Must be followed by <a class="el" href="#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> polling or blocking calls.</p>
+<p>Synchronous and asynchronous invocation styles can be mixed in one application. </p>
 
 </div>
 </div>
@@ -517,6 +515,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>-2 on inference not invoked, -1 on inference error, 0 on success, 1 on inference running</dd></dl>
+<p>Used with <a class="el" href="#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>. When block=true, waits for completion; when block=false, polls without blocking.</p>
+<p>If called from another thread concurrently with <a class="el" href="#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>, caller ordering must guarantee wait is entered only after successful async invoke completion. </p><dl class="section return"><dt>Returns</dt><dd>-2: not invoked, -1: error, 0: success, 1: still running. </dd></dl>
 
 </div>
 </div>
@@ -536,6 +536,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Reserves a driver to execute inference with. Call will block until a driver is available.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to driver handle.</dd></dl>
+<p>In multi-NPU usage, this call is serialized with mutex operations and may block on a semaphore when no driver instance is free.</p>
+<p>Waiting for an available driver instance uses the global driver semaphore with forever-wait semantics.</p>
+<p>Used with ethosu_invoke_v2() wrapper for backwards compatibility. </p>
 
 </div>
 </div>
@@ -560,6 +563,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Marks the driver available for other inference tasks.</p>
+<p>In multi-NPU usage, this is paired with semaphore signaling to wake tasks blocked while waiting for a free driver. </p>
 
 </div>
 </div>
@@ -584,6 +589,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Called from target IRQ glue (for example, vector-table entry wired with NVIC_SetVector/NVIC_EnableIRQ in platform setup).</p>
+<p>Processes NPU interrupt completion and updates job state. </p>
 
 </div>
 </div>

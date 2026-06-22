@@ -128,9 +128,6 @@ $(function(){initNavTree('group__ethosu__callback__api.html',''); initResizable(
   <div class="headertitle"><div class="title">Callbacks</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p>Platform adaptation functions with default baremetal implementations that can be overridden to integrate with an RTOS or custom platform.  
-<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -164,7 +161,6 @@ Functions</h2></td></tr>
 <tr class="separator:ga872178ba3393d3f21c57c950ed82fb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Description</h2>
-<p>Platform adaptation functions with default baremetal implementations that can be overridden to integrate with an RTOS or custom platform. </p>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="gae23e3120197768bbd1b21fd03823183a" name="gae23e3120197768bbd1b21fd03823183a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gae23e3120197768bbd1b21fd03823183a">&#9670;&#160;</a></span>ethosu_flush_dcache()</h2>
@@ -199,6 +195,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Ensures data written by CPU is visible to NPU.</p>
+<p>The application is expected to ensure cache coherency before inference. This weak hook exists for integration convenience.</p>
+<p>Target implementations commonly map this to architecture cache APIs such as SCB_CleanDCache_by_Addr on Cortex-M. </p>
 
 </div>
 </div>
@@ -235,6 +234,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Ensures CPU reads fresh data written by NPU.</p>
+<p>Target implementations commonly map this to architecture cache APIs such as SCB_InvalidateDCache_by_Addr on Cortex-M. </p>
 
 </div>
 </div>
@@ -254,6 +255,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Minimal mutex implementation for baremetal applications. See ethosu_driver.c.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to mutex handle</dd></dl>
+<p>Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c. </p>
 
 </div>
 </div>
@@ -274,7 +276,7 @@ Functions</h2></td></tr>
 <p>Destroy mutex.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mutex</td><td>Pointer to mutex handle</td></tr>
+    <tr><td class="paramname">mutex</td><td>Pointer to mutex handle </td></tr>
   </table>
   </dd>
 </dl>
@@ -297,6 +299,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Minimal sempahore implementation for baremetal applications. See ethosu_driver.c.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to semaphore handle</dd></dl>
+<p>Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c. </p>
 
 </div>
 </div>
@@ -317,7 +320,7 @@ Functions</h2></td></tr>
 <p>Destroy semaphore.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">sem</td><td>Pointer to semaphore handle</td></tr>
+    <tr><td class="paramname">sem</td><td>Pointer to semaphore handle </td></tr>
   </table>
   </dd>
 </dl>
@@ -345,7 +348,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code </dd></dl>
 
 </div>
 </div>
@@ -370,7 +373,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code </dd></dl>
 
 </div>
 </div>
@@ -401,6 +404,9 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success else negative error code</dd></dl>
+<p>Timeout is implementation-defined. Use ETHOSU_SEMAPHORE_WAIT_FOREVER for infinite timeout.</p>
+<p>In multi-NPU flows this primitive is used to sleep while waiting for a free driver instance.</p>
+<p>Inference semaphore timeout can be configured via ETHOSU_INFERENCE_TIMEOUT (build-time) and is forwarded as-is to this API. </p>
 
 </div>
 </div>
@@ -426,6 +432,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<p>In multi-NPU flows this primitive wakes tasks waiting for a free driver instance. </p>
 
 </div>
 </div>
@@ -455,6 +462,10 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Weak callback hook for custom behavior (for example PMU setup, profiling start, monitor setup).</p>
+<p>In reference applications this callback configures PMU events and can start timer-based sampling.</p>
+<p>user_arg comes from <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3()</a>/ethosu_invoke_async().</p>
+<p>Any allocations performed here should be released in <a class="el" href="#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>. </p>
 
 </div>
 </div>
@@ -484,6 +495,10 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Weak callback hook for custom behavior (for example PMU readout, profiler stop, monitor release).</p>
+<p>Reference implementations use this to collect PMU counters and then disable PMU resources.</p>
+<p>user_arg comes from <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3()</a>/ethosu_invoke_async().</p>
+<p>If begin callback has run, end callback is expected to run as well, including interrupt semaphore timeout paths. </p>
 
 </div>
 </div>
@@ -514,6 +529,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Remapped address</dd></dl>
+<p>index convention: -1 for command stream and 0..n for base pointer entries. </p>
 
 </div>
 </div>
@@ -545,6 +561,9 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Configuration to use</dd></dl>
+<p>Default implementation is based on NPU_QCONFIG and NPU_REGIONCFG_n.</p>
+<p>Platform guidance: memory routing should avoid mixing slow and fast transactions on the same AXI interface.</p>
+<p>For Ethos-U65, NPU_REGIONCFG values 0/1 map to AXI0 and 2/3 map to AXI1.</p>
 
 </div>
 </div>
