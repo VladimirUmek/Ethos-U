@@ -26,14 +26,18 @@ var NAVTREE =
 [
   [ "Integration", "index.html", [
     [ "Introduction", "index.html#autotoc_md0", null ],
-    [ "Vela system configuration names", "index.html#autotoc_md1", null ],
-    [ "Vela memory modes and memory areas", "index.html#autotoc_md2", [
-      [ "Arena cache size", "index.html#autotoc_md3", null ]
+    [ "Vela system configuration names", "index.html#autotoc_md1", [
+      [ "Vela-compatible parser constraints", "index.html#autotoc_md2", null ]
     ] ],
-    [ "Linker script relationship", "index.html#autotoc_md4", null ],
-    [ "Driver weak hooks", "index.html#autotoc_md5", null ],
-    [ "Driver build configuration", "index.html#autotoc_md6", null ],
-    [ "General integration guidance", "index.html#autotoc_md7", null ]
+    [ "Vela memory modes and memory areas", "index.html#autotoc_md3", [
+      [ "Spilling", "index.html#autotoc_md4", null ],
+      [ "Arena cache size", "index.html#autotoc_md5", null ]
+    ] ],
+    [ "Generated command-stream regions", "index.html#autotoc_md6", null ],
+    [ "Linker script relationship", "index.html#autotoc_md7", null ],
+    [ "Driver weak hooks", "index.html#autotoc_md8", null ],
+    [ "Driver build configuration", "index.html#autotoc_md9", null ],
+    [ "General integration guidance", "index.html#autotoc_md10", null ]
   ] ]
 ];
 
