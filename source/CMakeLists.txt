@@ -49,7 +49,7 @@ if (${LOG_SEVERITY} EQUAL -1)
 endif()
 
 # Make include directories available for current- and sub projects
-include_directories(include src)
+include_directories(include src config)
 include_directories(${CMSIS_PATH}/CMSIS/Core/Include)
 
 #
@@ -58,7 +58,9 @@ include_directories(${CMSIS_PATH}/CMSIS/Core/Include)
 
 # Build driver library
 add_library(ethosu_core_driver STATIC)
-target_include_directories(ethosu_core_driver PUBLIC include)
+target_include_directories(ethosu_core_driver
+    PUBLIC include
+    PRIVATE config)
 target_sources(ethosu_core_driver PRIVATE src/ethosu_driver.c src/ethosu_pmu.c)
 
 string(TOLOWER ${ETHOSU_TARGET_NPU_CONFIG} ETHOSU_TARGET_NPU_CONFIG)
@@ -98,6 +100,9 @@ target_compile_definitions(ethosu_core_driver PRIVATE
 install(TARGETS ethosu_core_driver LIBRARY DESTINATION "lib")
 install(FILES include/ethosu_device.h include/ethosu_driver.h include/pmu_ethosu.h
         DESTINATION "include")
+install(DIRECTORY config/
+        DESTINATION "include"
+        FILES_MATCHING PATTERN "*.h")
 
 # Define ETHOSU macro
 target_compile_definitions(ethosu_core_driver PUBLIC ETHOSU)
