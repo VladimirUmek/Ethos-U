@@ -45,7 +45,7 @@
       </RTE_Components_h>
       <Pre_Include_Global_h>
         // enabling global pre includes
-        #define ETHOSU55
+        #define ETHOSU65
         #define ETHOSU_ARCH u65
       </Pre_Include_Global_h>
       <files>
@@ -64,7 +64,7 @@
       </RTE_Components_h>
       <Pre_Include_Global_h>
         // enabling global pre includes
-        #define ETHOSU55
+        #define ETHOSU85
         #define ETHOSU_ARCH u85
       </Pre_Include_Global_h>
       <files>
