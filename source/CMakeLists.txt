@@ -98,7 +98,7 @@ target_compile_definitions(ethosu_core_driver PRIVATE
 
 # Install library and include files
 install(TARGETS ethosu_core_driver LIBRARY DESTINATION "lib")
-install(FILES include/ethosu_device.h include/ethosu_driver.h include/pmu_ethosu.h
+install(FILES include/ethosu_driver.h include/ethosu_types.h include/pmu_ethosu.h
         DESTINATION "include")
 install(DIRECTORY config/
         DESTINATION "include"
