@@ -2,13 +2,6 @@
 
 This section contains integration documentation and workflows.
 
-See also:
-
-- [General](../general/index.html)
-- [Vela](../vela/index.html)
-- [Drivers](../drivers/index.html)
-
-
 ## Introduction
 
 The Vela configuration, linker script, MPU or SAU setup, and Ethos-U driver build

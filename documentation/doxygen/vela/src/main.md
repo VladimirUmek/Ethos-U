@@ -1,9 +1,5 @@
 # Vela {#mainpage}
 
-See also: [General](../general/index.html),
-[Drivers](../drivers/index.html), and
-[Integration](../integration/index.html).
-
 Arm Vela is a ahead-of-time neural-network compiler for the
 [Ethos-U55](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55),
 [Ethos-U65](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65), and
