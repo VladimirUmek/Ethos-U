@@ -5,6 +5,7 @@ This section contains integration documentation and workflows.
 See also:
 
 - [General](../general/index.html)
+- [Vela](../vela/index.html)
 - [Drivers](../drivers/index.html)
 
 

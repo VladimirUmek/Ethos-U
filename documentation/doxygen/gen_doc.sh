@@ -113,6 +113,7 @@ function generate() {
 
 echo "Generating documentation ..."
 generate "general" "${VERSION_FULL}"
+generate "vela"
 generate "drivers"
 generate "integration"
 

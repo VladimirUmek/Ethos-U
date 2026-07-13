@@ -5,6 +5,7 @@ This documentation is structured into following chapters:
 Chapter                                                    | Description
 :----------------------------------------------------------|:--------------------
 [General](index.html)                                      | Overview and general information.
+[Vela](../vela/index.html)                                 | Vela compiler features, configuration, and usage.
 [Drivers](../drivers/index.html)                   | Driver interfaces and usage.
 [Integration](../integration/index.html)           | Integration notes and workflows.
 

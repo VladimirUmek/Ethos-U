@@ -44,6 +44,7 @@ Directory | Description
 .\doxygen\gen_doc.sh | Script for building documentation
 .\doxygen\style_template\ | Additional files defining styles and appearance
 .\doxygen\general\general.dxy | Doxygen configuration for the General section
+.\doxygen\vela\vela.dxy | Doxygen configuration for the Vela section
 .\doxygen\drivers\drivers.dxy | Doxygen configuration for the Drivers section
 .\doxygen\integration\integration.dxy | Doxygen configuration for the Integration section
 .\doxygen\&lt;section&gt;\src\ | Markdown sources for each section
