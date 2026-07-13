@@ -491,27 +491,3 @@ Vela options can evolve independently from the standalone CLI examples above.
 | Performance degrades after reducing SRAM | A smaller cache can cause more AXI1 reads. Inspect the performance CSV/report and hardware PMU counters. |
 | A wheel is unavailable | Install Python development headers, CMake, and C99/C++17 build tools, or use a supported host/Python combination. |
 | Output does not run on the target | Recompile for the exact Ethos-U architecture/MAC configuration and keep Vela, driver, linker, and memory-region configuration consistent. |
-
-## Further information
-
-### Related Arm products
-
-- [Arm Ethos-U55](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55)
-- [Arm Ethos-U65](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65)
-- [Arm Ethos-U85](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85)
-- [CMSIS-NN software pack](https://www.keil.arm.com/packs/cmsis-nn-arm/overview/)
-- [CMSIS software pack](https://www.keil.arm.com/packs/cmsis-arm/overview/)
-- [Arm Cortex-M55](https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m55)
-- [Arm Corstone-300](https://www.arm.com/products/silicon-ip-subsystems/corstone-300)
-- [Arm Corstone-320](https://www.arm.com/products/silicon-ip-subsystems/corstone-320)
-- [Arm Fixed Virtual Platforms](https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms)
-
-### Vela and ExecuTorch resources
-
-- [ethos-u-vela on PyPI](https://pypi.org/project/ethos-u-vela/)
-- [Vela source and release documentation](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela)
-- [Vela CLI options](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela/-/blob/5.1.0/OPTIONS.md)
-- [Supported operator constraints](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela/-/blob/5.1.0/SUPPORTED_OPS.md)
-- [Performance estimation reference](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela/-/blob/5.1.0/PERFORMANCE.md)
-- [ExecuTorch examples](https://github.com/pytorch/executorch/tree/main/examples)
-- [ExecuTorch Arm examples](https://github.com/pytorch/executorch/tree/main/examples/arm)

@@ -79,12 +79,28 @@ Typically, there are three memory modes available as shown in the following diag
 - `arena_cache_size` defines the maximum size of `cache_mem_area`.
 - `arena_mem_area` contains all network input, output, and intermediate tensors, including the Ethos-U scratch tensor working buffers.
 
-
-
 **Important:**
 
 The Vela settings, system configuration and memory allocation via linker scripts must be consistent. This is the responsibility software architect as there is no tool support for consistency checking.
 
-## Related documentation
+## Related Arm products
 
-ToDo
+- [Arm Ethos-U55](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55)
+- [Arm Ethos-U65](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65)
+- [Arm Ethos-U85](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85)
+- [CMSIS-NN software pack](https://www.keil.arm.com/packs/cmsis-nn-arm/overview/)
+- [CMSIS software pack](https://www.keil.arm.com/packs/cmsis-arm/overview/)
+- [Arm Cortex-M55](https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m55)
+- [Arm Corstone-300](https://www.arm.com/products/silicon-ip-subsystems/corstone-300)
+- [Arm Corstone-320](https://www.arm.com/products/silicon-ip-subsystems/corstone-320)
+- [Arm Fixed Virtual Platforms](https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms)
+
+## Vela and ExecuTorch resources
+
+- [ethos-u-vela on PyPI](https://pypi.org/project/ethos-u-vela/)
+- [Vela source and release documentation](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela)
+- [Vela CLI options](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela/-/blob/5.1.0/OPTIONS.md)
+- [Supported operator constraints](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela/-/blob/5.1.0/SUPPORTED_OPS.md)
+- [Performance estimation reference](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela/-/blob/5.1.0/PERFORMANCE.md)
+- [ExecuTorch examples](https://github.com/pytorch/executorch/tree/main/examples)
+- [ExecuTorch Arm examples](https://github.com/pytorch/executorch/tree/main/examples/arm)
