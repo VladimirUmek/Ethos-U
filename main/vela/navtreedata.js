@@ -52,11 +52,7 @@ var NAVTREE =
       [ "Embed an optimized TFLite model in firmware", "index.html#autotoc_md20", null ]
     ] ],
     [ "ExecuTorch Arm example flow", "index.html#autotoc_md21", null ],
-    [ "Troubleshooting", "index.html#autotoc_md22", null ],
-    [ "Further information", "index.html#autotoc_md23", [
-      [ "Related Arm products", "index.html#autotoc_md24", null ],
-      [ "Vela and ExecuTorch resources", "index.html#autotoc_md25", null ]
-    ] ]
+    [ "Troubleshooting", "index.html#autotoc_md22", null ]
   ] ]
 ];
 

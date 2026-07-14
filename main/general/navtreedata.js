@@ -29,7 +29,8 @@ var NAVTREE =
     [ "Typical System Architecture", "index.html#autotoc_md1", null ],
     [ "Vela Overview", "index.html#autotoc_md2", null ],
     [ "Memory Modes", "index.html#autotoc_md3", null ],
-    [ "Related documentation", "index.html#autotoc_md4", null ]
+    [ "Related Arm products", "index.html#autotoc_md4", null ],
+    [ "Vela and ExecuTorch resources", "index.html#autotoc_md5", null ]
   ] ]
 ];
 

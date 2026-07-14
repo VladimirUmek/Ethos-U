@@ -8,9 +8,7 @@ var searchData=
   ['and_20compiler_20decisions_5',['Inspect placement and compiler decisions',['../index.html#autotoc_md19',1,'']]],
   ['and_20diagnostics_6',['Reporting and diagnostics',['../index.html#autotoc_md7',1,'']]],
   ['and_20discovery_7',['Input, output, and discovery',['../index.html#autotoc_md5',1,'']]],
-  ['and_20executorch_20resources_8',['Vela and ExecuTorch resources',['../index.html#autotoc_md25',1,'']]],
-  ['and_20memory_20configuration_9',['Accelerator and memory configuration',['../index.html#autotoc_md8',1,'']]],
-  ['and_20scheduling_10',['Target and scheduling',['../index.html#autotoc_md6',1,'']]],
-  ['arm_20example_20flow_11',['ExecuTorch Arm example flow',['../index.html#autotoc_md21',1,'']]],
-  ['arm_20products_12',['Related Arm products',['../index.html#autotoc_md24',1,'']]]
+  ['and_20memory_20configuration_8',['Accelerator and memory configuration',['../index.html#autotoc_md8',1,'']]],
+  ['and_20scheduling_9',['Target and scheduling',['../index.html#autotoc_md6',1,'']]],
+  ['arm_20example_20flow_10',['ExecuTorch Arm example flow',['../index.html#autotoc_md21',1,'']]]
 ];

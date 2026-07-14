@@ -7,6 +7,5 @@ var searchData=
   ['example_20flow_4',['ExecuTorch Arm example flow',['../index.html#autotoc_md21',1,'']]],
   ['examples_5',['Examples',['../index.html#autotoc_md14',1,'']]],
   ['executorch_20arm_20example_20flow_6',['ExecuTorch Arm example flow',['../index.html#autotoc_md21',1,'']]],
-  ['executorch_20resources_7',['Vela and ExecuTorch resources',['../index.html#autotoc_md25',1,'']]],
-  ['existing_20installation_8',['Update an existing installation',['../index.html#autotoc_md2',1,'']]]
+  ['existing_20installation_7',['Update an existing installation',['../index.html#autotoc_md2',1,'']]]
 ];

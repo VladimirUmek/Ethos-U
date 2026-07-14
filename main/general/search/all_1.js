@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['documentation_0',['Related documentation',['../index.html#autotoc_md4',1,'']]]
+  ['executorch_20resources_0',['Vela and ExecuTorch resources',['../index.html#autotoc_md5',1,'']]]
 ];

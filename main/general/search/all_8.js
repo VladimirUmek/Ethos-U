@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vela_20overview_0',['Vela Overview',['../index.html#autotoc_md2',1,'']]]
+  ['typical_20system_20architecture_0',['Typical System Architecture',['../index.html#autotoc_md1',1,'']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['system_20architecture_0',['Typical System Architecture',['../index.html#autotoc_md1',1,'']]]
+  ['related_20arm_20products_0',['Related Arm products',['../index.html#autotoc_md4',1,'']]],
+  ['resources_1',['Vela and ExecuTorch resources',['../index.html#autotoc_md5',1,'']]]
 ];
