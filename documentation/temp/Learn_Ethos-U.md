@@ -7,6 +7,7 @@ Table of Content
 - Command stream - what is it?
 - Ethos-U Configuration (and Registers)
 - Vela Configuration
+- How to determine memory requirements
 
 ## Ethos-U55 Architecture
 
@@ -703,3 +704,170 @@ Lets go step by step:
      69 ns  / 2.5 = 27.6  -> 28 cycles
      276 ns / 2.5 = 110.4 -> 111 cycles
      ```
+
+5. TODO
+
+## How to determine memory requirements
+
+### Select the network and target
+
+Determine:
+
+- quantized TFLite/TOSA network (i.e. select ML model)
+- target device:
+  - Ethos-U type and MAC count
+  - Memory topology
+    - Constant-storage location
+    - Arena-storage location
+
+Consider memory modes from Arm's reference configuration for Vela:
+
+```ini
+[Memory_Mode.Sram_Only]
+const_mem_area=Axi0
+arena_mem_area=Axi0
+cache_mem_area=Axi0
+
+[Memory_Mode.Shared_Sram]
+const_mem_area=Axi1
+arena_mem_area=Axi0
+cache_mem_area=Axi0
+
+[Memory_Mode.Dedicated_Sram]
+const_mem_area=Axi1
+arena_mem_area=Axi1
+cache_mem_area=Axi0
+```
+
+- Sram_Only
+  - All model data is in SRAM. Constants and arena are separate logical regions, but both use
+    the same memory path. cache_mem_area is not used as a separate cache.
+- Shared_Sram
+  - SRAM is shared between Ethos-U and Cortex-M software. Activations/scratch/output go to SRAM,
+    while constants usually go to another memory such as Flash, MRAM, or DRAM.
+- Dedicated_Sram
+  - Fast SRAM is reserved for Ethos-U cache/staging. Constants and arena go to another memory,
+    commonly DRAM or external memory. arena-cache-size is the size of the dedicated SRAM cache/staging area.
+
+Example:
+
+- device with Ethos-U55, 256 MACs
+- constants will reside in constant-memory (Flash/MRAM)
+- arena will reside in SRAM
+
+### Compile the network for minimum model memory
+
+Use Vela compiler and invoke it for selected model and with the `--optimise Size` option.
+Such invocation will optimize for minimal SRAM usage and Vela will output network summary
+which will give an estimate about the minimum required arena size when using selected model.
+
+```shell
+vela network.tflite
+  --config <device-vela.ini>
+  --accelerator-config ethos-u55-256
+  --system-config <System_Config>
+  --memory-mode <Memory_Mode>
+  --optimise Size
+  --verbose-allocation
+  --output-dir out\vela-size
+```
+
+Example summary:
+
+```shell
+Network summary for <selected model>
+...
+Total SRAM used                                102.00 KiB
+Total Off-chip Flash used                      346.92 KiB
+...
+```
+
+Keep in mind that this is minimum memory consumed by the model-controlled tensor allocation,
+not the complete ML framework. ML framework requires memory for its own operation and also adds
+overhead to the activation buffer size and there should be some safety margin as well to account
+for buffer alignment needs.
+
+> NOTE: `--optimise Size` produces Vela’s practical memory-minimized schedule for the exact model,
+> Vela version, accelerator, and system configuration. It is not a mathematically guaranteed
+> global minimum.
+
+### Determine memory budget
+
+Once model-controlled minimum memory allocation is known one can determine total memory
+requirements for the target memory region:
+
+The amount of Off-chip Flash used is constant. One should only pay attention to allocate this
+memory into correct region.
+
+For SRAM, there are other objects in memory that reside in the same region as ML model:
+
+```txt
+Total Required SRAM = model SRAM used +
+                      ML framework +
+                      safety +
+                      application objects + ...
+```
+
+If "Total Required SRAM" is less than the available memory in selected SRAM region, memory
+available to the ML model can be increased and model can be re-compiled for performance.
+
+### Compile the network for performance
+
+When re-compiling ML model network for performance, invoke Vela using `--optimise Performance`
+and using additional argument `--arena-cache-size <budget_bytes>`.
+
+This argument has the same meaning as `arena_cache_size` in configuration file:
+
+```ini
+arena_cache_size=<budget-bytes>
+```
+
+To keep the configuration file generic `arena_cache_size` is usually not specified.
+
+```shell
+vela network.tflite
+  --config <device-vela.ini>
+  --accelerator-config ethos-u55-256
+  --system-config <System_Config>
+  --memory-mode <Memory_Mode>
+  --optimise Performance
+  --arena-cache-size <budget_bytes>
+  --verbose-allocation
+  --output-dir out\vela-performance
+```
+
+To evaluate ML model performance, compile several candidates, using different setting for `--arena-cache-size`.
+
+Note that `--arena-cache-size` for reference memory mode `Shared_Sram` is an optimization target,
+not an absolute allocation guarantee. Vela may therefore emit:
+
+```txt
+Warning: SRAM target for arena memory area exceeded.
+Target = ... Bytes, Actual = ... Bytes
+```
+
+In such case, use the reported actual memory area size.
+
+### Quick Summary
+
+To determine memory requirements for a project, follow high-level flow below:
+
+```txt
+Network + target architecture
+        ↓
+Vela --optimise Size
+        ↓
+Minimum model-controlled arena
+        ↓
+Add ML framework overhead + application requirements
+        ↓
+Determine feasible ML model memory budget
+        ↓
+Vela Performance budget sweep
+        ↓
+Choose performance based on project requirements
+        ↓
+Determine actual final allocation
+        ↓
+Set activation buffer size and verify
+```
