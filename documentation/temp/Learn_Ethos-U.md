@@ -8,6 +8,7 @@ Table of Content
 - Ethos-U Configuration (and Registers)
 - Vela Configuration
 - How to determine memory requirements
+- How to configure Ethos-U driver
 
 ## Ethos-U55 Architecture
 
@@ -871,3 +872,117 @@ Determine actual final allocation
         ↓
 Set activation buffer size and verify
 ```
+
+## How to configure Ethos-U driver
+
+Assumptions:
+
+- ML model was successfully compiled using Vela
+- linker script for the target device is properly constructed
+
+Before we can continue one must understand how Vela constructs the Ethos-U custom
+operator inputs. There are slight differences depending on the Vela's output format.
+
+### TFLite-style custom operators
+
+The order is below:
+
+```txt
+Operator input 0: command-stream/COP data
+Operator input 1: read-only model data
+Operator input 2: main scratch/arena
+Operator input 3: fast scratch
+Operator input 4+: network inputs
+```
+
+A "network input" (operator inputs 4+) is data entering the neural-network computation, such as:
+
+- an input image
+- an audio feature tensor
+- sensor data
+- an output from a preceding CPU operator
+- an output from another NPU subgraph
+
+So, the first four operator inputs are Vela runtime infrastructure. Inputs 4 onward carry actual inference data.
+
+How does this apply to Ethos-U?
+
+Ethos-U uses separate register for command stream fetches (QBASE) and multiple registers (BASEP) to
+access weights, activations, scratch buffers or outputs.
+
+TFLM will convert operator input ordering into:
+
+```txt
+base_addrs[0] = operator input 1 = model/constants
+base_addrs[1] = operator input 2 = main arena
+base_addrs[2] = operator input 3 = fast scratch
+```
+
+Considering this ordering, there are several combinations depending on how the ML model was compiled.
+
+Assuming configuration where:
+
+```txt
+command stream  -> AXI1 -> OffChipFlash
+model/constants -> AXI1 -> OffChipFlash
+main arena      -> AXI0 -> SRAM
+fast scratch    -> AXI0 -> SRAM
+network inputs  -> AXI0 -> SRAM
+```
+
+One would configure QBASE and BASEP0 for access to flash, while the rest of BASEPn registers
+would be configured for access to SRAM.
+
+It makes sense to split command stream and model constants accesses to separate counters, hence
+in configuration header select:
+
+```txt
+NPU_QCONFIG     -> AXI1 counter 2, uses AXI_LIMIT2
+NPU_REGIONCFG_0 -> AXI1 counter 3, uses AXI_LIMIT3
+```
+
+This covers accesses to Flash. For accesses to SRAM it makes sense to split accesses to main arena
+and everything other to separate counters, hence:
+
+```txt
+NPU_REGIONCFG_1    -> AXI0 counter 0, uses AXI_LIMIT0
+NPU_REGIONCFG_2..7 -> AXI0 counter 1, uses AXI_LIMIT1
+```
+
+### ExecuTorch custom operators (Vela's raw output format)
+
+Ethos-U backend in ExecuTorch uses Vela's raw output format and constructs a fixed three-entry
+base-address array.
+
+The raw Vela output already separates:
+
+```txt
+- command data
+- weight data
+- scratch-buffer size
+- input offsets within scratch
+- output offsets within scratch
+```
+
+At runtime, Ethos-U backend in ExecuTorch iterates over input arguments and constructs something like:
+
+```txt
+ExecuTorch args[0] -> copied to scratch + Vela input[0].offset
+ExecuTorch args[1] -> copied to scratch + Vela input[1].offset
+...
+```
+
+The NPU accesses those input through BASEP1 + Vela-generated offset.
+ExecuTorch does not pass each network input as a separate BASEP address.
+Instead it defines three base addresses:
+
+| Array entry | NPU register | Assignment                                   |
+|------------:|--------------|----------------------------------------------|
+| `bases[0]`  | `BASEP0`     | weights and constants                        |
+| `bases[1]`  | `BASEP1`     | scratch buffer, including inputs and outputs |
+| `bases[2]`  | `BASEP2`     | Dedicated fast-scratch buffer, if used       |
+
+BASEP3..7 are not used.
+
+Ethos-U driver configuration is therefore the same as in the case for TFLite
+except that BASEP3..7 are not used, hence their configuration is irrelevant.
