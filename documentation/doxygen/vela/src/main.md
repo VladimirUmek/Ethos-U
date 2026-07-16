@@ -1,31 +1,31 @@
 # Vela {#mainpage}
 
-Arm Vela is a ahead-of-time neural-network compiler for the
+Arm Vela is an ahead-of-time neural network model compiler for the
 [Ethos-U55](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55),
 [Ethos-U65](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65), and
 [Ethos-U85](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85) NPUs.
 It converts a quantized TensorFlow Lite
-(`.tflite`) or TOSA (`.tosa`) network into command streams and encoded constant
+(`.tflite`) or TOSA (`.tosa`) ML model into command streams and encoded constant
 data for a selected Ethos-U configuration.
 
-This page describes Vela 5.1.0.
-Run `vela --version` and consult the matching release documentation when using a
+This chapter describes Vela 5.1.0.
+Run `vela --version` and consult the corresponding release documentation when using a
 different version.
 
 ## Feature overview
 
-Vela performs the offline, target-specific part of an Ethos-U deployment:
+The Vela compiler performs the offline, target-specific part of an Ethos-U deployment:
 
-- Reads quantized TFLite/LiteRT and TOSA networks. Activations and weights must
+- Reads quantized TFLite/LiteRT and TOSA ML models. Activations and weights must
   be quantized for Ethos-U acceleration.
-- Detects operations supported by the selected NPU. In TFLite networks,
+- Detects operations supported by the selected NPU. In TFLite ML models,
   unsupported regions remain CPU operations; TOSA compilation has no CPU
   fallback.
 - Rewrites, decomposes, packs, and fuses graph operations into Ethos-U work.
 - Selects execution schedules and block configurations for the target MAC
   configuration.
 - Compresses weights and uses cascading, striping, buffering, and tensor reuse
-  to reduce storage and runtime-memory demand.
+  to reduce storage and run-time tensor-memory demand.
 - Allocates tensors among the constant, arena, and cache memory areas described
   by the selected system configuration and memory mode.
 - Optimizes either for performance or for minimum peak SRAM use.
@@ -35,10 +35,10 @@ Vela performs the offline, target-specific part of an Ethos-U deployment:
 The normal deployment flow is:
 
 ```text
-quantized model -> Vela + target/memory description -> optimized model
+quantized model -> Vela compiler + target/memory description -> optimized model
                                                        |
                                                        v
-                                      runtime + Ethos-U driver -> NPU
+                         ML inference runtime + Ethos-U driver -> NPU
 ```
 
 For TFLite output, supported regions become Ethos-U custom operators containing
@@ -48,7 +48,7 @@ the model for CPU execution, commonly using TensorFlow Lite Micro reference or
 Always review compiler warnings and `--show-cpu-operations`;
 a successful compilation does not imply that every operation runs on the NPU.
 
-Vela's cycle and bandwidth figures are cost-model estimates intended to guide
+The Vela compiler's cycle and bandwidth figures are cost-model estimates intended to guide
 compiler decisions and compare like-for-like builds. Validate final performance
 on an FPGA or target silicon; an
 [Arm Fixed Virtual Platform (FVP)](https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms)
@@ -74,6 +74,8 @@ python -m pip install --upgrade ethos-u-vela
 python -m pip show ethos-u-vela
 vela --version
 ```
+
+#### Troubleshooting installation
 
 If PyPI reports a newer package but `vela --version` still shows the old
 version, the `pip` command and the `vela` executable usually belong to different
@@ -104,13 +106,36 @@ available, `pip` builds from source and requires Python development headers,
 CMake, a C99 compiler, and a C++17 compiler. The package depends on FlatBuffers
 and NumPy 1.23 or newer.
 
+## Obtaining the device configuration
+
+For a microcontroller device, use the configuration supplied and qualified by
+the silicon vendor. Device Family Packs are available from the
+[www.keil.arm.com/pack](https://www.keil.arm.com/pack).
+The DFP description references device resources such as the `vela.ini`
+configuration file and linker scripts. CMSIS-Toolbox resolves these resources for
+the selected device and build context and provides the applicable values through
+its [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
+
+CMSIS-Toolbox records the selected packs and `vela.ini` configuration file in the
+project metadata. Use the resolved accelerator configuration, system
+configuration, and supported memory mode instead of guessing values from the
+device name or substituting a generic reference configuration. The
+[Alif Ensemble DFP](https://github.com/alifsemi/alif_ensemble-cmsis-dfp) is an
+example of a pack that references device-specific files from its DFP
+description.
+
+The standalone options described below also support silicon-vendor development
+and manual integration when a suitable DFP is not available. In that case,
+obtain the equivalent configuration and linker information from the silicon
+vendor and keep those artifacts under version control.
+
 ## Basic invocation
 
 ```console
 vela [OPTIONS] NETWORK
 ```
 
-Only the input network and accelerator configuration are needed for a basic
+Only the input ML model file and accelerator configuration are needed for a basic
 build:
 
 ```console
@@ -123,9 +148,9 @@ configuration, memory mode, and optimization strategy:
 ```console
 vela my_network.tflite \
   --accelerator-config ethos-u55-128 \
-  --config Arm/vela.ini \
-  --system-config Ethos_U55_High_End_Embedded \
-  --memory-mode Shared_Sram \
+  --config path/to/device-vela.ini \
+  --system-config DEVICE_SYSTEM_CONFIG \
+  --memory-mode DEVICE_MEMORY_MODE \
   --optimise Performance
 ```
 
@@ -138,16 +163,16 @@ provided by the installed version.
 
 | Parameter | Purpose |
 |---|---|
-| `NETWORK` | Required `.tflite` or `.tosa` input path. |
+| `NETWORK` | Vela compiler CLI metavariable for the required `.tflite` or `.tosa` ML model input path. It does not refer to a communications network. |
 | `-h`, `--help` | Show command help and exit. |
 | `--version` | Show the installed Vela version and exit. |
 | `--api-version` | Show the deprecated external-API version. Planned for removal. |
 | `--supported-ops-report` | Write `SUPPORTED_OPS.md` for TFLite operator constraints and exit. |
-| `--list-config-files` | List packaged Vela configuration files and exit. |
+| `--list-config-files` | List packaged `vela.ini` configuration files and exit. |
 | `--list-configs FILE` | List system configurations and memory modes in a `vela.ini` file and exit. |
 | `--output-dir DIR` | Output directory; default `output`. |
 | `--output-format {tflite,raw}` | Select the output format; default `tflite`. Raw output is an `.npz` archive and requires complete NPU placement. |
-| `--enable-debug-db` | Write a network debug database into the output directory. |
+| `--enable-debug-db` | Write an ML model debug database into the output directory. |
 | `--config FILE` | Read a ConfigParser-format `vela.ini` file. May be supplied more than once; later files can extend or override earlier definitions. |
 | `--timing` | Report time spent in compiler stages. |
 | `--force-symmetric-int-weights` | Force signed integer weight zero-points to zero. |
@@ -167,12 +192,12 @@ TFLite-to-TOSA conversion format.
 | `--max-block-dependency {0,1,2,3}` | Limit dependency distance between NPU kernel operations; default `3`. Smaller values can improve interrupt latency at a possible performance cost. |
 | `--optimise {Performance,Size}` | `Performance` is the default and minimizes inference time; `Size` minimizes peak SRAM and ignores the arena-cache size. |
 | `--arena-cache-size BYTES` | Override the selected memory mode's cache capacity for `Performance` optimization. This is a byte count, not KiB. |
-| `--cpu-tensor-alignment BYTES` | Alignment for CPU tensors, including custom-operator inputs and outputs; default `16`. Keep it consistent with the runtime allocation. |
+| `--cpu-tensor-alignment BYTES` | Alignment for CPU tensors, including custom-operator inputs and outputs; default `16`. Keep it consistent with the ML inference runtime allocation. |
 | `--recursion-limit COUNT` | Python recursion limit used during compilation; default `1000`. |
 | `--hillclimb-max-iterations COUNT` | Maximum HillClimb allocator iterations; default `99999`. |
 | `--cop-format {COP1,COP2}` | Select custom-operator payload metadata format; default `COP1`. |
 | `--separate-io-regions` | Place custom-operator inputs and outputs into separate logical regions. Requires `--cop-format COP2`. |
-| `--ignore-ops OP[,OP...]` | Force named TFLite builtin operator types, such as `ADD,ARGMAX`, onto the CPU. Repeatable, Regor-only, and ignored for TOSA. |
+| `--ignore-ops OP[,OP...]` | Force named TFLite builtin operator types, such as `ADD,ARGMAX`, onto the CPU. Repeatable and ignored for TOSA. |
 
 ### Reporting and diagnostics
 
@@ -198,13 +223,13 @@ TFLite-to-TOSA conversion format.
 | `--verbose-progress` | Show compilation progress. |
 
 The source also exposes experimental and debug switches such as
-`--experimental-softmax-int16-neg-exp-range`, `--debug-force-legacy-core`,
-`--debug-force-regor`, `--disable-chaining`, `--disable-fwd`, `--disable-cascading`,
-and `--disable-buffering`. They are useful for compiler development and
-regression isolation, but are not recommended as production tuning controls.
-Their names and behavior can change between releases.
+`--experimental-softmax-int16-neg-exp-range`, `--disable-chaining`,
+`--disable-fwd`, `--disable-cascading`, and `--disable-buffering`. They are
+useful for compiler development and regression isolation, but are not
+recommended as production tuning controls. Their names and behavior can change
+between releases.
 
-## Accelerator and memory configuration
+## Using the device configuration
 
 The accelerator target, system configuration, and memory mode describe
 different things:
@@ -215,7 +240,10 @@ different things:
 | `--system-config` | Core clock, AXI port mapping, memory clock ratios, burst lengths, latencies, and outstanding transactions used by the cost model. |
 | `--memory-mode` | Placement of constant, arena, and cache memory areas on the AXI-connected memories. |
 
-The package provides the reference file `Arm/vela.ini`. Discover the installed
+Prefer the device configuration referenced by the selected DFP. The Vela
+package also provides the generic reference file `Arm/vela.ini` for evaluation,
+silicon-vendor development, and manual integration. Do not assume that its
+parameters describe a specific production device. Discover installed
 configuration files and definitions with:
 
 ```console
@@ -237,20 +265,37 @@ Typical packaged system configurations include:
 
 | Mode | Constants | Arena | Fast cache | Typical use |
 |---|---|---|---|---|
-| `Sram_Only` | AXI0/SRAM | AXI0/SRAM | AXI0/SRAM | Everything fits in SRAM. |
-| `Shared_Sram` | AXI1/Flash or DRAM | AXI0/SRAM | AXI0/SRAM | SRAM is shared with software; constants remain in slower memory. |
-| `Dedicated_Sram` | AXI1/DRAM | AXI1/DRAM | AXI0/SRAM | Dedicated SRAM is a cache for an arena in writable external memory. |
+| `Sram_Only` | `Axi0` | `Axi0` | `Axi0` | All model storage uses the memory type selected for `Axi0`, normally SRAM. |
+| `Shared_Sram` | `Axi1` | `Axi0` | `Axi0` | Constants remain in the memory selected for `Axi1`; arena and cache share the `Axi0` memory. |
+| `Dedicated_Sram` | `Axi1` | `Axi1` | `Axi0` | The `Axi0` memory is a fast staging cache for an arena in the writable memory selected for `Axi1`. |
 
 Packaged variants such as `Dedicated_Sram_256KB`, `_384KB`, `_512KB`, and
 `_1024KB` inherit `Dedicated_Sram` and set `arena_cache_size`.
 
-The names `Axi0` and `Axi1` are logical Vela ports. Their physical memory types
+The names `Axi0` and `Axi1` are logical aliases in `vela.ini`. Their physical memory types
 come from the selected system configuration. The `vela.ini` file, SoC interconnect,
 linker placement, MPU/SAU attributes, cache policy, driver region indices, and
-runtime tensor arena must agree. Vela cannot validate the complete firmware
-memory map.
+ML inference runtime tensor arena must agree. The Vela compiler cannot validate
+the complete firmware memory map.
 
-## `vela.ini` reference
+`cache_mem_area` does not always create a separate cache allocation. When it
+resolves to the same memory type as `arena_mem_area`, the fast-scratch role is
+folded into the normal arena. It becomes a distinct staging area, used for
+spilling and represented by the scratch-fast command-stream region, only when
+the two attributes resolve to different memory types.
+
+Ethos-U55's hardware AXI1 interface is read-only. Consequently,
+`Dedicated_Sram` is not a practical Ethos-U55 execution model when the writable
+feature-map arena would be placed on that interface. Do not infer the same
+read-only restriction for the logical `Axi1` alias in `vela.ini` on every Ethos-U target.
+
+## `vela.ini` reference for silicon vendors and manual integration
+
+Application developers using a complete DFP normally consume this information
+through CMSIS-Toolbox. Silicon vendors and pack maintainers define and validate
+these values against the device, linker scripts, memory attributes, and driver
+configuration. This reference also supports troubleshooting and devices whose
+packs do not yet provide the required information.
 
 `vela.ini` uses Python ConfigParser syntax and is case-sensitive for section
 names, keys, and values. It contains two section types:
@@ -273,17 +318,30 @@ affects the target system.
 Any section can contain `inherit=Part.Name` to inherit another section. The
 child's values override the parent. Inheritance cannot be recursive.
 
+Custom files must observe the following constraints:
+
+- Put a section that is inherited from before the section that inherits it.
+- Avoid underscores in custom memory type names. The Vela compiler splits a
+  memory parameter
+  such as `<Memory>_clock_scale` at the first underscore.
+- Start the name of a custom Ethos-U55 system configuration with
+  `Ethos_U55`. The Vela compiler uses this prefix when selecting the U55 AXI
+  bandwidth width
+  while translating memory-performance values.
+
 ### System configuration parameters
 
-The system configuration maps Vela's two logical AXI interfaces to memory
-types and supplies the performance model. Parameters for a memory type are
+The system configuration maps the two logical aliases in `vela.ini` to memory types and
+supplies the performance model. `axi0_port` and `axi1_port` connect the aliases
+used by a memory mode to those types; they do not by themselves identify a
+physical memory or hardware port. Parameters for a memory type are
 needed only when `axi0_port` or `axi1_port` selects that type.
 
 | Parameter | Type or values | Description |
 |---|---|---|
 | `core_clock` | Float, Hz | Ethos-U core frequency. Scientific notation such as `500e6` is accepted. |
-| `axi0_port` | `Sram`, `Dram`, `OnChipFlash`, `OffChipFlash` | Memory type connected to Vela's AXI0 interface. |
-| `axi1_port` | Same as `axi0_port` | Memory type connected to Vela's AXI1 interface. |
+| `axi0_port` | `Sram`, `Dram`, `OnChipFlash`, `OffChipFlash` | Memory type assigned to the logical `Axi0` alias. |
+| `axi1_port` | Same as `axi0_port` | Memory type assigned to the logical `Axi1` alias. |
 | `<Memory>_clock_scale` | Float, `0.0` to `1.0` | Memory clock/bandwidth scale relative to `core_clock`. `<Memory>` is `Sram`, `Dram`, `OnChipFlash`, or `OffChipFlash`. |
 | `<Memory>_ports_used` | Integer | Number of ports used for that memory. Documented for SRAM, DRAM, and off-chip Flash. |
 | `<Memory>_burst_length` | Integer, bytes | Minimum efficient transfer burst. |
@@ -297,19 +355,31 @@ The current option reference explicitly lists the full metric set for `Sram`,
 Use `--verbose-config` with the installed Vela version to inspect the resolved
 properties supported by that version.
 
+These values are compiler cost-model inputs, not reporting metadata alone.
+Bandwidth, latency, burst length, and outstanding-transaction limits can alter
+scheduling, buffering, DMA insertion, allocation sizes, and the generated
+command stream. `core_clock` is primarily used to convert cycle estimates to
+time. Benchmark the compiled model on the target when accurate performance is
+required.
+
 ### Memory mode parameters
 
 | Parameter | Type or values | Description |
 |---|---|---|
 | `const_mem_area` | `Axi0` or `Axi1` | Location for read-only constants, including weights, scales, biases, and constant tensors. |
 | `arena_mem_area` | `Axi0` or `Axi1` | Location for read/write feature maps, intermediate tensors, and internal buffers. |
-| `cache_mem_area` | `Axi0` or `Axi1` | Fast memory used as a dedicated cache when the selected mode requires one. |
-| `arena_cache_size` | Integer, bytes | Available arena size in SRAM-only/shared-SRAM modes, or cache size in dedicated-SRAM mode. The CLI `--arena-cache-size` overrides it for `Performance` optimization. |
+| `cache_mem_area` | `Axi0` or `Axi1` | Staging or fast-scratch location. It is separate from the arena only when it resolves to a different memory type from `arena_mem_area`. |
+| `arena_cache_size` | Integer, bytes | Scheduler's fast-memory budget: the arena target when arena and cache resolve to the same memory type, or the separate staging-cache size when they differ. The CLI `--arena-cache-size` overrides it for `Performance` optimization. |
 | `inherit` | `Part.Name` | Parent section whose parameters are inherited. Child values take precedence. |
 
-The memory-area mapping must match the Ethos-U driver, runtime tensor arena,
+The memory-area mapping must match the Ethos-U driver, ML inference runtime tensor arena,
 linker script, and physical memory system. These options guide compilation; they
 do not configure the hardware.
+
+With `--optimise Size`, the Vela compiler minimizes SRAM use and does not use
+the arena-cache size. With `--optimise Performance`, it uses the configured or command-line
+arena-cache size. If neither is supplied, the compiler uses the maximum addressable size
+for the selected Ethos-U target.
 
 ### Complete `vela.ini` example
 
@@ -383,7 +453,7 @@ vela person_detect.tflite \
 
 The default output directory contains `person_detect_vela.tflite` and reporting
 artifacts. Use the optimized model, not the original input, in the Ethos-U
-runtime application.
+ML inference application.
 
 ### Minimize peak SRAM
 
@@ -422,7 +492,7 @@ vela my_network.tosa \
 ```
 
 The resulting `.npz` contains the NPU command streams, constants, and
-quantization metadata needed by an integration that consumes raw Vela output.
+quantization metadata needed by an integration that consumes raw Vela compiler output.
 
 ### Inspect placement and compiler decisions
 
@@ -437,18 +507,18 @@ vela model.tflite \
 ```
 
 Start with focused reports. `--verbose-all` can produce impractically large
-logs for real networks.
+logs for representative ML models.
 
 ### Embed an optimized TFLite model in firmware
 
-On hosts that provide `xxd`, convert the Vela output to a C array:
+On hosts that provide `xxd`, convert the Vela compiler output to a C array:
 
 ```console
 xxd -i output/my_network_vela.tflite my_network_model.h
 ```
 
-Place the generated data in the linker region that matches the Vela memory
-configuration. Ensure the runtime registers the Ethos-U custom operator and
+Place the generated data in the linker region that matches the memory
+configuration selected from `vela.ini`. Ensure the ML inference runtime registers the Ethos-U custom operator and
 uses an Ethos-U driver compatible with the compiled command stream.
 
 ## ExecuTorch Arm example flow
@@ -458,10 +528,10 @@ Ethos-U workflow. Its setup script installs the Arm toolchain, TOSA tools,
 Ethos-U Vela, and
 [Corstone](https://www.arm.com/products/silicon-ip-subsystems) FVPs. The AOT Arm
 backend exports and quantizes a
-PyTorch model, lowers supported partitions through TOSA and Vela, and packages
-the result in an ExecuTorch `.pte`/`.bpte` program. In this flow Vela is called
-by the backend; users normally run the example helper rather than invoke Vela
-on a `.pte` file.
+PyTorch model, lowers supported partitions through TOSA and the Vela compiler,
+and packages the result in an ExecuTorch `.pte`/`.bpte` program. In this flow
+the compiler is called by the backend; users normally run the example helper
+rather than invoke Vela on a `.pte` file.
 
 From an ExecuTorch checkout on Linux:
 
@@ -473,7 +543,7 @@ source examples/arm/arm-scratch/setup_path.sh
   --target=ethos-u85-128
 ```
 
-The helper runs the AOT compiler, builds the matching runtime, and starts the
+The helper runs the AOT compiler, builds the matching ML inference runtime, and starts the
 target simulator unless build-only mode is selected. Other examples include an
 Ethos-U minimal notebook, quantizer tutorial, pruning example, image
 classification application, and Zephyr/[CMSIS](https://www.keil.arm.com/packs/cmsis-arm/overview/)
@@ -487,7 +557,7 @@ Vela options can evolve independently from the standalone CLI examples above.
 |---|---|
 | Most operations run on the CPU | Confirm integer quantization, inspect `--show-cpu-operations`, and generate `--supported-ops-report` to check every operator constraint. |
 | Compilation succeeds but estimates look unrealistic | Use a platform-specific `System_Config`; verify clocks, AXI mappings, latency, bandwidth, and memory mode. Compare only builds with the same configuration. |
-| Runtime allocation fails | Check Vela's peak-memory report and add firmware overhead. Align linker regions and the tensor arena with `cpu_tensor_alignment` and the chosen memory mode. |
+| Runtime allocation fails | Check the Vela compiler's peak-memory report and add firmware overhead. Align linker regions and the tensor arena with `cpu_tensor_alignment` and the chosen memory mode. |
 | Performance degrades after reducing SRAM | A smaller cache can cause more AXI1 reads. Inspect the performance CSV/report and hardware PMU counters. |
 | A wheel is unavailable | Install Python development headers, CMake, and C99/C++17 build tools, or use a supported host/Python combination. |
-| Output does not run on the target | Recompile for the exact Ethos-U architecture/MAC configuration and keep Vela, driver, linker, and memory-region configuration consistent. |
+| Output does not run on the target | Recompile for the exact Ethos-U architecture/MAC configuration and keep `vela.ini`, driver, linker, and memory-region configuration consistent. |
