@@ -51,6 +51,38 @@ Directory | Description
 .\doxygen\&lt;section&gt;\src\images\ | Image assets for each section
 .\documentation\ | html output folder
 
+## Content
+
+The manual has four sections:
+
+Section | Content
+:-- | :--
+General | Architecture overview, terminology, and routing to detailed material.
+Vela | Compiler installation, inputs, options, configuration syntax, output, and compiler diagnostics.
+Drivers | Low-level driver behavior, public API, runtime execution contract, interrupts, and platform hooks.
+Integration | Cross-component design: memory topology, linker and MPU/SAU placement, cache policy, Vela-to-driver mapping, RTOS concerns, budgeting, validation, and tuning.
+
+When information affects more than one component, document the complete decision
+in Integration. Keep only the component-specific syntax or API contract in Vela
+or Drivers and link to Integration. General should summarize concepts and link
+to the main source of information rather than repeat configuration tables.
+
+### Authoring for engineers and automated agents
+
+- Start each page by stating its scope and what it does not own.
+- Use the exact configuration keys, API names, files, and generated region
+  numbers that a reader must inspect or change.
+- Separate facts, platform assumptions, examples, and measurements. Label
+  target-specific examples as examples.
+- Record tool and model versions where behavior can change.
+- Prefer decision tables and verification checklists for mappings that span
+  Vela, linker, driver, and hardware configuration.
+- Give every concept one primary explanation. Elsewhere, add a short context
+  sentence and a link.
+- Do not publish unresolved investigation notes as guidance. Move confirmed,
+  reusable conclusions into the owning section and leave a provenance pointer
+  in `temp` if the history remains useful.
+
 ### Notes
 
 - Check [additional PlantUML documentation](https://plantuml-documentation.readthedocs.io/en/latest/index.html)
