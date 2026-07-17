@@ -1,11 +1,17 @@
 # General {#mainpage}
 
-Content:
+This documentation is organized as follows:
 
-- This chapter explains the top-level architecture and deployment flow for ML models to Cortex-M/Ethos-U based system.
-- [Vela](../vela/index.html) explains how to compile, inspect, or troubleshoot a ML model for Ethos-U.
-- [Drivers](../drivers/index.html) contains details about the Ethos-U related drivers.
-- [Integration](../integration/index.html) details the overall system design with information about memory, linker, cache, RTOS, and build configuration.
+- This chapter introduces the terminology, architecture, and deployment flow for
+  ML models on an Edge AI MCU.
+- [Vela](../vela/index.html) explains how to install and use the Vela compiler,
+  obtain or create an Ethos-U configuration, create matching linker and driver
+  configurations, and publish the configuration in a DFP.
+- [Drivers](../drivers/index.html) describes the low-level Ethos-U driver API,
+  execution contract, platform hooks, and bring-up checks.
+- [Integration](../integration/index.html) explains how to keep the compiled ML
+  model, memory placement, driver settings, and application consistent, and how
+  to budget, validate, and tune the complete system.
 
 ## Target audiences and device packs
 
@@ -14,8 +20,9 @@ integrated Ethos-U NPU. The documentation serves both embedded application
 developers using these devices and silicon vendors or platform maintainers who
 provide support for them.
 
-A CMSIS Device Family Pack (DFP) can simplify integration by including Ethos-U resources such as the `vela.ini` configuration
-file, linker scripts, and software components. Device packs are available from
+A CMSIS Device Family Pack (DFP) can simplify integration by including Ethos-U
+resources such as the `vela.ini` configuration file, linker scripts, and
+software components. Device packs are available from
 [www.keil.arm.com/pack](https://www.keil.arm.com/pack). CMSIS-Toolbox uses
 these resources for the selected device and build context and exposes the
 relevant parameters through its
@@ -24,25 +31,25 @@ See
 [Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
 for the relevant DFP description entries.
 
-When a DFP with Ethos-U resources is available, application developers can use it to
-obtain validated device-specific files. Silicon vendors and pack maintainers
+When a DFP contains Ethos-U resources, application developers can use the
+validated device-specific files directly. Silicon vendors and pack maintainers
 are responsible for supplying and validating those files. If a suitable DFP is
-unavailable, the same information in this documentation supports manual
-integration.
+unavailable, this documentation also supports manual integration.
 
 ## Key terms
 
-This manual uses:
+This documentation uses the following terms:
 
-- **Vela compiler** for the model-compilation tool.
-- **`vela.ini` configuration** for the target-system and memory configuration
-  file. System configurations and memory modes are named sections within that
-  file.
-- **ML model** or **neural network model** for the compiled machine-learning workload.
-- **ML inference runtime** for the software framework that interprets model
+- **Vela compiler** means the model-compilation tool.
+- **`vela.ini` configuration** means the target-system and memory configuration
+  file. System configurations and memory modes are named sections within it.
+- **ML model** or **neural network model** means the machine-learning workload
+  being compiled and deployed.
+- **ML inference runtime** means the software framework that interprets model
   metadata, prepares tensors, and invokes the Ethos-U driver.
-- **Target system** for the complete Cortex-M-based hardware and firmware platform.
-- **Ethos-U target** for the selected NPU architecture and MAC configuration.
+- **Target system** means the complete Cortex-M-based hardware and firmware
+  platform.
+- **Ethos-U target** means the selected NPU architecture and MAC configuration.
 
 | Term | Meaning | More information |
 | --- | --- | --- |
@@ -57,14 +64,15 @@ This manual uses:
 
 An Ethos-U NPU is a memory-mapped accelerator controlled by Cortex-M software.
 The Vela compiler performs target-specific compilation before deployment. At
-run time, the ML inference runtime locates the generated Ethos-U custom operator and asks the driver to
-execute its command stream using the model's memory-region base addresses.
+runtime, the ML inference runtime locates the generated Ethos-U custom operator
+and asks the driver to execute its command stream using the model's memory-region
+base addresses.
 
 ```text
 quantized model
       |
       v
-Vela compiler + DFP-provided target and memory description
+Vela compiler + device target and memory configuration
       |
       v
 optimized model: metadata + constants + Ethos-U command stream
@@ -76,8 +84,8 @@ application / ML inference runtime -> Ethos-U driver -> NPU
 ```
 
 The Vela compiler decides which supported operations run on the NPU and how
-their tensors are scheduled and placed. Unsupported TensorFlow Lite operations can remain CPU
-operations. At run time, the CPU provides the command stream and region base
+their tensors are scheduled and placed. Unsupported TensorFlow Lite operations
+can remain CPU operations. At runtime, the CPU provides the command stream and region base
 addresses; the NPU fetches constants and input data, performs the encoded tensor
 operations, writes intermediate and output tensors, and signals completion.
 
@@ -95,21 +103,21 @@ that finished device:
    available memory regions.
 2. The `vela.ini` configuration models the device's memory performance and
    defines its supported memory modes.
-3. The linker and MPU/SAU configuration places code and data in the device's
+3. The linker and MPU/SAU configuration place code and data in the device's
    physical memory regions with suitable CPU attributes.
 4. The driver configuration assigns the command stream and model regions to the
    matching NPU memory-access paths and attributes.
 
-A DFP can provide these related descriptions, and CMSIS-Toolbox can resolve
-them for the selected device and build context. They are not independent
-choices. The full mapping, examples, and
-consistency checklist are in [Integration](../integration/index.html). The
-meaning and syntax of `vela.ini` are in [Vela](../vela/index.html).
+A DFP can provide these related configuration artifacts, and CMSIS-Toolbox can
+resolve them for the selected device and build context. The artifacts must be
+consistent. The full mapping, examples, and consistency checklist are in
+[Integration](../integration/index.html). The meaning and syntax of `vela.ini`
+are in [Vela](../vela/index.html).
 
 ## Memory modes at a glance
 
 A memory mode in `vela.ini` describes where the different classes of ML model
-data are stored. The following diagram provides a conceptual comparison of the three
+data are stored. The following diagram provides a conceptual comparison of three
 commonly used memory modes.
 
 ![Comparison of Ethos-U memory modes](./images/memory-modes.png "Ethos-U memory modes")
@@ -134,8 +142,8 @@ preserves SRAM for data that changes during inference.
 Constants and the main writable tensor arena are stored outside the dedicated
 SRAM, commonly in external or higher-capacity memory. The SRAM is reserved as a
 fast staging area for the NPU. The Vela compiler can move selected data through
-this area to reduce the performance cost of accessing the main storage. This behavior is
-also called spilling.
+this area to reduce the performance cost of accessing the main storage. This
+behavior is also called spilling.
 
 These names describe logical placement patterns, not fixed physical memory
 devices or NPU bus connections. The exact meaning comes from the selected
@@ -148,23 +156,23 @@ fast staging area map to the same memory.
 
 ## Deployment lifecycle
 
-1. Select the device, its DFP, and specify the CMSIS-Toolbox build context.
-2. Select a quantized ML model and ML inference runtime, then resolve the
-   `vela.ini`, linker, and driver configuration supplied by the pack.
+1. Select the device and CMSIS-Toolbox build context. Use its DFP when the pack
+   provides the required Ethos-U resources.
+2. Select a quantized ML model and ML inference runtime, then resolve or supply
+   the matching `vela.ini`, linker, and driver configuration.
 3. Compile for size to establish the model-controlled memory floor.
-4. Reserve ML inference runtime and application memory, then compile
-   performance candidates
-   using the remaining budget.
+4. Reserve memory for the ML inference runtime and application, then use the
+   remaining budget to compile performance candidates.
 5. Place model artifacts and buffers with the linker and configure the driver
    to match the same memory mapping.
 6. Implement target hooks for interrupts, cache maintenance, address remapping,
    and RTOS synchronization as needed.
-7. Validate correctness with a small known-good ML model, then measure the
-   production ML model on hardware and tune from evidence.
+7. Validate correctness with a small known-good ML model. Then measure the
+   production ML model on hardware and tune the system based on those results.
 
 The detailed procedure and required evidence are in
-[Integration](../integration/index.html). Vela compiler estimates are useful for
-comparison but do not replace measurements on the target.
+[Integration](../integration/index.html). The Vela compiler's estimates are
+useful for comparison but do not replace measurements on the target.
 
 ## Related resources
 
