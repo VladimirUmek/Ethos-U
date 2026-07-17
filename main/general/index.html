@@ -44,7 +44,7 @@
   <td id="projectlogo" style="padding: 1em;"><img alt="Logo" src="arm.png"/></td>
   <td style="padding-left: 2em; padding-bottom: 1em;padding-top: 1em;">
   <div id="projectname">Ethos-U Integration for Cortex-M
-   &#160;<span id="projectnumber">Version 1.0.0-dev31</span>
+   &#160;<span id="projectnumber">Version 1.0.0-dev32</span>
    </div>
    <div id="projectbrief">General Information</div>
   </td>
@@ -128,7 +128,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="mainpage"></a></p>
-<p>Chapter content:</p>
+<p>Content:</p>
 <ul>
 <li>This chapter explains the top-level architecture and deployment flow for ML models to Cortex-M/Ethos-U based system.</li>
 <li><a href="../vela/index.html">Vela</a> explains how to compile, inspect, or troubleshoot a ML model for Ethos-U.</li>
@@ -137,74 +137,19 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 </ul>
 <h1><a class="anchor" id="autotoc_md0"></a>
 Target audiences and device packs</h1>
-<p>In this documentation, a <b>microcontroller device</b> is a device that combines a Cortex-M processor with an integrated Ethos-U NPU. The documentation serves both embedded application developers using these devices and silicon vendors or platform maintainers who provide support for them.</p>
-<p>The term <b>Vela compiler</b> refers to the model-compilation tool. The term <b><code>vela.ini</code> configuration</b> refers to its target-system and memory configuration file. System configurations and memory modes are named sections within that file.</p>
-<p>A CMSIS Device Family Pack (DFP) can simplify integration by including or referencing device-specific resources such as the <code>vela.ini</code> configuration file, linker scripts, and software components. Device packs are available from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. CMSIS-Toolbox resolves these resources for the selected device and build context and exposes the relevant parameters through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>. See <a href="../vela/index.html#vela_publish_configuration">Publish Ethos-U configuration in a DFP</a> for the relevant DFP description entries.</p>
-<p>When a vendor-qualified DFP is available, application developers can use it to obtain validated device-specific files. Silicon vendors and pack maintainers are responsible for supplying and validating those files. If a suitable DFP is unavailable, the same information in this documentation supports manual integration.</p>
+<p>In this documentation, an <b>Edge AI MCU</b> combines a Cortex-M processor with an integrated Ethos-U NPU. The documentation serves both embedded application developers using these devices and silicon vendors or platform maintainers who provide support for them.</p>
+<p>A CMSIS Device Family Pack (DFP) can simplify integration by including Ethos-U resources such as the <code>vela.ini</code> configuration file, linker scripts, and software components. Device packs are available from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. CMSIS-Toolbox uses these resources for the selected device and build context and exposes the relevant parameters through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>. See <a href="../vela/index.html#vela_publish_configuration">Publish Ethos-U configuration in a DFP</a> for the relevant DFP description entries.</p>
+<p>When a DFP with Ethos-U resources is available, application developers can use it to obtain validated device-specific files. Silicon vendors and pack maintainers are responsible for supplying and validating those files. If a suitable DFP is unavailable, the same information in this documentation supports manual integration.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
-System overview</h1>
-<p>An Ethos-U NPU is a memory-mapped accelerator controlled by Cortex-M software. The Vela compiler performs target-specific compilation before deployment. At run time, the ML inference runtime locates the generated Ethos-U custom operator and asks the driver to execute its command stream using the model's memory-region base addresses.</p>
-<div class="fragment"><div class="line">quantized model</div>
-<div class="line">      |</div>
-<div class="line">      v</div>
-<div class="line">Vela compiler + DFP-provided target and memory description</div>
-<div class="line">      |</div>
-<div class="line">      v</div>
-<div class="line">optimized model: metadata + constants + Ethos-U command stream</div>
-<div class="line">      |</div>
-<div class="line">      v</div>
-<div class="line">application / ML inference runtime -&gt; Ethos-U driver -&gt; NPU</div>
-<div class="line">      ^                                      |</div>
-<div class="line">      +---------- input and output memory ---+</div>
-</div><!-- fragment --><p>The Vela compiler decides which supported operations run on the NPU and how their tensors are scheduled and placed. Unsupported TensorFlow Lite operations can remain CPU operations. At run time, the CPU provides the command stream and region base addresses; the NPU fetches constants and input data, performs the encoded tensor operations, writes intermediate and output tensors, and signals completion.</p>
-<p>For command-line options and compiler diagnostics, see <a href="../vela/index.html">Vela</a>. For invocation and interrupt contracts, see <a href="../drivers/index.html">Drivers</a>.</p>
-<h1><a class="anchor" id="autotoc_md2"></a>
-Coordinating the device configuration</h1>
-<p>A microcontroller device has a fixed Cortex-M, Ethos-U, interconnect, and memory integration. The software descriptions used to build an application must match that finished device:</p>
-<ol type="1">
-<li>The device description identifies the processor, Ethos-U configuration, and available memory regions.</li>
-<li>The <code>vela.ini</code> configuration models the device's memory performance and defines its supported memory modes.</li>
-<li>The linker and MPU/SAU configuration places code and data in the device's physical memory regions with suitable CPU attributes.</li>
-<li>The driver configuration assigns the command stream and model regions to the matching NPU memory-access paths and attributes.</li>
-</ol>
-<p>A DFP can provide these related descriptions, and CMSIS-Toolbox can resolve them for the selected device and build context. They are not independent choices. The full mapping, examples, and consistency checklist are in <a href="../integration/index.html">Integration</a>. The meaning and syntax of <code>vela.ini</code> are in <a href="../vela/index.html">Vela</a>.</p>
-<h1><a class="anchor" id="autotoc_md3"></a>
-Memory modes at a glance</h1>
-<p>A memory mode in <code>vela.ini</code> describes where the different classes of ML model data are stored. The following diagram provides a conceptual comparison of the three commonly used memory modes.</p>
-<div class="image">
-<img src="memory-modes.png" alt=""/>
-<div class="caption">
-Ethos-U memory modes</div></div>
-    <h2><a class="anchor" id="autotoc_md4"></a>
-SRAM-only mode</h2>
-<p>All ML model data is stored in SRAM. Constants and writable tensor data remain separate logical areas, but both use the same physical memory type. This mode is simple and can provide low access latency, but the complete compiled ML model and its tensor arena must fit in the available SRAM.</p>
-<h2><a class="anchor" id="autotoc_md5"></a>
-Shared-SRAM mode</h2>
-<p>The writable tensor arena is stored in SRAM shared with the Cortex-M application. The arena contains ML model input and output tensors, intermediate activations, and scratch tensors. Read-only constants, such as encoded weights and scales, are stored in another memory such as Flash, MRAM, or DRAM. This arrangement preserves SRAM for data that changes during inference.</p>
-<h2><a class="anchor" id="autotoc_md6"></a>
-Dedicated-SRAM mode</h2>
-<p>Constants and the main writable tensor arena are stored outside the dedicated SRAM, commonly in external or higher-capacity memory. The SRAM is reserved as a fast staging area for the NPU. The Vela compiler can move selected data through this area to reduce the performance cost of accessing the main storage. This behavior is also called spilling.</p>
-<p>These names describe logical placement patterns, not fixed physical memory devices or NPU bus connections. The exact meaning comes from the selected system configuration and memory-area mapping in <code>vela.ini</code>. See <a href="../vela/index.html">Vela</a> for configuration syntax and <a href="../integration/index.html">Integration</a> for the corresponding linker sections, MPU/SAU attributes, cache policy, and driver region configuration. In particular, the meaning of <code>arena_cache_size</code> depends on whether the arena and fast staging area map to the same memory.</p>
-<h1><a class="anchor" id="autotoc_md7"></a>
-Deployment lifecycle</h1>
-<ol type="1">
-<li>Select the device, its DFP, and specify the CMSIS-Toolbox build context.</li>
-<li>Select a quantized ML model and ML inference runtime, then resolve the <code>vela.ini</code>, linker, and driver configuration supplied by the pack.</li>
-<li>Compile for size to establish the model-controlled memory floor.</li>
-<li>Reserve ML inference runtime and application memory, then compile performance candidates using the remaining budget.</li>
-<li>Place model artifacts and buffers with the linker and configure the driver to match the same memory mapping.</li>
-<li>Implement target hooks for interrupts, cache maintenance, address remapping, and RTOS synchronization as needed.</li>
-<li>Validate correctness with a small known-good ML model, then measure the production ML model on hardware and tune from evidence.</li>
-</ol>
-<p>The detailed procedure and required evidence are in <a href="../integration/index.html">Integration</a>. Vela compiler estimates are useful for comparison but do not replace measurements on the target.</p>
-<h1><a class="anchor" id="autotoc_md8"></a>
 Key terms</h1>
 <p>This manual uses:</p>
 <ul>
+<li><b>Vela compiler</b> for the model-compilation tool.</li>
+<li><b><code>vela.ini</code> configuration</b> for the target-system and memory configuration file. System configurations and memory modes are named sections within that file.</li>
 <li><b>ML model</b> or <b>neural network model</b> for the compiled machine-learning workload.</li>
-<li><b>ML inference runtime</b> means the software framework that interprets model metadata, prepares tensors, and invokes the Ethos-U driver.</li>
-<li><b>Target system</b> means the complete Cortex-M-based hardware and firmware platform.</li>
-<li><b>Ethos-U target</b> means the selected NPU architecture and MAC configuration.</li>
+<li><b>ML inference runtime</b> for the software framework that interprets model metadata, prepares tensors, and invokes the Ethos-U driver.</li>
+<li><b>Target system</b> for the complete Cortex-M-based hardware and firmware platform.</li>
+<li><b>Ethos-U target</b> for the selected NPU architecture and MAC configuration.</li>
 </ul>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -222,6 +167,62 @@ Key terms</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">memory mode   </td><td class="markdownTableBodyNone">mapping of model storage roles to memory aliases defined in <code>vela.ini</code>   </td><td class="markdownTableBodyNone"><a href="../vela/index.html">Vela</a>   </td></tr>
 </table>
+<h1><a class="anchor" id="autotoc_md2"></a>
+System overview</h1>
+<p>An Ethos-U NPU is a memory-mapped accelerator controlled by Cortex-M software. The Vela compiler performs target-specific compilation before deployment. At run time, the ML inference runtime locates the generated Ethos-U custom operator and asks the driver to execute its command stream using the model's memory-region base addresses.</p>
+<div class="fragment"><div class="line">quantized model</div>
+<div class="line">      |</div>
+<div class="line">      v</div>
+<div class="line">Vela compiler + DFP-provided target and memory description</div>
+<div class="line">      |</div>
+<div class="line">      v</div>
+<div class="line">optimized model: metadata + constants + Ethos-U command stream</div>
+<div class="line">      |</div>
+<div class="line">      v</div>
+<div class="line">application / ML inference runtime -&gt; Ethos-U driver -&gt; NPU</div>
+<div class="line">      ^                                      |</div>
+<div class="line">      +---------- input and output memory ---+</div>
+</div><!-- fragment --><p>The Vela compiler decides which supported operations run on the NPU and how their tensors are scheduled and placed. Unsupported TensorFlow Lite operations can remain CPU operations. At run time, the CPU provides the command stream and region base addresses; the NPU fetches constants and input data, performs the encoded tensor operations, writes intermediate and output tensors, and signals completion.</p>
+<p>For command-line options and compiler diagnostics, see <a href="../vela/index.html">Vela</a>. For invocation and interrupt contracts, see <a href="../drivers/index.html">Drivers</a>.</p>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Coordinating the device configuration</h1>
+<p>An Edge AI MCU has a fixed Cortex-M, Ethos-U, interconnect, and memory integration. The software descriptions used to build an application must match that finished device:</p>
+<ol type="1">
+<li>The device description identifies the processor, Ethos-U configuration, and available memory regions.</li>
+<li>The <code>vela.ini</code> configuration models the device's memory performance and defines its supported memory modes.</li>
+<li>The linker and MPU/SAU configuration places code and data in the device's physical memory regions with suitable CPU attributes.</li>
+<li>The driver configuration assigns the command stream and model regions to the matching NPU memory-access paths and attributes.</li>
+</ol>
+<p>A DFP can provide these related descriptions, and CMSIS-Toolbox can resolve them for the selected device and build context. They are not independent choices. The full mapping, examples, and consistency checklist are in <a href="../integration/index.html">Integration</a>. The meaning and syntax of <code>vela.ini</code> are in <a href="../vela/index.html">Vela</a>.</p>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Memory modes at a glance</h1>
+<p>A memory mode in <code>vela.ini</code> describes where the different classes of ML model data are stored. The following diagram provides a conceptual comparison of the three commonly used memory modes.</p>
+<div class="image">
+<img src="memory-modes.png" alt=""/>
+<div class="caption">
+Ethos-U memory modes</div></div>
+    <h2><a class="anchor" id="autotoc_md5"></a>
+SRAM-only mode</h2>
+<p>All ML model data is stored in SRAM. Constants and writable tensor data remain separate logical areas, but both use the same physical memory type. This mode is simple and can provide low access latency, but the complete compiled ML model and its tensor arena must fit in the available SRAM.</p>
+<h2><a class="anchor" id="autotoc_md6"></a>
+Shared-SRAM mode</h2>
+<p>The writable tensor arena is stored in SRAM shared with the Cortex-M application. The arena contains ML model input and output tensors, intermediate activations, and scratch tensors. Read-only constants, such as encoded weights and scales, are stored in another memory such as Flash, MRAM, or DRAM. This arrangement preserves SRAM for data that changes during inference.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
+Dedicated-SRAM mode</h2>
+<p>Constants and the main writable tensor arena are stored outside the dedicated SRAM, commonly in external or higher-capacity memory. The SRAM is reserved as a fast staging area for the NPU. The Vela compiler can move selected data through this area to reduce the performance cost of accessing the main storage. This behavior is also called spilling.</p>
+<p>These names describe logical placement patterns, not fixed physical memory devices or NPU bus connections. The exact meaning comes from the selected system configuration and memory-area mapping in <code>vela.ini</code>. See <a href="../vela/index.html">Vela</a> for configuration syntax and <a href="../integration/index.html">Integration</a> for the corresponding linker sections, MPU/SAU attributes, cache policy, and driver region configuration. In particular, the meaning of <code>arena_cache_size</code> depends on whether the arena and fast staging area map to the same memory.</p>
+<h1><a class="anchor" id="autotoc_md8"></a>
+Deployment lifecycle</h1>
+<ol type="1">
+<li>Select the device, its DFP, and specify the CMSIS-Toolbox build context.</li>
+<li>Select a quantized ML model and ML inference runtime, then resolve the <code>vela.ini</code>, linker, and driver configuration supplied by the pack.</li>
+<li>Compile for size to establish the model-controlled memory floor.</li>
+<li>Reserve ML inference runtime and application memory, then compile performance candidates using the remaining budget.</li>
+<li>Place model artifacts and buffers with the linker and configure the driver to match the same memory mapping.</li>
+<li>Implement target hooks for interrupts, cache maintenance, address remapping, and RTOS synchronization as needed.</li>
+<li>Validate correctness with a small known-good ML model, then measure the production ML model on hardware and tune from evidence.</li>
+</ol>
+<p>The detailed procedure and required evidence are in <a href="../integration/index.html">Integration</a>. Vela compiler estimates are useful for comparison but do not replace measurements on the target.</p>
 <h1><a class="anchor" id="autotoc_md9"></a>
 Related resources</h1>
 <ul>

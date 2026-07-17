@@ -132,7 +132,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 Integration workflow</h1>
 <p>Complete the steps in order because later steps depend on earlier decisions and measurements. Each step ends with a concrete deliverable:</p>
 <ol type="1">
-<li><b>Select the device and DFP.</b> Choose the microcontroller device and its Device Family Pack from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. CMSIS-Toolbox records the selected packs in the project metadata.</li>
+<li><b>Select the device and DFP.</b> Choose the Edge AI MCU and its Device Family Pack from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. CMSIS-Toolbox records the selected packs in the project metadata.</li>
 <li><b>Select the build context.</b> Use CMSIS-Toolbox to select the device and resolve the <code>vela.ini</code>, linker, and driver resources referenced by the DFP description. The project metadata records the <code>vela.ini</code> configuration file used by the build. Deliverable: the resolved <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</li>
 <li><b>Select the workload.</b> Define the quantized ML model, CPU fallback policy, and latency and throughput goals. Deliverable: a versioned input ML model and acceptance criteria.</li>
 <li><b>Compile with the device configuration.</b> Use the accelerator, system configuration, and memory mode supplied by the DFP. Deliverable: the optimized model, compiler reports, and resolved <code>vela.ini</code> configuration.</li>
@@ -170,7 +170,7 @@ Keep records</h2>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Introduction</h1>
 <p>The <code>vela.ini</code> configuration, linker script, MPU or SAU setup, and Ethos-U driver build configuration must describe the same memory system. The Vela compiler uses this information to generate an ML model for the selected memory mode, while the ML inference runtime and driver must make the corresponding buffers visible to the NPU at run time.</p>
-<p>For a microcontroller device, the silicon vendor should define and validate these settings in a DFP, with the device-specific resources referenced by its DFP description. Application developers normally select the pack and consume the resolved settings through CMSIS-Toolbox. Configuration creation and manual integration are described in the Vela guide.</p>
+<p>For an Edge AI MCU, the silicon vendor should define and validate these settings in a DFP, with the device-specific resources referenced by its DFP description. Application developers normally select the pack and consume the resolved settings through CMSIS-Toolbox. Configuration creation and manual integration are described in the Vela guide.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Creating or extending a Device Family Pack</h1>
 <p>A silicon vendor or pack maintainer should include the device-specific <code>vela.ini</code> configuration file, matching linker scripts, and Ethos-U driver configuration in the DFP and reference them from the DFP description. The pack should expose the applicable parameters through the CMSIS-Toolbox build context and MLOps information so that an application build does not need to locate or reconcile these files manually.</p>

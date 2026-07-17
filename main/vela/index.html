@@ -128,7 +128,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="mainpage"></a></p>
 <p>Arm Vela is an ahead-of-time (AOT) neural network model compiler for the <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55">Ethos-U55</a>, <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65">Ethos-U65</a>, and <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85">Ethos-U85</a> NPUs. It converts a quantized TensorFlow Lite (<code>.tflite</code>) or TOSA (<code>.tosa</code>) ML model into command streams and encoded constant data for a selected Ethos-U configuration.</p>
-<p>This chapter describes Vela 5.1.0. Run <code>vela --version</code> and consult the corresponding release documentation when using a different version.</p>
+<p>This chapter covers Vela 5.1 and later. Use <code>vela --version</code> to identify the installed version and consult its release notes for version-specific changes.</p>
 <h1><a class="anchor" id="autotoc_md0"></a>
 Feature overview</h1>
 <p>The Vela compiler performs the offline, target-specific part of an Ethos-U deployment:</p>
@@ -152,7 +152,7 @@ Feature overview</h1>
 <p>The Vela compiler's cycle and bandwidth figures are cost-model estimates intended to guide compiler decisions and compare like-for-like builds. Validate final performance on an FPGA or target silicon; an <a href="https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms">Arm Fixed Virtual Platform (FVP)</a> can provide approximate behavior.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Installation</h1>
-<p>Vela runs on Linux, macOS, and Windows. The released package requires Python 3.10 or newer:</p>
+<p>The Vela compiler runs on Linux, macOS, and Windows. The released package requires Python 3.10 or newer:</p>
 <div class="fragment"><div class="line">python -m pip install ethos-u-vela</div>
 <div class="line">vela --version</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md2"></a>
@@ -175,7 +175,7 @@ Troubleshooting installation</h3>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Obtain Ethos-U configuration for a device</h1>
 <p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <code>vela.ini</code> configuration file. This file contains named <code>System_Config</code> sections that model device memory performance and named <code>Memory_Mode</code> sections that define where model data is placed.</p>
-<p>For a microcontroller device, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>, can provide the Ethos-U configuration information, including the device-specific <code>vela.ini</code> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
+<p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>, can provide the Ethos-U configuration information, including the device-specific <code>vela.ini</code> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
 <p>When a DFP with Ethos-U information is not available, the equivalent configuration can be supplied manually as described under <a class="el" href="#vela_create_configuration">Create Ethos-U configuration for a device</a>.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Basic invocation</h1>
