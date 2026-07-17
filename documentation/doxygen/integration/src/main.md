@@ -46,16 +46,11 @@ value requires reviewing the other descriptions of that memory region.
 
 - Keep the `vela.ini` `System_Config`, selected `Memory_Mode`, linker sections,
   MPU/SAU attributes, and driver build definitions consistent.
-- Use `arena_cache_size` as the compiler allocation constraint. In
-  shared-SRAM mappings, it constrains the `arena_mem_area`, so the application
-  arena, often a statically allocated C array, must not be smaller than this
-  value. In dedicated-cache mappings, it constrains the `cache_mem_area`; model
-  constants and activations can then grow up to the limits of the memories where
-  the linker places them.
-- Place model constants, activations, and any dedicated cache section in memory
-  regions that match the memory-area mapping selected in `vela.ini`. If the
-  linker uses three physical memories, benchmark representative ML models to
-  confirm that the selected `System_Config` section models the system suitably.
+- Apply `arena_cache_size` according to the selected memory mode as described in
+  [Understand arena cache and spilling](../vela/index.html#vela_arena_cache_size).
+- Place model constants, activations, and any separate scratch-fast storage as
+  described in
+  [Create the linker script](../vela/index.html#vela_create_linker_script).
 - Override the driver weak hooks when the default integration assumptions do not
   match the platform, especially for data cache maintenance, address remapping,
   and RTOS synchronization.
@@ -95,9 +90,8 @@ buffers visible to the NPU at run time.
 For a microcontroller device, the silicon vendor should define and validate these
 settings in a DFP, with the device-specific resources referenced by its DFP
 description. Application developers normally select the pack and consume the resolved
-settings through CMSIS-Toolbox. The detailed configuration sections below are
-retained for silicon vendors, pack authors, troubleshooting, and manual
-integration when a suitable DFP is unavailable.
+settings through CMSIS-Toolbox. Configuration creation and manual integration
+are described in the Vela guide.
 
 ## Creating or extending a Device Family Pack
 
@@ -112,299 +106,41 @@ Validate every supported pack configuration as one unit: the `System_Config`
 and `Memory_Mode` sections in `vela.ini`, linker placement, MPU/SAU and cache
 attributes,
 driver region settings, interrupt wiring, and physical device memory system must
-agree. Version these artifacts together. The
-[Alif Ensemble DFP](https://github.com/alifsemi/alif_ensemble-cmsis-dfp) is an
-example of device-specific files referenced by a DFP description.
+agree. Version these artifacts together. See
+[Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
+for a concise DFP-description example.
 
-If the selected DFP does not provide the required `vela.ini` or linker information,
-use the manual procedure in the following sections and obtain the missing device
-parameters from the silicon vendor. Record locally supplied files with the
-build, and report the missing pack support to the vendor.
+If the selected DFP does not provide the required `vela.ini` or linker
+information, use
+[Create Ethos-U configuration for a device](../vela/index.html#vela_create_configuration)
+and obtain the missing device parameters from the silicon vendor.
+Record locally supplied files with the build, and report the missing pack
+support to the vendor.
 
-## `vela.ini` system configuration names
+## Ethos-U configuration
 
-The memory block names used in the `System_Config` sections of `vela.ini`, such
-as `Sram`, `OnChipFlash`, `OffChipFlash`, and `Dram`, are memory type names used
-by `vela.ini`. A memory type describes a class of memory and gives that memory a
-name and attaches performance parameters to it. For example, `Sram`,
-`OffChipFlash`, and `Dram` are memory types:
+The Vela guide explains how to select an existing configuration and how to
+create one for a device:
 
-```ini
-[System_Config.Example]
-axi0_port=Sram
-axi1_port=Dram
-Sram_clock_scale=1.0
-Sram_read_latency=32
-Dram_clock_scale=0.25
-Dram_read_latency=500
-```
+- use [Use the Ethos-U configuration](../vela/index.html#vela_use_configuration)
+  to inspect the resolved `System_Config` and `Memory_Mode`; and
+- use [Create Ethos-U configuration for a device](../vela/index.html#vela_create_configuration)
+  for `vela.ini` syntax, memory modes, performance parameters, arena-cache
+  behavior, and spilling.
 
-In this example, the configuration has two aliases, `Axi0` and `Axi1`. `Axi0` resolves to the
-`Sram` memory type, and `Axi1` resolves to the `Dram` memory type. The names have
-compiler meaning, but they do not by themselves name physical memories in the
-SoC.
-
-The `axi0_port` and `axi1_port` keys define logical aliases in `vela.ini`. They should
-be read as labels used by `vela.ini` to connect a memory mode to memory types,
-not as physical memory names or direct references to real hardware ports. A
-memory mode is a separate `vela.ini` section that chooses which alias is used for
-each kind of model storage: constants, the feature-map arena, and any cache or
-staging area. For example:
-
-```ini
-[Memory_Mode.Shared_Sram]
-const_mem_area=Axi1
-arena_mem_area=Axi0
-cache_mem_area=Axi0
-```
-
-Together with the system config above, this means that constants use the `Dram`
-memory type, while the feature-map arena and cache or staging area use the
-`Sram` memory type. The aliases describe the compiler's memory-placement model. The
-hardware access path is selected later by the ML inference runtime and driver configuration
-when the generated model is executed.
-
-The stock memory type names are also the safest names for custom configurations:
-
-- `Sram`
-- `Dram`
-- `OnChipFlash`
-- `OffChipFlash`
-
-These names follow `vela.ini` conventions and avoid parser naming pitfalls. The
-Vela compiler splits memory parameter keys at the first underscore, so a
-custom memory name such as `My_Sram` in `My_Sram_clock_scale` is parsed as
-memory `My` with an unrecognized parameter name.
-
-Model storage means the categories of data that the Vela compiler must place in
-memory, such
-as ML model constants, neural network activations, scratch tensors, and optional cache or
-staging data. What matters to the compiler are the memory type selected for each kind of
-model storage and the performance values associated with that type:
-
-- `*_clock_scale`
-- `*_burst_length`
-- `*_read_latency`
-- `*_write_latency`
-- optional outstanding read and write limits, when supported by the target
-
-For example, an SRAM/MRAM system configuration can use the `Axi0` alias for
-`Sram` and `Axi1` for `OffChipFlash`:
-
-```ini
-axi0_port=Sram
-axi1_port=OffChipFlash
-```
-
-In this case the physical memory behind `axi1_port` may be MRAM, even though the
-memory type name in `vela.ini` is `OffChipFlash`. This is appropriate when the
-MRAM is
-used like a read-only, higher-latency memory for model constants.
-
-An SRAM/DRAM system configuration can instead map the `Axi1` alias to `Dram`:
-
-```ini
-axi0_port=Sram
-axi1_port=Dram
-```
-
-Here the `Dram` name is selected because the memory behaves like a read-write,
-higher-latency memory. In both examples, the important part is that the memory
-roles and the performance values attached to `Sram`, `OffChipFlash`, or `Dram`
-describe the memory behavior well enough for the Vela compiler to make
-scheduling, buffering,
-and placement decisions.
-
-These values form a compiler cost model. They are not only used for reports:
-memory bandwidth, latency, burst length, and outstanding transaction limits can
-change schedule selection, weight buffering, staging, DMA insertion, allocation
-sizes, and therefore the generated command stream. `core_clock` is different; it
-is mostly used for reporting and conversion of cycle counts to time. None of
-these values are a replacement for benchmarking the final ML model on the real
-system when accurate performance numbers are required.
-
-In a typical platform integration, the `Axi0` alias is used for lower-latency
-memory, often internal memory such as SRAM or TCM, and `Axi1` is used for
-higher-latency memory, often external Flash, MRAM, or DRAM. The selected
-`Memory_Mode` then chooses which alias is used for constants, the feature-map
-arena, and any cache or staging area.
-
-### `vela.ini` configuration constraints
-
-Custom `vela.ini` files should preserve these naming conventions:
-
-- Use `[System_Config.<name>]` and `[Memory_Mode.<name>]` section prefixes.
-- Use `axi0_port` and `axi1_port` in system configs, and `Axi0` and `Axi1` in
-  memory modes.
-- Avoid underscores in custom memory type names.
-- Put inherited sections before inheriting sections.
-- Start custom U55 system configuration names with `Ethos_U55`. The Vela
-  compiler uses that
-  prefix to select the U55 AXI bandwidth width when translating memory
-  performance values.
-
-## `vela.ini` memory modes and memory areas
-
-The `Memory_Mode` section of `vela.ini` selects how the compiler memory areas are
-mapped onto the `Axi0` and `Axi1` aliases. The aliases are resolved to memory
-types by the selected `System_Config`.
-
-The Vela compiler then uses storage roles. A compiler storage role is the compiler's
-name for what a tensor or buffer is used for after the memory mode has been
-resolved. Examples are read-only storage for constants and weights, feature-map
-storage for activations and scratch tensors, and staging storage for fast
-temporary copies. These names may be visible in verbose compiler output or compiler
-dumps:
-
-| Memory mode attribute | Compiler storage role | Typical contents | Typical generated region |
-| --- | --- | --- | --- |
-| `const_mem_area` | read-only or permanent storage | constants, encoded weights, scales, and other read-only tensor data | region 0, weight tensor |
-| `arena_mem_area` | feature-map or scratch arena storage | ML model input, output, intermediate activations, and scratch tensors | region 1, scratch tensor |
-| `cache_mem_area` | staging or fast scratch storage | temporary fast copies used for caching, staging, or spilling | region 2, scratch-fast tensor when spilling is enabled |
-
-The staging or fast scratch role is temporary storage used by the compiler for
-data that benefits from being moved through faster memory. It is separate from
-the main feature-map arena only when `cache_mem_area` resolves to a different
-memory type from `arena_mem_area`.
-
-The names `Sram_Only`, `Shared_Sram`, and `Dedicated_Sram` are used in the
-official Vela documentation, so keeping those names makes the configuration
-easier to relate to the Vela documentation when they match the intended mapping.
-A platform can still define additional names when a more specific label is
-useful. What matters for integration is the mapping described by the
-`const_mem_area`, `arena_mem_area`, and `cache_mem_area` attributes.
-
-A configuration where all three areas use the memory selected by `Axi0` is
-typically named `Sram_Only`:
-
-```ini
-[Memory_Mode.Sram_Only]
-const_mem_area=Axi0
-arena_mem_area=Axi0
-cache_mem_area=Axi0
-```
-
-A configuration where model constants are placed in the memory selected by
-`Axi1`, while activations use the memory selected by `Axi0`, is typically named
-`Shared_Sram`:
-
-```ini
-[Memory_Mode.Shared_Sram]
-const_mem_area=Axi1
-arena_mem_area=Axi0
-cache_mem_area=Axi0
-```
-
-A configuration where constants and activations use the memory selected by
-`Axi1`, while staging or cache storage uses the memory selected by `Axi0`, is
-typically named `Dedicated_Sram`:
-
-```ini
-[Memory_Mode.Dedicated_Sram]
-const_mem_area=Axi1
-arena_mem_area=Axi1
-cache_mem_area=Axi0
-```
-
-Another platform may use a different label for the same mapping. For example,
-`Dtcm_Cache` can make it explicit that the cache memory is DTCM rather than
-ordinary SRAM:
-
-```ini
-[Memory_Mode.Dtcm_Cache]
-const_mem_area=Axi1
-arena_mem_area=Axi1
-cache_mem_area=Axi0
-```
-
-Conceptually, the two logical aliases in `vela.ini` can still target three run-time memory
-purposes:
-
-| Compiler memory area | Linker section purpose | Access |
-| --- | --- | --- |
-| `const_mem_area` | model coefficients and other read-mostly model data | read-only is preferred, but read-write memory can be used if the platform requires it |
-| `arena_mem_area` | neural network activations, including ML model input and output tensors | read-write |
-| `cache_mem_area` | staging or fast scratch area for dedicated SRAM configurations | read-write |
-
-The `cache_mem_area` attribute is present in all `Memory_Mode` sections, but it
-does not always imply a separate NPU-only cache memory. It becomes a distinct
-staging or scratch-fast memory only when the memory mode maps `cache_mem_area` to
-a different alias from `arena_mem_area`, as in a dedicated-SRAM configuration.
-In SRAM-only or shared-SRAM configurations, `cache_mem_area` maps to the same
-alias as `arena_mem_area`, so the scratch-fast role is folded into the normal
-scratch region and there is no separate NPU-only cache section to allocate.
-
-### Spilling
-
-Spilling is the Vela compiler's use of a separate fast staging memory for data
-whose main storage is in another memory, for example DRAM. When spilling is
-enabled, the compiler
-can insert DMA transfers that move selected weights or feature-map data into the
-fast memory before an NPU operation uses it. This can improve performance, but
-it can also change tensor placement, scheduling, memory allocation sizes, and
-the generated command stream.
-
-The compiler's spilling machinery uses this separate staging memory when the
-resolved
-cache or staging memory differs from the resolved feature-map arena memory.
-Spilling uses the scratch-fast region in the generated command stream.
-
-### Arena cache size {#integration_arena_cache_size}
-
-A `Memory_Mode` section can also define `arena_cache_size`, for example:
-
-```ini
-arena_cache_size=393216
-```
-
-The meaning of `arena_cache_size` depends on the memory-area mapping, not on the
-name of the memory mode. It is the scheduler's available fast-memory budget:
-
-- If `arena_mem_area` and `cache_mem_area` map to the same logical alias, as
-  in the `Sram_Only` and `Shared_Sram` examples above, `arena_cache_size` sizes
-  the `arena_mem_area` and acts as the SRAM arena target.
-- If `arena_mem_area` and `cache_mem_area` map to different logical aliases, as
-  in the `Dedicated_Sram` and `Dtcm_Cache` examples above, `arena_cache_size`
-  sizes the separate fast staging or cache memory, not the full arena memory.
-
-The Vela compiler also supports related command-line options:
-
-```text
-vela network.tflite --optimise Size
-vela network.tflite --optimise Performance --arena-cache-size 2097152
-```
-
-`--optimise Size` minimizes SRAM usage and does not use the arena cache memory
-area size. `--optimise Performance` maximizes performance and uses the arena
-cache memory area size when it is specified. The `--arena-cache-size` option sets
-the arena cache size in bytes and overrides the `arena_cache_size` value from
-`vela.ini`. If neither value is specified, the compiler uses a size equal to the
-maximum
-address supported by the selected Ethos-U target.
-
-Ethos-U55 treats the real hardware AXI1 interface as read-only. Other Ethos-U
-implementations do not necessarily have that constraint, so do not infer a
-global read-only rule from the `Axi1` alias in `vela.ini` alone. The compiler
-contains
-generic spilling machinery, but `Dedicated_Sram` is not a practical Ethos-U55
-execution model when it requires the writable feature-map arena to be backed by
-the real U55 AXI1 side.
+This integration guide assumes that the accelerator configuration,
+`System_Config`, and `Memory_Mode` have already been selected. The remaining
+task is to keep that configuration consistent with the generated command-stream
+regions, physical memory placement, driver settings, and application memory
+budget described below.
 
 ## Generated command-stream regions
 
-After the Vela compiler resolves the selected system configuration and memory
-mode, the generated
-command stream uses NPU regions, also called base pointer indices. It does not
-use the strings `Axi0` or `Axi1`. Those aliases have already been resolved into
-compiler storage roles before this point.
-
-For the common Cortex-M embedded flow, the application-facing regions are:
-
-| Region | Compiler storage role | Driver base pointer |
-| --- | --- | --- |
-| 0 | read-only tensors, constants, encoded weights | weight tensor |
-| 1 | feature-map arena and scratch tensors | scratch tensor |
-| 2 | fast staging or cache tensors, when spilling is enabled | scratch-fast tensor |
+The common relationship between compiler memory areas and driver regions is
+described in
+[Match the driver configuration](../vela/index.html#vela_match_driver_configuration).
+The generated command stream uses numeric NPU regions, also
+called base pointer indices; it does not use the `Axi0` or `Axi1` aliases.
 
 Generated commands such as `NPU_SET_IFM_REGION`, `NPU_SET_OFM_REGION`,
 `NPU_SET_WEIGHT_REGION`, `NPU_SET_SCALE_REGION`, `NPU_SET_DMA0_SRC_REGION`, and
@@ -413,69 +149,35 @@ driver supply the base addresses and memory attributes for those regions.
 
 Verbose compiler dumps can also show internal region names that are not ordinary
 application-provided buffers. `Mem2Mem` is one of these names. The Vela compiler
-uses it for
-internal DMA or LUT handling, not for the application weight, scratch, or
+uses it for internal DMA or LUT handling, not for the application weight, scratch, or
 scratch-fast buffers. Spilling uses the scratch-fast region, not `Mem2Mem`.
 
 COP1 and COP2 are driver-action output formats produced by the Vela compiler.
-The common Cortex-M
-embedded flow uses the usual application-facing base pointers for weights,
-scratch, and optionally scratch-fast storage. COP2 is required by the compiler for
-flows that use separated input and output regions; it is a command-stream or
-driver-action format that a compatible ML inference runtime flow must consume.
+The common Cortex-M embedded flow uses the usual application-facing base
+pointers for weights, scratch, and optionally scratch-fast storage. COP2 is
+required by the compiler for flows that use separated input and output regions;
+it is a command-stream or driver-action format that a compatible ML inference
+runtime flow must consume.
 
 The Vela compiler can emit separated input and output regions when
-`--separate-io-regions`
-is used. That belongs to COP2/raw or separated-IO flows, not the normal Cortex-M
+`--separate-io-regions` is used. That belongs to COP2/raw or separated-IO flows,
+not the normal Cortex-M
 COP1-style flow that passes the usual weight, scratch, and optional scratch-fast
 buffers. If the generated stream uses additional base pointer regions,
 configure the corresponding driver region definitions from the actual generated
 ML model and ML inference runtime flow.
 
-## Linker script relationship
+## Linker configuration
 
-Even when a selected `System_Config` section in `vela.ini` names only two memory
-aliases, the Vela compiler works with three logical storage roles: constants,
-arena, and
-staging or cache.
-The linker script should therefore expose three corresponding sections so the
-application can place each generated ML model artifact or run-time buffer
-deliberately:
+Create the physical sections for model constants, the tensor arena, and any
+separate scratch-fast storage as described in
+[Create the linker script](../vela/index.html#vela_create_linker_script). Use the
+linker map to verify that their addresses and sizes match the selected memory
+mode and that every generated NPU region is accessible through the driver
+configuration.
 
-| Linker section | Compiler memory area | Sram_Only example | Shared_Sram example | Dedicated_Sram example |
-| --- | --- | --- | --- | --- |
-| `ethosu_arena` | `arena_mem_area` | low-latency memory | low-latency memory shared with Cortex-M software | DRAM |
-| `ethosu_const` | `const_mem_area` | low-latency memory | external Flash or DRAM | external Flash or DRAM |
-| `ethosu_cache` | `cache_mem_area` | not used separately | not used separately | dedicated SRAM or DTCM |
-
-The memory names in the table are examples. A dedicated-cache configuration can
-therefore use three different physical memories: external Flash for model
-constants, DRAM for activations, and dedicated SRAM or DTCM for staging or
-cache storage.
-For SRAM-only and shared-SRAM configurations, the dedicated cache section is not
-used and can be ignored.
-
-Select a `System_Config` section in `vela.ini` that corresponds to the memory
-placement used by the linker script. When the linker placement uses only two
-physical memories, this mapping is usually direct because the selected
-`System_Config` section
-also describes two memory types and their performance parameters. When the linker
-placement uses three physical memories, as in the dedicated-cache example above,
-the selected `System_Config` section cannot fully describe all three memory
-performances. In that case, use the system configuration that best matches the
-intended ML model placement, then benchmark representative ML models to decide which
-configuration generates the best model for the real memory system.
-
-The exact section names are platform-defined. The important point is that the
-linker placement, MPU/SAU attributes, cache maintenance policy, and memory-area
-mapping selected in `vela.ini` agree. When `arena_mem_area` and
-`cache_mem_area` map to the same resolved
-memory type, there is no separate dedicated cache section to allocate. When they
-map to different resolved memory types, the cache section should be placed in
-the low-latency memory that is reserved for the NPU, for example a dedicated
-SRAM or DTCM region. Dedicated SRAM cache is not a practical Ethos-U55 mode
-because the writable arena cannot be placed behind the real U55 read-only AXI1
-side.
+The following driver sections explain the platform hooks and region attributes
+that must agree with this placement.
 
 ## Driver weak hooks
 
@@ -592,14 +294,7 @@ the selected region configuration.
 
 For example, a shared-SRAM memory mode may place the command stream and
 constants in the memory selected by `Axi1`, and activations in the memory
-selected by `Axi0`:
-
-```ini
-[Memory_Mode.Shared_Sram]
-const_mem_area=Axi1
-arena_mem_area=Axi0
-cache_mem_area=Axi0
-```
+selected by `Axi0`.
 
 If the driver configuration maps `2` or `3` to the memory selected by `Axi1` and
 `0` or `1` to the memory selected by `Axi0`, the corresponding build definitions
@@ -615,14 +310,7 @@ defines:
 
 For a dedicated-SRAM memory mode, where supported, activations may move to the
 memory selected by `Axi1` while the staging or cache region remains in the
-memory selected by `Axi0`:
-
-```ini
-[Memory_Mode.Dedicated_Sram]
-const_mem_area=Axi1
-arena_mem_area=Axi1
-cache_mem_area=Axi0
-```
+memory selected by `Axi0`.
 
 The build definitions then follow that placement:
 
@@ -636,13 +324,6 @@ defines:
 
 For an SRAM-only memory mode, all generated regions can use the memory selected
 by `Axi0`:
-
-```ini
-[Memory_Mode.Sram_Only]
-const_mem_area=Axi0
-arena_mem_area=Axi0
-cache_mem_area=Axi0
-```
 
 ```yaml
 defines:
@@ -742,7 +423,7 @@ vela network.tflite \
 
 `--arena-cache-size` overrides the value in `vela.ini`. Its target area depends
 on the selected memory-mode mapping, as explained in
-\ref integration_arena_cache_size "Arena cache size".
+[Understand arena cache and spilling](../vela/index.html#vela_arena_cache_size).
 Treat it as an optimization target: if the compiler reports that the target was
 exceeded, use the reported actual allocation. Select a candidate only after its
 linked image fits and its correctness and performance have been measured on the
@@ -754,4 +435,3 @@ The compact loop is:
 size compile -> reserve the whole system -> performance budget sweep
      -> inspect actual allocation -> link -> run -> measure -> select
 ```
-

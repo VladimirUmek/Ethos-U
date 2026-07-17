@@ -25,9 +25,7 @@ policy. Review the resolved build settings before overriding pack-provided
 values such as `NPU_QCONFIG` or `NPU_REGIONCFG_x`.
 
 The low-level material below also supports silicon-vendor integration,
-troubleshooting, and manual porting when a suitable DFP is unavailable. The
-[Alif Ensemble DFP](https://github.com/alifsemi/alif_ensemble-cmsis-dfp)
-provides an example of device files referenced from a pack description.
+troubleshooting, and manual porting when a suitable DFP is unavailable.
 
 ## Driver responsibilities
 

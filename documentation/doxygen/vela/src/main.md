@@ -1,6 +1,6 @@
 # Vela {#mainpage}
 
-Arm Vela is an ahead-of-time neural network model compiler for the
+Arm Vela is an ahead-of-time (AOT) neural network model compiler for the
 [Ethos-U55](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55),
 [Ethos-U65](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65), and
 [Ethos-U85](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85) NPUs.
@@ -106,28 +106,23 @@ available, `pip` builds from source and requires Python development headers,
 CMake, a C99 compiler, and a C++17 compiler. The package depends on FlatBuffers
 and NumPy 1.23 or newer.
 
-## Obtaining the device configuration
+## Obtain Ethos-U configuration for a device
 
-For a microcontroller device, use the configuration supplied and qualified by
-the silicon vendor. Device Family Packs are available from the
-[www.keil.arm.com/pack](https://www.keil.arm.com/pack).
-The DFP description references device resources such as the `vela.ini`
-configuration file and linker scripts. CMSIS-Toolbox resolves these resources for
-the selected device and build context and provides the applicable values through
-its [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
+The Vela compiler requires the selected Ethos-U variant and MAC configuration,
+plus a `vela.ini` configuration file. This file contains named `System_Config`
+sections that model device memory performance and named `Memory_Mode` sections
+that define where model data is placed.
 
-CMSIS-Toolbox records the selected packs and `vela.ini` configuration file in the
-project metadata. Use the resolved accelerator configuration, system
-configuration, and supported memory mode instead of guessing values from the
-device name or substituting a generic reference configuration. The
-[Alif Ensemble DFP](https://github.com/alifsemi/alif_ensemble-cmsis-dfp) is an
-example of a pack that references device-specific files from its DFP
-description.
+For a microcontroller device, a Device Family Pack (DFP), available from
+[www.keil.arm.com/pack](https://www.keil.arm.com/pack), can provide the Ethos-U
+configuration information, including the device-specific `vela.ini` file.
+CMSIS-Toolbox exports these resources for the selected device and build context
+through its
+[MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
 
-The standalone options described below also support silicon-vendor development
-and manual integration when a suitable DFP is not available. In that case,
-obtain the equivalent configuration and linker information from the silicon
-vendor and keep those artifacts under version control.
+When a DFP with Ethos-U information is not available, the equivalent
+configuration can be supplied manually as described under
+\ref vela_create_configuration "Create Ethos-U configuration for a device".
 
 ## Basic invocation
 
@@ -163,7 +158,7 @@ provided by the installed version.
 
 | Parameter | Purpose |
 |---|---|
-| `NETWORK` | Vela compiler CLI metavariable for the required `.tflite` or `.tosa` ML model input path. It does not refer to a communications network. |
+| `NETWORK` | Path to the `.tflite` or `.tosa` ML model input file. |
 | `-h`, `--help` | Show command help and exit. |
 | `--version` | Show the installed Vela version and exit. |
 | `--api-version` | Show the deprecated external-API version. Planned for removal. |
@@ -229,10 +224,9 @@ useful for compiler development and regression isolation, but are not
 recommended as production tuning controls. Their names and behavior can change
 between releases.
 
-## Using the device configuration
+## Use the Ethos-U configuration {#vela_use_configuration}
 
-The accelerator target, system configuration, and memory mode describe
-different things:
+Compiling an ML model requires three selections from the Ethos-U configuration:
 
 | Setting | Describes |
 |---|---|
@@ -240,18 +234,28 @@ different things:
 | `--system-config` | Core clock, AXI port mapping, memory clock ratios, burst lengths, latencies, and outstanding transactions used by the cost model. |
 | `--memory-mode` | Placement of constant, arena, and cache memory areas on the AXI-connected memories. |
 
-Prefer the device configuration referenced by the selected DFP. The Vela
-package also provides the generic reference file `Arm/vela.ini` for evaluation,
-silicon-vendor development, and manual integration. Do not assume that its
-parameters describe a specific production device. Discover installed
-configuration files and definitions with:
+When a DFP supplies device-specific Ethos-U configuration information and the
+CMSIS-Toolbox project includes
+[MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information),
+CMSIS-Toolbox places the resolved configuration file in the `.cmsis` directory.
+List its available system configurations and memory modes with:
+
+```console
+vela --list-configs .cmsis/vela.ini  # The filename can be device-specific.
+```
+
+If the project does not provide a device configuration, the Vela installation
+includes the generic reference file `Arm/vela.ini` for evaluation,
+silicon-vendor development, and manual integration. Its parameters do not
+describe a specific production device. List the installed configuration files
+and their definitions with:
 
 ```console
 vela --list-config-files
 vela --list-configs Arm/vela.ini
 ```
 
-Typical packaged system configurations include:
+The generic `Arm/vela.ini` reference file includes these system configurations:
 
 - Ethos-U55: `Ethos_U55_Deep_Embedded`,
   `Ethos_U55_High_End_Embedded`.
@@ -261,7 +265,9 @@ Typical packaged system configurations include:
   `Ethos_U85_SYS_DRAM_Low`, `Ethos_U85_SYS_DRAM_Mid`,
   `Ethos_U85_SYS_DRAM_High`.
 
-### Memory modes
+### Select a memory mode {#vela_select_memory_mode}
+
+The reference configuration defines these commonly used memory modes:
 
 | Mode | Constants | Arena | Fast cache | Typical use |
 |---|---|---|---|---|
@@ -272,11 +278,13 @@ Typical packaged system configurations include:
 Packaged variants such as `Dedicated_Sram_256KB`, `_384KB`, `_512KB`, and
 `_1024KB` inherit `Dedicated_Sram` and set `arena_cache_size`.
 
-The names `Axi0` and `Axi1` are logical aliases in `vela.ini`. Their physical memory types
-come from the selected system configuration. The `vela.ini` file, SoC interconnect,
-linker placement, MPU/SAU attributes, cache policy, driver region indices, and
-ML inference runtime tensor arena must agree. The Vela compiler cannot validate
-the complete firmware memory map.
+The names `Axi0` and `Axi1` are logical aliases in `vela.ini`. Their physical
+memory types come from the selected system configuration. The `vela.ini` file,
+device interconnect, linker placement, MPU/SAU attributes, cache policy, driver
+region indices, and ML inference runtime tensor arena must agree. The Vela
+compiler cannot validate the complete firmware memory map.
+
+### Understand arena cache and spilling {#vela_arena_cache_size}
 
 `cache_mem_area` does not always create a separate cache allocation. When it
 resolves to the same memory type as `arena_mem_area`, the fast-scratch role is
@@ -287,15 +295,31 @@ the two attributes resolve to different memory types.
 Ethos-U55's hardware AXI1 interface is read-only. Consequently,
 `Dedicated_Sram` is not a practical Ethos-U55 execution model when the writable
 feature-map arena would be placed on that interface. Do not infer the same
-read-only restriction for the logical `Axi1` alias in `vela.ini` on every Ethos-U target.
+read-only restriction for the logical `Axi1` alias in `vela.ini` on every
+Ethos-U target.
 
-## `vela.ini` reference for silicon vendors and manual integration
+## Create Ethos-U configuration for a device {#vela_create_configuration}
 
-Application developers using a complete DFP normally consume this information
-through CMSIS-Toolbox. Silicon vendors and pack maintainers define and validate
-these values against the device, linker scripts, memory attributes, and driver
-configuration. This reference also supports troubleshooting and devices whose
-packs do not yet provide the required information.
+You may create a device-specific `vela.ini` file manually. Application
+developers normally obtain this file from the silicon vendor, either directly
+or from a DFP through CMSIS-Toolbox.
+
+Creating an Ethos-U configuration requires these steps:
+
+1. Select the Ethos-U variant and MAC configuration integrated in the device.
+2. Identify the physical memories accessible to the NPU and obtain their clock,
+   bandwidth, latency, burst, and outstanding-transaction characteristics.
+3. Define a `System_Config` that models those memories through the logical
+   `Axi0` and `Axi1` aliases.
+4. Define one or more `Memory_Mode` sections that place constants, the writable
+   arena, and optional fast staging storage on those aliases.
+5. Create matching linker and driver configurations for the physical memory
+   placement.
+6. Validate the complete configuration with compiler reports, the linker map,
+   and measurements on the device.
+
+The `vela.ini`, linker, MPU/SAU, cache, and driver settings must describe the
+same finished device integration.
 
 `vela.ini` uses Python ConfigParser syntax and is case-sensitive for section
 names, keys, and values. It contains two section types:
@@ -322,20 +346,34 @@ Custom files must observe the following constraints:
 
 - Put a section that is inherited from before the section that inherits it.
 - Avoid underscores in custom memory type names. The Vela compiler splits a
-  memory parameter
-  such as `<Memory>_clock_scale` at the first underscore.
+  memory parameter such as `<Memory>_clock_scale` at the first underscore.
 - Start the name of a custom Ethos-U55 system configuration with
   `Ethos_U55`. The Vela compiler uses this prefix when selecting the U55 AXI
-  bandwidth width
-  while translating memory-performance values.
+  bandwidth width while translating memory-performance values.
 
-### System configuration parameters
+### System configuration parameters {#vela_system_configuration}
 
-The system configuration maps the two logical aliases in `vela.ini` to memory types and
-supplies the performance model. `axi0_port` and `axi1_port` connect the aliases
-used by a memory mode to those types; they do not by themselves identify a
-physical memory or hardware port. Parameters for a memory type are
+The system configuration maps the two logical aliases in `vela.ini` to memory
+types and supplies the performance model. `axi0_port` and `axi1_port` connect
+the aliases used by a memory mode to those types; they do not by themselves
+identify a physical memory or hardware port. Parameters for a memory type are
 needed only when `axi0_port` or `axi1_port` selects that type.
+
+Derive the values from the device data sheet, interconnect description, and
+measured memory behavior:
+
+- use the integrated Ethos-U clock for `core_clock`;
+- map each logical alias to the memory type that most closely represents the
+  physical memory connected through that access path;
+- express memory clock or bandwidth scaling relative to the Ethos-U core clock;
+- convert read and write latency to Ethos-U core cycles; and
+- use supported burst lengths and outstanding-transaction limits from the
+  device interconnect.
+
+These inputs form a scheduling cost model, not a cycle-accurate hardware model.
+Start with conservative values when the hardware documentation gives a range,
+then compare compiler estimates and hardware measurements for representative ML
+models.
 
 | Parameter | Type or values | Description |
 |---|---|---|
@@ -362,7 +400,7 @@ command stream. `core_clock` is primarily used to convert cycle estimates to
 time. Benchmark the compiled model on the target when accurate performance is
 required.
 
-### Memory mode parameters
+### Memory mode parameters {#vela_memory_mode}
 
 | Parameter | Type or values | Description |
 |---|---|---|
@@ -372,14 +410,76 @@ required.
 | `arena_cache_size` | Integer, bytes | Scheduler's fast-memory budget: the arena target when arena and cache resolve to the same memory type, or the separate staging-cache size when they differ. The CLI `--arena-cache-size` overrides it for `Performance` optimization. |
 | `inherit` | `Part.Name` | Parent section whose parameters are inherited. Child values take precedence. |
 
-The memory-area mapping must match the Ethos-U driver, ML inference runtime tensor arena,
-linker script, and physical memory system. These options guide compilation; they
-do not configure the hardware.
+The memory-area mapping must match the Ethos-U driver, ML inference runtime
+tensor arena, linker script, and physical memory system. These options guide
+compilation; they do not configure the hardware.
 
 With `--optimise Size`, the Vela compiler minimizes SRAM use and does not use
-the arena-cache size. With `--optimise Performance`, it uses the configured or command-line
-arena-cache size. If neither is supplied, the compiler uses the maximum addressable size
-for the selected Ethos-U target.
+the arena-cache size. With `--optimise Performance`, it uses the configured or
+command-line arena-cache size. If neither is supplied, the compiler uses the
+maximum addressable size for the selected Ethos-U target.
+
+### Create the linker script {#vela_create_linker_script}
+
+The linker script places the generated model artifacts and run-time buffers in
+the physical memories represented by the selected `System_Config` and
+`Memory_Mode`. It does not use the logical names `Axi0` and `Axi1` directly.
+Instead, it provides sections or memory regions for the compiler memory areas:
+
+| Compiler memory area | Linker placement | Access |
+|---|---|---|
+| `const_mem_area` | Compiled model, command stream, encoded weights, scales, and other constants | Normally read-only |
+| `arena_mem_area` | Input, output, intermediate activation, and scratch storage used by the ML inference runtime | Read-write |
+| `cache_mem_area` | Optional scratch-fast or staging buffer when it resolves to a different physical memory from `arena_mem_area` | Read-write |
+
+The linker section names are device- and runtime-specific. Names such as
+`ethosu_const`, `ethosu_arena`, and `ethosu_cache` can be used, but the important
+property is their physical placement. If `arena_mem_area` and `cache_mem_area`
+resolve to the same memory type, a separate cache section is not required. If
+they resolve to different memory types, reserve the configured
+`arena_cache_size` in the fast memory used for `cache_mem_area`.
+
+The linker script, MPU/SAU attributes, and CPU cache policy must make every
+generated region accessible to both the ML inference runtime and the NPU as
+required. When Cortex-M software and the NPU use different addresses for the
+same memory, the driver must provide the corresponding address translation.
+The driver's command-stream and region attributes must also select access paths
+that match the linker placement.
+
+Validate a new linker configuration by checking:
+
+- the link map contains the compiled model and all run-time buffers in the
+  intended physical memories;
+- the allocated arena and optional scratch-fast buffer are at least as large as
+  the compiler reports;
+- all used command-stream base regions are accessible to the NPU;
+- MPU/SAU and cache attributes match the driver cache-maintenance policy; and
+- the optimized model runs correctly and meets its memory and performance goals
+  on the device.
+
+### Match the driver configuration {#vela_match_driver_configuration}
+
+The driver configuration must select NPU access paths that match the physical
+placement established by `vela.ini` and the linker script. For the common
+embedded output flow, verify these relationships:
+
+| Generated content | Typical compiler memory area | Driver setting |
+|---|---|---|
+| Command stream | Placed with compiled model constants | `NPU_QCONFIG` |
+| Base region 0: constants and encoded weights | `const_mem_area` | `NPU_REGIONCFG_0` |
+| Base region 1: activations and scratch | `arena_mem_area` | `NPU_REGIONCFG_1` |
+| Base region 2: optional scratch-fast storage | `cache_mem_area` | `NPU_REGIONCFG_2` |
+
+The numeric values of these driver settings are target-specific. Additional
+base regions can be present in specialized output flows, so use the generated
+command stream and the device integration information as the authority. Also
+configure address translation and cache maintenance when Cortex-M software and
+the NPU access the same physical memory through different addresses or cache
+policies.
+
+See [Integration](../integration/index.html) for system validation, platform
+hooks, target-specific driver build configuration, cache maintenance, and
+address-remapping guidance.
 
 ### Complete `vela.ini` example
 
@@ -436,6 +536,53 @@ vela model.tflite --config vela.ini \
   --memory-mode My_Shared_Sram \
   --verbose-config
 ```
+
+### Publish Ethos-U configuration in a DFP {#vela_publish_configuration}
+
+A DFP can publish the NPU capabilities, `vela.ini` file, and matching linker
+scripts in its DFP description. CMSIS-Toolbox can then select these resources
+for the device, processor, and toolchain used by a project.
+
+Declare each integrated NPU with a device `feature`. The `n` attribute identifies
+the Ethos-U variant, `m` identifies its MAC configuration, and `Pname` associates
+it with a processor when the device contains more than one:
+
+```xml
+<feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
+<feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
+```
+
+Publish the device-specific Vela configuration through the `VELA` environment:
+
+```xml
+<environment name="VELA">
+  <file name="Device/scripts/vela/device_vela.ini" type="ini"/>
+</environment>
+```
+
+Add linker scripts as component files. Conditions can select the script that
+matches a processor and toolchain:
+
+```xml
+<file category="linkerScript"
+      name="Device/linker/linker_ac6_mram.sct"
+      attr="config" condition="ARMCC6_HP"/>
+<file category="linkerScript"
+      name="Device/linker/linker_gnu_mram.ld.src"
+      attr="config" condition="GCC_HP"/>
+```
+
+Keep the NPU feature, Vela environment, `vela.ini`, linker scripts, and their
+conditions consistent. A project that selects another processor or compiler
+must resolve to the corresponding NPU configuration and linker script.
+
+For the complete pack structure and element rules, see:
+
+- [DFP Pack Hands-On](https://github.com/Open-CMSIS-Pack/DFP-Pack-HandsOn);
+- [`feature` element](https://open-cmsis-pack.github.io/Open-CMSIS-Pack-Spec/main/html/pdsc_family_pg.html#element_feature);
+- [`environment` element](https://open-cmsis-pack.github.io/Open-CMSIS-Pack-Spec/main/html/pdsc_family_pg.html#element_environment); and
+- [component `file` element](https://open-cmsis-pack.github.io/Open-CMSIS-Pack-Spec/main/html/pdsc_components_pg.html#element_file).
+
 
 ## Examples
 
@@ -523,7 +670,7 @@ uses an Ethos-U driver compatible with the compiled command stream.
 
 ## ExecuTorch Arm example flow
 
-ExecuTorch's `examples/arm` directory demonstrates an integrated PyTorch-to-
+The ExecuTorch repository contains on [github.com/pytorch/executorch/tree/main/examples/arm](https://github.com/pytorch/executorch/tree/main/examples/arm/ethos-u-setup) contains examples and demonstrates an integrated PyTorch-to-
 Ethos-U workflow. Its setup script installs the Arm toolchain, TOSA tools,
 Ethos-U Vela, and
 [Corstone](https://www.arm.com/products/silicon-ip-subsystems) FVPs. The AOT Arm

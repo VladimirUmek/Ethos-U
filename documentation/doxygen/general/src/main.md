@@ -26,8 +26,9 @@ file, linker scripts, and software components. Device packs are available from
 these resources for the selected device and build context and exposes the
 relevant parameters through its
 [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
-The [Alif Ensemble DFP](https://github.com/alifsemi/alif_ensemble-cmsis-dfp)
-is an example of this pack structure.
+See
+[Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
+for the relevant DFP description entries.
 
 When a vendor-qualified DFP is available, application developers can use it to
 obtain validated device-specific files. Silicon vendors and pack maintainers
