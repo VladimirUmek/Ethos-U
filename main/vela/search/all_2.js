@@ -1,9 +1,14 @@
 var searchData=
 [
-  ['compile_20for_20an_20ethos_20u55_20reference_20system_0',['Compile for an Ethos-U55 reference system',['../index.html#autotoc_md17',1,'']]],
-  ['compile_20tosa_20for_20ethos_20u85_20raw_20output_1',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md20',1,'']]],
-  ['compiler_20decisions_2',['Inspect placement and compiler decisions',['../index.html#autotoc_md21',1,'']]],
-  ['complete_20tt_20vela_20ini_20tt_20example_3',['Complete &lt;tt&gt;vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md15',1,'']]],
-  ['configuration_4',['configuration',['../index.html#autotoc_md4',1,'Obtaining the device configuration'],['../index.html#autotoc_md10',1,'Using the device configuration']]],
-  ['configuration_20parameters_5',['System configuration parameters',['../index.html#autotoc_md13',1,'']]]
+  ['cache_20and_20spilling_0',['Understand arena cache and spilling',['../index.html#vela_arena_cache_size',1,'']]],
+  ['compile_20for_20an_20ethos_20u55_20reference_20system_1',['Compile for an Ethos-U55 reference system',['../index.html#autotoc_md12',1,'']]],
+  ['compile_20tosa_20for_20ethos_20u85_20raw_20output_2',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md15',1,'']]],
+  ['compiler_20decisions_3',['Inspect placement and compiler decisions',['../index.html#autotoc_md16',1,'']]],
+  ['complete_20tt_20vela_20ini_20tt_20example_4',['Complete &lt;tt&gt;vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]],
+  ['configuration_5',['configuration',['../index.html#vela_match_driver_configuration',1,'Match the driver configuration'],['../index.html#vela_use_configuration',1,'Use the Ethos-U configuration']]],
+  ['configuration_20for_20a_20device_6',['configuration for a device',['../index.html#vela_create_configuration',1,'Create Ethos-U configuration for a device'],['../index.html#autotoc_md4',1,'Obtain Ethos-U configuration for a device']]],
+  ['configuration_20in_20a_20dfp_7',['Publish Ethos-U configuration in a DFP',['../index.html#vela_publish_configuration',1,'']]],
+  ['configuration_20parameters_8',['System configuration parameters',['../index.html#vela_system_configuration',1,'']]],
+  ['create_20ethos_20u_20configuration_20for_20a_20device_9',['Create Ethos-U configuration for a device',['../index.html#vela_create_configuration',1,'']]],
+  ['create_20the_20linker_20script_10',['Create the linker script',['../index.html#vela_create_linker_script',1,'']]]
 ];

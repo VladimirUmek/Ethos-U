@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['or_20extending_20a_20device_20family_20pack_0',['Creating or extending a Device Family Pack',['../index.html#autotoc_md4',1,'']]]
+  ['pack_0',['Creating or extending a Device Family Pack',['../index.html#autotoc_md4',1,'']]],
+  ['performance_20budgets_1',['Sweep feasible performance budgets',['../index.html#autotoc_md13',1,'']]]
 ];

@@ -31,31 +31,35 @@ var NAVTREE =
         [ "Troubleshooting installation", "index.html#autotoc_md3", null ]
       ] ]
     ] ],
-    [ "Obtaining the device configuration", "index.html#autotoc_md4", null ],
+    [ "Obtain Ethos-U configuration for a device", "index.html#autotoc_md4", null ],
     [ "Basic invocation", "index.html#autotoc_md5", null ],
     [ "Invocation parameters", "index.html#autotoc_md6", [
       [ "Input, output, and discovery", "index.html#autotoc_md7", null ],
       [ "Target and scheduling", "index.html#autotoc_md8", null ],
       [ "Reporting and diagnostics", "index.html#autotoc_md9", null ]
     ] ],
-    [ "Using the device configuration", "index.html#autotoc_md10", [
-      [ "Memory modes", "index.html#autotoc_md11", null ]
+    [ "Use the Ethos-U configuration", "index.html#vela_use_configuration", [
+      [ "Select a memory mode", "index.html#vela_select_memory_mode", null ],
+      [ "Understand arena cache and spilling", "index.html#vela_arena_cache_size", null ]
     ] ],
-    [ "vela.ini reference for silicon vendors and manual integration", "index.html#autotoc_md12", [
-      [ "System configuration parameters", "index.html#autotoc_md13", null ],
-      [ "Memory mode parameters", "index.html#autotoc_md14", null ],
-      [ "Complete vela.ini example", "index.html#autotoc_md15", null ]
+    [ "Create Ethos-U configuration for a device", "index.html#vela_create_configuration", [
+      [ "System configuration parameters", "index.html#vela_system_configuration", null ],
+      [ "Memory mode parameters", "index.html#vela_memory_mode", null ],
+      [ "Create the linker script", "index.html#vela_create_linker_script", null ],
+      [ "Match the driver configuration", "index.html#vela_match_driver_configuration", null ],
+      [ "Complete vela.ini example", "index.html#autotoc_md10", null ],
+      [ "Publish Ethos-U configuration in a DFP", "index.html#vela_publish_configuration", null ]
     ] ],
-    [ "Examples", "index.html#autotoc_md16", [
-      [ "Compile for an Ethos-U55 reference system", "index.html#autotoc_md17", null ],
-      [ "Minimize peak SRAM", "index.html#autotoc_md18", null ],
-      [ "Set a performance-scheduler SRAM budget", "index.html#autotoc_md19", null ],
-      [ "Compile TOSA for Ethos-U85 raw output", "index.html#autotoc_md20", null ],
-      [ "Inspect placement and compiler decisions", "index.html#autotoc_md21", null ],
-      [ "Embed an optimized TFLite model in firmware", "index.html#autotoc_md22", null ]
+    [ "Examples", "index.html#autotoc_md11", [
+      [ "Compile for an Ethos-U55 reference system", "index.html#autotoc_md12", null ],
+      [ "Minimize peak SRAM", "index.html#autotoc_md13", null ],
+      [ "Set a performance-scheduler SRAM budget", "index.html#autotoc_md14", null ],
+      [ "Compile TOSA for Ethos-U85 raw output", "index.html#autotoc_md15", null ],
+      [ "Inspect placement and compiler decisions", "index.html#autotoc_md16", null ],
+      [ "Embed an optimized TFLite model in firmware", "index.html#autotoc_md17", null ]
     ] ],
-    [ "ExecuTorch Arm example flow", "index.html#autotoc_md23", null ],
-    [ "Troubleshooting", "index.html#autotoc_md24", null ]
+    [ "ExecuTorch Arm example flow", "index.html#autotoc_md18", null ],
+    [ "Troubleshooting", "index.html#autotoc_md19", null ]
   ] ]
 ];
 

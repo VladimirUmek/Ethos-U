@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['raw_20output_0',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md20',1,'']]],
-  ['reference_20for_20silicon_20vendors_20and_20manual_20integration_1',['&lt;tt&gt;vela.ini&lt;/tt&gt; reference for silicon vendors and manual integration',['../index.html#autotoc_md12',1,'']]],
-  ['reference_20system_2',['Compile for an Ethos-U55 reference system',['../index.html#autotoc_md17',1,'']]],
-  ['reporting_20and_20diagnostics_3',['Reporting and diagnostics',['../index.html#autotoc_md9',1,'']]]
+  ['parameters_0',['parameters',['../index.html#autotoc_md6',1,'Invocation parameters'],['../index.html#vela_memory_mode',1,'Memory mode parameters'],['../index.html#vela_system_configuration',1,'System configuration parameters']]],
+  ['peak_20sram_1',['Minimize peak SRAM',['../index.html#autotoc_md13',1,'']]],
+  ['performance_20scheduler_20sram_20budget_2',['Set a performance-scheduler SRAM budget',['../index.html#autotoc_md14',1,'']]],
+  ['placement_20and_20compiler_20decisions_3',['Inspect placement and compiler decisions',['../index.html#autotoc_md16',1,'']]],
+  ['publish_20ethos_20u_20configuration_20in_20a_20dfp_4',['Publish Ethos-U configuration in a DFP',['../index.html#vela_publish_configuration',1,'']]]
 ];

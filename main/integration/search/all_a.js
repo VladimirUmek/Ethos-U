@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['linker_20script_20relationship_0',['Linker script relationship',['../index.html#autotoc_md10',1,'']]]
+  ['linker_20configuration_0',['Linker configuration',['../index.html#autotoc_md7',1,'']]]
 ];

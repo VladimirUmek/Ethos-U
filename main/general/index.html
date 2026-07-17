@@ -44,7 +44,7 @@
   <td id="projectlogo" style="padding: 1em;"><img alt="Logo" src="arm.png"/></td>
   <td style="padding-left: 2em; padding-bottom: 1em;padding-top: 1em;">
   <div id="projectname">Ethos-U Integration for Cortex-M
-   &#160;<span id="projectnumber">Version 1.0.0-dev30</span>
+   &#160;<span id="projectnumber">Version 1.0.0-dev31</span>
    </div>
    <div id="projectbrief">General Information</div>
   </td>
@@ -139,7 +139,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 Target audiences and device packs</h1>
 <p>In this documentation, a <b>microcontroller device</b> is a device that combines a Cortex-M processor with an integrated Ethos-U NPU. The documentation serves both embedded application developers using these devices and silicon vendors or platform maintainers who provide support for them.</p>
 <p>The term <b>Vela compiler</b> refers to the model-compilation tool. The term <b><code>vela.ini</code> configuration</b> refers to its target-system and memory configuration file. System configurations and memory modes are named sections within that file.</p>
-<p>A CMSIS Device Family Pack (DFP) can simplify integration by including or referencing device-specific resources such as the <code>vela.ini</code> configuration file, linker scripts, and software components. Device packs are available from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. CMSIS-Toolbox resolves these resources for the selected device and build context and exposes the relevant parameters through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>. The <a href="https://github.com/alifsemi/alif_ensemble-cmsis-dfp">Alif Ensemble DFP</a> is an example of this pack structure.</p>
+<p>A CMSIS Device Family Pack (DFP) can simplify integration by including or referencing device-specific resources such as the <code>vela.ini</code> configuration file, linker scripts, and software components. Device packs are available from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. CMSIS-Toolbox resolves these resources for the selected device and build context and exposes the relevant parameters through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>. See <a href="../vela/index.html#vela_publish_configuration">Publish Ethos-U configuration in a DFP</a> for the relevant DFP description entries.</p>
 <p>When a vendor-qualified DFP is available, application developers can use it to obtain validated device-specific files. Silicon vendors and pack maintainers are responsible for supplying and validating those files. If a suitable DFP is unavailable, the same information in this documentation supports manual integration.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 System overview</h1>

@@ -1,11 +1,14 @@
 var searchData=
 [
-  ['embed_20an_20optimized_20tflite_20model_20in_20firmware_0',['Embed an optimized TFLite model in firmware',['../index.html#autotoc_md22',1,'']]],
-  ['ethos_20u55_20reference_20system_1',['Compile for an Ethos-U55 reference system',['../index.html#autotoc_md17',1,'']]],
-  ['ethos_20u85_20raw_20output_2',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md20',1,'']]],
-  ['example_3',['Complete &lt;tt&gt;vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md15',1,'']]],
-  ['example_20flow_4',['ExecuTorch Arm example flow',['../index.html#autotoc_md23',1,'']]],
-  ['examples_5',['Examples',['../index.html#autotoc_md16',1,'']]],
-  ['executorch_20arm_20example_20flow_6',['ExecuTorch Arm example flow',['../index.html#autotoc_md23',1,'']]],
-  ['existing_20installation_7',['Update an existing installation',['../index.html#autotoc_md2',1,'']]]
+  ['embed_20an_20optimized_20tflite_20model_20in_20firmware_0',['Embed an optimized TFLite model in firmware',['../index.html#autotoc_md17',1,'']]],
+  ['ethos_20u_20configuration_1',['Use the Ethos-U configuration',['../index.html#vela_use_configuration',1,'']]],
+  ['ethos_20u_20configuration_20for_20a_20device_2',['Ethos U configuration for a device',['../index.html#vela_create_configuration',1,'Create Ethos-U configuration for a device'],['../index.html#autotoc_md4',1,'Obtain Ethos-U configuration for a device']]],
+  ['ethos_20u_20configuration_20in_20a_20dfp_3',['Publish Ethos-U configuration in a DFP',['../index.html#vela_publish_configuration',1,'']]],
+  ['ethos_20u55_20reference_20system_4',['Compile for an Ethos-U55 reference system',['../index.html#autotoc_md12',1,'']]],
+  ['ethos_20u85_20raw_20output_5',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md15',1,'']]],
+  ['example_6',['Complete &lt;tt&gt;vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]],
+  ['example_20flow_7',['ExecuTorch Arm example flow',['../index.html#autotoc_md18',1,'']]],
+  ['examples_8',['Examples',['../index.html#autotoc_md11',1,'']]],
+  ['executorch_20arm_20example_20flow_9',['ExecuTorch Arm example flow',['../index.html#autotoc_md18',1,'']]],
+  ['existing_20installation_10',['Update an existing installation',['../index.html#autotoc_md2',1,'']]]
 ];

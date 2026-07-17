@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['parameters_0',['parameters',['../index.html#autotoc_md6',1,'Invocation parameters'],['../index.html#autotoc_md14',1,'Memory mode parameters'],['../index.html#autotoc_md13',1,'System configuration parameters']]],
-  ['peak_20sram_1',['Minimize peak SRAM',['../index.html#autotoc_md18',1,'']]],
-  ['performance_20scheduler_20sram_20budget_2',['Set a performance-scheduler SRAM budget',['../index.html#autotoc_md19',1,'']]],
-  ['placement_20and_20compiler_20decisions_3',['Inspect placement and compiler decisions',['../index.html#autotoc_md21',1,'']]]
+  ['obtain_20ethos_20u_20configuration_20for_20a_20device_0',['Obtain Ethos-U configuration for a device',['../index.html#autotoc_md4',1,'']]],
+  ['optimized_20tflite_20model_20in_20firmware_1',['Embed an optimized TFLite model in firmware',['../index.html#autotoc_md17',1,'']]],
+  ['output_2',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md15',1,'']]],
+  ['output_20and_20discovery_3',['Input, output, and discovery',['../index.html#autotoc_md7',1,'']]],
+  ['overview_4',['Feature overview',['../index.html#autotoc_md0',1,'']]]
 ];

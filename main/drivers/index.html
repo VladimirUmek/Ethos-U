@@ -133,7 +133,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 Device-pack integration</h1>
 <p>For a microcontroller device, start with the silicon vendor's Device Family Pack from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. Its DFP description should reference the device description, linker configuration, driver components, and <code>vela.ini</code> configuration file needed by the target. CMSIS-Toolbox resolves these resources for the selected device and build context; see its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
 <p>The vendor or pack maintainer owns the device-specific IRQ wiring, address mapping, NPU region attributes, cache assumptions, linker configuration, and platform-hook defaults. The application owns model buffers, invocation, RTOS coordination, timeout handling, and any application-specific power or cache policy. Review the resolved build settings before overriding pack-provided values such as <code>NPU_QCONFIG</code> or <code>NPU_REGIONCFG_x</code>.</p>
-<p>The low-level material below also supports silicon-vendor integration, troubleshooting, and manual porting when a suitable DFP is unavailable. The <a href="https://github.com/alifsemi/alif_ensemble-cmsis-dfp">Alif Ensemble DFP</a> provides an example of device files referenced from a pack description.</p>
+<p>The low-level material below also supports silicon-vendor integration, troubleshooting, and manual porting when a suitable DFP is unavailable.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Driver responsibilities</h1>
 <p>The driver:</p>

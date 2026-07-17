@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['obtaining_20the_20device_20configuration_0',['Obtaining the device configuration',['../index.html#autotoc_md4',1,'']]],
-  ['optimized_20tflite_20model_20in_20firmware_1',['Embed an optimized TFLite model in firmware',['../index.html#autotoc_md22',1,'']]],
-  ['output_2',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md20',1,'']]],
-  ['output_20and_20discovery_3',['Input, output, and discovery',['../index.html#autotoc_md7',1,'']]],
-  ['overview_4',['Feature overview',['../index.html#autotoc_md0',1,'']]]
+  ['match_20the_20driver_20configuration_0',['Match the driver configuration',['../index.html#vela_match_driver_configuration',1,'']]],
+  ['memory_20mode_1',['Select a memory mode',['../index.html#vela_select_memory_mode',1,'']]],
+  ['memory_20mode_20parameters_2',['Memory mode parameters',['../index.html#vela_memory_mode',1,'']]],
+  ['minimize_20peak_20sram_3',['Minimize peak SRAM',['../index.html#autotoc_md13',1,'']]],
+  ['mode_4',['Select a memory mode',['../index.html#vela_select_memory_mode',1,'']]],
+  ['mode_20parameters_5',['Memory mode parameters',['../index.html#vela_memory_mode',1,'']]],
+  ['model_20in_20firmware_6',['Embed an optimized TFLite model in firmware',['../index.html#autotoc_md17',1,'']]]
 ];
