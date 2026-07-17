@@ -127,13 +127,13 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="mainpage"></a></p>
-<p>This section is the technical reference for the low-level Ethos-U driver. It explains the NPU execution contract and links to the API generated directly from <code>ethosu_driver.h</code>.</p>
-<p>For compiler options, use <a href="../vela/index.html">Vela</a>. For decisions that must coordinate <code>vela.ini</code>, the linker, MPU/SAU, caches, RTOS, and driver build settings, use <a href="../integration/index.html">Integration</a>.</p>
+<p>This chapter is the technical reference for the low-level Ethos-U driver. It explains the NPU execution contract and links to the API generated directly from <code>ethosu_driver.h</code>.</p>
 <h1><a class="anchor" id="autotoc_md0"></a>
-Device-pack integration</h1>
-<p>For an Edge AI MCU, start with the silicon vendor's Device Family Pack from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>. Its DFP description should reference the device description, linker configuration, driver components, and <code>vela.ini</code> configuration file needed by the target. CMSIS-Toolbox resolves these resources for the selected device and build context; see its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
-<p>The vendor or pack maintainer owns the device-specific IRQ wiring, address mapping, NPU region attributes, cache assumptions, linker configuration, and platform-hook defaults. The application owns model buffers, invocation, RTOS coordination, timeout handling, and any application-specific power or cache policy. Review the resolved build settings before overriding pack-provided values such as <code>NPU_QCONFIG</code> or <code>NPU_REGIONCFG_x</code>.</p>
-<p>The low-level material below also supports silicon-vendor integration, troubleshooting, and manual porting when a suitable DFP is unavailable.</p>
+Add the driver component to csolution project</h1>
+<p>Add the driver variant that matches the device's Ethos-U NPU to the <code>components</code> list. For example, select the Ethos-U55 driver with:</p>
+<div class="fragment"><div class="line">components:</div>
+<div class="line">  - component: &quot;ARM::Machine Learning:NPU Support:Ethos-U Driver&amp;Generic U55&quot;</div>
+</div><!-- fragment --><p>Use <code>Generic U65</code> or <code>Generic U85</code> for an Ethos-U65 or Ethos-U85 device. Select exactly one driver variant. CMSIS-Toolbox resolves the component from the <code>ARM::CMSIS-Ethos-U</code> pack.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Driver responsibilities</h1>
 <p>The driver:</p>
@@ -143,6 +143,7 @@ Driver responsibilities</h1>
 <li>programs the command-stream and model-region base addresses;</li>
 <li>starts the NPU and handles completion or fault interrupts;</li>
 <li>supports synchronous and asynchronous invocation;</li>
+<li>provides access to the Ethos-U Performance Monitoring Unit (PMU);</li>
 <li>exposes weak platform hooks for power, cache, address, and RTOS integration.</li>
 </ul>
 <p>It does not compile models, allocate the ML framework's tensor arena, choose a memory mode in <code>vela.ini</code>, or place sections in physical memory.</p>
@@ -212,6 +213,29 @@ Platform hooks</h1>
 </table>
 <p>Cache policy, linker placement, and region configuration are system-level decisions. Detailed guidance is in <a href="../integration/index.html">Driver weak hooks</a> and <a href="../integration/index.html">Driver build configuration</a>.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
+Performance Monitoring Unit</h1>
+<p>The driver exposes the Ethos-U PMU through <code>pmu_ethosu.h</code>. The API supports a 64-bit cycle counter and programmable event counters. Ethos-U55 and Ethos-U65 builds provide four event counters; Ethos-U85 builds provide eight. Use <code>ETHOSU_PMU_Get_NumEventCounters()</code> when code must work with more than one Ethos-U target.</p>
+<p>The target-specific <code>enum ethosu_pmu_event_type</code> lists the supported events. They include NPU and MAC activity or stalls, weight-decoder and activation-output activity, memory transactions and stalls, latency ranges, and ECC events. The available event names differ between Ethos-U55/U65 and Ethos-U85. Use the symbolic enum values with <code>ETHOSU_PMU_Set_EVTYPER()</code>; do not program hardware event numbers directly.</p>
+<p>The main API groups are:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Task   </th><th class="markdownTableHeadNone">PMU API    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Enable or disable the PMU   </td><td class="markdownTableBodyNone"><code>ETHOSU_PMU_Enable()</code>, <code>ETHOSU_PMU_Disable()</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Select an event   </td><td class="markdownTableBodyNone"><code>ETHOSU_PMU_Set_EVTYPER()</code>, <code>ETHOSU_PMU_Get_EVTYPER()</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Reset counters   </td><td class="markdownTableBodyNone"><code>ETHOSU_PMU_CYCCNT_Reset()</code>, <code>ETHOSU_PMU_EVCNTR_ALL_Reset()</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Enable or disable counters   </td><td class="markdownTableBodyNone"><code>ETHOSU_PMU_CNTR_Enable()</code>, <code>ETHOSU_PMU_CNTR_Disable()</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Read counters   </td><td class="markdownTableBodyNone"><code>ETHOSU_PMU_Get_CCNTR()</code>, <code>ETHOSU_PMU_Get_EVCNTR()</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Handle overflow   </td><td class="markdownTableBodyNone"><code>ETHOSU_PMU_Get_CNTR_OVS()</code>, <code>ETHOSU_PMU_Set_CNTR_OVS()</code>, <code>ETHOSU_PMU_Set_CNTR_IRQ_Enable()</code>, <code>ETHOSU_PMU_Set_CNTR_IRQ_Disable()</code>   </td></tr>
+</table>
+<p>Counter masks use <code>ETHOSU_PMU_CNT1_Msk</code> and the other event-counter masks, plus <code>ETHOSU_PMU_CCNT_Msk</code> for the cycle counter. Enabling the PMU requests NPU power; disabling it releases that request, so always pair the two operations.</p>
+<p>Override <code><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a></code> to select and reset events immediately before an inference, and override <code><a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a></code> to read the counters and disable the PMU afterward. These callbacks receive the same <code>user_arg</code> that was passed to <code><a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3()</a></code> or <code><a class="el" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a></code>, which can identify where the results should be stored. PMU measurements are hardware observations; compare them with Vela compiler estimates, but do not treat the estimates as cycle-accurate measurements.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Bring-up checklist</h1>
 <ul>
 <li>Confirm the NPU identity and MAC configuration match the Vela compiler target.</li>
@@ -220,6 +244,7 @@ Bring-up checklist</h1>
 <li>Verify cache clean/invalidate behavior with caches enabled, not only disabled.</li>
 <li>Check address remapping for TCM or aliased memory windows.</li>
 <li>Start with one known-good, fully supported model before testing a large graph.</li>
+<li>Use PMU cycle, activity, stall, and memory events when validating performance or investigating a difference from compiler estimates.</li>
 <li>Capture driver fault information before resetting after an error.</li>
 </ul>
 <p>Continue with the end-to-end <a href="../integration/index.html">Integration</a> checklist before treating driver bring-up as complete. </p>

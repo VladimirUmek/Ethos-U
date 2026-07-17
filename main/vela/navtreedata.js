@@ -31,7 +31,7 @@ var NAVTREE =
         [ "Troubleshooting installation", "index.html#autotoc_md3", null ]
       ] ]
     ] ],
-    [ "Obtain Ethos-U configuration for a device", "index.html#autotoc_md4", null ],
+    [ "Obtain an Ethos-U configuration for a device", "index.html#autotoc_md4", null ],
     [ "Basic invocation", "index.html#autotoc_md5", null ],
     [ "Invocation parameters", "index.html#autotoc_md6", [
       [ "Input, output, and discovery", "index.html#autotoc_md7", null ],

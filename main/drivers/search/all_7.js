@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['integration_0',['Device-pack integration',['../index.html#autotoc_md0',1,'']]]
+  ['monitoring_20unit_0',['Performance Monitoring Unit',['../index.html#autotoc_md5',1,'']]]
 ];
