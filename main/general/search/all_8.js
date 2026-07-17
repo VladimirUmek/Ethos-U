@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['typical_20system_20architecture_0',['Typical System Architecture',['../index.html#autotoc_md1',1,'']]]
+  ['packs_0',['Target audiences and device packs',['../index.html#autotoc_md0',1,'']]]
 ];

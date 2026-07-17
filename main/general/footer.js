@@ -1,7 +1,7 @@
 function writeHeader() {
-    document.write('Version 1.0.0-dev28');
+    document.write('Version 1.0.0-dev29');
 };
 
 function writeFooter()  {
-    document.write('Generated on Thu Jul 16 2026 10:24:17 for PROJECT_NAME           = General 1.0.0-dev28+g614a637. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Fri Jul 17 2026 10:42:44 for PROJECT_NAME           = General 1.0.0-dev29+ga8e3fc0. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };

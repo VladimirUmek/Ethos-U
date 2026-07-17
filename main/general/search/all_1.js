@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['executorch_20resources_0',['Vela and ExecuTorch resources',['../index.html#autotoc_md5',1,'']]]
+  ['configuration_0',['Coordinating the device configuration',['../index.html#autotoc_md2',1,'']]],
+  ['coordinating_20the_20device_20configuration_1',['Coordinating the device configuration',['../index.html#autotoc_md2',1,'']]]
 ];

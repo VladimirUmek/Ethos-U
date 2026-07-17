@@ -25,6 +25,12 @@
 var NAVTREE =
 [
   [ "Drivers", "index.html", [
+    [ "Device-pack integration", "index.html#autotoc_md0", null ],
+    [ "Driver responsibilities", "index.html#autotoc_md1", null ],
+    [ "NPU execution contract", "index.html#autotoc_md2", null ],
+    [ "API entry points", "index.html#autotoc_md3", null ],
+    [ "Platform hooks", "index.html#autotoc_md4", null ],
+    [ "Bring-up checklist", "index.html#autotoc_md5", null ],
     [ "API Reference", "topics.html", "topics" ]
   ] ]
 ];

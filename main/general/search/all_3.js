@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['memory_20modes_0',['Memory Modes',['../index.html#autotoc_md3',1,'']]],
-  ['modes_1',['Memory Modes',['../index.html#autotoc_md3',1,'']]]
+  ['general_0',['General',['../index.html',1,'']]],
+  ['glance_1',['Memory modes at a glance',['../index.html#autotoc_md3',1,'']]]
 ];

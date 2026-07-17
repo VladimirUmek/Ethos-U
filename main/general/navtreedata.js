@@ -25,12 +25,17 @@
 var NAVTREE =
 [
   [ "General", "index.html", [
-    [ "Overview", "index.html#autotoc_md0", null ],
-    [ "Typical System Architecture", "index.html#autotoc_md1", null ],
-    [ "Vela Overview", "index.html#autotoc_md2", null ],
-    [ "Memory Modes", "index.html#autotoc_md3", null ],
-    [ "Related Arm products", "index.html#autotoc_md4", null ],
-    [ "Vela and ExecuTorch resources", "index.html#autotoc_md5", null ]
+    [ "Target audiences and device packs", "index.html#autotoc_md0", null ],
+    [ "System overview", "index.html#autotoc_md1", null ],
+    [ "Coordinating the device configuration", "index.html#autotoc_md2", null ],
+    [ "Memory modes at a glance", "index.html#autotoc_md3", [
+      [ "SRAM-only mode", "index.html#autotoc_md4", null ],
+      [ "Shared-SRAM mode", "index.html#autotoc_md5", null ],
+      [ "Dedicated-SRAM mode", "index.html#autotoc_md6", null ]
+    ] ],
+    [ "Deployment lifecycle", "index.html#autotoc_md7", null ],
+    [ "Key terms", "index.html#autotoc_md8", null ],
+    [ "Related resources", "index.html#autotoc_md9", null ]
   ] ]
 ];
 

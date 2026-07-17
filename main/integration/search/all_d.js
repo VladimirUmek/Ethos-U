@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['regions_0',['Generated command-stream regions',['../index.html#autotoc_md6',1,'']]],
-  ['relationship_1',['Linker script relationship',['../index.html#autotoc_md7',1,'']]]
+  ['or_20extending_20a_20device_20family_20pack_0',['Creating or extending a Device Family Pack',['../index.html#autotoc_md4',1,'']]]
 ];

@@ -25,19 +25,28 @@
 var NAVTREE =
 [
   [ "Integration", "index.html", [
-    [ "Introduction", "index.html#autotoc_md0", null ],
-    [ "Vela system configuration names", "index.html#autotoc_md1", [
-      [ "Vela-compatible parser constraints", "index.html#autotoc_md2", null ]
+    [ "Integration workflow", "index.html#autotoc_md0", null ],
+    [ "General integration guidance", "index.html#autotoc_md1", [
+      [ "Keep records", "index.html#autotoc_md2", null ]
     ] ],
-    [ "Vela memory modes and memory areas", "index.html#autotoc_md3", [
-      [ "Spilling", "index.html#autotoc_md4", null ],
-      [ "Arena cache size", "index.html#autotoc_md5", null ]
+    [ "Introduction", "index.html#autotoc_md3", null ],
+    [ "Creating or extending a Device Family Pack", "index.html#autotoc_md4", null ],
+    [ "vela.ini system configuration names", "index.html#autotoc_md5", [
+      [ "vela.ini configuration constraints", "index.html#autotoc_md6", null ]
     ] ],
-    [ "Generated command-stream regions", "index.html#autotoc_md6", null ],
-    [ "Linker script relationship", "index.html#autotoc_md7", null ],
-    [ "Driver weak hooks", "index.html#autotoc_md8", null ],
-    [ "Driver build configuration", "index.html#autotoc_md9", null ],
-    [ "General integration guidance", "index.html#autotoc_md10", null ]
+    [ "vela.ini memory modes and memory areas", "index.html#autotoc_md7", [
+      [ "Spilling", "index.html#autotoc_md8", null ],
+      [ "Arena cache size", "index.html#integration_arena_cache_size", null ]
+    ] ],
+    [ "Generated command-stream regions", "index.html#autotoc_md9", null ],
+    [ "Linker script relationship", "index.html#autotoc_md10", null ],
+    [ "Driver weak hooks", "index.html#autotoc_md11", null ],
+    [ "Driver build configuration", "index.html#autotoc_md12", null ],
+    [ "Determine the memory budget", "index.html#autotoc_md13", [
+      [ "Establish the model-controlled floor", "index.html#autotoc_md14", null ],
+      [ "Convert the floor into a system budget", "index.html#autotoc_md15", null ],
+      [ "Sweep feasible performance budgets", "index.html#autotoc_md16", null ]
+    ] ]
   ] ]
 ];
 

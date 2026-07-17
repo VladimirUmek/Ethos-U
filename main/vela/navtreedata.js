@@ -27,32 +27,35 @@ var NAVTREE =
   [ "Vela", "index.html", [
     [ "Feature overview", "index.html#autotoc_md0", null ],
     [ "Installation", "index.html#autotoc_md1", [
-      [ "Update an existing installation", "index.html#autotoc_md2", null ]
+      [ "Update an existing installation", "index.html#autotoc_md2", [
+        [ "Troubleshooting installation", "index.html#autotoc_md3", null ]
+      ] ]
     ] ],
-    [ "Basic invocation", "index.html#autotoc_md3", null ],
-    [ "Invocation parameters", "index.html#autotoc_md4", [
-      [ "Input, output, and discovery", "index.html#autotoc_md5", null ],
-      [ "Target and scheduling", "index.html#autotoc_md6", null ],
-      [ "Reporting and diagnostics", "index.html#autotoc_md7", null ]
+    [ "Obtaining the device configuration", "index.html#autotoc_md4", null ],
+    [ "Basic invocation", "index.html#autotoc_md5", null ],
+    [ "Invocation parameters", "index.html#autotoc_md6", [
+      [ "Input, output, and discovery", "index.html#autotoc_md7", null ],
+      [ "Target and scheduling", "index.html#autotoc_md8", null ],
+      [ "Reporting and diagnostics", "index.html#autotoc_md9", null ]
     ] ],
-    [ "Accelerator and memory configuration", "index.html#autotoc_md8", [
-      [ "Memory modes", "index.html#autotoc_md9", null ]
+    [ "Using the device configuration", "index.html#autotoc_md10", [
+      [ "Memory modes", "index.html#autotoc_md11", null ]
     ] ],
-    [ "vela.ini reference", "index.html#autotoc_md10", [
-      [ "System configuration parameters", "index.html#autotoc_md11", null ],
-      [ "Memory mode parameters", "index.html#autotoc_md12", null ],
-      [ "Complete vela.ini example", "index.html#autotoc_md13", null ]
+    [ "vela.ini reference for silicon vendors and manual integration", "index.html#autotoc_md12", [
+      [ "System configuration parameters", "index.html#autotoc_md13", null ],
+      [ "Memory mode parameters", "index.html#autotoc_md14", null ],
+      [ "Complete vela.ini example", "index.html#autotoc_md15", null ]
     ] ],
-    [ "Examples", "index.html#autotoc_md14", [
-      [ "Compile for an Ethos-U55 reference system", "index.html#autotoc_md15", null ],
-      [ "Minimize peak SRAM", "index.html#autotoc_md16", null ],
-      [ "Set a performance-scheduler SRAM budget", "index.html#autotoc_md17", null ],
-      [ "Compile TOSA for Ethos-U85 raw output", "index.html#autotoc_md18", null ],
-      [ "Inspect placement and compiler decisions", "index.html#autotoc_md19", null ],
-      [ "Embed an optimized TFLite model in firmware", "index.html#autotoc_md20", null ]
+    [ "Examples", "index.html#autotoc_md16", [
+      [ "Compile for an Ethos-U55 reference system", "index.html#autotoc_md17", null ],
+      [ "Minimize peak SRAM", "index.html#autotoc_md18", null ],
+      [ "Set a performance-scheduler SRAM budget", "index.html#autotoc_md19", null ],
+      [ "Compile TOSA for Ethos-U85 raw output", "index.html#autotoc_md20", null ],
+      [ "Inspect placement and compiler decisions", "index.html#autotoc_md21", null ],
+      [ "Embed an optimized TFLite model in firmware", "index.html#autotoc_md22", null ]
     ] ],
-    [ "ExecuTorch Arm example flow", "index.html#autotoc_md21", null ],
-    [ "Troubleshooting", "index.html#autotoc_md22", null ]
+    [ "ExecuTorch Arm example flow", "index.html#autotoc_md23", null ],
+    [ "Troubleshooting", "index.html#autotoc_md24", null ]
   ] ]
 ];
 

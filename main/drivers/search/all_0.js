@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['callbacks_0',['Callbacks',['../group__ethosu__callback__api.html',1,'']]]
+  ['api_20entry_20points_0',['API entry points',['../index.html#autotoc_md3',1,'']]]
 ];
