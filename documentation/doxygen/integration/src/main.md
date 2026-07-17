@@ -8,7 +8,7 @@ Cortex-M and Ethos-U target system.
 Complete the steps in order because later steps depend on earlier decisions and
 measurements. Each step ends with a concrete deliverable:
 
-1. **Select the device and DFP.** Choose the microcontroller device and its Device
+1. **Select the device and DFP.** Choose the Edge AI MCU and its Device
    Family Pack from [www.keil.arm.com/pack](https://www.keil.arm.com/pack).
    CMSIS-Toolbox records the selected packs in the project metadata.
 2. **Select the build context.** Use CMSIS-Toolbox to select the device and
@@ -87,7 +87,7 @@ compiler uses this information to generate an ML model for the selected memory
 mode, while the ML inference runtime and driver must make the corresponding
 buffers visible to the NPU at run time.
 
-For a microcontroller device, the silicon vendor should define and validate these
+For an Edge AI MCU, the silicon vendor should define and validate these
 settings in a DFP, with the device-specific resources referenced by its DFP
 description. Application developers normally select the pack and consume the resolved
 settings through CMSIS-Toolbox. Configuration creation and manual integration

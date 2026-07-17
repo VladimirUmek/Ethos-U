@@ -10,7 +10,7 @@ settings, use [Integration](../integration/index.html).
 
 ## Device-pack integration
 
-For a microcontroller device, start with the silicon vendor's Device Family Pack
+For an Edge AI MCU, start with the silicon vendor's Device Family Pack
 from [www.keil.arm.com/pack](https://www.keil.arm.com/pack). Its DFP description
 should reference the device description, linker configuration, driver
 components, and `vela.ini` configuration file needed by the target.

@@ -8,13 +8,13 @@ It converts a quantized TensorFlow Lite
 (`.tflite`) or TOSA (`.tosa`) ML model into command streams and encoded constant
 data for a selected Ethos-U configuration.
 
-This chapter describes Vela 5.1.0.
-Run `vela --version` and consult the corresponding release documentation when using a
-different version.
+This chapter covers Vela 5.1 and later. Use `vela --version` to identify the
+installed version and consult its release notes for version-specific changes.
 
 ## Feature overview
 
-The Vela compiler performs the offline, target-specific part of an Ethos-U deployment:
+The Vela compiler performs the offline, target-specific part of an Ethos-U
+deployment:
 
 - Reads quantized TFLite/LiteRT and TOSA ML models. Activations and weights must
   be quantized for Ethos-U acceleration.
@@ -56,7 +56,7 @@ can provide approximate behavior.
 
 ## Installation
 
-Vela runs on Linux, macOS, and Windows. The released package requires Python
+The Vela compiler runs on Linux, macOS, and Windows. The released package requires Python
 3.10 or newer:
 
 ```console
@@ -113,7 +113,7 @@ plus a `vela.ini` configuration file. This file contains named `System_Config`
 sections that model device memory performance and named `Memory_Mode` sections
 that define where model data is placed.
 
-For a microcontroller device, a Device Family Pack (DFP), available from
+For an Edge AI MCU, a Device Family Pack (DFP), available from
 [www.keil.arm.com/pack](https://www.keil.arm.com/pack), can provide the Ethos-U
 configuration information, including the device-specific `vela.ini` file.
 CMSIS-Toolbox exports these resources for the selected device and build context
