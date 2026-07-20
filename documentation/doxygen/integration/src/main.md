@@ -126,7 +126,8 @@ create one for a device:
   to inspect the resolved `System_Config` and `Memory_Mode`; and
 - use [Create Ethos-U configuration for a device](../vela/index.html#vela_create_configuration)
   for `vela.ini` syntax, memory modes, performance parameters, arena-cache
-  behavior, and spilling.
+  behavior, and spilling. The constraints for parsing `vela.ini` can differ
+  between Ethos-U cores, so follow the requirements for the selected core.
 
 This integration guide assumes that the accelerator configuration,
 `System_Config`, and `Memory_Mode` have already been selected. The remaining
@@ -152,20 +153,9 @@ application-provided buffers. `Mem2Mem` is one of these names. The Vela compiler
 uses it for internal DMA or LUT handling, not for the application weight, scratch, or
 scratch-fast buffers. Spilling uses the scratch-fast region, not `Mem2Mem`.
 
-COP1 and COP2 are driver-action output formats produced by the Vela compiler.
-The common Cortex-M embedded flow uses the usual application-facing base
-pointers for weights, scratch, and optionally scratch-fast storage. COP2 is
-required by the compiler for flows that use separated input and output regions;
-it is a command-stream or driver-action format that a compatible ML inference
-runtime flow must consume.
-
-The Vela compiler can emit separated input and output regions when
-`--separate-io-regions` is used. That belongs to COP2/raw or separated-IO flows,
-not the normal Cortex-M
-COP1-style flow that passes the usual weight, scratch, and optional scratch-fast
-buffers. If the generated stream uses additional base pointer regions,
-configure the corresponding driver region definitions from the actual generated
-ML model and ML inference runtime flow.
+The Cortex-M flow uses base pointer regions 0 to 2 for weights, scratch, and
+optional scratch-fast storage. Other platform integrations can use additional
+regions, but these are not part of the Cortex-M integration.
 
 ## Linker configuration
 
@@ -266,13 +256,10 @@ access path to use for the command stream and for each base pointer region:
 | `NPU_REGIONCFG_2` | base pointer region 2 | `cache_mem_area`, when the generated model uses scratch-fast storage |
 
 Additional `NPU_REGIONCFG_3` to `NPU_REGIONCFG_7` definitions exist for command
-streams that use more base pointer regions. In normal Cortex-M COP1-style
-outputs these are usually not additional application buffers. The Vela compiler
-can use
-regions 3 and 4 for separated input and output tensors when
-`--separate-io-regions` is enabled, while the special `Mem2Mem` use of region 3
-is for internal DMA/LUT handling. Configure extra regions only when the generated
-model and ML inference runtime flow use them.
+streams used by other platform configurations. For example, the experimental
+Ethos-U85 Direct Drive flow on Linux uses region 3 for input tensors and region
+4 for output tensors. Cortex-M integrations use regions 0 to 2 and do not need
+to configure these additional regions.
 
 For the default driver configuration, the practical mapping is:
 
