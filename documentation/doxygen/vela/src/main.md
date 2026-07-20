@@ -298,7 +298,7 @@ feature-map arena would be placed on that interface. Do not infer the same
 read-only restriction for the logical `Axi1` alias in `vela.ini` on every
 Ethos-U target.
 
-## Create Ethos-U configuration for a device {#vela_create_configuration}
+##  {#vela_create_configuration}
 
 To support a device manually, create a device-specific `vela.ini` file.
 Application developers normally obtain this file from the silicon vendor,

@@ -37,7 +37,7 @@
         <file category="include" name="source/src/"/>
         <file category="include" name="source/include/"/>
 
-        <file category="sourceC" name="interface/cmsis_rtos2/ethosu_os_rtos2.c"/>
+        <file category="sourceC" name="interface/cmsis_rtos2/ethosu_os_rtos2.c" attr="template" />
       </files>
     </component>
     <component Cclass="Machine Learning" Cgroup="NPU Support" Csub="Ethos-U Driver" Cvariant="Generic U65" Cversion="1.26.2">
@@ -58,7 +58,7 @@
         <file category="include" name="source/src/"/>
         <file category="include" name="source/include/"/>
 
-        <file category="sourceC" name="interface/cmsis_rtos2/ethosu_os_rtos2.c"/>
+        <file category="sourceC" name="interface/cmsis_rtos2/ethosu_os_rtos2.c" attr="template" />
       </files>
     </component>
     <component Cclass="Machine Learning" Cgroup="NPU Support" Csub="Ethos-U Driver" Cvariant="Generic U85" Cversion="1.26.2">
@@ -79,7 +79,7 @@
         <file category="include" name="source/src/"/>
         <file category="include" name="source/include/"/>
 
-        <file category="sourceC" name="interface/cmsis_rtos2/ethosu_os_rtos2.c"/>
+        <file category="sourceC" name="interface/cmsis_rtos2/ethosu_os_rtos2.c" attr="template" />
       </files>
     </component>
   </components>
