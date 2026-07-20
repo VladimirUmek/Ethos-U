@@ -42,7 +42,7 @@ var NAVTREE =
       [ "Select a memory mode", "index.html#vela_select_memory_mode", null ],
       [ "Understand arena cache and spilling", "index.html#vela_arena_cache_size", null ]
     ] ],
-    [ "Create Ethos-U configuration for a device", "index.html#vela_create_configuration", [
+    [ "vela_create_configuration", "index.html#vela_create_configuration", [
       [ "System configuration parameters", "index.html#vela_system_configuration", null ],
       [ "Memory mode parameters", "index.html#vela_memory_mode", null ],
       [ "Create the linker script", "index.html#vela_create_linker_script", null ],
@@ -51,15 +51,15 @@ var NAVTREE =
       [ "Publish Ethos-U configuration in a DFP", "index.html#vela_publish_configuration", null ]
     ] ],
     [ "Examples", "index.html#autotoc_md11", [
-      [ "Compile for an Ethos-U55 reference system", "index.html#autotoc_md12", null ],
-      [ "Minimize peak SRAM", "index.html#autotoc_md13", null ],
-      [ "Set a performance-scheduler SRAM budget", "index.html#autotoc_md14", null ],
-      [ "Compile TOSA for Ethos-U85 raw output", "index.html#autotoc_md15", null ],
-      [ "Inspect placement and compiler decisions", "index.html#autotoc_md16", null ],
-      [ "Embed an optimized TFLite model in firmware", "index.html#autotoc_md17", null ]
+      [ "Compile for an Ethos-U reference system", "index.html#vela_compile_reference_system", null ],
+      [ "Minimize peak SRAM", "index.html#autotoc_md12", null ],
+      [ "Set a performance-scheduler SRAM budget", "index.html#autotoc_md13", null ],
+      [ "Compile TOSA for Ethos-U85 raw output", "index.html#autotoc_md14", null ],
+      [ "Inspect placement and compiler decisions", "index.html#autotoc_md15", null ],
+      [ "Embed an optimized TFLite model in firmware", "index.html#autotoc_md16", null ]
     ] ],
-    [ "ExecuTorch Arm example flow", "index.html#autotoc_md18", null ],
-    [ "Troubleshooting", "index.html#autotoc_md19", null ]
+    [ "ExecuTorch Arm example flow", "index.html#autotoc_md17", null ],
+    [ "Troubleshooting", "index.html#autotoc_md18", null ]
   ] ]
 ];
 

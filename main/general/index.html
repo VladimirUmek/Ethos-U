@@ -44,7 +44,7 @@
   <td id="projectlogo" style="padding: 1em;"><img alt="Logo" src="arm.png"/></td>
   <td style="padding-left: 2em; padding-bottom: 1em;padding-top: 1em;">
   <div id="projectname">Ethos-U Integration for Cortex-M
-   &#160;<span id="projectnumber">Version 1.0.0-dev34</span>
+   &#160;<span id="projectnumber">Version 1.0.0-dev40</span>
    </div>
    <div id="projectbrief">General Information</div>
   </td>
@@ -146,10 +146,10 @@ Key terms</h1>
 <p>This documentation uses the following terms:</p>
 <ul>
 <li><b>Vela compiler</b> means the model-compilation tool.</li>
-<li><b><code>vela.ini</code> configuration</b> means the target-system and memory configuration file. System configurations and memory modes are named sections within it.</li>
+<li><b><code>vela.ini</code> configuration</b> means the configuration file for the Vela compiler that describes the system configurations and memory modes of the target system.</li>
 <li><b>ML model</b> or <b>neural network model</b> means the machine-learning workload being compiled and deployed.</li>
 <li><b>ML inference runtime</b> means the software framework that interprets model metadata, prepares tensors, and invokes the Ethos-U driver.</li>
-<li><b>Target system</b> means the complete Cortex-M-based hardware and firmware platform.</li>
+<li><b>Target system</b> means the complete Cortex-M-based hardware (with Ethos-U) and firmware platform.</li>
 <li><b>Ethos-U target</b> means the selected NPU architecture and MAC configuration.</li>
 </ul>
 <p>The following terms describe the Ethos-U compilation model and its memory interface:</p>
@@ -189,9 +189,9 @@ Coordinating the device configuration</h1>
 </ol>
 <p>A DFP can provide these related configuration artifacts, and CMSIS-Toolbox can resolve them for the selected device and build context. The artifacts must be consistent. The full mapping, examples, and consistency checklist are in <a href="../integration/index.html">Integration</a>. The meaning and syntax of <code>vela.ini</code> are in <a href="../vela/index.html">Vela</a>.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
-System and memory modes at a glance</h1>
+System configuration and memory modes at a glance</h1>
 <p>Ethos-U uses AXI bus interfaces for DMA memory access. The memory access timing for the different data classes has direct impact to overall performance. Vela optimizes the ML model execution based on system and memory parameters in the <code>vela.ini</code> file.</p>
-<p>Vela uses the alias:</p>
+<p>Vela uses the alias names to model system and memory performance:</p>
 <ul>
 <li>Axi0: for read/write memory;</li>
 <li>Axi1: for read-only AXI manager.</li>
@@ -238,7 +238,7 @@ Related resources</h1>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="footer">
-	Copyright &copy; 2021-2023 Arm Limited (or its affiliates). All rights reserved.
+	Copyright &copy; 2021-2026 Arm Limited (or its affiliates). All rights reserved.
 	<!-- Use script below for auto-inserting date, project name, version, etc  -->
 	<!-- <script type="text/javascript">
         writeFooter.call(this);

@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['family_20pack_0',['Creating or extending a Device Family Pack',['../index.html#autotoc_md4',1,'']]],
-  ['feasible_20performance_20budgets_1',['Sweep feasible performance budgets',['../index.html#autotoc_md13',1,'']]],
-  ['floor_2',['Establish the model-controlled floor',['../index.html#autotoc_md11',1,'']]],
-  ['floor_20into_20a_20system_20budget_3',['Convert the floor into a system budget',['../index.html#autotoc_md12',1,'']]],
-  ['functions_4',['Functions',['../../drivers/group__ethosu__public__api.html',1,'']]]
+  ['feasible_20performance_20budgets_0',['Sweep feasible performance budgets',['../index.html#autotoc_md17',1,'']]],
+  ['floor_1',['Establish the model-controlled floor',['../index.html#autotoc_md15',1,'']]],
+  ['floor_20into_20a_20system_20budget_2',['Convert the floor into a system budget',['../index.html#autotoc_md16',1,'']]],
+  ['for_20the_20device_3',['Compile the ML model for the device',['../index.html#integration_compile_model',1,'']]],
+  ['from_20creating_20or_20extending_20a_20dfp_3a_4',['From Creating or extending a DFP:',['../index.html#autotoc_md8',1,'']]],
+  ['functions_5',['Functions',['../../drivers/group__ethosu__public__api.html',1,'']]]
 ];

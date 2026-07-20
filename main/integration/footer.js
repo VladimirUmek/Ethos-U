@@ -1,7 +1,7 @@
 function writeHeader() {
-    document.write('Version 178827f');
+    document.write('Version 46b1e12');
 };
 
 function writeFooter()  {
-    document.write('Generated on Mon Jul 20 2026 07:18:35 for PROJECT_NAME           = Integration 178827f. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Mon Jul 20 2026 19:27:10 for PROJECT_NAME           = Integration 46b1e12. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };

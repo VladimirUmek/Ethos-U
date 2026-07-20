@@ -29,7 +29,7 @@ var NAVTREE =
     [ "Key terms", "index.html#autotoc_md1", null ],
     [ "System overview", "index.html#autotoc_md2", null ],
     [ "Coordinating the device configuration", "index.html#autotoc_md3", null ],
-    [ "System and memory modes at a glance", "index.html#autotoc_md4", null ],
+    [ "System configuration and memory modes at a glance", "index.html#autotoc_md4", null ],
     [ "Deployment lifecycle", "index.html#autotoc_md5", null ],
     [ "Related resources", "index.html#autotoc_md6", null ]
   ] ]

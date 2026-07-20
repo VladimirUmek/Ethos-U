@@ -344,7 +344,7 @@ Understand arena cache and spilling</h2>
 <p><code>cache_mem_area</code> does not always create a separate cache allocation. When it resolves to the same memory type as <code>arena_mem_area</code>, the fast-scratch role is folded into the normal arena. It becomes a distinct staging area, used for spilling and represented by the scratch-fast command-stream region, only when the two attributes resolve to different memory types.</p>
 <p>Ethos-U55's hardware AXI1 interface is read-only. Consequently, <code>Dedicated_Sram</code> is not a practical Ethos-U55 execution model when the writable feature-map arena would be placed on that interface. Do not infer the same read-only restriction for the logical <code>Axi1</code> alias in <code>vela.ini</code> on every Ethos-U target.</p>
 <h1><a class="anchor" id="vela_create_configuration"></a>
-Create Ethos-U configuration for a device</h1>
+vela_create_configuration</h1>
 <p>To support a device manually, create a device-specific <code>vela.ini</code> file. Application developers normally obtain this file from the silicon vendor, either directly or from a DFP through CMSIS-Toolbox.</p>
 <p>Creating an Ethos-U configuration requires these steps:</p>
 <ol type="1">
@@ -534,8 +534,8 @@ Publish Ethos-U configuration in a DFP</h2>
 </ul>
 <h1><a class="anchor" id="autotoc_md11"></a>
 Examples</h1>
-<h2><a class="anchor" id="autotoc_md12"></a>
-Compile for an Ethos-U55 reference system</h2>
+<h2><a class="anchor" id="vela_compile_reference_system"></a>
+Compile for an Ethos-U reference system</h2>
 <div class="fragment"><div class="line">vela person_detect.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-128 \</div>
 <div class="line">  --config Arm/vela.ini \</div>
@@ -545,20 +545,20 @@ Compile for an Ethos-U55 reference system</h2>
 <div class="line">  --verbose-cycle-estimate</div>
 </div><!-- fragment --><p>The <code>output</code> directory contains the optimized ML model <code>person_detect_vela.tflite</code> and a report. The optimized model is for deployment to the Edge AI MCU.</p>
 <p>The console output shows several details including configuration parameters, memory usage, and with <code>--verbose-cycle-estimate</code> a rough estimation of the inference time.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Minimize peak SRAM</h2>
 <div class="fragment"><div class="line">vela keyword_spotting.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-64 \</div>
 <div class="line">  --optimise Size</div>
 </div><!-- fragment --><p><code>Size</code> scheduling favors tensor reuse and cascading. It can reread more weights and reduce throughput, so measure both memory and performance.</p>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Set a performance-scheduler SRAM budget</h2>
 <div class="fragment"><div class="line">vela person_detect.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-128 \</div>
 <div class="line">  --optimise Performance \</div>
 <div class="line">  --arena-cache-size 61440</div>
 </div><!-- fragment --><p>This supplies a 60 KiB cache budget. Reducing it may increase AXI1 traffic as weights or feature-map data are reread. The reported <code>Total SRAM used</code> covers the model's NPU-visible tensors and working buffers, not the RTOS, stacks, application allocations, CPU kernels, or other firmware state.</p>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Compile TOSA for Ethos-U85 raw output</h2>
 <div class="fragment"><div class="line">vela my_network.tosa \</div>
 <div class="line">  --config Arm/vela.ini \</div>
@@ -567,7 +567,7 @@ Compile TOSA for Ethos-U85 raw output</h2>
 <div class="line">  --memory-mode Dedicated_Sram_384KB \</div>
 <div class="line">  --output-format raw</div>
 </div><!-- fragment --><p>The resulting <code>.npz</code> contains the NPU command streams, constants, and quantization metadata required by an integration that consumes raw compiler output.</p>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 Inspect placement and compiler decisions</h2>
 <div class="fragment"><div class="line">vela model.tflite \</div>
 <div class="line">  --accelerator-config ethos-u85-512 \</div>
@@ -577,12 +577,12 @@ Inspect placement and compiler decisions</h2>
 <div class="line">  --verbose-performance \</div>
 <div class="line">  --enable-debug-db</div>
 </div><!-- fragment --><p>Start with focused reports. <code>--verbose-all</code> can produce impractically large logs for representative ML models.</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Embed an optimized TFLite model in firmware</h2>
 <p>On hosts that provide <code>xxd</code>, convert the Vela compiler output to a C array:</p>
 <div class="fragment"><div class="line">xxd -i output/my_network_vela.tflite my_network_model.h</div>
 </div><!-- fragment --><p>Place the generated data in the linker region that matches the memory configuration selected from <code>vela.ini</code>. Ensure that the ML inference runtime registers the Ethos-U custom operator and uses an Ethos-U driver compatible with the compiled command stream.</p>
-<h1><a class="anchor" id="autotoc_md18"></a>
+<h1><a class="anchor" id="autotoc_md17"></a>
 ExecuTorch Arm example flow</h1>
 <p>The <a href="https://github.com/pytorch/executorch/tree/main/examples/arm">ExecuTorch Arm examples</a> demonstrate an integrated PyTorch-to-Ethos-U workflow. The setup script installs the Arm toolchain, TOSA tools, the Vela compiler, and <a href="https://www.arm.com/products/silicon-ip-subsystems">Corstone</a> FVPs. The AOT Arm backend exports and quantizes a PyTorch model, lowers supported partitions through TOSA and the Vela compiler, and packages the result in an ExecuTorch <code>.pte</code>/<code>.bpte</code> program. In this flow the compiler is called by the backend; users normally run the example helper rather than invoke Vela on a <code>.pte</code> file.</p>
 <p>From an ExecuTorch checkout on Linux:</p>
@@ -592,7 +592,7 @@ ExecuTorch Arm example flow</h1>
 <div class="line">  --model_name=examples/arm/example_modules/add.py \</div>
 <div class="line">  --target=ethos-u85-128</div>
 </div><!-- fragment --><p>The helper runs the AOT compiler, builds the matching ML inference runtime, and starts the target simulator unless build-only mode is selected. Other examples include a minimal Ethos-U notebook, a quantizer tutorial, a pruning example, an image-classification application, and Zephyr and <a href="https://www.keil.arm.com/packs/cmsis-arm/overview/">CMSIS</a> project templates. Treat the ExecuTorch branch and Vela version as a tested toolchain because backend-generated Vela options can evolve independently from the standalone CLI examples above.</p>
-<h1><a class="anchor" id="autotoc_md19"></a>
+<h1><a class="anchor" id="autotoc_md18"></a>
 Troubleshooting</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -618,7 +618,7 @@ Troubleshooting</h1>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="footer">
-	Copyright &copy; 2021-2023 Arm Limited (or its affiliates). All rights reserved.
+	Copyright &copy; 2021-2026 Arm Limited (or its affiliates). All rights reserved.
 	<!-- Use script below for auto-inserting date, project name, version, etc  -->
 	<!-- <script type="text/javascript">
         writeFooter.call(this);

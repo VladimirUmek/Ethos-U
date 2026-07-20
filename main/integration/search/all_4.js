@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['establish_20the_20model_20controlled_20floor_0',['Establish the model-controlled floor',['../index.html#autotoc_md11',1,'']]],
-  ['ethos_20u_20configuration_1',['Ethos-U configuration',['../index.html#autotoc_md5',1,'']]],
+  ['establish_20the_20model_20controlled_20floor_0',['Establish the model-controlled floor',['../index.html#autotoc_md15',1,'']]],
+  ['ethos_20u_20configuration_1',['Ethos-U configuration',['../index.html#autotoc_md9',1,'']]],
   ['ethosu_5faddress_5fremap_2',['ethosu_address_remap',['../../drivers/group__ethosu__callback__api.html#gaada1c421a052cbdcfd5f1c8c31cd8c4a',1,]]],
   ['ethosu_5fconfig_5fselect_3',['ethosu_config_select',['../../drivers/group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a',1,]]],
   ['ethosu_5fdeinit_4',['ethosu_deinit',['../../drivers/group__ethosu__public__api.html#ga7d07a2c3e7c66236d31986c191c7c6e1',1,]]],
@@ -32,5 +32,5 @@ var searchData=
   ['ethosu_5fsemaphore_5ftake_29',['ethosu_semaphore_take',['../../drivers/group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725',1,]]],
   ['ethosu_5fsoft_5freset_30',['ethosu_soft_reset',['../../drivers/group__ethosu__public__api.html#ga480a7f7b324b3be61c1a9ffc92be9f3a',1,]]],
   ['ethosu_5fwait_31',['ethosu_wait',['../../drivers/group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b',1,]]],
-  ['extending_20a_20device_20family_20pack_32',['Creating or extending a Device Family Pack',['../index.html#autotoc_md4',1,'']]]
+  ['extending_20a_20dfp_3a_32',['From Creating or extending a DFP:',['../index.html#autotoc_md8',1,'']]]
 ];

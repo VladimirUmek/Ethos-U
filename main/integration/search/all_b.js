@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['memory_20budget_0',['Determine the memory budget',['../index.html#autotoc_md10',1,'']]],
-  ['model_20controlled_20floor_1',['Establish the model-controlled floor',['../index.html#autotoc_md11',1,'']]]
+  ['or_20extending_20a_20dfp_3a_0',['From Creating or extending a DFP:',['../index.html#autotoc_md8',1,'']]]
 ];
