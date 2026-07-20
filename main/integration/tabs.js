@@ -17,6 +17,7 @@ var arr = [];
  arr.push( new tabElement( "Vela",         "vela",         "Vela"        ));
  arr.push( new tabElement( "Drivers",      "drivers",      "Drivers"     ));
  arr.push( new tabElement( "Integration",  "integration",  "Integration" ));
+ arr.push( new tabElement( "Zephyr",       "zephyr",       "Zephyr"      ));
 
 // write tabs
 // called from the header file.

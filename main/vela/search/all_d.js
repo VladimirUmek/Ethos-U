@@ -8,6 +8,6 @@ var searchData=
   ['tosa_20for_20ethos_20u85_20raw_20output_5',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md15',1,'']]],
   ['troubleshooting_6',['Troubleshooting',['../index.html#autotoc_md19',1,'']]],
   ['troubleshooting_20installation_7',['Troubleshooting installation',['../index.html#autotoc_md3',1,'']]],
-  ['tt_20example_8',['Complete &lt;tt&gt;vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]],
-  ['tt_20vela_20ini_20tt_20example_9',['Complete &lt;tt&gt;vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]]
+  ['tt_20example_8',['Complete &lt;tt&gt;My_vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]],
+  ['tt_20my_5fvela_20ini_20tt_20example_9',['Complete &lt;tt&gt;My_vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]]
 ];

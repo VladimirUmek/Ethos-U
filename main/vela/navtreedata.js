@@ -47,7 +47,7 @@ var NAVTREE =
       [ "Memory mode parameters", "index.html#vela_memory_mode", null ],
       [ "Create the linker script", "index.html#vela_create_linker_script", null ],
       [ "Match the driver configuration", "index.html#vela_match_driver_configuration", null ],
-      [ "Complete vela.ini example", "index.html#autotoc_md10", null ],
+      [ "Complete My_vela.ini example", "index.html#autotoc_md10", null ],
       [ "Publish Ethos-U configuration in a DFP", "index.html#vela_publish_configuration", null ]
     ] ],
     [ "Examples", "index.html#autotoc_md11", [

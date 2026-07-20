@@ -4,7 +4,7 @@ var searchData=
   ['compile_20for_20an_20ethos_20u55_20reference_20system_1',['Compile for an Ethos-U55 reference system',['../index.html#autotoc_md12',1,'']]],
   ['compile_20tosa_20for_20ethos_20u85_20raw_20output_2',['Compile TOSA for Ethos-U85 raw output',['../index.html#autotoc_md15',1,'']]],
   ['compiler_20decisions_3',['Inspect placement and compiler decisions',['../index.html#autotoc_md16',1,'']]],
-  ['complete_20tt_20vela_20ini_20tt_20example_4',['Complete &lt;tt&gt;vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]],
+  ['complete_20tt_20my_5fvela_20ini_20tt_20example_4',['Complete &lt;tt&gt;My_vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]],
   ['configuration_5',['configuration',['../index.html#vela_match_driver_configuration',1,'Match the driver configuration'],['../index.html#vela_use_configuration',1,'Use the Ethos-U configuration']]],
   ['configuration_20for_20a_20device_6',['configuration for a device',['../index.html#vela_create_configuration',1,'Create Ethos-U configuration for a device'],['../index.html#autotoc_md4',1,'Obtain an Ethos-U configuration for a device']]],
   ['configuration_20in_20a_20dfp_7',['Publish Ethos-U configuration in a DFP',['../index.html#vela_publish_configuration',1,'']]],

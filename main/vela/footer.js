@@ -1,7 +1,7 @@
 function writeHeader() {
-    document.write('Version 9cb8570');
+    document.write('Version 178827f');
 };
 
 function writeFooter()  {
-    document.write('Generated on Fri Jul 17 2026 15:16:50 for PROJECT_NAME           = Vela 9cb8570. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Mon Jul 20 2026 07:18:35 for PROJECT_NAME           = Vela 178827f. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };

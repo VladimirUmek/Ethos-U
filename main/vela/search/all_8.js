@@ -6,5 +6,6 @@ var searchData=
   ['minimize_20peak_20sram_3',['Minimize peak SRAM',['../index.html#autotoc_md13',1,'']]],
   ['mode_4',['Select a memory mode',['../index.html#vela_select_memory_mode',1,'']]],
   ['mode_20parameters_5',['Memory mode parameters',['../index.html#vela_memory_mode',1,'']]],
-  ['model_20in_20firmware_6',['Embed an optimized TFLite model in firmware',['../index.html#autotoc_md17',1,'']]]
+  ['model_20in_20firmware_6',['Embed an optimized TFLite model in firmware',['../index.html#autotoc_md17',1,'']]],
+  ['my_5fvela_20ini_20tt_20example_7',['Complete &lt;tt&gt;My_vela.ini&lt;/tt&gt; example',['../index.html#autotoc_md10',1,'']]]
 ];

@@ -9,7 +9,7 @@
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<script type="text/javascript" src="tabs.js?v=4"></script>
+<script type="text/javascript" src="tabs.js?v=5"></script>
 <script type="text/javascript" src="footer.js"></script>
 <script type="text/javascript" src="navtree.js"></script>
 <script type="text/javascript">
@@ -314,7 +314,7 @@ Use the Ethos-U configuration</h1>
 <td class="markdownTableBodyNone"><code>--memory-mode</code>   </td><td class="markdownTableBodyNone">Placement of constant, arena, and cache memory areas on the AXI-connected memories.   </td></tr>
 </table>
 <p>When a DFP supplies device-specific Ethos-U configuration information and the CMSIS-Toolbox project includes <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>, CMSIS-Toolbox places the resolved configuration file in the <code>.cmsis</code> directory. List its available system configurations and memory modes with:</p>
-<div class="fragment"><div class="line">vela --list-configs .cmsis/vela.ini  # The filename can be device-specific.</div>
+<div class="fragment"><div class="line">vela --list-configs .cmsis/device-vela.ini  # Use device-specific vela.ini</div>
 </div><!-- fragment --><p>If the project does not provide a device configuration, the Vela installation includes the generic reference file <code>Arm/vela.ini</code> for evaluation, silicon-vendor development, and manual integration. Its parameters do not describe a specific production device. List the installed configuration files and their definitions with:</p>
 <div class="fragment"><div class="line">vela --list-config-files</div>
 <div class="line">vela --list-configs Arm/vela.ini</div>
@@ -467,7 +467,7 @@ Match the driver configuration</h2>
 <p>The numeric values of these driver settings are target-specific. Additional base regions can be present in specialized output flows, so use the generated command stream and the device integration information as the authority. Also configure address translation and cache maintenance when Cortex-M software and the NPU access the same physical memory through different addresses or cache policies.</p>
 <p>See <a href="../integration/index.html">Integration</a> for system validation, platform hooks, target-specific driver build configuration, cache maintenance, and address-remapping guidance.</p>
 <h2><a class="anchor" id="autotoc_md10"></a>
-Complete <code>vela.ini</code> example</h2>
+Complete <code>My_vela.ini</code> example</h2>
 <div class="fragment"><div class="line">; Ethos-U55 at 500 MHz with SRAM on AXI0 and read-only Flash on AXI1</div>
 <div class="line">[System_Config.My_Ethos_U55_System]</div>
 <div class="line">core_clock=500e6</div>
@@ -502,12 +502,12 @@ Complete <code>vela.ini</code> example</h2>
 <div class="line">inherit=Memory_Mode.My_Shared_Sram</div>
 <div class="line">arena_cache_size=131072</div>
 </div><!-- fragment --><p>Invoke it with:</p>
-<div class="fragment"><div class="line">vela model.tflite --config vela.ini \</div>
+<div class="fragment"><div class="line">vela model.tflite --config My_vela.ini \</div>
 <div class="line">  --accelerator-config ethos-u55-128 \</div>
 <div class="line">  --system-config My_Ethos_U55_System \</div>
 <div class="line">  --memory-mode My_Shared_Sram</div>
 </div><!-- fragment --><p>Print the effective values while validating a new configuration:</p>
-<div class="fragment"><div class="line">vela model.tflite --config vela.ini \</div>
+<div class="fragment"><div class="line">vela model.tflite --config My_vela.ini \</div>
 <div class="line">  --system-config My_Ethos_U55_System \</div>
 <div class="line">  --memory-mode My_Shared_Sram \</div>
 <div class="line">  --verbose-config</div>
@@ -515,20 +515,16 @@ Complete <code>vela.ini</code> example</h2>
 Publish Ethos-U configuration in a DFP</h2>
 <p>A DFP can publish the NPU capabilities, <code>vela.ini</code> file, and matching linker scripts in its DFP description. CMSIS-Toolbox can then select these resources for the device, processor, and toolchain used by a project.</p>
 <p>Declare each integrated NPU with a device <code>feature</code>. The <code>n</code> attribute identifies the Ethos-U variant, <code>m</code> identifies its MAC configuration, and <code>Pname</code> associates it with a processor when the device contains more than one:</p>
-<div class="fragment"><div class="line">&lt;<span class="keywordtype">feature</span> <span class="keyword">type</span>=<span class="stringliteral">&quot;NPU&quot;</span> <span class="keyword">n</span>=<span class="stringliteral">&quot;Ethos-U55&quot;</span> <span class="keyword">m</span>=<span class="stringliteral">&quot;256MACs&quot;</span> <span class="keyword">Pname</span>=<span class="stringliteral">&quot;M55_HP&quot;</span>/&gt;</div>
-<div class="line">&lt;<span class="keywordtype">feature</span> <span class="keyword">type</span>=<span class="stringliteral">&quot;NPU&quot;</span> <span class="keyword">n</span>=<span class="stringliteral">&quot;Ethos-U55&quot;</span> <span class="keyword">m</span>=<span class="stringliteral">&quot;128MACs&quot;</span> <span class="keyword">Pname</span>=<span class="stringliteral">&quot;M55_HE&quot;</span>/&gt;</div>
+<div class="fragment"><div class="line">&lt;<span class="keywordtype">feature</span> <span class="keyword">type</span>=<span class="stringliteral">&quot;NPU&quot;</span> <span class="keyword">n</span>=<span class="stringliteral">&quot;Ethos-U55&quot;</span> <span class="keyword">m</span>=<span class="stringliteral">&quot;256MACs&quot;</span> <span class="keyword">Pname</span>=<span class="stringliteral">&quot;M55_P0&quot;</span>/&gt;</div>
+<div class="line">&lt;<span class="keywordtype">feature</span> <span class="keyword">type</span>=<span class="stringliteral">&quot;NPU&quot;</span> <span class="keyword">n</span>=<span class="stringliteral">&quot;Ethos-U55&quot;</span> <span class="keyword">m</span>=<span class="stringliteral">&quot;128MACs&quot;</span> <span class="keyword">Pname</span>=<span class="stringliteral">&quot;M55_P1&quot;</span>/&gt;</div>
 </div><!-- fragment --><p>Publish the device-specific Vela configuration through the <code>VELA</code> environment:</p>
 <div class="fragment"><div class="line">&lt;<span class="keywordtype">environment</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;VELA&quot;</span>&gt;</div>
-<div class="line">  &lt;<span class="keywordtype">file</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;Device/scripts/vela/device_vela.ini&quot;</span> <span class="keyword">type</span>=<span class="stringliteral">&quot;ini&quot;</span>/&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">file</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;Device/scripts/vela/My_vela.ini&quot;</span> <span class="keyword">type</span>=<span class="stringliteral">&quot;ini&quot;</span>/&gt;</div>
 <div class="line">&lt;/<span class="keywordtype">environment</span>&gt;</div>
 </div><!-- fragment --><p>Add linker scripts as component files. Conditions can select the script that matches a processor and toolchain:</p>
-<div class="fragment"><div class="line">&lt;<span class="keywordtype">file</span> <span class="keyword">category</span>=<span class="stringliteral">&quot;linkerScript&quot;</span></div>
-<div class="line">      <span class="keyword">name</span>=<span class="stringliteral">&quot;Device/linker/linker_ac6_mram.sct&quot;</span></div>
-<div class="line">      <span class="keyword">attr</span>=<span class="stringliteral">&quot;config&quot;</span> <span class="keyword">condition</span>=<span class="stringliteral">&quot;ARMCC6_HP&quot;</span>/&gt;</div>
-<div class="line">&lt;<span class="keywordtype">file</span> <span class="keyword">category</span>=<span class="stringliteral">&quot;linkerScript&quot;</span></div>
-<div class="line">      <span class="keyword">name</span>=<span class="stringliteral">&quot;Device/linker/linker_gnu_mram.ld.src&quot;</span></div>
-<div class="line">      <span class="keyword">attr</span>=<span class="stringliteral">&quot;config&quot;</span> <span class="keyword">condition</span>=<span class="stringliteral">&quot;GCC_HP&quot;</span>/&gt;</div>
-</div><!-- fragment --><p>Keep the NPU feature, Vela environment, <code>vela.ini</code>, linker scripts, and their conditions consistent. A project that selects a different processor or toolchain must resolve to the corresponding NPU configuration and linker script.</p>
+<div class="fragment"><div class="line">&lt;<span class="keywordtype">file</span> <span class="keyword">category</span>=<span class="stringliteral">&quot;linkerScript&quot;</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;Device/linker/linker_ac6.sct&quot;</span>    <span class="keyword">attr</span>=<span class="stringliteral">&quot;config&quot;</span> <span class="keyword">condition</span>=<span class="stringliteral">&quot;AC6&quot;</span>/&gt;</div>
+<div class="line">&lt;<span class="keywordtype">file</span> <span class="keyword">category</span>=<span class="stringliteral">&quot;linkerScript&quot;</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;Device/linker/linker_gnu.ld.src&quot;</span> <span class="keyword">attr</span>=<span class="stringliteral">&quot;config&quot;</span> <span class="keyword">condition</span>=<span class="stringliteral">&quot;GCC&quot;</span>/&gt;</div>
+</div><!-- fragment --><p>Keep the NPU feature, Vela environment, <code>My_vela.ini</code>, linker scripts, and their conditions consistent. A project that selects a different processor or toolchain must resolve to the corresponding NPU configuration and linker script.</p>
 <p>For the complete pack structure and element rules, see:</p>
 <ul>
 <li><a href="https://github.com/Open-CMSIS-Pack/DFP-Pack-HandsOn">DFP Pack Hands-On</a>;</li>
@@ -546,8 +542,9 @@ Compile for an Ethos-U55 reference system</h2>
 <div class="line">  --system-config Ethos_U55_High_End_Embedded \</div>
 <div class="line">  --memory-mode Shared_Sram \</div>
 <div class="line">  --optimise Performance \</div>
-<div class="line">  --show-cpu-operations</div>
-</div><!-- fragment --><p>The default output directory contains <code>person_detect_vela.tflite</code> and reporting artifacts. Use the optimized model, not the original input, in the Ethos-U ML inference application.</p>
+<div class="line">  --verbose-cycle-estimate</div>
+</div><!-- fragment --><p>The <code>output</code> directory contains the optimized ML model <code>person_detect_vela.tflite</code> and a report. The optimized model is for deployment to the Edge AI MCU.</p>
+<p>The console output shows several details including configuration parameters, memory usage, and with <code>--verbose-cycle-estimate</code> a rough estimation of the inference time.</p>
 <h2><a class="anchor" id="autotoc_md13"></a>
 Minimize peak SRAM</h2>
 <div class="fragment"><div class="line">vela keyword_spotting.tflite \</div>
