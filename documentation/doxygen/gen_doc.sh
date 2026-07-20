@@ -116,6 +116,7 @@ generate "general" "${VERSION_FULL}"
 generate "vela"
 generate "drivers"
 generate "integration"
+generate "zephyr"
 
 
 cp -f "${DIRNAME}/index.html" "${DIRNAME}/../html/"

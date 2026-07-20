@@ -241,7 +241,7 @@ CMSIS-Toolbox places the resolved configuration file in the `.cmsis` directory.
 List its available system configurations and memory modes with:
 
 ```console
-vela --list-configs .cmsis/vela.ini  # The filename can be device-specific.
+vela --list-configs .cmsis/device-vela.ini  # Use device-specific vela.ini
 ```
 
 If the project does not provide a device configuration, the Vela installation
@@ -481,7 +481,7 @@ See [Integration](../integration/index.html) for system validation, platform
 hooks, target-specific driver build configuration, cache maintenance, and
 address-remapping guidance.
 
-### Complete `vela.ini` example
+### Complete `My_vela.ini` example
 
 ```ini
 ; Ethos-U55 at 500 MHz with SRAM on AXI0 and read-only Flash on AXI1
@@ -522,7 +522,7 @@ arena_cache_size=131072
 Invoke it with:
 
 ```console
-vela model.tflite --config vela.ini \
+vela model.tflite --config My_vela.ini \
   --accelerator-config ethos-u55-128 \
   --system-config My_Ethos_U55_System \
   --memory-mode My_Shared_Sram
@@ -531,7 +531,7 @@ vela model.tflite --config vela.ini \
 Print the effective values while validating a new configuration:
 
 ```console
-vela model.tflite --config vela.ini \
+vela model.tflite --config My_vela.ini \
   --system-config My_Ethos_U55_System \
   --memory-mode My_Shared_Sram \
   --verbose-config
@@ -548,15 +548,15 @@ the Ethos-U variant, `m` identifies its MAC configuration, and `Pname` associate
 it with a processor when the device contains more than one:
 
 ```xml
-<feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
-<feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
+<feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_P0"/>
+<feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_P1"/>
 ```
 
 Publish the device-specific Vela configuration through the `VELA` environment:
 
 ```xml
 <environment name="VELA">
-  <file name="Device/scripts/vela/device_vela.ini" type="ini"/>
+  <file name="Device/scripts/vela/My_vela.ini" type="ini"/>
 </environment>
 ```
 
@@ -564,15 +564,11 @@ Add linker scripts as component files. Conditions can select the script that
 matches a processor and toolchain:
 
 ```xml
-<file category="linkerScript"
-      name="Device/linker/linker_ac6_mram.sct"
-      attr="config" condition="ARMCC6_HP"/>
-<file category="linkerScript"
-      name="Device/linker/linker_gnu_mram.ld.src"
-      attr="config" condition="GCC_HP"/>
+<file category="linkerScript" name="Device/linker/linker_ac6.sct"    attr="config" condition="AC6"/>
+<file category="linkerScript" name="Device/linker/linker_gnu.ld.src" attr="config" condition="GCC"/>
 ```
 
-Keep the NPU feature, Vela environment, `vela.ini`, linker scripts, and their
+Keep the NPU feature, Vela environment, `My_vela.ini`, linker scripts, and their
 conditions consistent. A project that selects a different processor or toolchain
 must resolve to the corresponding NPU configuration and linker script.
 
@@ -594,12 +590,13 @@ vela person_detect.tflite \
   --system-config Ethos_U55_High_End_Embedded \
   --memory-mode Shared_Sram \
   --optimise Performance \
-  --show-cpu-operations
+  --verbose-cycle-estimate
 ```
 
-The default output directory contains `person_detect_vela.tflite` and reporting
-artifacts. Use the optimized model, not the original input, in the Ethos-U
-ML inference application.
+The `output` directory contains the optimized ML model `person_detect_vela.tflite` and a report.
+The optimized model is for deployment to the Edge AI MCU.
+
+The console output shows several details including configuration parameters, memory usage, and with `--verbose-cycle-estimate` a rough estimation of the inference time.
 
 ### Minimize peak SRAM
 
