@@ -43,14 +43,14 @@ unavailable, this documentation also supports manual integration.
 This documentation uses the following terms:
 
 - **Vela compiler** means the model-compilation tool.
-- **`vela.ini` configuration** means the target-system and memory configuration
-  file. System configurations and memory modes are named sections within it.
+- **`vela.ini` configuration** means the configuration file for the Vela compiler
+  that describes the system configurations and memory modes of the target system.
 - **ML model** or **neural network model** means the machine-learning workload
   being compiled and deployed.
 - **ML inference runtime** means the software framework that interprets model
   metadata, prepares tensors, and invokes the Ethos-U driver.
-- **Target system** means the complete Cortex-M-based hardware and firmware
-  platform.
+- **Target system** means the complete Cortex-M-based hardware (with Ethos-U)
+  and firmware platform.
 - **Ethos-U target** means the selected NPU architecture and MAC configuration.
 
 The following terms describe the Ethos-U compilation model and its memory
@@ -122,13 +122,13 @@ consistent. The full mapping, examples, and consistency checklist are in
 [Integration](../integration/index.html). The meaning and syntax of `vela.ini`
 are in [Vela](../vela/index.html).
 
-## System and memory modes at a glance
+## System configuration and memory modes at a glance
 
 Ethos-U uses AXI bus interfaces for DMA memory access. The memory access timing
 for the different data classes has direct impact to overall performance.
 Vela optimizes the ML model execution based on system and memory parameters in the `vela.ini` file.
 
-Vela uses the alias:
+Vela uses the alias names to model system and memory performance:
 
 - Axi0: for read/write memory;
 - Axi1: for read-only AXI manager.

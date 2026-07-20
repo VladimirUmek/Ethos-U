@@ -1,43 +1,56 @@
 # Integration {#mainpage}
 
-This chapter explains how to integrate a compiled ML model consistently into a
-Cortex-M and Ethos-U target system.
+This chapter explains how to integrate a pretrained, quantized ML model into an
+Edge AI MCU based on Cortex-M and Ethos-U. Model training, quantization, and
+functional accuracy validation are outside the scope of this integration flow.
+
+## Starting point
+
+The starting point is a pretrained, quantized ML model that meets the
+application's functional requirements. Before selecting a specific Edge AI MCU,
+compile the model with Vela for one or more Ethos-U reference systems as
+described in
+[Compile for an Ethos-U reference system](../vela/index.html#vela_compile_reference_system).
+
+The Vela reports provide initial estimates of NPU cycles, memory bandwidth, and
+model memory requirements. They also identify which operations are assigned to
+the NPU and which remain on the CPU. Use these results to compare Ethos-U
+configurations and memory modes and to identify Edge AI MCUs with suitable NPU
+performance and memory capacity. These estimates support device selection; they
+do not replace a device-specific compile or measurements on the final target.
+
+Some model zoos already provide corresponding performance and memory data for
+Ethos-U-based systems. Confirm that the published configuration is relevant to
+the candidate device before using those results.
 
 ## Integration workflow
 
-Complete the steps in order because later steps depend on earlier decisions and
-measurements. Each step ends with a concrete deliverable:
+Complete the following steps in order because later steps depend on earlier
+decisions and measurements.
 
-1. **Select the device and DFP.** Choose the Edge AI MCU and its Device
-   Family Pack from [www.keil.arm.com/pack](https://www.keil.arm.com/pack).
-   CMSIS-Toolbox records the selected packs in the project metadata.
-2. **Select the build context.** Use CMSIS-Toolbox to select the device and
-   resolve the `vela.ini`, linker, and driver resources referenced by the DFP
-   description. The project metadata records the `vela.ini` configuration file used
-   by the build. Deliverable: the resolved
-   [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
-3. **Select the workload.** Define the quantized ML model, CPU fallback policy,
-   and latency and throughput goals. Deliverable: a versioned input ML model and
-   acceptance criteria.
-4. **Compile with the device configuration.** Use the accelerator, system
-   configuration, and memory mode supplied by the DFP. Deliverable: the
-   optimized model, compiler reports, and resolved `vela.ini` configuration.
-5. **Establish the memory floor.** Run a size-optimized compile and inspect its
-   allocation report. Deliverable: the minimum model-controlled allocation.
-6. **Set a system budget.** Account for the ML inference runtime, stacks, heaps,
-   application data, alignment, and a safety margin. Deliverable: the maximum ML
-   model budget for each physical memory region.
-7. **Generate candidates.** Run performance compiles across the feasible memory
-   budgets. Deliverable: the generated models and their compiler reports.
-8. **Build and verify placement.** Use the linker and driver configuration from
-   the same DFP and review the resulting application allocations. Deliverable:
-   the resolved vendor memory map with the application placement.
-9. **Complete application integration.** Add any application-specific RTOS,
-   power, timeout, cache, and fault handling. Deliverable: the completed
-   application hooks.
-10. **Validate and tune.** Verify correctness, actual allocation, cycle counts,
-   bandwidth, latency, and concurrency. Deliverable: a measured release
-   configuration.
+1. **Select the Edge AI MCU and DFP.** Compare the reference results with the
+   device's NPU configuration and memory capacity and with the application's
+   performance requirements. Obtain the matching Device Family Pack (DFP) from
+   [www.keil.arm.com/pack](https://www.keil.arm.com/pack).
+2. **Check the DFP resources.** Determine whether the DFP provides a
+   device-specific `vela.ini` file, matching linker scripts, and other required
+   resources. If it does not, contact the device or SoC vendor or
+   [create an Ethos-U configuration for the device](../vela/index.html#vela_create_configuration).
+3. **[Set up the CMSIS-Toolbox project](#integration_setup_cmsis_toolbox).** Select the device and build context and specify the Vela system configuration and memory mode.
+   Use the generated [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
+   to obtain the Vela parameters and resources supplied by the DFP.
+4. **[Compile the ML model for the device](#integration_compile_model).** Run Vela with the device-specific
+   parameters and confirm that its performance and memory estimates meet the
+   application requirements. Treat the performance figures as model-based
+   estimates and retain sufficient margin.
+5. **[Configure memory placement and the linker script](#integration_configure_memory).** Keep the Vela memory
+   mode, linker placement, and driver region configuration consistent. Account
+   for the ML inference runtime, stacks, heaps, application data, alignment, and
+   a safety margin. Build the system and review the compiler and linker reports.
+6. **[Complete application integration](#integration_complete_application).** Add any application-specific RTOS,
+   power, timeout, cache, and fault handling.
+7. **[Validate and tune](#integration_validate_tune).** Verify correctness, memory allocation, ML model performance,
+   bandwidth, latency, and concurrency on the actual target system.
 
 A change to a memory mode, linker section, cache attribute, or driver region
 value requires reviewing the other descriptions of that memory region.
@@ -60,62 +73,120 @@ value requires reviewing the other descriptions of that memory region.
 - During bring-up, use timeouts, fault reporting, and a minimal known-good model
   before moving to full application graphs.
 
-### Keep records
+### Add ML model and configuration to version control
 
 It is good practice to document the hand-off boundary between model, platform, and application
 engineers. This also gives automated tools enough context to check consistency.
 CMSIS-Toolbox already records the selected packs and `vela.ini` configuration
-file in the project metadata; do not duplicate that information. Record the
-remaining application-specific information:
+file in the *csolution project* files and the metafiles `*.cbuild-pack.yml` and `*.cbuild-mlops.yml`.
+Keep these files along with the input ML model under version control.
 
-- Input ML model hash or version and Vela version;
-- Accelerator configuration, system configuration, memory mode, optimization
-  strategy, and effective arena-cache size;
-- Physical placement of the command stream and every generated base region;
-- Linker symbols or sections and their reserved sizes;
-- MPU/SAU and CPU cache attributes;
-- `NPU_QCONFIG`, all used `NPU_REGIONCFG_x` values, and any non-default AXI or
-  memory-attribute settings;
-- Implemented cache, address-remap, interrupt, RTOS, power, and fault hooks;
-- Actual compiler-reported allocation, link-map use, and measured target-system performance.
+## Set up the CMSIS-Toolbox project {#integration_setup_cmsis_toolbox}
 
-## Introduction
+CMSIS-Toolbox simplifies MLOps by combining device and DFP data with project
+settings into machine-readable
+[MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
+that tools can use to generate the ML model and test it on hardware or a
+simulator.
 
-The `vela.ini` configuration, linker script, MPU or SAU setup, and Ethos-U
-driver build configuration must describe the same memory system. The Vela
-compiler uses this information to generate an ML model for the selected memory
-mode, while the ML inference runtime and driver must make the corresponding
-buffers visible to the NPU at run time.
+### Use a project template and add device
 
-For an Edge AI MCU, the silicon vendor should define and validate these
-settings in a DFP, with the device-specific resources referenced by its DFP
-description. Application developers normally select the pack and consume the resolved
-settings through CMSIS-Toolbox. Configuration creation and manual integration
-are described in the Vela guide.
+ToDo: start with a project template available in this pack.  This should come with a simple test model.
 
-## Creating or extending a Device Family Pack
 
-A silicon vendor or pack maintainer should include the device-specific
-`vela.ini` configuration file, matching linker scripts, and Ethos-U driver
-configuration in the DFP and reference them from the DFP description. The pack should expose the
-applicable parameters through the CMSIS-Toolbox build context and MLOps
-information so that an application build does not need to locate or reconcile
-these files manually.
 
-Validate every supported pack configuration as one unit: the `System_Config`
-and `Memory_Mode` sections in `vela.ini`, linker placement, MPU/SAU and cache
-attributes,
-driver region settings, interrupt wiring, and physical device memory system must
-agree. Version these artifacts together. See
-[Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
-for a concise DFP-description example.
+### Add MLOps information
 
-If the selected DFP does not provide the required `vela.ini` or linker
-information, use
-[Create Ethos-U configuration for a device](../vela/index.html#vela_create_configuration)
-and obtain the missing device parameters from the silicon vendor.
-Record locally supplied files with the build, and report the missing pack
-support to the vendor.
+Add an `mlops:` node under `solution:` in the `*.csolution.yml` file.
+CMSIS-Toolbox combines this information with the selected device and DFP and
+generates `*.cbuild-mlops.yml` for the MLOps tools. See
+[MLOps Management](https://open-cmsis-pack.github.io/cmsis-toolbox/YML-Input-Format/#mlops-management)
+for the complete schema, defaults, and usage constraints.
+
+The following example selects an Ethos-U55 configuration and identifies the
+software layer that contains the ML model:
+
+```yaml
+solution:
+  mlops:
+    description: Person detection model
+    npu:
+      type: Ethos-U55
+      macs: 128
+    vela:
+      system: Ethos_U55_High_End_Embedded
+      memory: Shared_Sram
+    model:
+      clayer: $AI-Layer$
+      name: PersonDetect
+```
+
+### Add ML model layer
+
+Replace the NPU and Vela selectors with values supported by the selected device
+and set `model.clayer` to the layer that contains the model. The example omits
+`vela.ini`, so CMSIS-Toolbox uses the configuration supplied by the device or
+DFP.
+
+## Compile the ML model for the device {#integration_compile_model}
+
+CMSIS-Toolbox combines DFP information with the csolution project configuration
+and generates the MLOps information file `*.cbuild-mlops.yml`. The `vela:` node provides the `ini:` configuration file and `options:` that can be used for invocation.
+
+```console
+vela --config <vela.ini> \
+  <vela.options> \
+  model.tflite
+```
+
+See
+[Generate ML Model with Vela](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#generate-ml-model-with-vela)
+for the generated-field mapping and command examples. ExecuTorch model
+generation is typically performed by a project-specific Python export script.
+The
+[CMSIS ExecuTorch simple example](https://github.com/MatthiasHertelArm/cmsis-executorch-simple)
+reads the MLOps information file and uses its Vela configuration file and
+device-specific option string for Ethos-U model compilation.
+
+## Configure memory placement and the linker script {#integration_configure_memory}
+
+The common relationship between compiler memory areas and driver regions is
+described in
+[Match the driver configuration](../vela/index.html#vela_match_driver_configuration).
+The generated command stream uses numeric NPU regions, also
+called base pointer indices; it does not use the `Axi0` or `Axi1` aliases.
+
+Generated commands such as `NPU_SET_IFM_REGION`, `NPU_SET_OFM_REGION`,
+`NPU_SET_WEIGHT_REGION`, `NPU_SET_SCALE_REGION`, `NPU_SET_DMA0_SRC_REGION`, and
+`NPU_SET_DMA0_DST_REGION` carry region numbers and offsets. The runtime and
+driver supply the base addresses and memory attributes for those regions.
+
+The following driver sections explain the platform hooks and region attributes
+that must agree with this placement.
+
+Create the physical sections for model constants, the tensor arena, and any
+separate scratch-fast storage as described in
+[Create the linker script](../vela/index.html#vela_create_linker_script). Use the
+linker map to verify that their addresses and sizes match the selected memory
+mode and that every generated NPU region is accessible through the driver
+configuration.
+
+## Complete application integration {#integration_complete_application}
+
+Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver settings.
+
+
+## Validate and tune {#integration_validate_tune}
+
+----
+
+
+### From Creating or extending a DFP:
+
+Most content duplicates General and Vela. Only these details add value:Include matching Ethos-U driver configuration in the DFP.
+Version these artifacts together.
+Record manually supplied files and report missing pack support.
+
 
 ## Ethos-U configuration
 
@@ -159,12 +230,6 @@ regions, but these are not part of the Cortex-M integration.
 
 ## Linker configuration
 
-Create the physical sections for model constants, the tensor arena, and any
-separate scratch-fast storage as described in
-[Create the linker script](../vela/index.html#vela_create_linker_script). Use the
-linker map to verify that their addresses and sizes match the selected memory
-mode and that every generated NPU region is accessible through the driver
-configuration.
 
 The following driver sections explain the platform hooks and region attributes
 that must agree with this placement.

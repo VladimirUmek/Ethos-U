@@ -581,7 +581,7 @@ For the complete pack structure and element rules, see:
 
 ## Examples
 
-### Compile for an Ethos-U55 reference system
+### Compile for an Ethos-U reference system {#vela_compile_reference_system}
 
 ```console
 vela person_detect.tflite \
