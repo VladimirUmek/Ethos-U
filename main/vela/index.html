@@ -148,7 +148,7 @@ Feature overview</h1>
 <div class="line">                                                       |</div>
 <div class="line">                                                       v</div>
 <div class="line">                         ML inference runtime + Ethos-U driver -&gt; NPU</div>
-</div><!-- fragment --><p>For TFLite output, supported regions become Ethos-U custom operators containing the NPU command stream and related data. Unsupported TFLite operators remain in the model for CPU execution, commonly using TensorFlow Lite Micro reference or <a href="https://www.keil.arm.com/packs/cmsis-nn-arm/overview/">CMSIS-NN</a> kernels. Always review compiler warnings and <code>--show-cpu-operations</code>; a successful compilation does not imply that every operation runs on the NPU.</p>
+</div><!-- fragment --><p>For TFLite output, supported regions become Ethos-U custom operators containing the NPU command stream and related data. Unsupported TFLite operators remain in the model for CPU execution, commonly using TensorFlow Lite Micro reference or <a href="https://www.keil.arm.com/packss/cmsis-nn-arm/overview/">CMSIS-NN</a> kernels. Always review compiler warnings and <code>--show-cpu-operations</code>; a successful compilation does not imply that every operation runs on the NPU.</p>
 <p>The Vela compiler's cycle and bandwidth figures are cost-model estimates. Use them to guide compiler decisions and compare like-for-like builds. Validate final performance on an FPGA or target silicon; an <a href="https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms">Arm Fixed Virtual Platform (FVP)</a> can provide approximate behavior.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Installation</h1>
@@ -175,7 +175,7 @@ Troubleshooting installation</h3>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Obtain an Ethos-U configuration for a device</h1>
 <p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <code>vela.ini</code> configuration file. This file contains named <code>System_Config</code> sections that model device memory performance and named <code>Memory_Mode</code> sections that define where model data is placed.</p>
-<p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>, can provide the Ethos-U configuration information, including the device-specific <code>vela.ini</code> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
+<p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/packs">www.keil.arm.com/packs</a>, can provide the Ethos-U configuration information, including the device-specific <code>vela.ini</code> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
 <p>When no DFP supplies this information, create the equivalent configuration manually as described in <a class="el" href="#vela_create_configuration">Create Ethos-U configuration for a device</a>.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Basic invocation</h1>
@@ -591,7 +591,7 @@ ExecuTorch Arm example flow</h1>
 <div class="line">./examples/arm/run.sh \</div>
 <div class="line">  --model_name=examples/arm/example_modules/add.py \</div>
 <div class="line">  --target=ethos-u85-128</div>
-</div><!-- fragment --><p>The helper runs the AOT compiler, builds the matching ML inference runtime, and starts the target simulator unless build-only mode is selected. Other examples include a minimal Ethos-U notebook, a quantizer tutorial, a pruning example, an image-classification application, and Zephyr and <a href="https://www.keil.arm.com/packs/cmsis-arm/overview/">CMSIS</a> project templates. Treat the ExecuTorch branch and Vela version as a tested toolchain because backend-generated Vela options can evolve independently from the standalone CLI examples above.</p>
+</div><!-- fragment --><p>The helper runs the AOT compiler, builds the matching ML inference runtime, and starts the target simulator unless build-only mode is selected. Other examples include a minimal Ethos-U notebook, a quantizer tutorial, a pruning example, an image-classification application, and Zephyr and <a href="https://www.keil.arm.com/packss/cmsis-arm/overview/">CMSIS</a> project templates. Treat the ExecuTorch branch and Vela version as a tested toolchain because backend-generated Vela options can evolve independently from the standalone CLI examples above.</p>
 <h1><a class="anchor" id="autotoc_md18"></a>
 Troubleshooting</h1>
 <table class="markdownTable">
