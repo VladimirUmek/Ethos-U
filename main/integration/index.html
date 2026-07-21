@@ -133,36 +133,44 @@ Starting point</h1>
 <p>The starting point is a pretrained, quantized ML model that meets the application's functional requirements. Before selecting a specific Edge AI MCU, compile the model with Vela for one or more Ethos-U reference systems as described in <a href="../vela/index.html#vela_compile_reference_system">Compile for an Ethos-U reference system</a>.</p>
 <p>The Vela outputs estimates of NPU cycles, memory bandwidth, and model memory requirements. Vela also identifies which operations are assigned to the NPU and which remain on the CPU. Use these results to compare Ethos-U configurations and memory modes and to identify Edge AI MCUs with suitable NPU performance and memory capacity. The Vela estimates support device selection; they do not replace a device-specific compile or measurements on the final target.</p>
 <p>Some model zoos already provide corresponding performance and memory data for Ethos-U-based systems. Confirm that the published configuration is relevant to the candidate device before using those results.</p>
-<h1><a class="anchor" id="autotoc_md1"></a>
+<h2><a class="anchor" id="autotoc_md1"></a>
+Determine the memory budget</h2>
+<p>Most embedded applications are resource constraint and therefore the memory budget is an important aspect. Use this three-step approach to estimate the total memory requirements of the application:</p>
+<ul>
+<li><b>Establish the ML model floor.</b> Compile the ML model and with <code>--optimise Size</code> and record the reported memory areas. See <a href="../vela/index.html#vela_memory_mode">Vela memory mode parameters</a>.</li>
+<li><b>Build the system budget.</b> Add runtime and application data, stacks, heaps, alignment, padding, and a safety margin.</li>
+<li><b>Tune and optimize.</b> Use the remaining memory budget for performance gains. Use different Vela system configurations and memory modes combined with <code>--arena-cache-size</code> as described in <a href="../vela/index.html#vela_arena_cache_size">Understand arena cache and spilling</a>.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Integration workflow</h1>
 <p>Complete the following steps in order because later steps depend on earlier decisions and measurements.</p>
 <ol type="1">
 <li><b>Select the Edge AI MCU and DFP.</b> Compare the reference results with the device's NPU configuration and memory capacity and with the application's performance requirements. Obtain the matching Device Family Pack (DFP) from <a href="https://www.keil.arm.com/pack">www.keil.arm.com/pack</a>.</li>
 <li><b>Check the DFP resources.</b> Determine whether the DFP provides a device-specific <code>vela.ini</code> file, matching linker scripts, and other required resources. If it does not, contact the device or SoC vendor or <a href="../vela/index.html#vela_create_configuration">create an Ethos-U configuration for the device</a>.</li>
-<li><b><a class="el" href="#integration_create_cmsis_toolbox">Create the CMSIS-Toolbox project</a>.</b> Select the device and build context, and specify the Vela system configuration and memory mode. Use the generated <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a> to obtain the Vela parameters and resources supplied by the DFP.</li>
+<li><b><a class="el" href="#integration_create_csolution">Create the CMSIS-Toolbox project</a>.</b> Select the device and build context, and specify the Vela system configuration and memory mode. Use the generated <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a> to obtain the Vela parameters and resources supplied by the DFP.</li>
 <li><b><a class="el" href="#integration_compile_model">Compile the ML model for the device</a>.</b> Run Vela with the device-specific parameters and confirm that its performance and memory estimates meet the application requirements. Treat the performance figures as model-based estimates and retain sufficient margin.</li>
 <li><b><a class="el" href="#integration_configure_memory">Configure memory placement and the linker script</a>.</b> Keep the Vela memory mode, linker placement, and driver region configuration consistent. Account for the ML inference runtime, stacks, heaps, application data, alignment, and a safety margin. Build the system and review the compiler and linker reports.</li>
 <li><b><a class="el" href="#integration_complete_application">Complete application integration</a>.</b> Add any application-specific RTOS, power, timeout, cache, and fault handling.</li>
 <li><b><a class="el" href="#integration_validate_tune">Validate and tune</a>.</b> Verify correctness, memory allocation, ML model performance, bandwidth, latency, and concurrency on the actual target system.</li>
 </ol>
 <p>A change to a memory mode, linker section, cache attribute, or driver region value requires a review of the other descriptions of that memory region.</p>
-<h1><a class="anchor" id="autotoc_md2"></a>
-General integration guidance</h1>
+<h2><a class="anchor" id="autotoc_md3"></a>
+General integration guidance</h2>
 <ul>
-<li>Keep the <code>vela.ini</code> <code>System_Config</code>, selected <code>Memory_Mode</code>, linker sections, MPU/SAU attributes, and driver build definitions consistent.</li>
+<li>Keep the <code>vela.ini</code>, <code>System_Config</code>, selected <code>Memory_Mode</code>, linker sections, MPU/SAU attributes, and driver build definitions consistent.</li>
 <li>Apply <code>arena_cache_size</code> according to the selected memory mode as described in <a href="../vela/index.html#vela_arena_cache_size">Understand arena cache and spilling</a>.</li>
 <li>Place model constants, activations, and any separate scratch-fast storage as described in <a href="../vela/index.html#vela_create_linker_script">Create the linker script</a>.</li>
 <li>Override the driver weak hooks when the default integration assumptions do not match the platform, especially for data cache maintenance, address remapping, and RTOS synchronization.</li>
 <li>Ensure the NPU completion interrupt is eventually serviced. Very low jitter is usually not required for inference workloads, but completion handling must not be postponed indefinitely.</li>
 <li>During bring-up, use timeouts, fault reporting, and a minimal known-good model before moving to full application graphs.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md3"></a>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Add ML model and configuration to version control</h2>
 <p>It is good practice to document the handoff boundary between model, platform, and application engineers. This also gives automated tools enough context to check consistency. CMSIS-Toolbox already records the selected packs and <code>vela.ini</code> configuration file in the <em>csolution project</em> files and in the metafiles <code>*.cbuild-pack.yml</code> and <code>*.cbuild-mlops.yml</code>. Keep these files along with the input ML model under version control.</p>
-<h1><a class="anchor" id="integration_create_cmsis_toolbox"></a>
-Create the CMSIS-Toolbox project</h1>
+<h1><a class="anchor" id="integration_create_csolution"></a>
+Create the <em>csolution project</em></h1>
 <p>CMSIS-Toolbox simplifies MLOps by combining device and DFP data with project settings into machine-readable <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a> that tools can use to generate the ML model and test it on hardware or a simulator.</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Use a project example and add device</h2>
 <p>This pack includes <a href="https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html">examples</a> for FVP simulation models that show the Ethos-U NPU integration in a Cortex-M target. These projects are <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications">reference applications</a> that can be deployed to other boards that provide a board layer with an <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/#connections">STDOUT connection</a>.</p>
 <table class="markdownTable">
@@ -185,7 +193,7 @@ Use a project example and add device</h2>
 <div class="line">      board: AppKit-E7-AIML</div>
 <div class="line">// todo</div>
 <div class="line">    - type: SSE-300-U55</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
 Add MLOps information</h2>
 <p>The <code>mlops:</code> node in the <code>*.csolution.yml</code> file configures <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/YML-Input-Format/#mlops-management">MLOps Management</a>. CMSIS-Toolbox combines this information with the selected device and DFP and generates the <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/YML-CBuild-Format/#cbuild-mlopsyml"><code>*.cbuild-mlops.yml</code></a> file for the MLOps workflow.</p>
 <p>The following example selects an Ethos-U55 configuration and identifies the software layer that contains the ML model:</p>
@@ -200,7 +208,7 @@ Add MLOps information</h2>
 <div class="line">      memory: Shared_Sram</div>
 <div class="line">    model:</div>
 <div class="line">      clayer: $ML-Layer$      # this can also be an absolute path</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
 Add ML model layer</h2>
 <p>Replace the NPU and Vela selectors with values supported by the selected device and set <code>model.clayer</code> to the layer that contains the model. The example omits <code>vela.ini</code>, so CMSIS-Toolbox uses the configuration supplied by the device or DFP.</p>
 <h1><a class="anchor" id="integration_compile_model"></a>
@@ -219,9 +227,6 @@ Complete application integration</h1>
 <h1><a class="anchor" id="integration_validate_tune"></a>
 Validate and tune</h1>
 <hr  />
-<h2><a class="anchor" id="autotoc_md8"></a>
-From Creating or extending a DFP:</h2>
-<p>Most content duplicates the General and Vela guides. Only these details add value: include the matching Ethos-U driver configuration in the DFP. Version these artifacts together. Record manually supplied files and report missing pack support.</p>
 <h1><a class="anchor" id="autotoc_md9"></a>
 Ethos-U configuration</h1>
 <p>The Vela guide explains how to select an existing configuration and how to create one for a device:</p>
@@ -310,49 +315,8 @@ Driver build configuration</h1>
 <div class="line">  - NPU_REGIONCFG_2: 1</div>
 </div><!-- fragment --><p>The distinction between <code>0</code> and <code>1</code>, or between <code>2</code> and <code>3</code>, is target- and system-specific. On Ethos-U55 and Ethos-U65, the value is the REGIONCFG encoding and selects one of the AXI limit entries: <code>0</code> and <code>1</code> use the AXI0-side limit settings, while <code>2</code> and <code>3</code> use the AXI1-side limit settings. On Ethos-U85, the value is a MEM_ATTR index; the driver defaults make MEM_ATTR0 and MEM_ATTR1 use AXI_SRAM, and MEM_ATTR2 and MEM_ATTR3 use AXI_EXT. Change <code>NPU_MEM_ATTR_0</code> through <code>NPU_MEM_ATTR_3</code> only when the platform needs different U85 memory attributes.</p>
 <p>The AXI limit values are separate platform-tuning settings. Simplified, <code>AXI_LIMIT0</code> and <code>AXI_LIMIT1</code> on Ethos-U55 and Ethos-U65 correspond to the AXI0-side configuration, while <code>AXI_LIMIT2</code> and <code>AXI_LIMIT3</code> correspond to the AXI1-side configuration. On Ethos-U85, the equivalent limit settings are grouped under AXI_SRAM and AXI_EXT. The exact outstanding transaction and burst settings depend on the SoC interconnect and memory system.</p>
-<p>Keep these definitions synchronized with the <code>Memory_Mode</code> used to compile the model with the Vela compiler and with the linker sections used by the application. The driver must ultimately program region attributes that match the memory used for the command stream and each model base pointer. If the meaning of a numeric value is not clear for the selected Ethos-U target, use the target integration guide, hardware register descriptions, or a platform-provided configuration as the source of truth before benchmarking or releasing the build.</p>
-<h1><a class="anchor" id="autotoc_md14"></a>
-Determine the memory budget</h1>
-<p>Memory sizing is an iterative system exercise, not a single number from a Vela compiler report.</p>
-<h2><a class="anchor" id="autotoc_md15"></a>
-Establish the model-controlled floor</h2>
-<p>Compile the exact ML model for the exact Ethos-U target configuration using the size strategy:</p>
-<div class="fragment"><div class="line">vela network.tflite \</div>
-<div class="line">  --config target-vela.ini \</div>
-<div class="line">  --accelerator-config ethos-u55-256 \</div>
-<div class="line">  --system-config System_Name \</div>
-<div class="line">  --memory-mode Shared_Sram \</div>
-<div class="line">  --optimise Size \</div>
-<div class="line">  --verbose-allocation \</div>
-<div class="line">  --output-dir out/vela-size</div>
-</div><!-- fragment --><p>Record each reported memory area, not only the total SRAM requirement. This is the Vela compiler's practical, memory-minimized schedule for that model, compiler version, accelerator, and configuration; it is not proof of a global mathematical minimum.</p>
-<h2><a class="anchor" id="autotoc_md16"></a>
-Convert the floor into a system budget</h2>
-<p>For every physical memory, account for all consumers:</p>
-<div class="fragment"><div class="line">required memory = generated model data</div>
-<div class="line">                + ML inference runtime overhead</div>
-<div class="line">                + application static data</div>
-<div class="line">                + stacks and heaps</div>
-<div class="line">                + alignment and section padding</div>
-<div class="line">                + measured safety margin</div>
-</div><!-- fragment --><p>Use the linker map and runtime high-water measurements to verify the non-model terms. The activation buffer or tensor arena reserved by the application must be at least as large as the actual generated requirement, including framework alignment and metadata overhead. A Vela compiler allocation report alone is not a complete firmware memory budget.</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
-Sweep feasible performance budgets</h2>
-<p>Give the Vela compiler the memory remaining after the system reservation and compile several candidates optimized for performance:</p>
-<div class="fragment"><div class="line">vela network.tflite \</div>
-<div class="line">  --config target-vela.ini \</div>
-<div class="line">  --accelerator-config ethos-u55-256 \</div>
-<div class="line">  --system-config System_Name \</div>
-<div class="line">  --memory-mode Shared_Sram \</div>
-<div class="line">  --optimise Performance \</div>
-<div class="line">  --arena-cache-size BUDGET_BYTES \</div>
-<div class="line">  --verbose-allocation \</div>
-<div class="line">  --output-dir out/vela-performance</div>
-</div><!-- fragment --><p><code>--arena-cache-size</code> overrides the value in <code>vela.ini</code>. Its target area depends on the selected memory-mode mapping, as explained in <a href="../vela/index.html#vela_arena_cache_size">Understand arena cache and spilling</a>. Treat it as an optimization target: if the compiler reports that the target was exceeded, use the reported actual allocation. Select a candidate only after its linked image fits and its correctness and performance have been measured on the target.</p>
-<p>The compact loop is:</p>
-<div class="fragment"><div class="line">size compile -&gt; reserve the whole system -&gt; performance budget sweep</div>
-<div class="line">     -&gt; inspect actual allocation -&gt; link -&gt; run -&gt; measure -&gt; select</div>
-</div><!-- fragment --> </div></div><!-- PageDoc -->
+<p>Keep these definitions synchronized with the <code>Memory_Mode</code> used to compile the model with the Vela compiler and with the linker sections used by the application. The driver must ultimately program region attributes that match the memory used for the command stream and each model base pointer. If the meaning of a numeric value is not clear for the selected Ethos-U target, use the target integration guide, hardware register descriptions, or a platform-provided configuration as the source of truth before benchmarking or releasing the build. </p>
+</div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->
 </div><!-- doc-content -->

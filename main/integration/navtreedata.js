@@ -25,32 +25,27 @@
 var NAVTREE =
 [
   [ "Integration", "index.html", [
-    [ "Starting point", "index.html#autotoc_md0", null ],
-    [ "Integration workflow", "index.html#autotoc_md1", null ],
-    [ "General integration guidance", "index.html#autotoc_md2", [
-      [ "Add ML model and configuration to version control", "index.html#autotoc_md3", null ]
+    [ "Starting point", "index.html#autotoc_md0", [
+      [ "Determine the memory budget", "index.html#autotoc_md1", null ]
     ] ],
-    [ "Create the CMSIS-Toolbox project", "index.html#integration_create_cmsis_toolbox", [
-      [ "Use a project example and add device", "index.html#autotoc_md4", null ],
-      [ "Add MLOps information", "index.html#autotoc_md5", null ],
-      [ "Add ML model layer", "index.html#autotoc_md6", null ]
+    [ "Integration workflow", "index.html#autotoc_md2", [
+      [ "General integration guidance", "index.html#autotoc_md3", null ],
+      [ "Add ML model and configuration to version control", "index.html#autotoc_md4", null ]
+    ] ],
+    [ "Create the csolution project", "index.html#integration_create_csolution", [
+      [ "Use a project example and add device", "index.html#autotoc_md5", null ],
+      [ "Add MLOps information", "index.html#autotoc_md6", null ],
+      [ "Add ML model layer", "index.html#autotoc_md7", null ]
     ] ],
     [ "Compile the ML model for the device", "index.html#integration_compile_model", null ],
     [ "Configure memory placement and the linker script", "index.html#integration_configure_memory", null ],
     [ "Complete application integration", "index.html#integration_complete_application", null ],
-    [ "Validate and tune", "index.html#integration_validate_tune", [
-      [ "From Creating or extending a DFP:", "index.html#autotoc_md8", null ]
-    ] ],
+    [ "Validate and tune", "index.html#integration_validate_tune", null ],
     [ "Ethos-U configuration", "index.html#autotoc_md9", null ],
     [ "Generated command-stream regions", "index.html#autotoc_md10", null ],
     [ "Linker configuration", "index.html#autotoc_md11", null ],
     [ "Driver weak hooks", "index.html#autotoc_md12", null ],
-    [ "Driver build configuration", "index.html#autotoc_md13", null ],
-    [ "Determine the memory budget", "index.html#autotoc_md14", [
-      [ "Establish the model-controlled floor", "index.html#autotoc_md15", null ],
-      [ "Convert the floor into a system budget", "index.html#autotoc_md16", null ],
-      [ "Sweep feasible performance budgets", "index.html#autotoc_md17", null ]
-    ] ]
+    [ "Driver build configuration", "index.html#autotoc_md13", null ]
   ] ]
 ];
 

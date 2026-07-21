@@ -1,7 +1,7 @@
 function writeHeader() {
-    document.write('Version 120b9ec');
+    document.write('Version bdb0b08');
 };
 
 function writeFooter()  {
-    document.write('Generated on Tue Jul 21 2026 09:50:58 for PROJECT_NAME           = Drivers 120b9ec. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Tue Jul 21 2026 12:54:50 for PROJECT_NAME           = Drivers bdb0b08. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };

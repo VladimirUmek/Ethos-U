@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['validate_20and_20tune_0',['Validate and tune',['../index.html#integration_validate_tune',1,'']]],
-  ['version_20control_1',['Add ML model and configuration to version control',['../index.html#autotoc_md3',1,'']]]
+  ['weak_20hooks_0',['Driver weak hooks',['../index.html#autotoc_md12',1,'']]],
+  ['workflow_1',['Integration workflow',['../index.html#autotoc_md2',1,'']]]
 ];
