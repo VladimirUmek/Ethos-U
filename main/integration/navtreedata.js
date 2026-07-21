@@ -30,8 +30,8 @@ var NAVTREE =
     [ "General integration guidance", "index.html#autotoc_md2", [
       [ "Add ML model and configuration to version control", "index.html#autotoc_md3", null ]
     ] ],
-    [ "Set up the CMSIS-Toolbox project", "index.html#integration_setup_cmsis_toolbox", [
-      [ "Use a project template and add device", "index.html#autotoc_md4", null ],
+    [ "Create the CMSIS-Toolbox project", "index.html#integration_create_cmsis_toolbox", [
+      [ "Use a project example and add device", "index.html#autotoc_md4", null ],
       [ "Add MLOps information", "index.html#autotoc_md5", null ],
       [ "Add ML model layer", "index.html#autotoc_md6", null ]
     ] ],

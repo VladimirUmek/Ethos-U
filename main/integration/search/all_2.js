@@ -1,7 +1,7 @@
 var searchData=
 [
   ['callbacks_0',['Callbacks',['../../drivers/group__ethosu__callback__api.html',1,'']]],
-  ['cmsis_20toolbox_20project_1',['Set up the CMSIS-Toolbox project',['../index.html#integration_setup_cmsis_toolbox',1,'']]],
+  ['cmsis_20toolbox_20project_1',['Create the CMSIS-Toolbox project',['../index.html#integration_create_cmsis_toolbox',1,'']]],
   ['command_20stream_20regions_2',['Generated command-stream regions',['../index.html#autotoc_md10',1,'']]],
   ['compile_20the_20ml_20model_20for_20the_20device_3',['Compile the ML model for the device',['../index.html#integration_compile_model',1,'']]],
   ['complete_20application_20integration_4',['Complete application integration',['../index.html#integration_complete_application',1,'']]],
@@ -11,5 +11,6 @@ var searchData=
   ['control_8',['Add ML model and configuration to version control',['../index.html#autotoc_md3',1,'']]],
   ['controlled_20floor_9',['Establish the model-controlled floor',['../index.html#autotoc_md15',1,'']]],
   ['convert_20the_20floor_20into_20a_20system_20budget_10',['Convert the floor into a system budget',['../index.html#autotoc_md16',1,'']]],
-  ['creating_20or_20extending_20a_20dfp_3a_11',['From Creating or extending a DFP:',['../index.html#autotoc_md8',1,'']]]
+  ['create_20the_20cmsis_20toolbox_20project_11',['Create the CMSIS-Toolbox project',['../index.html#integration_create_cmsis_toolbox',1,'']]],
+  ['creating_20or_20extending_20a_20dfp_3a_12',['From Creating or extending a DFP:',['../index.html#autotoc_md8',1,'']]]
 ];

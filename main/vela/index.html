@@ -344,7 +344,7 @@ Understand arena cache and spilling</h2>
 <p><code>cache_mem_area</code> does not always create a separate cache allocation. When it resolves to the same memory type as <code>arena_mem_area</code>, the fast-scratch role is folded into the normal arena. It becomes a distinct staging area, used for spilling and represented by the scratch-fast command-stream region, only when the two attributes resolve to different memory types.</p>
 <p>Ethos-U55's hardware AXI1 interface is read-only. Consequently, <code>Dedicated_Sram</code> is not a practical Ethos-U55 execution model when the writable feature-map arena would be placed on that interface. Do not infer the same read-only restriction for the logical <code>Axi1</code> alias in <code>vela.ini</code> on every Ethos-U target.</p>
 <h1><a class="anchor" id="vela_create_configuration"></a>
-vela_create_configuration</h1>
+Create Ethos-U configuration for a device</h1>
 <p>To support a device manually, create a device-specific <code>vela.ini</code> file. Application developers normally obtain this file from the silicon vendor, either directly or from a DFP through CMSIS-Toolbox.</p>
 <p>Creating an Ethos-U configuration requires these steps:</p>
 <ol type="1">
@@ -390,11 +390,11 @@ System configuration parameters</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>axi0_port</code>   </td><td class="markdownTableBodyNone"><code>Sram</code>, <code>Dram</code>, <code>OnChipFlash</code>, <code>OffChipFlash</code>   </td><td class="markdownTableBodyNone">Memory type assigned to the logical <code>Axi0</code> alias.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>axi1_port</code>   </td><td class="markdownTableBodyNone">Same as <code>axi0_port</code>   </td><td class="markdownTableBodyNone">Memory type assigned to the logical <code>Axi1</code> alias.    </td></tr>
+<td class="markdownTableBodyNone"><code>axi1_port</code>   </td><td class="markdownTableBodyNone"><code>Sram</code>, <code>Dram</code>, <code>OnChipFlash</code>, <code>OffChipFlash</code>   </td><td class="markdownTableBodyNone">Memory type assigned to the logical <code>Axi1</code> alias.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>&lt;Memory&gt;_clock_scale</code>   </td><td class="markdownTableBodyNone">Float, <code>0.0</code> to <code>1.0</code>   </td><td class="markdownTableBodyNone">Memory clock/bandwidth scale relative to <code>core_clock</code>. <code>&lt;Memory&gt;</code> is <code>Sram</code>, <code>Dram</code>, <code>OnChipFlash</code>, or <code>OffChipFlash</code>.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;Memory&gt;_ports_used</code>   </td><td class="markdownTableBodyNone">Integer   </td><td class="markdownTableBodyNone">Number of ports used for that memory. Documented for SRAM, DRAM, and off-chip Flash.    </td></tr>
+<td class="markdownTableBodyNone"><code>&lt;Memory&gt;_ports_used</code>   </td><td class="markdownTableBodyNone">Integer   </td><td class="markdownTableBodyNone">Number of ports used for memory (used for <code>Sram</code>, <code>Dram</code>, <code>OnChipFlash</code>)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>&lt;Memory&gt;_burst_length</code>   </td><td class="markdownTableBodyNone">Integer, bytes   </td><td class="markdownTableBodyNone">Minimum efficient transfer burst.    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -407,7 +407,7 @@ System configuration parameters</h2>
 <td class="markdownTableBodyNone"><code>&lt;Memory&gt;_max_writes</code>   </td><td class="markdownTableBodyNone">Integer   </td><td class="markdownTableBodyNone">Maximum outstanding writes. Use <code>0</code> for a read-only memory when appropriate.   </td></tr>
 </table>
 <p>The option reference lists the full metric set for <code>Sram</code>, <code>Dram</code>, and <code>OffChipFlash</code>, and lists <code>OnChipFlash_clock_scale</code> for on-chip Flash. Use <code>--verbose-config</code> with the installed Vela version to inspect the resolved properties supported by that version.</p>
-<p>These values are compiler cost-model inputs, not reporting metadata alone. Bandwidth, latency, burst length, and outstanding-transaction limits can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated command stream. <code>core_clock</code> is primarily used to convert cycle estimates to time. Benchmark the compiled model on the target when accurate performance is required.</p>
+<p>The values in <code>vela.ini</code> are used by the Vela compiler to optimize the ML model for the target and the output report. The can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated command stream. <code>core_clock</code> is primarily used to convert cycle estimates to time.</p>
 <h2><a class="anchor" id="vela_memory_mode"></a>
 Memory mode parameters</h2>
 <table class="markdownTable">

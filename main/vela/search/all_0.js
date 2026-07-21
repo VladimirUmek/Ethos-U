@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['a_20device_0',['Obtain an Ethos-U configuration for a device',['../index.html#autotoc_md4',1,'']]],
+  ['a_20device_0',['a device',['../index.html#vela_create_configuration',1,'Create Ethos-U configuration for a device'],['../index.html#autotoc_md4',1,'Obtain an Ethos-U configuration for a device']]],
   ['a_20dfp_1',['Publish Ethos-U configuration in a DFP',['../index.html#vela_publish_configuration',1,'']]],
   ['a_20memory_20mode_2',['Select a memory mode',['../index.html#vela_select_memory_mode',1,'']]],
   ['a_20performance_20scheduler_20sram_20budget_3',['Set a performance-scheduler SRAM budget',['../index.html#autotoc_md13',1,'']]],

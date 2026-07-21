@@ -21,7 +21,7 @@ var NAVTREEINDEX0 =
 "index.html#integration_compile_model":[4],
 "index.html#integration_complete_application":[6],
 "index.html#integration_configure_memory":[5],
-"index.html#integration_setup_cmsis_toolbox":[3],
+"index.html#integration_create_cmsis_toolbox":[3],
 "index.html#integration_validate_tune":[7],
 "pages.html":[]
 };

@@ -32,5 +32,6 @@ var searchData=
   ['ethosu_5fsemaphore_5ftake_29',['ethosu_semaphore_take',['../../drivers/group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725',1,]]],
   ['ethosu_5fsoft_5freset_30',['ethosu_soft_reset',['../../drivers/group__ethosu__public__api.html#ga480a7f7b324b3be61c1a9ffc92be9f3a',1,]]],
   ['ethosu_5fwait_31',['ethosu_wait',['../../drivers/group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b',1,]]],
-  ['extending_20a_20dfp_3a_32',['From Creating or extending a DFP:',['../index.html#autotoc_md8',1,'']]]
+  ['example_20and_20add_20device_32',['Use a project example and add device',['../index.html#autotoc_md4',1,'']]],
+  ['extending_20a_20dfp_3a_33',['From Creating or extending a DFP:',['../index.html#autotoc_md8',1,'']]]
 ];
