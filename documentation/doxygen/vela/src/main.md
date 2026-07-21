@@ -298,7 +298,7 @@ feature-map arena would be placed on that interface. Do not infer the same
 read-only restriction for the logical `Axi1` alias in `vela.ini` on every
 Ethos-U target.
 
-##  {#vela_create_configuration}
+## Create Ethos-U configuration for a device {#vela_create_configuration}
 
 To support a device manually, create a device-specific `vela.ini` file.
 Application developers normally obtain this file from the silicon vendor,
@@ -379,9 +379,9 @@ models.
 |---|---|---|
 | `core_clock` | Float, Hz | Ethos-U core frequency. Scientific notation such as `500e6` is accepted. |
 | `axi0_port` | `Sram`, `Dram`, `OnChipFlash`, `OffChipFlash` | Memory type assigned to the logical `Axi0` alias. |
-| `axi1_port` | Same as `axi0_port` | Memory type assigned to the logical `Axi1` alias. |
+| `axi1_port` | `Sram`, `Dram`, `OnChipFlash`, `OffChipFlash` | Memory type assigned to the logical `Axi1` alias. |
 | `<Memory>_clock_scale` | Float, `0.0` to `1.0` | Memory clock/bandwidth scale relative to `core_clock`. `<Memory>` is `Sram`, `Dram`, `OnChipFlash`, or `OffChipFlash`. |
-| `<Memory>_ports_used` | Integer | Number of ports used for that memory. Documented for SRAM, DRAM, and off-chip Flash. |
+| `<Memory>_ports_used` | Integer | Number of ports used for memory (used for `Sram`, `Dram`, `OnChipFlash`) |
 | `<Memory>_burst_length` | Integer, bytes | Minimum efficient transfer burst. |
 | `<Memory>_read_latency` | Integer, cycles | Read latency used by the cost model. |
 | `<Memory>_write_latency` | Integer, cycles | Write latency used by the cost model. Use `0` for a read-only memory when appropriate. |
@@ -393,12 +393,9 @@ The option reference lists the full metric set for `Sram`, `Dram`, and
 Use `--verbose-config` with the installed Vela version to inspect the resolved
 properties supported by that version.
 
-These values are compiler cost-model inputs, not reporting metadata alone.
-Bandwidth, latency, burst length, and outstanding-transaction limits can alter
-scheduling, buffering, DMA insertion, allocation sizes, and the generated
-command stream. `core_clock` is primarily used to convert cycle estimates to
-time. Benchmark the compiled model on the target when accurate performance is
-required.
+The values in `vela.ini` are used by the Vela compiler to optimize the ML model for the target and the output report.
+The can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated
+command stream. `core_clock` is primarily used to convert cycle estimates to time.
 
 ### Memory mode parameters {#vela_memory_mode}
 

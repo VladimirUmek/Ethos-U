@@ -12,11 +12,11 @@ compile the model with Vela for one or more Ethos-U reference systems as
 described in
 [Compile for an Ethos-U reference system](../vela/index.html#vela_compile_reference_system).
 
-The Vela reports provide initial estimates of NPU cycles, memory bandwidth, and
-model memory requirements. They also identify which operations are assigned to
+The Vela outputs estimates of NPU cycles, memory bandwidth, and
+model memory requirements. Vela also identifies which operations are assigned to
 the NPU and which remain on the CPU. Use these results to compare Ethos-U
 configurations and memory modes and to identify Edge AI MCUs with suitable NPU
-performance and memory capacity. These estimates support device selection; they
+performance and memory capacity. The Vela estimates support device selection; they
 do not replace a device-specific compile or measurements on the final target.
 
 Some model zoos already provide corresponding performance and memory data for
@@ -36,7 +36,7 @@ decisions and measurements.
    device-specific `vela.ini` file, matching linker scripts, and other required
    resources. If it does not, contact the device or SoC vendor or
    [create an Ethos-U configuration for the device](../vela/index.html#vela_create_configuration).
-3. **[Set up the CMSIS-Toolbox project](#integration_setup_cmsis_toolbox).** Select the device and build context and specify the Vela system configuration and memory mode.
+3. **[Create the CMSIS-Toolbox project](#integration_create_cmsis_toolbox).** Select the device and build context, and specify the Vela system configuration and memory mode.
    Use the generated [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
    to obtain the Vela parameters and resources supplied by the DFP.
 4. **[Compile the ML model for the device](#integration_compile_model).** Run Vela with the device-specific
@@ -53,7 +53,7 @@ decisions and measurements.
    bandwidth, latency, and concurrency on the actual target system.
 
 A change to a memory mode, linker section, cache attribute, or driver region
-value requires reviewing the other descriptions of that memory region.
+value requires a review of the other descriptions of that memory region.
 
 ## General integration guidance
 
@@ -75,13 +75,13 @@ value requires reviewing the other descriptions of that memory region.
 
 ### Add ML model and configuration to version control
 
-It is good practice to document the hand-off boundary between model, platform, and application
+It is good practice to document the handoff boundary between model, platform, and application
 engineers. This also gives automated tools enough context to check consistency.
 CMSIS-Toolbox already records the selected packs and `vela.ini` configuration
-file in the *csolution project* files and the metafiles `*.cbuild-pack.yml` and `*.cbuild-mlops.yml`.
+file in the *csolution project* files and in the metafiles `*.cbuild-pack.yml` and `*.cbuild-mlops.yml`.
 Keep these files along with the input ML model under version control.
 
-## Set up the CMSIS-Toolbox project {#integration_setup_cmsis_toolbox}
+## Create the CMSIS-Toolbox project {#integration_create_cmsis_toolbox}
 
 CMSIS-Toolbox simplifies MLOps by combining device and DFP data with project
 settings into machine-readable
@@ -89,22 +89,36 @@ settings into machine-readable
 that tools can use to generate the ML model and test it on hardware or a
 simulator.
 
-### Use a project template and add device
+### Use a project example and add device
 
-ToDo: start with a project template available in this pack.  This should come with a simple test model.
+This pack includes [examples](https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html) for FVP simulation models that show the Ethos-U NPU integration in a Cortex-M target. These projects are [reference applications](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications) that can be deployed to other boards that provide a board layer with an [STDOUT connection](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/#connections).
 
+Target Board (FVP Simulator)   | NPU       | Example project
+:------------------------------|:----------|:---------------------------
+V2M-MPS3-SSE-300-FVP           | Ethos-U55 | `Hello-Ethos-U55.csolution.yml`
+V2M-MPS3-SSE-300-FVP           | Ethos-U65 | `Hello-Ethos-U65.csolution.yml`
+SSE-320                        | Ethos-U85 | `Hello-Ethos-U85.csolution.yml`
 
+A hardware target can be added in the `*.csolution.yml` file as shown below:
+
+```yaml
+  packs:
+    - pack: AlifSemiconductor::Ensemble      # Add DFP and optional BSP
+
+  target-types:
+    - type: MyHardware                       # Add hardware target
+      device: AE722F80F55D5LS
+      board: AppKit-E7-AIML
+// todo
+    - type: SSE-300-U55
+```
 
 ### Add MLOps information
 
-Add an `mlops:` node under `solution:` in the `*.csolution.yml` file.
-CMSIS-Toolbox combines this information with the selected device and DFP and
-generates `*.cbuild-mlops.yml` for the MLOps tools. See
-[MLOps Management](https://open-cmsis-pack.github.io/cmsis-toolbox/YML-Input-Format/#mlops-management)
-for the complete schema, defaults, and usage constraints.
+The `mlops:` node in the `*.csolution.yml` file configures [MLOps Management](https://open-cmsis-pack.github.io/cmsis-toolbox/YML-Input-Format/#mlops-management).
+CMSIS-Toolbox combines this information with the selected device and DFP and generates the [`*.cbuild-mlops.yml`](https://open-cmsis-pack.github.io/cmsis-toolbox/YML-CBuild-Format/#cbuild-mlopsyml) file for the MLOps workflow.
 
-The following example selects an Ethos-U55 configuration and identifies the
-software layer that contains the ML model:
+The following example selects an Ethos-U55 configuration and identifies the software layer that contains the ML model:
 
 ```yaml
 solution:
@@ -117,8 +131,7 @@ solution:
       system: Ethos_U55_High_End_Embedded
       memory: Shared_Sram
     model:
-      clayer: $AI-Layer$
-      name: PersonDetect
+      clayer: $ML-Layer$      # this can also be an absolute path
 ```
 
 ### Add ML model layer
@@ -131,22 +144,11 @@ DFP.
 ## Compile the ML model for the device {#integration_compile_model}
 
 CMSIS-Toolbox combines DFP information with the csolution project configuration
-and generates the MLOps information file `*.cbuild-mlops.yml`. The `vela:` node provides the `ini:` configuration file and `options:` that can be used for invocation.
+and generates the MLOps information file `*.cbuild-mlops.yml`. The `vela:` node provides the `ini:` configuration file and `options:` that can be used to invoke Vela.
 
 ```console
-vela --config <vela.ini> \
-  <vela.options> \
-  model.tflite
+vela --config <vela.ini> <vela.options> ml-model.tflite
 ```
-
-See
-[Generate ML Model with Vela](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#generate-ml-model-with-vela)
-for the generated-field mapping and command examples. ExecuTorch model
-generation is typically performed by a project-specific Python export script.
-The
-[CMSIS ExecuTorch simple example](https://github.com/MatthiasHertelArm/cmsis-executorch-simple)
-reads the MLOps information file and uses its Vela configuration file and
-device-specific option string for Ethos-U model compilation.
 
 ## Configure memory placement and the linker script {#integration_configure_memory}
 
@@ -183,7 +185,7 @@ Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver set
 
 ### From Creating or extending a DFP:
 
-Most content duplicates General and Vela. Only these details add value:Include matching Ethos-U driver configuration in the DFP.
+Most content duplicates the General and Vela guides. Only these details add value: include the matching Ethos-U driver configuration in the DFP.
 Version these artifacts together.
 Record manually supplied files and report missing pack support.
 
@@ -221,8 +223,9 @@ driver supply the base addresses and memory attributes for those regions.
 
 Verbose compiler dumps can also show internal region names that are not ordinary
 application-provided buffers. `Mem2Mem` is one of these names. The Vela compiler
-uses it for internal DMA or LUT handling, not for the application weight, scratch, or
-scratch-fast buffers. Spilling uses the scratch-fast region, not `Mem2Mem`.
+uses it for internal DMA or LUT handling, not for application-provided weight,
+scratch, or scratch-fast buffers. Spilling uses the scratch-fast region, not
+`Mem2Mem`.
 
 The Cortex-M flow uses base pointer regions 0 to 2 for weights, scratch, and
 optional scratch-fast storage. Other platform integrations can use additional
@@ -245,7 +248,7 @@ For data cache maintenance, the driver exposes \ref ethosu_flush_dcache
 "ethosu_flush_dcache()" and \ref ethosu_invalidate_dcache
 "ethosu_invalidate_dcache()". The default implementations are no-ops. Override
 them when the Cortex-M data cache is enabled and the NPU accesses memory that may
-also be cached by the CPU. It is advised to clean and invalidate.
+also be cached by the CPU. Clean and invalidate the cache as appropriate.
 
 - \ref ethosu_flush_dcache "ethosu_flush_dcache()" prepares CPU-written data for
   NPU access. It is used before inference so the NPU sees the command stream,
@@ -253,7 +256,8 @@ also be cached by the CPU. It is advised to clean and invalidate.
   cache.
 - \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" prepares
   NPU-written data for CPU access. It is used after inference so the CPU does not
-  read stale cache lines for output or activation buffers updated by the NPU. It is advised to clean and invalidate.
+  read stale cache lines for output or activation buffers updated by the NPU.
+  Clean and invalidate the cache as appropriate.
 
 Cache management policy is platform-specific, but these rules are useful during
 integration:
@@ -267,7 +271,7 @@ integration:
   outside the inference buffers.
 - If a cache hook is asked to operate on a non-cacheable region, such as TCM or a
   memory region configured as device/non-cacheable, it should do nothing for that
-  range except any required ordering barrier.
+  range except apply any required ordering barrier.
 
 The driver also exposes \ref ethosu_address_remap "ethosu_address_remap()" and
 \ref ethosu_config_select "ethosu_config_select()" for address and
@@ -284,7 +288,7 @@ region-configuration handling.
   selection depends on the address or memory placement.
 
 For bare-metal systems, the default synchronization hooks may be sufficient if
-only one execution context submits work to the driver. For RTOS-based systems, or
+only one execution context submits work to the driver. For RTOS-based systems or
 for integrations where multiple contexts may use the driver, override the mutex
 and semaphore hooks to use the operating system primitives:
 \ref ethosu_mutex_create "ethosu_mutex_create()",
@@ -308,7 +312,7 @@ time. A single binary cannot switch between different memory-area mappings unles
 the project builds separate variants or adds a platform-specific selection
 mechanism.
 
-With CMSIS Toolbox, select the required mode by providing the driver compile
+With CMSIS-Toolbox, select the required mode by providing the driver compile
 definitions in the relevant build context, layer, or target configuration. The
 values used for `NPU_QCONFIG` and `NPU_REGIONCFG_x` tell the driver which NPU
 access path to use for the command stream and for each base pointer region:
@@ -335,8 +339,8 @@ For the default driver configuration, the practical mapping is:
 
 This lets the same region values give the same intended behavior across
 Ethos-U55, Ethos-U65, and Ethos-U85: use `0` or `1` for base pointer regions
-whose compiler storage role resolved through the `Axi0` alias, and use `2` or
-`3` for base pointer regions whose role resolved through the `Axi1` alias.
+whose compiler storage role is resolved through the `Axi0` alias, and use `2` or
+`3` for base pointer regions whose role is resolved through the `Axi1` alias.
 
 The value does not name a physical memory by itself. It selects the NPU access
 path and the attributes programmed for that path. The platform integration must
@@ -385,19 +389,19 @@ defines:
   - NPU_REGIONCFG_2: 1
 ```
 
-The distinction between `0` and `1`, or between `2` and `3`, is target and
-system specific. On Ethos-U55 and Ethos-U65 the value is the REGIONCFG encoding
+The distinction between `0` and `1`, or between `2` and `3`, is target- and
+system-specific. On Ethos-U55 and Ethos-U65, the value is the REGIONCFG encoding
 and selects one of the AXI limit entries: `0` and `1` use the AXI0-side limit
-settings, while `2` and `3` use the AXI1-side limit settings. On Ethos-U85 the
+settings, while `2` and `3` use the AXI1-side limit settings. On Ethos-U85, the
 value is a MEM_ATTR index; the driver defaults make MEM_ATTR0 and MEM_ATTR1 use
-AXI_SRAM, and MEM_ATTR2 and MEM_ATTR3 use AXI_EXT. Change `NPU_MEM_ATTR_0` to
+AXI_SRAM, and MEM_ATTR2 and MEM_ATTR3 use AXI_EXT. Change `NPU_MEM_ATTR_0` through
 `NPU_MEM_ATTR_3` only when the platform needs different U85 memory attributes.
 
 The AXI limit values are separate platform-tuning settings. Simplified,
 `AXI_LIMIT0` and `AXI_LIMIT1` on Ethos-U55 and Ethos-U65 correspond to the
 AXI0-side configuration, while `AXI_LIMIT2` and `AXI_LIMIT3` correspond to the
-AXI1-side configuration. On Ethos-U85 the equivalent limit settings are grouped
-as AXI_SRAM and AXI_EXT. The exact outstanding transaction and burst settings
+AXI1-side configuration. On Ethos-U85, the equivalent limit settings are grouped
+under AXI_SRAM and AXI_EXT. The exact outstanding transaction and burst settings
 depend on the SoC interconnect and memory system.
 
 Keep these definitions synchronized with the `Memory_Mode` used to compile the
@@ -406,7 +410,7 @@ application. The driver
 must ultimately program region attributes that match the memory used for the
 command stream and each model base pointer. If the meaning of a numeric value is
 not clear for the selected Ethos-U target, use the target integration guide,
-hardware register description, or a platform-provided configuration as the source
+hardware register descriptions, or a platform-provided configuration as the source
 of truth before benchmarking or releasing the build.
 
 ## Determine the memory budget
@@ -430,10 +434,10 @@ vela network.tflite \
   --output-dir out/vela-size
 ```
 
-Record each reported memory area, not only total SRAM. This is the Vela
-compiler's practical
-memory-minimized schedule for that model, compiler version, accelerator, and
-configuration; it is not a proof of a global mathematical minimum.
+Record each reported memory area, not only the total SRAM requirement. This is
+the Vela compiler's practical, memory-minimized schedule for that model,
+compiler version, accelerator, and
+configuration; it is not proof of a global mathematical minimum.
 
 ### Convert the floor into a system budget
 
@@ -448,9 +452,9 @@ required memory = generated model data
                 + measured safety margin
 ```
 
-Use the linker map and run-time high-water measurements to verify the non-model
+Use the linker map and runtime high-water measurements to verify the non-model
 terms. The activation buffer or tensor arena reserved by the application must
-be at least the actual generated requirement, including framework alignment and
+be at least as large as the actual generated requirement, including framework alignment and
 metadata overhead. A Vela compiler allocation report alone is not a complete
 firmware
 memory budget.
@@ -458,8 +462,7 @@ memory budget.
 ### Sweep feasible performance budgets
 
 Give the Vela compiler the memory remaining after the system reservation and
-compile several
-performance candidates:
+compile several candidates optimized for performance:
 
 ```console
 vela network.tflite \

@@ -27,10 +27,8 @@ resources such as the `vela.ini` configuration file, linker scripts, and
 software components. Device packs are available from
 [www.keil.arm.com/pack](https://www.keil.arm.com/pack). CMSIS-Toolbox uses
 these resources for the selected device and build context and exposes the
-relevant parameters through its
-[MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
-See
-[Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
+relevant parameters through its [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
+See [Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
 for the relevant DFP description entries.
 
 When a DFP contains Ethos-U resources, application developers can use the
