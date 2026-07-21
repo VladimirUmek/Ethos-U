@@ -25,7 +25,7 @@ provide support for them.
 A CMSIS Device Family Pack (DFP) can simplify integration by including Ethos-U
 resources such as the `vela.ini` configuration file, linker scripts, and
 software components. Device packs are available from
-[www.keil.arm.com/pack](https://www.keil.arm.com/pack). CMSIS-Toolbox uses
+[www.keil.arm.com/packs](https://www.keil.arm.com/packs). CMSIS-Toolbox uses
 these resources for the selected device and build context and exposes the
 relevant parameters through its [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
 See [Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
@@ -170,6 +170,6 @@ useful for comparison but do not replace measurements on the target.
   [Ethos-U65](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65), and
   [Ethos-U85](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85)
 - [Vela source and release documentation](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela)
-- [CMSIS-NN](https://www.keil.arm.com/packs/cmsis-nn-arm/overview/)
+- [CMSIS-NN](https://www.keil.arm.com/packss/cmsis-nn-arm/overview/)
 - [ExecuTorch Arm examples](https://github.com/pytorch/executorch/tree/main/examples/arm)
 - [Arm Fixed Virtual Platforms](https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms)

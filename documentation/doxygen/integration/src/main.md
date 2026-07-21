@@ -42,7 +42,7 @@ decisions and measurements.
 1. **Select the Edge AI MCU and DFP.** Compare the reference results with the
    device's NPU configuration and memory capacity and with the application's
    performance requirements. Obtain the matching Device Family Pack (DFP) from
-   [www.keil.arm.com/pack](https://www.keil.arm.com/pack).
+   [www.keil.arm.com/packs](https://www.keil.arm.com/packs).
 2. **Check the DFP resources.** Determine whether the DFP provides a
    device-specific `vela.ini` file, matching linker scripts, and other required
    resources. If it does not, contact the device or SoC vendor or
