@@ -1,0 +1,22 @@
+project:
+  description: Ethos-U85 TFLM example and integration test
+
+  output:
+    type:
+      - elf
+
+  connections:
+    - connect: TFLM Ethos-U85 Test
+      consumes:
+        - STDOUT
+
+  groups:
+    - group: Test
+      files:
+        - file: ./Source/test_main.cpp
+
+  layers:
+    - layer: ./Board/Corstone-320/Board.clayer.yml
+      type: Board
+    - layer: ./Model/ML-Model.clayer.yml
+      type: ML-Model
