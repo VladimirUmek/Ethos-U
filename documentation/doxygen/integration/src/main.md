@@ -23,6 +23,17 @@ Some model zoos already provide corresponding performance and memory data for
 Ethos-U-based systems. Confirm that the published configuration is relevant to
 the candidate device before using those results.
 
+### Determine the memory budget
+
+Most embedded applications are resource constraint and therefore the memory budget is an important aspect. Use this three-step approach to estimate the total memory requirements of the application:
+
+- **Establish the ML model floor.** Compile the ML model and with
+  `--optimise Size` and record the reported memory
+  areas. See [Vela memory mode parameters](../vela/index.html#vela_memory_mode).
+- **Build the system budget.** Add runtime and application data, stacks, heaps,
+  alignment, padding, and a safety margin.
+- **Tune and optimize.** Use the remaining memory budget for performance gains. Use different Vela system configurations and memory modes combined with `--arena-cache-size` as described in [Understand arena cache and spilling](../vela/index.html#vela_arena_cache_size).
+
 ## Integration workflow
 
 Complete the following steps in order because later steps depend on earlier
@@ -36,7 +47,7 @@ decisions and measurements.
    device-specific `vela.ini` file, matching linker scripts, and other required
    resources. If it does not, contact the device or SoC vendor or
    [create an Ethos-U configuration for the device](../vela/index.html#vela_create_configuration).
-3. **[Create the CMSIS-Toolbox project](#integration_create_cmsis_toolbox).** Select the device and build context, and specify the Vela system configuration and memory mode.
+3. **[Create the CMSIS-Toolbox project](#integration_create_csolution).** Select the device and build context, and specify the Vela system configuration and memory mode.
    Use the generated [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
    to obtain the Vela parameters and resources supplied by the DFP.
 4. **[Compile the ML model for the device](#integration_compile_model).** Run Vela with the device-specific
@@ -55,9 +66,9 @@ decisions and measurements.
 A change to a memory mode, linker section, cache attribute, or driver region
 value requires a review of the other descriptions of that memory region.
 
-## General integration guidance
+### General integration guidance
 
-- Keep the `vela.ini` `System_Config`, selected `Memory_Mode`, linker sections,
+- Keep the `vela.ini`, `System_Config`, selected `Memory_Mode`, linker sections,
   MPU/SAU attributes, and driver build definitions consistent.
 - Apply `arena_cache_size` according to the selected memory mode as described in
   [Understand arena cache and spilling](../vela/index.html#vela_arena_cache_size).
@@ -81,7 +92,7 @@ CMSIS-Toolbox already records the selected packs and `vela.ini` configuration
 file in the *csolution project* files and in the metafiles `*.cbuild-pack.yml` and `*.cbuild-mlops.yml`.
 Keep these files along with the input ML model under version control.
 
-## Create the CMSIS-Toolbox project {#integration_create_cmsis_toolbox}
+## Create the *csolution project* {#integration_create_csolution}
 
 CMSIS-Toolbox simplifies MLOps by combining device and DFP data with project
 settings into machine-readable
@@ -182,14 +193,6 @@ Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver set
 
 ----
 
-
-### From Creating or extending a DFP:
-
-Most content duplicates the General and Vela guides. Only these details add value: include the matching Ethos-U driver configuration in the DFP.
-Version these artifacts together.
-Record manually supplied files and report missing pack support.
-
-
 ## Ethos-U configuration
 
 The Vela guide explains how to select an existing configuration and how to
@@ -232,7 +235,6 @@ optional scratch-fast storage. Other platform integrations can use additional
 regions, but these are not part of the Cortex-M integration.
 
 ## Linker configuration
-
 
 The following driver sections explain the platform hooks and region attributes
 that must agree with this placement.
@@ -412,81 +414,3 @@ command stream and each model base pointer. If the meaning of a numeric value is
 not clear for the selected Ethos-U target, use the target integration guide,
 hardware register descriptions, or a platform-provided configuration as the source
 of truth before benchmarking or releasing the build.
-
-## Determine the memory budget
-
-Memory sizing is an iterative system exercise, not a single number from a Vela
-compiler report.
-
-### Establish the model-controlled floor
-
-Compile the exact ML model for the exact Ethos-U target configuration using the
-size strategy:
-
-```console
-vela network.tflite \
-  --config target-vela.ini \
-  --accelerator-config ethos-u55-256 \
-  --system-config System_Name \
-  --memory-mode Shared_Sram \
-  --optimise Size \
-  --verbose-allocation \
-  --output-dir out/vela-size
-```
-
-Record each reported memory area, not only the total SRAM requirement. This is
-the Vela compiler's practical, memory-minimized schedule for that model,
-compiler version, accelerator, and
-configuration; it is not proof of a global mathematical minimum.
-
-### Convert the floor into a system budget
-
-For every physical memory, account for all consumers:
-
-```text
-required memory = generated model data
-                + ML inference runtime overhead
-                + application static data
-                + stacks and heaps
-                + alignment and section padding
-                + measured safety margin
-```
-
-Use the linker map and runtime high-water measurements to verify the non-model
-terms. The activation buffer or tensor arena reserved by the application must
-be at least as large as the actual generated requirement, including framework alignment and
-metadata overhead. A Vela compiler allocation report alone is not a complete
-firmware
-memory budget.
-
-### Sweep feasible performance budgets
-
-Give the Vela compiler the memory remaining after the system reservation and
-compile several candidates optimized for performance:
-
-```console
-vela network.tflite \
-  --config target-vela.ini \
-  --accelerator-config ethos-u55-256 \
-  --system-config System_Name \
-  --memory-mode Shared_Sram \
-  --optimise Performance \
-  --arena-cache-size BUDGET_BYTES \
-  --verbose-allocation \
-  --output-dir out/vela-performance
-```
-
-`--arena-cache-size` overrides the value in `vela.ini`. Its target area depends
-on the selected memory-mode mapping, as explained in
-[Understand arena cache and spilling](../vela/index.html#vela_arena_cache_size).
-Treat it as an optimization target: if the compiler reports that the target was
-exceeded, use the reported actual allocation. Select a candidate only after its
-linked image fits and its correctness and performance have been measured on the
-target.
-
-The compact loop is:
-
-```text
-size compile -> reserve the whole system -> performance budget sweep
-     -> inspect actual allocation -> link -> run -> measure -> select
-```

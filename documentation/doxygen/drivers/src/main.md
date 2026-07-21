@@ -4,7 +4,7 @@ This chapter is the technical reference for the low-level Ethos-U driver. It
 explains the NPU execution contract and links to the API generated directly from
 `ethosu_driver.h`.
 
-## Add the driver component to csolution project
+## Add the driver component to *csolution project*
 
 Add the driver variant that matches the device's Ethos-U NPU to the
 `components` list. For example, select the Ethos-U55 driver with:
