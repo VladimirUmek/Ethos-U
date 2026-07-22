@@ -1,7 +1,7 @@
 function writeHeader() {
-    document.write('Version 2777c4e');
+    document.write('Version 4058dea');
 };
 
 function writeFooter()  {
-    document.write('Generated on Tue Jul 21 2026 14:02:50 for PROJECT_NAME           = Zephyr 2777c4e. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Wed Jul 22 2026 06:35:49 for PROJECT_NAME           = Zephyr 4058dea. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };
