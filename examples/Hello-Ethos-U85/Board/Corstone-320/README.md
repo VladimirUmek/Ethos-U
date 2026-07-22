@@ -56,9 +56,7 @@ NPU reads past the end of the buffer.
 
 `ethos_setup.c` initializes the driver at `NPU0_APB_BASE_S`, secure and
 privileged, enables `NPU0_IRQn`, and prints the hardware identity.
-`NPU0_Handler` forwards to `ethosu_irq_handler`. It also exposes
-`ethos_get_info()`, so the application can read back the architecture revision
-and MACs/cc — the integration test asserts on both.
+`NPU0_Handler` forwards to `ethosu_irq_handler`.
 
 Caches are disabled by `SystemInit()` in `system_SSE320.c`, so no
 `ethosu_flush_dcache` / `ethosu_invalidate_dcache` overrides are needed. If you
