@@ -170,6 +170,6 @@ useful for comparison but do not replace measurements on the target.
   [Ethos-U65](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65), and
   [Ethos-U85](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85)
 - [Vela source and release documentation](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela)
-- [CMSIS-NN](https://www.keil.arm.com/packss/cmsis-nn-arm/overview/)
+- [CMSIS-NN](https://www.keil.arm.com/packs/cmsis-nn-arm/overview/)
 - [ExecuTorch Arm examples](https://github.com/pytorch/executorch/tree/main/examples/arm)
 - [Arm Fixed Virtual Platforms](https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms)

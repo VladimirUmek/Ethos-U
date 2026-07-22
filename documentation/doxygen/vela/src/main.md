@@ -44,7 +44,7 @@ quantized model -> Vela compiler + target/memory description -> optimized model
 For TFLite output, supported regions become Ethos-U custom operators containing
 the NPU command stream and related data. Unsupported TFLite operators remain in
 the model for CPU execution, commonly using TensorFlow Lite Micro reference or
-[CMSIS-NN](https://www.keil.arm.com/packss/cmsis-nn-arm/overview/) kernels.
+[CMSIS-NN](https://www.keil.arm.com/packs/cmsis-nn-arm/overview/) kernels.
 Always review compiler warnings and `--show-cpu-operations`;
 a successful compilation does not imply that every operation runs on the NPU.
 
@@ -690,7 +690,7 @@ The helper runs the AOT compiler, builds the matching ML inference runtime, and
 starts the target simulator unless build-only mode is selected. Other examples
 include a minimal Ethos-U notebook, a quantizer tutorial, a pruning example, an
 image-classification application, and Zephyr and
-[CMSIS](https://www.keil.arm.com/packss/cmsis-arm/overview/) project templates.
+[CMSIS](https://www.keil.arm.com/packs/cmsis-arm/overview/) project templates.
 Treat the ExecuTorch branch and Vela version as a tested toolchain because
 backend-generated Vela options can evolve independently from the standalone CLI
 examples above.
