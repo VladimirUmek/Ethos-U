@@ -38,6 +38,7 @@
         <file category="include" name="source/include/"/>
 
         <file category="source" name="interface/ethosu_os_rtos2.c" attr="template" select="CMSIS-RTOS2 Interface"/>
+        <file category="source" name="interface/ethosu_dcache.c"   attr="template" select="Cache Management Interface"/>
       </files>
     </component>
     <component Cclass="Machine Learning" Cgroup="NPU Support" Csub="Ethos-U Driver" Cvariant="Generic U65" Cversion="1.26.2">
@@ -59,6 +60,7 @@
         <file category="include" name="source/include/"/>
 
         <file category="source" name="interface/ethosu_os_rtos2.c" attr="template" select="CMSIS-RTOS2 Interface"/>
+        <file category="source" name="interface/ethosu_dcache.c"   attr="template" select="Cache Management Interface"/>
       </files>
     </component>
     <component Cclass="Machine Learning" Cgroup="NPU Support" Csub="Ethos-U Driver" Cvariant="Generic U85" Cversion="1.26.2">
@@ -80,6 +82,7 @@
         <file category="include" name="source/include/"/>
 
         <file category="source" name="interface/ethosu_os_rtos2.c" attr="template" select="CMSIS-RTOS2 Interface"/>
+        <file category="source" name="interface/ethosu_dcache.c"   attr="template" select="Cache Management Interface"/>
       </files>
     </component>
   </components>
