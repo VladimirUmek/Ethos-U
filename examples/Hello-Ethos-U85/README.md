@@ -113,7 +113,7 @@ and Vela summary. It also prints new golden vectors ready to paste into
 `Source/test_main.cpp`. Training is not bit-reproducible; use `--check` when the
 goal is only to detect Vela output drift without retraining.
 
-## Exploring memory modes
+## Exploring Ethos-U configurations
 
 The Vela configuration, generated command stream, linker placement, and driver
 region configuration describe the same memory system and must remain
