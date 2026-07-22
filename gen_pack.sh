@@ -30,6 +30,7 @@ DEFAULT_ARGS=(-c "v")
 #
 PACK_DIRS="
   documentation
+  examples
   interface
   overview
   source
