@@ -24,13 +24,14 @@ solution:
       define:
         - SIMULATOR
       target-set:
-        - set:
+        - set: "SSE-320 FVP"
+          debugger:
+            name: Arm-FVP
+            model: FVP_Corstone_SSE-320
+            config-file: ./Board/Corstone-320/fvp_config.txt
+            args: ""
           images:
             - project-context: Hello-Ethos-U85.Debug
-          debugger:
-            name: CMSIS-DAP@pyOCD
-            clock: 10000000
-            protocol: swd
 
   # The NPU_* values below must stay consistent with the Vela --memory-mode used
   # to compile the model in Model/gen/regenerate.sh. The committed model is built

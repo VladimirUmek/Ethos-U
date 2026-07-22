@@ -146,5 +146,8 @@ extern "C" int app_main(void) {
   printf("\n%d of %d checks passed\n", checks_run - checks_failed, checks_run);
   printf("TEST RESULT: %s\n", (checks_failed == 0) ? "PASS" : "FAIL");
 
+  /* EOT stops the simulation */
+  printf("\x04\n");
+
   while(1);
 }
