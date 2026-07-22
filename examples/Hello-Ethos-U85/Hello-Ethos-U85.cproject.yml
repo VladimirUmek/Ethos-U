@@ -11,6 +11,10 @@ project:
         - STDOUT
 
   groups:
+    - group: Documentation
+      files:
+        - file: ./README.md
+
     - group: Test
       files:
         - file: ./Source/test_main.cpp

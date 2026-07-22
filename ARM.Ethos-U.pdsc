@@ -103,7 +103,7 @@
       </project>
     </example>
 -->
-    <example name="Hello-Ethos-U85" doc="README.md" folder="examples/Hello-Ethos-U85">
+    <example name="Hello-Ethos-U85" doc="examples/Hello-Ethos-U85/README.md" folder="examples/Hello-Ethos-U85">
       <description>Get started template for Ethos-U85 targets</description>
       <project>
         <environment name="csolution" load="Hello-Ethos-U85.csolution.yml"/>
