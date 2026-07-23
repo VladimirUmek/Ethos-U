@@ -177,7 +177,7 @@ Troubleshooting installation</h3>
 Obtain an Ethos-U configuration for a device</h1>
 <p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <code>vela.ini</code> configuration file. The <code>vela.ini</code> file contains <code>System_Config</code> sections that model device memory performance and <code>Memory_Mode</code> sections that define where model data is placed.</p>
 <p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/packs">www.keil.arm.com/packs</a>, can provide the Ethos-U configuration information, including the device-specific <code>vela.ini</code> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
-<p>When no DFP supplies this information, create the equivalent configuration manually as described in <a class="el" href="#vela_create_configuration">Create device-specific `vela.ini` file</a>.</p>
+<p>When the DFP does not provide this information, create the equivalent configuration manually as described in <a class="el" href="#vela_create_configuration">Create device-specific `vela.ini` file</a>.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Basic invocation</h1>
 <div class="fragment"><div class="line">vela [OPTIONS] NETWORK</div>
@@ -300,7 +300,6 @@ Reporting and diagnostics</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>--verbose-progress</code>   </td><td class="markdownTableBodyNone">Show compilation progress.   </td></tr>
 </table>
-<p>The source also exposes experimental and debug switches such as <code>--experimental-softmax-int16-neg-exp-range</code>, <code>--disable-chaining</code>, <code>--disable-fwd</code>, <code>--disable-cascading</code>, and <code>--disable-buffering</code>. They are useful for compiler development and regression isolation, but are not recommended as production tuning controls. Their names and behavior can change between releases.</p>
 <h1><a class="anchor" id="vela_use_configuration"></a>
 Use the Ethos-U configuration</h1>
 <p>Compiling an ML model requires three selections from the Ethos-U configuration:</p>
