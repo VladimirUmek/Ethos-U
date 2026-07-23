@@ -986,3 +986,8 @@ BASEP3..7 are not used.
 
 Ethos-U driver configuration is therefore the same as in the case for TFLite
 except that BASEP3..7 are not used, hence their configuration is irrelevant.
+
+
+----
+
+https://github.com/ArmDeveloperEcosystem/arm-learning-paths/compare/main...matt-cossins:arm-learning-paths:alif_conformer

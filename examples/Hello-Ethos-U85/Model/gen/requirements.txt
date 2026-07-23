@@ -1,5 +1,4 @@
-# Pinned: Vela output is not bit-stable across releases, and the committed
-# golden vectors in Model/*/  were captured with these versions.
-tensorflow==2.20.0
-ethos-u-vela==5.0.0
+# Note: Vela output is not bit-stable across releases
+tensorflow>=2.20.0
+ethos-u-vela>=5.0.0
 numpy

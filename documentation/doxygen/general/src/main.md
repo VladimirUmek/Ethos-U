@@ -15,12 +15,17 @@ This documentation is organized as follows:
 - [Zephyr](../zephyr/index.html) explains how to configure, build, and run an
   Ethos-U-accelerated Zephyr application.
 
-## Target audiences and device packs
+## Target audiences
 
 In this documentation, an **Edge AI MCU** combines a Cortex-M processor with an
-integrated Ethos-U NPU. The documentation serves both embedded application
-developers using these devices and silicon vendors or platform maintainers who
-provide support for them.
+integrated Ethos-U NPU. This documentation is intended for:
+
+- Embedded application developers who build and deploy ML applications on
+  Edge AI MCUs.
+- Silicon vendors and platform maintainers who provide and validate device
+  support for those developers.
+
+## Device packs
 
 A CMSIS Device Family Pack (DFP) can simplify integration by including Ethos-U
 resources such as the `vela.ini` configuration file, linker scripts, and
@@ -32,7 +37,7 @@ See [Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_con
 for the relevant DFP description entries.
 
 When a DFP contains Ethos-U resources, application developers can use the
-validated device-specific files directly. Silicon vendors and pack maintainers
+validated device-specific files directly. Silicon vendors and platform maintainers
 are responsible for supplying and validating those files. If a suitable DFP is
 unavailable, this documentation also supports manual integration.
 

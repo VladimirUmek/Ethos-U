@@ -32,6 +32,11 @@ deployment:
 - Generates an optimized TFLite model or raw command-stream data.
 - Reports operator placement, estimated cycles, bandwidth, and memory use.
 
+Striping divides feature maps into smaller regions to reduce the active working
+set. Cascading feeds each region directly through a sequence of compatible
+operations, allowing Vela to use rolling buffers instead of storing complete
+intermediate feature maps.
+
 The normal deployment flow is:
 
 ```text
@@ -279,10 +284,14 @@ Packaged variants such as `Dedicated_Sram_256KB`, `_384KB`, `_512KB`, and
 `_1024KB` inherit `Dedicated_Sram` and set `arena_cache_size`.
 
 The names `Axi0` and `Axi1` are logical aliases in `vela.ini`. Their physical
-memory types come from the selected system configuration. The `vela.ini` file,
-device interconnect, linker placement, MPU/SAU attributes, cache policy, driver
-region indices, and ML inference runtime tensor arena must agree. The Vela
-compiler cannot validate the complete firmware memory map.
+memory types come from the selected system configuration. Ethos-U85 can have up to six
+AXI port interfaces, which Vela models as `Axi0` and `Axi1`. The `vela.ini` parameter
+`<Memory>_ports_used` contains the number of physical AXI ports that map to a
+logical alias.
+
+The `vela.ini` file, device interconnect, linker placement, MPU/SAU attributes,
+cache policy, driver region indices, and ML inference runtime tensor arena must
+agree. The Vela compiler cannot validate the complete firmware memory map.
 
 ### Understand arena cache and spilling {#vela_arena_cache_size}
 
@@ -292,7 +301,7 @@ folded into the normal arena. It becomes a distinct staging area, used for
 spilling and represented by the scratch-fast command-stream region, only when
 the two attributes resolve to different memory types.
 
-Ethos-U55's hardware AXI1 interface is read-only. Consequently,
+The Ethos-U55 hardware AXI1 port is a read-only interface. Consequently,
 `Dedicated_Sram` is not a practical Ethos-U55 execution model when the writable
 feature-map arena would be placed on that interface. Do not infer the same
 read-only restriction for the logical `Axi1` alias in `vela.ini` on every
