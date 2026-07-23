@@ -39,7 +39,6 @@
 // <i>Each MEM_ATTR entry selects a memory domain, AXI port, and memory type.
 
 // <h>MEM_ATTR0
-// <i>Configure memory attribute entry 0.
 // <o.0..1> Memory domain
 //   <0=> Non-shareable
 //   <1=> Inner shareable
@@ -61,13 +60,14 @@
 //   <0x9=> Write-back read allocate
 //   <0xA=> Write-back write allocate
 //   <0xB=> Write-back read and write allocate
+// <i>Configure memory attribute entry 0.
+// <i>Default: 0x00
 #ifndef NPU_MEM_ATTR_0
-#define NPU_MEM_ATTR_0                          0
+#define NPU_MEM_ATTR_0                          0x00
 #endif
 // </h>
 
 // <h>MEM_ATTR1
-// <i>Configure memory attribute entry 1.
 // <o.0..1> Memory domain
 //   <0=> Non-shareable
 //   <1=> Inner shareable
@@ -89,13 +89,14 @@
 //   <0x9=> Write-back read allocate
 //   <0xA=> Write-back write allocate
 //   <0xB=> Write-back read and write allocate
+// <i>Configure memory attribute entry 1.
+// <i>Default: 0x00
 #ifndef NPU_MEM_ATTR_1
-#define NPU_MEM_ATTR_1                          0
+#define NPU_MEM_ATTR_1                          0x00
 #endif
 // </h>
 
 // <h>MEM_ATTR2
-// <i>Configure memory attribute entry 2.
 // <o.0..1> Memory domain
 //   <0=> Non-shareable
 //   <1=> Inner shareable
@@ -117,13 +118,14 @@
 //   <0x9=> Write-back read allocate
 //   <0xA=> Write-back write allocate
 //   <0xB=> Write-back read and write allocate
+// <i>Configure memory attribute entry 2.
+// <i>Default: 0x04
 #ifndef NPU_MEM_ATTR_2
-#define NPU_MEM_ATTR_2                          0x4
+#define NPU_MEM_ATTR_2                          0x04
 #endif
 // </h>
 
 // <h>MEM_ATTR3
-// <i>Configure memory attribute entry 3.
 // <o.0..1> Memory domain
 //   <0=> Non-shareable
 //   <1=> Inner shareable
@@ -145,8 +147,10 @@
 //   <0x9=> Write-back read allocate
 //   <0xA=> Write-back write allocate
 //   <0xB=> Write-back read and write allocate
+// <i>Configure memory attribute entry 3.
+// <i>Default: 0x04
 #ifndef NPU_MEM_ATTR_3
-#define NPU_MEM_ATTR_3                          0x4
+#define NPU_MEM_ATTR_3                          0x04
 #endif
 // </h>
 
