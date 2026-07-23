@@ -146,7 +146,7 @@ Integration workflow</h1>
 <p>Complete the following steps in order because later steps depend on earlier decisions and measurements.</p>
 <ol type="1">
 <li><b>Select the Edge AI MCU and DFP.</b> Compare the reference results with the device's NPU configuration and memory capacity and with the application's performance requirements. Obtain the matching Device Family Pack (DFP) from <a href="https://www.keil.arm.com/packs">www.keil.arm.com/packs</a>.</li>
-<li><b>Check the DFP resources.</b> Determine whether the DFP provides a device-specific <code>vela.ini</code> file, matching linker scripts, and other required resources. If it does not, contact the device or SoC vendor or <a href="../vela/index.html#vela_create_configuration">create an Ethos-U configuration for the device</a>.</li>
+<li><b>Check the DFP resources.</b> Determine whether the DFP provides a device-specific <code>vela.ini</code> file, matching linker scripts, and other required resources. If it does not, contact the device or SoC vendor or <a href="../vela/index.html#vela_create_configuration">create a device-specific <code>vela.ini</code> file</a>.</li>
 <li><b><a class="el" href="#integration_create_csolution">Create the CMSIS-Toolbox project</a>.</b> Select the device and build context, and specify the Vela system configuration and memory mode. Use the generated <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a> to obtain the Vela parameters and resources supplied by the DFP.</li>
 <li><b><a class="el" href="#integration_compile_model">Compile the ML model for the device</a>.</b> Run Vela with the device-specific parameters and confirm that its performance and memory estimates meet the application requirements. Treat the performance figures as model-based estimates and retain sufficient margin.</li>
 <li><b><a class="el" href="#integration_configure_memory">Configure memory placement and the linker script</a>.</b> Keep the Vela memory mode, linker placement, and driver region configuration consistent. Account for the ML inference runtime, stacks, heaps, application data, alignment, and a safety margin. Build the system and review the compiler and linker reports.</li>
@@ -231,8 +231,8 @@ Validate and tune</h1>
 Ethos-U configuration</h1>
 <p>The Vela guide explains how to select an existing configuration and how to create one for a device:</p>
 <ul>
-<li>use <a href="../vela/index.html#vela_use_configuration">Use the Ethos-U configuration</a> to inspect the resolved <code>System_Config</code> and <code>Memory_Mode</code>; and</li>
-<li>use <a href="../vela/index.html#vela_create_configuration">Create Ethos-U configuration for a device</a> for <code>vela.ini</code> syntax, memory modes, performance parameters, arena-cache behavior, and spilling. The constraints for parsing <code>vela.ini</code> can differ between Ethos-U cores, so follow the requirements for the selected core.</li>
+<li>See <a href="../vela/index.html#vela_use_configuration">use the Ethos-U configuration</a> to inspect the resolved <code>System_Config</code> and <code>Memory_Mode</code>; and</li>
+<li>See <a href="../vela/index.html#vela_create_configuration">create device-specific <code>vela.ini</code> file</a> for <code>vela.ini</code> syntax, memory modes, performance parameters, arena-cache behavior, and spilling. The constraints for parsing <code>vela.ini</code> can differ between Ethos-U cores, so follow the requirements for the selected core.</li>
 </ul>
 <p>This integration guide assumes that the accelerator configuration, <code>System_Config</code>, and <code>Memory_Mode</code> have already been selected. The remaining task is to keep that configuration consistent with the generated command-stream regions, physical memory placement, driver settings, and application memory budget described below.</p>
 <h1><a class="anchor" id="autotoc_md10"></a>

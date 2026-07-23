@@ -42,7 +42,7 @@ var NAVTREE =
       [ "Select a memory mode", "index.html#vela_select_memory_mode", null ],
       [ "Understand arena cache and spilling", "index.html#vela_arena_cache_size", null ]
     ] ],
-    [ "Create Ethos-U configuration for a device", "index.html#vela_create_configuration", [
+    [ "Create device-specific vela.ini file", "index.html#vela_create_configuration", [
       [ "System configuration parameters", "index.html#vela_system_configuration", null ],
       [ "Memory mode parameters", "index.html#vela_memory_mode", null ],
       [ "Create the linker script", "index.html#vela_create_linker_script", null ],

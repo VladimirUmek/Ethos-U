@@ -175,9 +175,9 @@ Troubleshooting installation</h3>
 <p>PyPI supplies wheels for supported host combinations. If no matching wheel is available, <code>pip</code> builds from source and requires Python development headers, CMake, a C99 compiler, and a C++17 compiler. The package depends on FlatBuffers and NumPy 1.23 or newer.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Obtain an Ethos-U configuration for a device</h1>
-<p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <code>vela.ini</code> configuration file. This file contains named <code>System_Config</code> sections that model device memory performance and named <code>Memory_Mode</code> sections that define where model data is placed.</p>
+<p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <code>vela.ini</code> configuration file. The <code>vela.ini</code> file contains <code>System_Config</code> sections that model device memory performance and <code>Memory_Mode</code> sections that define where model data is placed.</p>
 <p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/packs">www.keil.arm.com/packs</a>, can provide the Ethos-U configuration information, including the device-specific <code>vela.ini</code> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
-<p>When no DFP supplies this information, create the equivalent configuration manually as described in <a class="el" href="#vela_create_configuration">Create Ethos-U configuration for a device</a>.</p>
+<p>When no DFP supplies this information, create the equivalent configuration manually as described in <a class="el" href="#vela_create_configuration">Create device-specific `vela.ini` file</a>.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Basic invocation</h1>
 <div class="fragment"><div class="line">vela [OPTIONS] NETWORK</div>
@@ -327,26 +327,30 @@ Use the Ethos-U configuration</h1>
 </ul>
 <h2><a class="anchor" id="vela_select_memory_mode"></a>
 Select a memory mode</h2>
-<p>The reference configuration defines these commonly used memory modes:</p>
+<p>The reference configuration defines typically memory modes as shown below.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Mode   </th><th class="markdownTableHeadNone">Constants   </th><th class="markdownTableHeadNone">Arena   </th><th class="markdownTableHeadNone">Fast cache   </th><th class="markdownTableHeadNone">Typical use    </th></tr>
+<th class="markdownTableHeadNone">Memory Mode   </th><th class="markdownTableHeadCenter"><code>const</code><br  />
+<code>_mem_area</code>   </th><th class="markdownTableHeadCenter"><code>arena</code><br  />
+<code>_mem_area</code>   </th><th class="markdownTableHeadCenter"><code>cache</code><br  />
+<code>_mem_area</code>   </th><th class="markdownTableHeadNone">Content    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Sram_Only</code>   </td><td class="markdownTableBodyNone"><code>Axi0</code>   </td><td class="markdownTableBodyNone"><code>Axi0</code>   </td><td class="markdownTableBodyNone"><code>Axi0</code>   </td><td class="markdownTableBodyNone">All model storage uses the memory type selected for <code>Axi0</code>, normally SRAM.    </td></tr>
+<td class="markdownTableBodyNone"><code>Sram_Only</code>   </td><td class="markdownTableBodyCenter"><code>Axi0</code>   </td><td class="markdownTableBodyCenter"><code>Axi0</code>   </td><td class="markdownTableBodyCenter"><code>Axi0</code>   </td><td class="markdownTableBodyNone">All model storage uses the memory type selected for <code>Axi0</code>.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>Shared_Sram</code>   </td><td class="markdownTableBodyNone"><code>Axi1</code>   </td><td class="markdownTableBodyNone"><code>Axi0</code>   </td><td class="markdownTableBodyNone"><code>Axi0</code>   </td><td class="markdownTableBodyNone">Constants remain in the memory selected for <code>Axi1</code>; arena and cache share the <code>Axi0</code> memory.    </td></tr>
+<td class="markdownTableBodyNone"><code>Shared_Sram</code>   </td><td class="markdownTableBodyCenter"><code>Axi1</code>   </td><td class="markdownTableBodyCenter"><code>Axi0</code>   </td><td class="markdownTableBodyCenter"><code>Axi0</code>   </td><td class="markdownTableBodyNone">Constants remain in the memory selected for <code>Axi1</code>; arena and cache share the <code>Axi0</code> memory.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Dedicated_Sram</code>   </td><td class="markdownTableBodyNone"><code>Axi1</code>   </td><td class="markdownTableBodyNone"><code>Axi1</code>   </td><td class="markdownTableBodyNone"><code>Axi0</code>   </td><td class="markdownTableBodyNone">The <code>Axi0</code> memory is a fast staging cache for an arena in the writable memory selected for <code>Axi1</code>.   </td></tr>
+<td class="markdownTableBodyNone"><code>Dedicated_Sram</code>   </td><td class="markdownTableBodyCenter"><code>Axi1</code>   </td><td class="markdownTableBodyCenter"><code>Axi1</code>   </td><td class="markdownTableBodyCenter"><code>Axi0</code>   </td><td class="markdownTableBodyNone">The <code>Axi0</code> memory is a fast staging cache for an arena in the writable memory selected for <code>Axi1</code>.   </td></tr>
 </table>
-<p>Packaged variants such as <code>Dedicated_Sram_256KB</code>, <code>_384KB</code>, <code>_512KB</code>, and <code>_1024KB</code> inherit <code>Dedicated_Sram</code> and set <code>arena_cache_size</code>.</p>
-<p>The names <code>Axi0</code> and <code>Axi1</code> are logical aliases in <code>vela.ini</code>. Their physical memory types come from the selected system configuration. Ethos-U85 can have up to six AXI port interfaces, which Vela models as <code>Axi0</code> and <code>Axi1</code>. The <code>vela.ini</code> parameter <code>&lt;Memory&gt;_ports_used</code> contains the number of physical AXI ports that map to a logical alias.</p>
+<p>Note that there can be memory mode variants such as <code>Dedicated_Sram_256KB</code>, <code>_384KB</code>, <code>_512KB</code>, and <code>_1024KB</code> that inherit <code>Dedicated_Sram</code> and set <code>arena_cache_size</code>.</p>
+<p>The names <code>Axi0</code> and <code>Axi1</code> are logical aliases in <code>vela.ini</code>. Their physical memory types come from the selected system configuration.</p>
+<p>Ethos-U85 can have up to six AXI port interfaces, which Vela maps to <code>Axi0</code> and <code>Axi1</code>. The <code>vela.ini</code> parameter <code>&lt;Memory&gt;_ports_used</code> contains the number of physical AXI ports that map to a logical alias.</p>
 <p>The <code>vela.ini</code> file, device interconnect, linker placement, MPU/SAU attributes, cache policy, driver region indices, and ML inference runtime tensor arena must agree. The Vela compiler cannot validate the complete firmware memory map.</p>
 <h2><a class="anchor" id="vela_arena_cache_size"></a>
 Understand arena cache and spilling</h2>
-<p><code>cache_mem_area</code> does not always create a separate cache allocation. When it resolves to the same memory type as <code>arena_mem_area</code>, the fast-scratch role is folded into the normal arena. It becomes a distinct staging area, used for spilling and represented by the scratch-fast command-stream region, only when the two attributes resolve to different memory types.</p>
+<p><code>cache_mem_area</code> does not always create a separate cache allocation. When it resolves to the same memory type as <code>arena_mem_area</code>, the fast-scratch memory region is folded into <code>arena_mem_area</code>. <code>cache_mem_area</code> is a distinct area only when <code>arena_mem_area</code> is in a different memory type.</p>
 <p>The Ethos-U55 hardware AXI1 port is a read-only interface. Consequently, <code>Dedicated_Sram</code> is not a practical Ethos-U55 execution model when the writable feature-map arena would be placed on that interface. Do not infer the same read-only restriction for the logical <code>Axi1</code> alias in <code>vela.ini</code> on every Ethos-U target.</p>
 <h1><a class="anchor" id="vela_create_configuration"></a>
-Create Ethos-U configuration for a device</h1>
+Create device-specific vela.ini file</h1>
 <p>To support a device manually, create a device-specific <code>vela.ini</code> file. Application developers normally obtain this file from the silicon vendor, either directly or from a DFP through CMSIS-Toolbox.</p>
 <p>Creating an Ethos-U configuration requires these steps:</p>
 <ol type="1">
@@ -364,12 +368,11 @@ Create Ethos-U configuration for a device</h1>
 <div class="line"> </div>
 <div class="line">[Memory_Mode.ModeName]</div>
 <div class="line">; compiler memory-area placement</div>
-</div><!-- fragment --><p><code>ConfigurationName</code> and <code>ModeName</code> must not contain spaces. A file can define multiple sections of either type; select them with <code>--system-config</code> and <code>--memory-mode</code>. Every property is technically optional, but an omitted property receives an internal value equivalent to <code>1</code>, not the corresponding property from a packaged reference configuration. Define every property that affects the target system.</p>
-<p>Any section can contain <code>inherit=Part.Name</code> to inherit another section. The child's values override the parent. Inheritance cannot be recursive.</p>
-<p>Custom files must observe the following constraints:</p>
+</div><!-- fragment --><p><code>ConfigurationName</code> and <code>ModeName</code> must not contain spaces. A file can define multiple sections of either type; select them with <code>--system-config</code> and <code>--memory-mode</code>. Every property is optional, when omitted it defaults to <code>1</code>. It is recommended to define every property that affects the target system.</p>
+<p>Any section can contain <code>inherit=Part.Name</code> to inherit the values of another section.</p>
 <ul>
 <li>Put a section that is inherited from before the section that inherits it.</li>
-<li>Avoid underscores in custom memory type names. The Vela compiler splits a memory parameter such as <code>&lt;Memory&gt;_clock_scale</code> at the first underscore.</li>
+<li>Underscores in memory type names are not permitted. The Vela compiler splits a memory type such as <code>&lt;Memory&gt;_clock_scale</code> at the first underscore. ToDo: verify this</li>
 <li>Start the name of a custom Ethos-U55 system configuration with <code>Ethos_U55</code>. The Vela compiler uses this prefix when selecting the U55 AXI bandwidth width while translating memory-performance values.</li>
 </ul>
 <h2><a class="anchor" id="vela_system_configuration"></a>
@@ -430,18 +433,20 @@ Memory mode parameters</h2>
 <p>With <code>--optimise Size</code>, the Vela compiler minimizes SRAM use and does not use the arena-cache size. With <code>--optimise Performance</code>, it uses the configured or command-line arena-cache size. If neither is supplied, the compiler uses the maximum addressable size for the selected Ethos-U target.</p>
 <h2><a class="anchor" id="vela_create_linker_script"></a>
 Create the linker script</h2>
-<p>The linker script places the generated model artifacts and runtime buffers in the physical memories represented by the selected <code>System_Config</code> and <code>Memory_Mode</code>. It does not use the logical names <code>Axi0</code> and <code>Axi1</code> directly. Instead, it provides sections or memory regions for the compiler memory areas:</p>
+<p>The linker script places the generated model artifacts and runtime buffers in the physical memories represented by the selected <code>System_Config</code> and <code>Memory_Mode</code>. It does not use the logical names <code>Axi0</code> and <code>Axi1</code> directly. Instead, it provides sections or memory regions for the Ethos-U I/O resources.</p>
+<p>The linker section names are device- and runtime-specific. The examples provided with this pack use the following section names.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Compiler memory area   </th><th class="markdownTableHeadNone">Linker placement   </th><th class="markdownTableHeadNone">Access    </th></tr>
+<th class="markdownTableHeadNone">Vela area   </th><th class="markdownTableHeadNone">Linker section<br  />
+in examples   </th><th class="markdownTableHeadNone">Content   </th><th class="markdownTableHeadNone">Access    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>const_mem_area</code>   </td><td class="markdownTableBodyNone">Compiled model, command stream, encoded weights, scales, and other constants   </td><td class="markdownTableBodyNone">Normally read-only    </td></tr>
+<td class="markdownTableBodyNone"><code>const_mem_area</code>   </td><td class="markdownTableBodyNone"><code>ethos_model</code>   </td><td class="markdownTableBodyNone">Compiled model, command stream, encoded weights, scales, and other constants   </td><td class="markdownTableBodyNone">Read-only    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>arena_mem_area</code>   </td><td class="markdownTableBodyNone">Input, output, intermediate activations, and scratch storage used by the ML inference runtime   </td><td class="markdownTableBodyNone">Read-write    </td></tr>
+<td class="markdownTableBodyNone"><code>arena_mem_area</code>   </td><td class="markdownTableBodyNone"><code>ethos_arena</code>   </td><td class="markdownTableBodyNone">Input, output, intermediate activations, and scratch storage used by the ML inference runtime   </td><td class="markdownTableBodyNone">Read-write    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>cache_mem_area</code>   </td><td class="markdownTableBodyNone">Optional scratch-fast or staging buffer when it resolves to a different physical memory from <code>arena_mem_area</code>   </td><td class="markdownTableBodyNone">Read-write   </td></tr>
+<td class="markdownTableBodyNone"><code>cache_mem_area</code>   </td><td class="markdownTableBodyNone"><code>ethos_cache</code>   </td><td class="markdownTableBodyNone">Optional scratch-fast or staging buffer when it resolves to a different physical memory from <code>arena_mem_area</code>   </td><td class="markdownTableBodyNone">Read-write   </td></tr>
 </table>
-<p>The linker section names are device- and runtime-specific. Names such as <code>ethosu_const</code>, <code>ethosu_arena</code>, and <code>ethosu_cache</code> can be used, but the important property is their physical placement. If <code>arena_mem_area</code> and <code>cache_mem_area</code> resolve to the same memory type, a separate cache section is not required. If they resolve to different memory types, reserve the configured <code>arena_cache_size</code> in the fast memory used for <code>cache_mem_area</code>.</p>
+<p>Different section names can be used, the important property is their physical placement. If <code>arena_mem_area</code> and <code>cache_mem_area</code> resolve to the same memory type, a separate cache section is not required. If they resolve to different memory types, reserve the configured <code>arena_cache_size</code> in the fast memory used for <code>cache_mem_area</code>.</p>
 <p>The linker script, MPU/SAU attributes, and CPU cache policy must make every generated region accessible to both the ML inference runtime and the NPU as required. When Cortex-M software and the NPU use different addresses for the same memory, the driver must provide the corresponding address translation. The driver's command-stream and region attributes must also select access paths that match the linker placement.</p>
 <p>Validate a new linker configuration by checking:</p>
 <ul>
