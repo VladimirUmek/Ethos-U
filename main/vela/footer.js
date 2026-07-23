@@ -1,7 +1,7 @@
 function writeHeader() {
-    document.write('Version 43f238c');
+    document.write('Version caf805f');
 };
 
 function writeFooter()  {
-    document.write('Generated on Thu Jul 23 2026 13:41:18 for PROJECT_NAME           = Vela 43f238c. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Thu Jul 23 2026 13:42:32 for PROJECT_NAME           = Vela caf805f. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };
