@@ -42,20 +42,10 @@ solution:
     - type: Debug
       debug: on
       optimize: debug
-      define:
-        - NPU_QCONFIG: 2
-        - NPU_REGIONCFG_0: 3
-        - NPU_REGIONCFG_1: 2
-        - NPU_REGIONCFG_2: 1
 
     - type: Release
       debug: off
       optimize: balanced
-      define:
-        - NPU_QCONFIG: 2
-        - NPU_REGIONCFG_0: 3
-        - NPU_REGIONCFG_1: 2
-        - NPU_REGIONCFG_2: 1
 
   projects:
     - project: ./Hello-Ethos-U85.cproject.yml

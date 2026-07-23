@@ -15,9 +15,6 @@ cbuild-pack:
     - resolved-pack: ARM::SSE_320_BSP@1.1.0
       selected-by-pack:
         - ARM::SSE_320_BSP@1.1.0
-    - resolved-pack: ARM::ethos-u-core-driver@1.26.2
-      selected-by-pack:
-        - ARM::ethos-u-core-driver@^1.25.2
     - resolved-pack: tensorflow::flatbuffers@1.26.2
       selected-by-pack:
         - tensorflow::flatbuffers
