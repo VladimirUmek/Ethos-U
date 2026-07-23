@@ -1167,6 +1167,10 @@ table.doxtable th {
 	color: var(--table-header-foreground-color);
 }
 
+table.doxtable th code {
+	background-color: var(--table-header-background-color);
+}
+
 table.doxtable tr:nth-child(odd) {
 	background-color: var(--table-odd-cell-color);
 }
@@ -1234,6 +1238,10 @@ table.markdownTable td, table.markdownTable th {
 table.markdownTable th {
        background-color: var(--table-header-background-color);
        color: var(--table-header-foreground-color);
+}
+
+table.markdownTable th code {
+       background-color: var(--table-header-background-color);
 }
 
 table.markdownTable tr:nth-child(odd) {
@@ -1638,4 +1646,3 @@ tr.heading h2 {
     display:inline;
   }
 }
-

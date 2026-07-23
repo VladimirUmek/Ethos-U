@@ -125,7 +125,7 @@ CMSIS-Toolbox exports these resources for the selected device and build context
 through its
 [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
 
-When no DFP supplies this information, create the equivalent configuration
+When the DFP does not provide this information, create the equivalent configuration
 manually as described in \ref vela_create_configuration "Create device-specific `vela.ini` file".
 
 ## Basic invocation
@@ -220,13 +220,6 @@ TFLite-to-TOSA conversion format.
 | `--verbose-weights` | Show weight information. |
 | `--verbose-cycle-estimate` | Show cycle-estimation details. |
 | `--verbose-progress` | Show compilation progress. |
-
-The source also exposes experimental and debug switches such as
-`--experimental-softmax-int16-neg-exp-range`, `--disable-chaining`,
-`--disable-fwd`, `--disable-cascading`, and `--disable-buffering`. They are
-useful for compiler development and regression isolation, but are not
-recommended as production tuning controls. Their names and behavior can change
-between releases.
 
 ## Use the Ethos-U configuration {#vela_use_configuration}
 
