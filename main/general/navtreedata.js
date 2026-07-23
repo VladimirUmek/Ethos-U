@@ -25,13 +25,14 @@
 var NAVTREE =
 [
   [ "General", "index.html", [
-    [ "Target audiences and device packs", "index.html#autotoc_md0", null ],
-    [ "Key terms", "index.html#autotoc_md1", null ],
-    [ "System overview", "index.html#autotoc_md2", null ],
-    [ "Coordinating the device configuration", "index.html#autotoc_md3", null ],
-    [ "System configuration and memory modes at a glance", "index.html#autotoc_md4", null ],
-    [ "Deployment lifecycle", "index.html#autotoc_md5", null ],
-    [ "Related resources", "index.html#autotoc_md6", null ]
+    [ "Target audiences", "index.html#autotoc_md0", null ],
+    [ "Device packs", "index.html#autotoc_md1", null ],
+    [ "Key terms", "index.html#autotoc_md2", null ],
+    [ "System overview", "index.html#autotoc_md3", null ],
+    [ "Coordinating the device configuration", "index.html#autotoc_md4", null ],
+    [ "System configuration and memory modes at a glance", "index.html#autotoc_md5", null ],
+    [ "Deployment lifecycle", "index.html#autotoc_md6", null ],
+    [ "Related resources", "index.html#autotoc_md7", null ]
   ] ]
 ];
 

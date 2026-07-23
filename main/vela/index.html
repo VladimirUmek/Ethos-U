@@ -143,6 +143,7 @@ Feature overview</h1>
 <li>Generates an optimized TFLite model or raw command-stream data.</li>
 <li>Reports operator placement, estimated cycles, bandwidth, and memory use.</li>
 </ul>
+<p>Striping divides feature maps into smaller regions to reduce the active working set. Cascading feeds each region directly through a sequence of compatible operations, allowing Vela to use rolling buffers instead of storing complete intermediate feature maps.</p>
 <p>The normal deployment flow is:</p>
 <div class="fragment"><div class="line">quantized model -&gt; Vela compiler + target/memory description -&gt; optimized model</div>
 <div class="line">                                                       |</div>
@@ -338,11 +339,12 @@ Select a memory mode</h2>
 <td class="markdownTableBodyNone"><code>Dedicated_Sram</code>   </td><td class="markdownTableBodyNone"><code>Axi1</code>   </td><td class="markdownTableBodyNone"><code>Axi1</code>   </td><td class="markdownTableBodyNone"><code>Axi0</code>   </td><td class="markdownTableBodyNone">The <code>Axi0</code> memory is a fast staging cache for an arena in the writable memory selected for <code>Axi1</code>.   </td></tr>
 </table>
 <p>Packaged variants such as <code>Dedicated_Sram_256KB</code>, <code>_384KB</code>, <code>_512KB</code>, and <code>_1024KB</code> inherit <code>Dedicated_Sram</code> and set <code>arena_cache_size</code>.</p>
-<p>The names <code>Axi0</code> and <code>Axi1</code> are logical aliases in <code>vela.ini</code>. Their physical memory types come from the selected system configuration. The <code>vela.ini</code> file, device interconnect, linker placement, MPU/SAU attributes, cache policy, driver region indices, and ML inference runtime tensor arena must agree. The Vela compiler cannot validate the complete firmware memory map.</p>
+<p>The names <code>Axi0</code> and <code>Axi1</code> are logical aliases in <code>vela.ini</code>. Their physical memory types come from the selected system configuration. Ethos-U85 can have up to six AXI port interfaces, which Vela models as <code>Axi0</code> and <code>Axi1</code>. The <code>vela.ini</code> parameter <code>&lt;Memory&gt;_ports_used</code> contains the number of physical AXI ports that map to a logical alias.</p>
+<p>The <code>vela.ini</code> file, device interconnect, linker placement, MPU/SAU attributes, cache policy, driver region indices, and ML inference runtime tensor arena must agree. The Vela compiler cannot validate the complete firmware memory map.</p>
 <h2><a class="anchor" id="vela_arena_cache_size"></a>
 Understand arena cache and spilling</h2>
 <p><code>cache_mem_area</code> does not always create a separate cache allocation. When it resolves to the same memory type as <code>arena_mem_area</code>, the fast-scratch role is folded into the normal arena. It becomes a distinct staging area, used for spilling and represented by the scratch-fast command-stream region, only when the two attributes resolve to different memory types.</p>
-<p>Ethos-U55's hardware AXI1 interface is read-only. Consequently, <code>Dedicated_Sram</code> is not a practical Ethos-U55 execution model when the writable feature-map arena would be placed on that interface. Do not infer the same read-only restriction for the logical <code>Axi1</code> alias in <code>vela.ini</code> on every Ethos-U target.</p>
+<p>The Ethos-U55 hardware AXI1 port is a read-only interface. Consequently, <code>Dedicated_Sram</code> is not a practical Ethos-U55 execution model when the writable feature-map arena would be placed on that interface. Do not infer the same read-only restriction for the logical <code>Axi1</code> alias in <code>vela.ini</code> on every Ethos-U target.</p>
 <h1><a class="anchor" id="vela_create_configuration"></a>
 Create Ethos-U configuration for a device</h1>
 <p>To support a device manually, create a device-specific <code>vela.ini</code> file. Application developers normally obtain this file from the silicon vendor, either directly or from a DFP through CMSIS-Toolbox.</p>

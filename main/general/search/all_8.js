@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['packs_0',['Target audiences and device packs',['../index.html#autotoc_md0',1,'']]]
+  ['packs_0',['Device packs',['../index.html#autotoc_md1',1,'']]]
 ];
