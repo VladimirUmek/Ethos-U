@@ -46,7 +46,7 @@ decisions and measurements.
 2. **Check the DFP resources.** Determine whether the DFP provides a
    device-specific `vela.ini` file, matching linker scripts, and other required
    resources. If it does not, contact the device or SoC vendor or
-   [create an Ethos-U configuration for the device](../vela/index.html#vela_create_configuration).
+   [create a device-specific `vela.ini` file](../vela/index.html#vela_create_configuration).
 3. **[Create the CMSIS-Toolbox project](#integration_create_csolution).** Select the device and build context, and specify the Vela system configuration and memory mode.
    Use the generated [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
    to obtain the Vela parameters and resources supplied by the DFP.
@@ -198,9 +198,9 @@ Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver set
 The Vela guide explains how to select an existing configuration and how to
 create one for a device:
 
-- use [Use the Ethos-U configuration](../vela/index.html#vela_use_configuration)
+- See [use the Ethos-U configuration](../vela/index.html#vela_use_configuration)
   to inspect the resolved `System_Config` and `Memory_Mode`; and
-- use [Create Ethos-U configuration for a device](../vela/index.html#vela_create_configuration)
+- See [create device-specific `vela.ini` file](../vela/index.html#vela_create_configuration)
   for `vela.ini` syntax, memory modes, performance parameters, arena-cache
   behavior, and spilling. The constraints for parsing `vela.ini` can differ
   between Ethos-U cores, so follow the requirements for the selected core.
