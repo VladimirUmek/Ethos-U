@@ -21,12 +21,10 @@ solution:
     - type: SSE-320-U85
       board: ARM::SSE-320
       device: ARM::SSE-320-FVP
-      define:
-        - SIMULATOR
       variables:
         - Board-Layer: ./Board/Corstone-320/Board.clayer.yml
       target-set:
-        - set: "SSE-320 FVP"
+        - set:
           debugger:
             name: Arm-FVP
             model: FVP_Corstone_SSE-320
