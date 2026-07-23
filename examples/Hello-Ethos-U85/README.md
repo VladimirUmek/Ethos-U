@@ -123,7 +123,7 @@ consistent. When changing the configuration, review these together:
   `Model/vela.ini`;
 - `NPU_QCONFIG` and `NPU_REGIONCFG_*` in
   `Hello-Ethos-U85.csolution.yml`;
-- the `nn_model`, `activation_buf`, and `ethos_cache_buf` linker sections in
+- the `ethos_model`, `ethos_arena`, and `ethos_cache` linker sections in
   the Board layer; and
 - the cache, security, and MPU/SAU attributes for those physical memories.
 

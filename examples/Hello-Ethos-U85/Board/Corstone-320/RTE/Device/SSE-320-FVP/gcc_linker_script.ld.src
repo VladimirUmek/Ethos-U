@@ -318,8 +318,8 @@ SECTIONS
   .cache (NOLOAD):
   {
     . = ALIGN(32);
-    *(*ethos_cache_buf)  /* Ethos-U Cache Area */
-    *(*activation_buf)   /* NN Activation Tensor (activation buffer / tensor arena) */
+    *(*ethos_cache)      /* Ethos-U Cache Area */
+    *(*ethos_arena)      /* NN Activation Tensor (activation buffer / tensor arena) */
   } > RAM1
 
   /* Initialized buffers in fast access RAM */
@@ -331,7 +331,7 @@ SECTIONS
 
   .rom2 :
   {
-    *(*nn_model)         /* NN Model Binary Representation */
+    *(*ethos_model)         /* NN Model Binary Representation */
   } > ROM2
 
   .rom3 :

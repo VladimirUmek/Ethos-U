@@ -20,14 +20,14 @@
 extern "C" {
 #endif
 
-/* Vela command streams, placed in section "nn_model". */
+/* Vela command streams, placed in section "ethos_model". */
 extern const uint8_t  hello_world_int8_vela_tflite[];
 extern const uint32_t hello_world_int8_vela_tflite_len;
 
 extern const uint8_t  tiny_cnn_int8_vela_tflite[];
 extern const uint32_t tiny_cnn_int8_vela_tflite_len;
 
-/* Tensor arena, placed in section "activation_buf" (NPU-visible SRAM). */
+/* Tensor arena, placed in section "ethos_arena" (NPU-visible SRAM). */
 extern uint8_t        g_tensor_arena[];
 extern const uint32_t g_tensor_arena_size;
 

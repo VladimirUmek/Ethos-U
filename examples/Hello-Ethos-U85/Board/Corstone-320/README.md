@@ -37,16 +37,16 @@ path. (The template's own README already documented 32 kB; its header disagreed.
 |---|---|---|---|---|
 | ROM0 | `BOOT_ROM_S` | `0x11000000` | 128 kB | vectors, startup |
 | ROM1 | `FPGA_SRAM_S` | `0x12000000` | 2 MB | `.text`, `.rodata` |
-| ROM2 | `DDR4_3_S` | `0x90000000` | 256 MB | section `nn_model` |
+| ROM2 | `DDR4_3_S` | `0x90000000` | 256 MB | section `ethos_model` |
 | RAM0 | `DDR4_1_S` | `0x70000000` | 256 MB | `.data`, `.bss`, heap, stack |
-| RAM1 | `SRAM_VM0_S` | `0x31000000` | 2 MB | `activation_buf`, `ethos_cache_buf` |
+| RAM1 | `SRAM_VM0_S` | `0x31000000` | 2 MB | `ethos_arena`, `ethos_cache` |
 | RAM3 | `DTCM_S` | `0x30000000` | 32 kB | spillover |
 
 Three section names are the contract between this layer and the ML-Model layer:
 
-- `nn_model` — model data, in DDR, reached by the NPU over Axi1.
-- `activation_buf` — the tensor arena, in on-chip SRAM, reached over Axi0.
-- `ethos_cache_buf` — the NPU's cache/staging buffer, also in SRAM.
+- `ethos_model` — model data, in DDR, reached by the NPU over Axi1.
+- `ethos_arena` — the tensor arena, in on-chip SRAM, reached over Axi0.
+- `ethos_cache` — the NPU's cache/staging buffer, also in SRAM.
 
 `ETHOS_CACHE_BUF_SIZE` (384 kB) must equal `arena_cache_size` in
 `Model/vela.ini`. If Vela plans for a larger cache than the driver provides, the

@@ -77,10 +77,10 @@ LR_RAM0 __RAM0_BASE {
 #if __RAM1_SIZE > 0
   RW_RAM1 __RAM1_BASE __RAM1_SIZE  {
     ; Ethos-U Cache Area
-    *.o (*ethos_cache_buf)
+    *.o (*ethos_cache)
 
     ; NN Activation Tensor (activation buffer / tensor arena)
-    *.o (*activation_buf)
+    *.o (*ethos_arena)
 
    .ANY (+RW +ZI)
   }
@@ -103,7 +103,7 @@ LR_RAM0 __RAM0_BASE {
 LR_ROM2 __ROM2_BASE __ROM2_SIZE  {
   ER_ROM2 +0 __ROM2_SIZE {
     ; NN Model Binary Representation
-    *.o (nn_model)
+    *.o (ethos_model)
 
    .ANY (+RO +XO)
   }
