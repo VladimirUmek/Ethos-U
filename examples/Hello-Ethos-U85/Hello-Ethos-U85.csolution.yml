@@ -21,16 +21,17 @@ solution:
     - type: SSE-320-U85
       board: ARM::SSE-320
       device: ARM::SSE-320-FVP
-      define:
-        - SIMULATOR
+      variables:
+        - Board-Layer: ./Board/Corstone-320/Board.clayer.yml
       target-set:
         - set:
+          debugger:
+            name: Arm-FVP
+            model: FVP_Corstone_SSE-320
+            config-file: ./Board/Corstone-320/fvp_config.txt
+            args: ""
           images:
             - project-context: Hello-Ethos-U85.Debug
-          debugger:
-            name: CMSIS-DAP@pyOCD
-            clock: 10000000
-            protocol: swd
 
   # The NPU_* values below must stay consistent with the Vela --memory-mode used
   # to compile the model in Model/gen/regenerate.sh. The committed model is built
@@ -41,20 +42,10 @@ solution:
     - type: Debug
       debug: on
       optimize: debug
-      define:
-        - NPU_QCONFIG: 2
-        - NPU_REGIONCFG_0: 3
-        - NPU_REGIONCFG_1: 2
-        - NPU_REGIONCFG_2: 1
 
     - type: Release
       debug: off
       optimize: balanced
-      define:
-        - NPU_QCONFIG: 2
-        - NPU_REGIONCFG_0: 3
-        - NPU_REGIONCFG_1: 2
-        - NPU_REGIONCFG_2: 1
 
   projects:
     - project: ./Hello-Ethos-U85.cproject.yml

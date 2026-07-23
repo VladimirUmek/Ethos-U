@@ -25,7 +25,7 @@
 /*
   Tensor arena.
 
-  Placed in section "activation_buf", which the board linker scripts map to RAM1
+  Placed in section "ethos_arena", which the board linker scripts map to RAM1
   (SRAM_VM0_S @ 0x31000000). That region is reachable by the NPU, which is a
   requirement: the Ethos-U reads and writes activations here directly.
 
@@ -41,6 +41,6 @@
 #endif
 
 uint8_t g_tensor_arena[TENSOR_ARENA_SIZE]
-  __attribute__((aligned(16), section("activation_buf")));
+  __attribute__((aligned(16), section("ethos_arena")));
 
 const uint32_t g_tensor_arena_size = TENSOR_ARENA_SIZE;

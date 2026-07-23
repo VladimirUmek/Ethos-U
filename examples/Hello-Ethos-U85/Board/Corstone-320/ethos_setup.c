@@ -37,7 +37,7 @@
 
 /* Define Ethos-U NPU cache buffer attributes */
 #ifndef ETHOS_CACHE_BUF_ATTRIBUTES
-#define ETHOS_CACHE_BUF_ATTRIBUTES  __attribute__((section("ethos_cache_buf"), aligned(ETHOS_CACHE_BUF_ALIGNMENT)))
+#define ETHOS_CACHE_BUF_ATTRIBUTES  __attribute__((section("ethos_cache"), aligned(ETHOS_CACHE_BUF_ALIGNMENT)))
 #endif
 #endif
 

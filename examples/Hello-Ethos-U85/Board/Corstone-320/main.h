@@ -28,9 +28,7 @@ extern int app_main (void);
 extern int stdio_init (void);
 
 #if defined(ETHOSU_ARCH)
-struct ethosu_hw_info;
-extern void ethos_setup    (void);
-extern int  ethos_get_info (struct ethosu_hw_info *info);
+extern void ethos_setup (void);
 #endif
 
 #ifdef __cplusplus

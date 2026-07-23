@@ -23,9 +23,9 @@
 #include "tensorflow/lite/micro/cortex_m_generic/debug_log_callback.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 
-extern "C" {
 #include "model_data.h"
-}
+#include "cmsis_os2.h"
+#include "main.h"
 
 /*
   hello_world. These are int8 *quantized* values, not the sine itself. Each
@@ -129,7 +129,7 @@ static void RunModel(const char *name,
   check(name, worst == 0, detail);
 }
 
-extern "C" int app_main(void) {
+void app_main_thread(void *arg) {
 
   RegisterDebugLogCallback(TflmDebugLog);
 
@@ -146,5 +146,21 @@ extern "C" int app_main(void) {
   printf("\n%d of %d checks passed\n", checks_run - checks_failed, checks_run);
   printf("TEST RESULT: %s\n", (checks_failed == 0) ? "PASS" : "FAIL");
 
+  /* EOT stops the simulation */
+  printf("\x04\n");
+
   while(1);
+}
+
+/* Application initialization */
+int app_main (void) {
+  const osThreadAttr_t attr = {
+    .stack_size = 4096,
+  };
+
+  /* Initialize CMSIS-RTOS2, create application thread and start the kernel */
+  osKernelInitialize();
+  osThreadNew(app_main_thread, NULL, &attr);
+  osKernelStart();
+  return 0;
 }

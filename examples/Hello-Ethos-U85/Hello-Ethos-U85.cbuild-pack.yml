@@ -9,12 +9,12 @@ cbuild-pack:
     - resolved-pack: ARM::CMSIS-NN@7.0.0
       selected-by-pack:
         - ARM::CMSIS-NN@^7.0.0
+    - resolved-pack: ARM::CMSIS-RTX@5.9.1
+      selected-by-pack:
+        - ARM::CMSIS-RTX@^5.9.0
     - resolved-pack: ARM::SSE_320_BSP@1.1.0
       selected-by-pack:
         - ARM::SSE_320_BSP@1.1.0
-    - resolved-pack: ARM::ethos-u-core-driver@1.26.2
-      selected-by-pack:
-        - ARM::ethos-u-core-driver@^1.25.2
     - resolved-pack: tensorflow::flatbuffers@1.26.2
       selected-by-pack:
         - tensorflow::flatbuffers

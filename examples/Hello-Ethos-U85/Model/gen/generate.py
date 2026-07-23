@@ -7,7 +7,7 @@ Produces, for each model, under Model/<name>/:
 
     <name>_int8.tflite       fully int8-quantized model, kept for recompilation
     <name>_int8_vela.tflite  Vela output for Ethos-U85, what the NPU runs
-    <name>_model.c           the Vela build as a C array in section "nn_model"
+    <name>_model.c           the Vela build as a C array in section "ethos_model"
     VELA_SUMMARY.md          the Vela report, committed for review
 
 It also prints one golden input/output pair per model as C, ready to paste into
@@ -274,9 +274,9 @@ def emit_model_c(path, name, npu_bytes):
     recompiled for another NPU configuration or memory mode, but there is no
     reason to spend flash on a copy the device never runs.
     """
-    # Placed in "nn_model" (ROM2 = DDR4, reached over Axi1) and 16-byte aligned,
+    # Placed in "ethos_model" (ROM2 = DDR4, reached over Axi1) and 16-byte aligned,
     # which both the flatbuffer accessors and the NPU command stream require.
-    attrs = '\n    __attribute__((aligned(16), section("nn_model")))'
+    attrs = '\n    __attribute__((aligned(16), section("ethos_model")))'
     with open(path, "w") as f:
         f.write(HEADER)
         f.write("#include <stdint.h>\n\n")
