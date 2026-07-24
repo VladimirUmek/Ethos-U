@@ -16,11 +16,6 @@
  * limitations under the License.
  */
 
-#include "RTE_Components.h"
-#include CMSIS_device_header
-
-#ifdef RTE_CMSIS_RTOS2
-
 #include "ethosu_driver.h"
 #include "cmsis_os2.h"
 
@@ -154,5 +149,3 @@ int ethosu_semaphore_give(void *sem) {
   }
   return rval;
 }
-
-#endif /* RTE_CMSIS_RTOS2 */
