@@ -211,29 +211,6 @@ task is to keep that configuration consistent with the generated command-stream
 regions, physical memory placement, driver settings, and application memory
 budget described below.
 
-## Generated command-stream regions
-
-The common relationship between compiler memory areas and driver regions is
-described in
-[Match the driver configuration](../vela/index.html#vela_match_driver_configuration).
-The generated command stream uses numeric NPU regions, also
-called base pointer indices; it does not use the `Axi0` or `Axi1` aliases.
-
-Generated commands such as `NPU_SET_IFM_REGION`, `NPU_SET_OFM_REGION`,
-`NPU_SET_WEIGHT_REGION`, `NPU_SET_SCALE_REGION`, `NPU_SET_DMA0_SRC_REGION`, and
-`NPU_SET_DMA0_DST_REGION` carry region numbers and offsets. The runtime and
-driver supply the base addresses and memory attributes for those regions.
-
-Verbose compiler dumps can also show internal region names that are not ordinary
-application-provided buffers. `Mem2Mem` is one of these names. The Vela compiler
-uses it for internal DMA or LUT handling, not for application-provided weight,
-scratch, or scratch-fast buffers. Spilling uses the scratch-fast region, not
-`Mem2Mem`.
-
-The Cortex-M flow uses base pointer regions 0 to 2 for weights, scratch, and
-optional scratch-fast storage. Other platform integrations can use additional
-regions, but these are not part of the Cortex-M integration.
-
 ## Linker configuration
 
 The following driver sections explain the platform hooks and region attributes

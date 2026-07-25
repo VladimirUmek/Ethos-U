@@ -193,38 +193,6 @@ Either of `*_MAX_BEATS` defines can have the following values:
 
 meaning that an AXI burst that crosses the selected aligned boundary is split into multiple bursts.
 
-## NPU execution contract
-
-The optimized model contains an Ethos-U custom operator with a command stream
-and metadata. The command stream tells the NPU which operations to perform, but
-it is not a self-contained model: execution also needs constants and writable
-tensor storage.
-
-The common application-facing region mapping is:
-
-| Region | Typical contents | Driver input |
-| --- | --- | --- |
-| 0 | constants, encoded weights, scales | weight tensor base and size |
-| 1 | input, output, intermediate activations, scratch | scratch tensor base and size |
-| 2 | optional fast staging storage used by spilling | scratch-fast base and size |
-
-The generated command stream is the authority for which regions are actually
-used. Additional regions can occur in specialized raw, COP2, or separated-I/O
-flows. See [Generated command-stream regions](../integration/index.html) before
-configuring extra driver regions.
-
-At a conceptual register level:
-
-- `QBASE` and `QSIZE` identify the command stream;
-- `QCONFIG` selects how the NPU fetches the command stream;
-- `BASEP` registers identify model data regions;
-- `REGIONCFG` selects how the NPU accesses each region;
-- `CMD`, `STATUS`, and the interrupt state control and report execution.
-
-Applications should use the driver API rather than program these registers
-directly. Exact encodings are target-specific; use the matching Ethos-U
-technical reference manual when implementing or reviewing the driver port.
-
 ## API entry points
 
 | Task | API |
