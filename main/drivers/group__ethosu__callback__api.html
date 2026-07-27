@@ -476,10 +476,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Weak callback hook for custom behavior (for example PMU setup, profiling start, monitor setup).</p>
-<p>In reference applications this callback configures PMU events and can start timer-based sampling.</p>
-<p>user_arg comes from <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3()</a>/ethosu_invoke_async().</p>
-<p>Any allocations performed here should be released in <a class="el" href="#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>. </p>
+<p>This callback hook is called by the driver before executing the inference job. Driver provides the default weak implementation that is effectively a no-op. </p>
 
 </div>
 </div>
@@ -509,10 +506,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Weak callback hook for custom behavior (for example PMU readout, profiler stop, monitor release).</p>
-<p>Reference implementations use this to collect PMU counters and then disable PMU resources.</p>
-<p>user_arg comes from <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3()</a>/ethosu_invoke_async().</p>
-<p>If begin callback has run, end callback is expected to run as well, including interrupt semaphore timeout paths. </p>
+<p>This callback hook is called by the driver after the inference job completes. Driver provides the default weak implementation that is effectively a no-op. </p>
 
 </div>
 </div>
@@ -543,7 +537,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Remapped address</dd></dl>
-<p>index convention: -1 for command stream and 0..n for base pointer entries. </p>
+<p>This callback hook is called by the driver to convert a CPU-visible address to the address used by the NPU.</p>
+<p>Re-implement this function when the CPU and NPU access the same memory through different address. </p>
 
 </div>
 </div>
@@ -575,9 +570,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Configuration to use</dd></dl>
-<p>Default implementation is based on NPU_QCONFIG and NPU_REGIONCFG_n.</p>
-<p>Platform guidance: memory routing should avoid mixing slow and fast transactions on the same AXI interface.</p>
-<p>For Ethos-U65, NPU_REGIONCFG values 0/1 map to AXI0 and 2/3 map to AXI1.</p>
+<p>This callback hook selects the NPU memory configuration for the command stream and base pointers. Driver provides the default weak implementation that applies configuration based on <em>ethos_config_*</em>.h configuration files.</p>
+<p>Reimplement this function if the application requires an alternative configuration mechanism. </p>
 
 </div>
 </div>
