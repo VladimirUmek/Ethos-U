@@ -302,8 +302,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Minimal sempahore implementation for baremetal applications. See ethosu_driver.c.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to semaphore handle</dd></dl>
-<p>Driver provides the default weak implementation that is ...</p>
-<p>Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in multithreaded application. </p>
+<p>Driver provides the default weak implementation that allocates a minimal bare-metal semaphore.</p>
+<p>Re-implement this function and create an RTOS semaphore with an initial count of zero in multithreaded application. </p>
 
 </div>
 </div>
@@ -328,8 +328,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Driver provides the default weak implementation that is ...</p>
-<p>Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in multithreaded application. </p>
+<p>Driver provides the default weak implementation that frees the storage allocated by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create()</a>.</p>
+<p>Re-implement this function in multithreaded application to destroy semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create</a>. </p>
 
 </div>
 </div>
@@ -414,9 +414,12 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success else negative error code</dd></dl>
-<p>Timeout is implementation-defined. Use ETHOSU_SEMAPHORE_WAIT_FOREVER for infinite timeout.</p>
-<p>In multi-NPU flows this primitive is used to sleep while waiting for a free driver instance.</p>
-<p>Inference semaphore timeout can be configured via ETHOSU_INFERENCE_TIMEOUT (build-time) and is forwarded as-is to this API. </p>
+<p>Driver provides the default weak implementation that ignores the timeout and waits with WFE.</p>
+<p>Re-implement this function in multithreaded application to use the semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create</a>.</p>
+<ul>
+<li>ETHOSU_SEMAPHORE_WAIT_FOREVER is used to request an indefinite wait.</li>
+<li>ETHOSU_SEMAPHORE_WAIT_INFERENCE is used to wait until inference completes. </li>
+</ul>
 
 </div>
 </div>
@@ -442,7 +445,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
-<p>In multi-NPU flows this primitive wakes tasks waiting for a free driver instance. </p>
+<p>Driver provides the default weak implementation that signals an event with SEV.</p>
+<p>Re-implement this function in multithreaded application to use the semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create</a>. </p>
 
 </div>
 </div>
