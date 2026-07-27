@@ -225,42 +225,39 @@
 
 /**
   \fn void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg)
-  \details Weak callback hook for custom behavior (for example PMU setup,
-  profiling start, monitor setup).
-  \details In reference applications this callback configures PMU events and
-  can start timer-based sampling.
-  \details user_arg comes from ethosu_invoke_v3()/ethosu_invoke_async().
-  \details Any allocations performed here should be released in
-  ethosu_inference_end().
+  \details
+  This callback hook is called by the driver before executing the inference
+  job. Driver provides the default weak implementation that is effectively a
+  no-op.
 */
 
 /**
   \fn void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg)
-  \details Weak callback hook for custom behavior (for example PMU readout,
-  profiler stop, monitor release).
-  \details Reference implementations use this to collect PMU counters and then
-  disable PMU resources.
-  \details user_arg comes from ethosu_invoke_v3()/ethosu_invoke_async().
-  \details If begin callback has run, end callback is expected to run as well,
-  including interrupt semaphore timeout paths.
+  \details
+  This callback hook is called by the driver after the inference job
+  completes. Driver provides the default weak implementation that is
+  effectively a no-op.
 */
 
 /**
   \fn uint64_t ethosu_address_remap(uint64_t address, int index)
-  \details \todo Implementation-specific address remapping.
-  \details index convention: -1 for command stream and 0..n for base pointer
-  entries.
+  \details
+  This callback hook is called by the driver to convert a CPU-visible address
+  to the address used by the NPU.
+
+  Re-implement this function when the CPU and NPU access the same memory
+  through different address.
 */
 
 /**
   \fn unsigned int ethosu_config_select(uint64_t address, int index)
-  \details Default implementation is based on NPU_QCONFIG and NPU_REGIONCFG_n.
-  \details Platform guidance: memory routing should avoid mixing slow and fast
-  transactions on the same AXI interface.
-  \details For Ethos-U65, NPU_REGIONCFG values 0/1 map to AXI0 and 2/3 map to
-  AXI1.
-  \details \todo Ethos-U85 mapping is based on NPU_MEM_ATTR_[0-3] and must be
-  configured per target memory-attribute setup.
+  \details
+  This callback hook selects the NPU memory configuration for the command
+  stream and base pointers. Driver provides the default weak implementation
+  that applies configuration based on \em ethos_config_*.h configuration files.
+
+  Reimplement this function if the application requires an alternative
+  configuration mechanism.
 */
 
 /**
