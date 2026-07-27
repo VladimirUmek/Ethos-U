@@ -166,21 +166,21 @@
 /**
   \fn void *ethosu_semaphore_create(void)
   \details
+  Driver provides the default weak implementation that allocates a minimal
+  bare-metal semaphore.
 
-  Driver provides the default weak implementation that is ...
-
-  Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in
-  multithreaded application.
+  Re-implement this function and create an RTOS semaphore with an initial
+  count of zero in multithreaded application.
 */
 
 /**
   \fn void ethosu_semaphore_destroy(void *sem)
   \details
+  Driver provides the default weak implementation that frees the storage
+  allocated by ethosu_semaphore_create().
 
-  Driver provides the default weak implementation that is ...
-
-  Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in
-  multithreaded application.
+  Re-implement this function in multithreaded application to destroy
+  semaphore created and returned by \ref ethosu_semaphore_create.
 */
 
 /**
@@ -203,18 +203,24 @@
 
 /**
   \fn int ethosu_semaphore_take(void *sem, uint64_t timeout)
-  \details Timeout is implementation-defined. Use
-  ETHOSU_SEMAPHORE_WAIT_FOREVER for infinite timeout.
-  \details In multi-NPU flows this primitive is used to sleep while waiting for
-  a free driver instance.
-  \details Inference semaphore timeout can be configured via
-  ETHOSU_INFERENCE_TIMEOUT (build-time) and is forwarded as-is to this API.
+  \details
+  Driver provides the default weak implementation that ignores the timeout and
+  waits with WFE.
+
+  Re-implement this function in multithreaded application to use the semaphore
+  created and returned by \ref ethosu_semaphore_create.
+
+  - ETHOSU_SEMAPHORE_WAIT_FOREVER is used to request an indefinite wait.
+  - ETHOSU_SEMAPHORE_WAIT_INFERENCE is used to wait until inference completes.
 */
 
 /**
   \fn int ethosu_semaphore_give(void *sem)
-  \details In multi-NPU flows this primitive wakes tasks waiting for a free
-  driver instance.
+  \details
+  Driver provides the default weak implementation that signals an event with SEV.
+
+  Re-implement this function in multithreaded application to use the semaphore
+  created and returned by \ref ethosu_semaphore_create.
 */
 
 /**
