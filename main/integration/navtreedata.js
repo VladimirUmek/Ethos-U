@@ -42,10 +42,9 @@ var NAVTREE =
     [ "Complete application integration", "index.html#integration_complete_application", null ],
     [ "Validate and tune", "index.html#integration_validate_tune", null ],
     [ "Ethos-U configuration", "index.html#autotoc_md9", null ],
-    [ "Generated command-stream regions", "index.html#autotoc_md10", null ],
-    [ "Linker configuration", "index.html#autotoc_md11", null ],
-    [ "Driver weak hooks", "index.html#autotoc_md12", null ],
-    [ "Driver build configuration", "index.html#autotoc_md13", null ]
+    [ "Linker configuration", "index.html#autotoc_md10", null ],
+    [ "Driver weak hooks", "index.html#autotoc_md11", null ],
+    [ "Driver build configuration", "index.html#autotoc_md12", null ]
   ] ]
 ];
 

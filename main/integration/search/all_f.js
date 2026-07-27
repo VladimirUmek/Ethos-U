@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['u_20configuration_0',['Ethos-U configuration',['../index.html#autotoc_md9',1,'']]],
-  ['use_20a_20project_20example_20and_20add_20device_1',['Use a project example and add device',['../index.html#autotoc_md5',1,'']]]
+  ['validate_20and_20tune_0',['Validate and tune',['../index.html#integration_validate_tune',1,'']]],
+  ['version_20control_1',['Add ML model and configuration to version control',['../index.html#autotoc_md4',1,'']]]
 ];

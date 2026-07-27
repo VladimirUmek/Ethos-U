@@ -227,5 +227,6 @@
     <title>Drivers</title>
     <filename>index.html</filename>
     <docanchor file="index.html" title="Drivers">mainpage</docanchor>
+    <docanchor file="index.html" title="Configuration">driver_configuration</docanchor>
   </compound>
 </tagfile>

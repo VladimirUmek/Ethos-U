@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['npu_20execution_20contract_0',['NPU execution contract',['../index.html#autotoc_md2',1,'']]]
+  ['memory_20attributes_0',['Ethos-U85 memory attributes',['../index.html#autotoc_md6',1,'']]],
+  ['monitoring_20unit_1',['Performance Monitoring Unit',['../index.html#autotoc_md10',1,'']]]
 ];

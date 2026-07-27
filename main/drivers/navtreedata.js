@@ -25,13 +25,21 @@
 var NAVTREE =
 [
   [ "Drivers", "index.html", [
-    [ "Add the driver component to csolution project", "index.html#autotoc_md0", null ],
-    [ "Driver responsibilities", "index.html#autotoc_md1", null ],
-    [ "NPU execution contract", "index.html#autotoc_md2", null ],
-    [ "API entry points", "index.html#autotoc_md3", null ],
-    [ "Platform hooks", "index.html#autotoc_md4", null ],
-    [ "Performance Monitoring Unit", "index.html#autotoc_md5", null ],
-    [ "Bring-up checklist", "index.html#autotoc_md6", null ],
+    [ "Driver responsibilities", "index.html#autotoc_md0", null ],
+    [ "Components", "index.html#autotoc_md1", null ],
+    [ "Configuration", "index.html#driver_configuration", [
+      [ "Configuration Options", "index.html#autotoc_md2", [
+        [ "Command-stream and base-pointer routing", "index.html#autotoc_md3", null ]
+      ] ],
+      [ "Ethos-U55 and Ethos-U65 AXI limits", "index.html#autotoc_md4", null ],
+      [ "Ethos-U85 power ramping", "index.html#autotoc_md5", null ],
+      [ "Ethos-U85 memory attributes", "index.html#autotoc_md6", null ],
+      [ "Ethos-U85 AXI limits", "index.html#autotoc_md7", null ]
+    ] ],
+    [ "API entry points", "index.html#autotoc_md8", null ],
+    [ "Platform hooks", "index.html#autotoc_md9", null ],
+    [ "Performance Monitoring Unit", "index.html#autotoc_md10", null ],
+    [ "Bring-up checklist", "index.html#autotoc_md11", null ],
     [ "API Reference", "topics.html", "topics" ]
   ] ]
 ];
