@@ -255,7 +255,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Minimal mutex implementation for baremetal applications. See ethosu_driver.c.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to mutex handle</dd></dl>
-<p>Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c. </p>
+<p>Driver provides the default weak implementation that is effectively a no-op.</p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
 
 </div>
 </div>
@@ -276,10 +277,12 @@ Functions</h2></td></tr>
 <p>Destroy mutex.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mutex</td><td>Pointer to mutex handle </td></tr>
+    <tr><td class="paramname">mutex</td><td>Pointer to mutex handle</td></tr>
   </table>
   </dd>
 </dl>
+<p>Driver provides the default weak implementation that is effectively a no-op.</p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
 
 </div>
 </div>
@@ -299,7 +302,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Minimal sempahore implementation for baremetal applications. See ethosu_driver.c.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to semaphore handle</dd></dl>
-<p>Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c. </p>
+<p>Driver provides the default weak implementation that is ...</p>
+<p>Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in multithreaded application. </p>
 
 </div>
 </div>
@@ -320,10 +324,12 @@ Functions</h2></td></tr>
 <p>Destroy semaphore.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">sem</td><td>Pointer to semaphore handle </td></tr>
+    <tr><td class="paramname">sem</td><td>Pointer to semaphore handle</td></tr>
   </table>
   </dd>
 </dl>
+<p>Driver provides the default weak implementation that is ...</p>
+<p>Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in multithreaded application. </p>
 
 </div>
 </div>
@@ -348,7 +354,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<p>Driver provides the default weak implementation that is effectively a no-op.</p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
 
 </div>
 </div>
@@ -373,7 +381,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
+<p>Driver provides the default weak implementation that is effectively a no-op.</p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
 
 </div>
 </div>
