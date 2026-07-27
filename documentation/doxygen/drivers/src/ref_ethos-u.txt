@@ -147,28 +147,58 @@
 
 /**
   \fn void *ethosu_mutex_create(void)
-  \details Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c.
+  \details
+  Driver provides the default weak implementation that is effectively a no-op.
+
+  Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in
+  multithreaded application or when multiple CPU cores can access the driver.
 */
 
 /**
   \fn void ethosu_mutex_destroy(void *mutex)
+  \details
+  Driver provides the default weak implementation that is effectively a no-op.
+
+  Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in
+  multithreaded application or when multiple CPU cores can access the driver.
 */
 
 /**
   \fn void *ethosu_semaphore_create(void)
-  \details Weak function for RTOS integration. Default baremetal implementation in ethosu_driver.c.
+  \details
+
+  Driver provides the default weak implementation that is ...
+
+  Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in
+  multithreaded application.
 */
 
 /**
   \fn void ethosu_semaphore_destroy(void *sem)
+  \details
+
+  Driver provides the default weak implementation that is ...
+
+  Re-implement this function and use an RTOS semaphore when Ethos-U NPU is used in
+  multithreaded application.
 */
 
 /**
   \fn int ethosu_mutex_lock(void *mutex)
+  \details
+  Driver provides the default weak implementation that is effectively a no-op.
+
+  Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in
+  multithreaded application or when multiple CPU cores can access the driver.
 */
 
 /**
   \fn int ethosu_mutex_unlock(void *mutex)
+  \details
+  Driver provides the default weak implementation that is effectively a no-op.
+
+  Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in
+  multithreaded application or when multiple CPU cores can access the driver.
 */
 
 /**
