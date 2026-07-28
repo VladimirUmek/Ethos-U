@@ -131,18 +131,22 @@
 
 /**
   \fn void ethosu_flush_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
-  \details Ensures data written by CPU is visible to NPU.
-  \details The application is expected to ensure cache coherency before
-  inference. This weak hook exists for integration convenience.
-  \details Target implementations commonly map this to architecture cache APIs
-  such as SCB_CleanDCache_by_Addr on Cortex-M.
+  \details
+  This callback hook is called before inference for the supplied base-address
+  regions. The default weak implementation is a no-op.
+
+  Reimplement this function when CPU-cached memory is shared with the NPU to
+  ensure that the data written by CPU is visible to NPU.
 */
 
 /**
   \fn void ethosu_invalidate_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
-  \details Ensures CPU reads fresh data written by NPU.
-  \details Target implementations commonly map this to architecture cache APIs
-  such as SCB_InvalidateDCache_by_Addr on Cortex-M.
+  \details
+  This callback hook is called when finalizing inference for the supplied
+  base-address regions. The default weak implementation is a no-op.
+  
+  Reimplement this function when CPU-cached memory is shared with the NPU to
+  ensure that the data written by NPU is visible to CPU.
 */
 
 /**
