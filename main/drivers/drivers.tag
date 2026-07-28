@@ -1,6 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile doxygen_version="1.13.2" doxygen_gitid="26342b775ea25e6fefb53220926b20702c56fcb3">
   <compound kind="struct">
+    <name>ethosu_config</name>
+    <filename>group__ethosu__driver__structs.html</filename>
+    <anchor>structethosu__config</anchor>
+  </compound>
+  <compound kind="struct">
     <name>ethosu_driver</name>
     <filename>group__ethosu__driver__structs.html</filename>
     <anchor>structethosu__driver</anchor>
@@ -9,6 +14,16 @@
     <name>ethosu_driver_version</name>
     <filename>group__ethosu__driver__structs.html</filename>
     <anchor>structethosu__driver__version</anchor>
+  </compound>
+  <compound kind="struct">
+    <name>ethosu_hw_info</name>
+    <filename>group__ethosu__driver__structs.html</filename>
+    <anchor>structethosu__hw__info</anchor>
+  </compound>
+  <compound kind="struct">
+    <name>ethosu_id</name>
+    <filename>group__ethosu__driver__structs.html</filename>
+    <anchor>structethosu__id</anchor>
   </compound>
   <compound kind="struct">
     <name>ethosu_job</name>
@@ -22,6 +37,9 @@
     <class kind="struct">ethosu_driver</class>
     <class kind="struct">ethosu_driver_version</class>
     <class kind="struct">ethosu_job</class>
+    <class kind="struct">ethosu_id</class>
+    <class kind="struct">ethosu_config</class>
+    <class kind="struct">ethosu_hw_info</class>
   </compound>
   <compound kind="group">
     <name>ethosu_public_api</name>
@@ -121,7 +139,7 @@
   </compound>
   <compound kind="group">
     <name>ethosu_callback_api</name>
-    <title>Callbacks</title>
+    <title>Platform hooks</title>
     <filename>group__ethosu__callback__api.html</filename>
     <member kind="function">
       <type>void</type>

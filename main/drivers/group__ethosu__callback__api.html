@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Drivers: Callbacks</title>
+<title>Drivers: Platform hooks</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -125,7 +125,7 @@ $(function(){initNavTree('group__ethosu__callback__api.html',''); initResizable(
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">Callbacks</div></div>
+  <div class="headertitle"><div class="title">Platform hooks</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
@@ -195,9 +195,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Ensures data written by CPU is visible to NPU.</p>
-<p>The application is expected to ensure cache coherency before inference. This weak hook exists for integration convenience.</p>
-<p>Target implementations commonly map this to architecture cache APIs such as SCB_CleanDCache_by_Addr on Cortex-M. </p>
+<p>This callback hook is called before inference for the supplied base-address regions. The command-stream region is not included. The default weak implementation is a no-op.</p>
+<p>Reimplement this function when CPU-cached memory is shared with the NPU to ensure that the data written by CPU is visible to NPU.</p>
+<p>The invocation API requires 16-byte base-address alignment. A cache implementation may require stricter cache-line alignment, commonly 32 bytes, and must handle non-cache-line-sized regions without affecting unrelated data. </p>
 
 </div>
 </div>
@@ -234,8 +234,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Ensures CPU reads fresh data written by NPU.</p>
-<p>Target implementations commonly map this to architecture cache APIs such as SCB_InvalidateDCache_by_Addr on Cortex-M. </p>
+<p>This callback hook is called when finalizing inference for the supplied base-address regions. The default weak implementation is a no-op.</p>
+<p>Reimplement this function when CPU-cached memory is shared with the NPU to ensure that the data written by NPU is visible to CPU.</p>
+<p>From the cache clean before inference until this invalidation completes, the CPU must not write memory owned by the NPU. Cleaning stale dirty CPU cache lines after the NPU has written the same memory can overwrite NPU results. The platform implementation must define and enforce this ownership rule, including for asynchronous invocation. </p>
 
 </div>
 </div>
@@ -446,7 +447,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
 <p>Driver provides the default weak implementation that signals an event with SEV.</p>
-<p>Re-implement this function in multithreaded application to use the semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create</a>. </p>
+<p>Re-implement this function in multithreaded application to use the semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create</a>. The implementation must be callable from NPU interrupt context. </p>
 
 </div>
 </div>
@@ -476,7 +477,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This callback hook is called by the driver before executing the inference job. Driver provides the default weak implementation that is effectively a no-op. </p>
+<p>Called immediately before starting the command stream. The default weak implementation is a no-op. </p>
 
 </div>
 </div>
@@ -506,7 +507,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This callback hook is called by the driver after the inference job completes. Driver provides the default weak implementation that is effectively a no-op. </p>
+<p>Called by <a class="el" href="group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> when finalizing a started job, including error and timeout paths. It is not guaranteed if a running driver is released. The default weak implementation is a no-op. </p>
 
 </div>
 </div>
@@ -537,8 +538,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Remapped address</dd></dl>
-<p>This callback hook is called by the driver to convert a CPU-visible address to the address used by the NPU.</p>
-<p>Re-implement this function when the CPU and NPU access the same memory through different address. </p>
+<p>This callback hook is called by the driver to convert a CPU-visible address to the address used by the NPU. Index -1 identifies the command stream; indexes 0 through 7 identify base pointers.</p>
+<p>Re-implement this function when the CPU and NPU use different addresses for the same memory. </p>
 
 </div>
 </div>
@@ -570,7 +571,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Configuration to use</dd></dl>
-<p>This callback hook selects the NPU memory configuration for the command stream and base pointers. Driver provides the default weak implementation that applies configuration based on <em>ethos_config_*</em>.h configuration files.</p>
+<p>This callback hook selects the NPU memory configuration for the command stream (index -1) or a base pointer (indexes 0 through 7). Driver provides the default weak implementation based on the <em>ethosu_config_u*</em>.h configuration file.</p>
 <p>Reimplement this function if the application requires an alternative configuration mechanism. </p>
 
 </div>

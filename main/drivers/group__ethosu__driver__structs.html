@@ -132,11 +132,23 @@ $(function(){initNavTree('group__ethosu__driver__structs.html',''); initResizabl
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:structethosu__driver" id="r_structethosu__driver"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#structethosu__driver">ethosu_driver</a></td></tr>
+<tr class="memdesc:structethosu__driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver handle.  <a href="#structethosu__driver">More...</a><br /></td></tr>
 <tr class="separator:structethosu__driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:structethosu__driver__version" id="r_structethosu__driver__version"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#structethosu__driver__version">ethosu_driver_version</a></td></tr>
+<tr class="memdesc:structethosu__driver__version"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver version.  <a href="#structethosu__driver__version">More...</a><br /></td></tr>
 <tr class="separator:structethosu__driver__version"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:structethosu__job" id="r_structethosu__job"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#structethosu__job">ethosu_job</a></td></tr>
+<tr class="memdesc:structethosu__job"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver job state.  <a href="#structethosu__job">More...</a><br /></td></tr>
 <tr class="separator:structethosu__job"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:structethosu__id" id="r_structethosu__id"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#structethosu__id">ethosu_id</a></td></tr>
+<tr class="memdesc:structethosu__id"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hardware Identification Information.  <a href="#structethosu__id">More...</a><br /></td></tr>
+<tr class="separator:structethosu__id"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:structethosu__config" id="r_structethosu__config"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#structethosu__config">ethosu_config</a></td></tr>
+<tr class="memdesc:structethosu__config"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hardware Configuration Information.  <a href="#structethosu__config">More...</a><br /></td></tr>
+<tr class="separator:structethosu__config"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:structethosu__hw__info" id="r_structethosu__hw__info"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#structethosu__hw__info">ethosu_hw_info</a></td></tr>
+<tr class="memdesc:structethosu__hw__info"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hardware Information.  <a href="#structethosu__hw__info">More...</a><br /></td></tr>
+<tr class="separator:structethosu__hw__info"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Description</h2>
 <hr/><h2 class="groupheader">Data Structure Documentation</h2>
@@ -151,7 +163,9 @@ Data Structures</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="textblock"></div>
+<div class="textblock"><p>Driver handle. </p>
+<p>Caller-allocated driver handle. Initialize it to zero before first use and do not modify its members. </p>
+</div>
 </div>
 </div>
 <a name="structethosu__driver__version" id="structethosu__driver__version"></a>
@@ -165,7 +179,15 @@ Data Structures</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="textblock"></div>
+<div class="textblock"><p>Driver version. </p>
+<p>This structure holds Ethos-U driver implementation version:</p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="#structethosu__driver__version" title="Driver version.">ethosu_driver_version</a></div>
+<div class="line">{</div>
+<div class="line">  uint8_t major;</div>
+<div class="line">  uint8_t minor;</div>
+<div class="line">  uint8_t patch;</div>
+<div class="line">};</div>
+</div><!-- fragment --> </div>
 </div>
 </div>
 <a name="structethosu__job" id="structethosu__job"></a>
@@ -179,7 +201,79 @@ Data Structures</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="textblock"></div>
+<div class="textblock"><p>Driver job state. </p>
+<p>Internal job state. Applications must not modify it. </p>
+</div>
+</div>
+</div>
+<a name="structethosu__id" id="structethosu__id"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structethosu__id">&#9670;&#160;</a></span>ethosu_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct ethosu_id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="textblock"><p>Hardware Identification Information. </p>
+<p>This structure holds hardware ID:</p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="#structethosu__id" title="Hardware Identification Information.">ethosu_id</a></div>
+<div class="line">{</div>
+<div class="line">  uint32_t version_status; <span class="comment">///&lt; Version status</span></div>
+<div class="line">  uint32_t version_minor;  <span class="comment">///&lt; Version minor</span></div>
+<div class="line">  uint32_t version_major;  <span class="comment">///&lt; Version major</span></div>
+<div class="line">  uint32_t product_major;  <span class="comment">///&lt; Product major</span></div>
+<div class="line">  uint32_t arch_patch_rev; <span class="comment">///&lt; Architecture version patch</span></div>
+<div class="line">  uint32_t arch_minor_rev; <span class="comment">///&lt; Architecture version minor</span></div>
+<div class="line">  uint32_t arch_major_rev; <span class="comment">///&lt; Architecture version major</span></div>
+<div class="line">};</div>
+</div><!-- fragment --> </div>
+</div>
+</div>
+<a name="structethosu__config" id="structethosu__config"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structethosu__config">&#9670;&#160;</a></span>ethosu_config</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct ethosu_config</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="textblock"><p>Hardware Configuration Information. </p>
+<p>This structure holds configuration information:</p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="#structethosu__config" title="Hardware Configuration Information.">ethosu_config</a></div>
+<div class="line">{</div>
+<div class="line">  uint32_t macs_per_cc;        <span class="comment">///&lt; MACs per clock cycle</span></div>
+<div class="line">  uint32_t cmd_stream_version; <span class="comment">///&lt; NPU command stream version</span></div>
+<div class="line">  uint32_t custom_dma;         <span class="comment">///&lt; Custom DMA enabled</span></div>
+<div class="line">};</div>
+</div><!-- fragment --><p>The <code>macs_per_cc</code> member contains the encoded hardware field, not the literal number of MACs. The number of MACs per clock cycle is (<code>1U</code> <code>&lt;&lt;</code> <code>macs_per_cc</code>). </p>
+</div>
+</div>
+</div>
+<a name="structethosu__hw__info" id="structethosu__hw__info"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structethosu__hw__info">&#9670;&#160;</a></span>ethosu_hw_info</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct ethosu_hw_info</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="textblock"><p>Hardware Information. </p>
+<p>This structure holds Ethos-U hardware information:</p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="#structethosu__hw__info" title="Hardware Information.">ethosu_hw_info</a></div>
+<div class="line">{</div>
+<div class="line">  <span class="keyword">struct </span><a class="code hl_struct" href="#structethosu__id" title="Hardware Identification Information.">ethosu_id</a> version;</div>
+<div class="line">  <span class="keyword">struct </span><a class="code hl_struct" href="#structethosu__config" title="Hardware Configuration Information.">ethosu_config</a> cfg;</div>
+<div class="line">};</div>
+</div><!-- fragment --> </div>
 </div>
 </div>
 </div><!-- contents -->

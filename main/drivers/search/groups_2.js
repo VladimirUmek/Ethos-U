@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['structures_0',['Structures',['../group__ethosu__driver__structs.html',1,'']]]
+  ['platform_20hooks_0',['Platform hooks',['../group__ethosu__callback__api.html',1,'']]]
 ];

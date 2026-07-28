@@ -143,7 +143,7 @@ Functions</h2></td></tr>
 <tr class="separator:gaa7aa51e0c8d7757f3ca28b0ad4303558"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga061d3040dbd395073b51968bc2e91d55" id="r_ga061d3040dbd395073b51968bc2e91d55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga061d3040dbd395073b51968bc2e91d55">ethosu_get_driver_version</a> (struct <a class="el" href="group__ethosu__driver__structs.html#structethosu__driver__version">ethosu_driver_version</a> *ver)</td></tr>
 <tr class="separator:ga061d3040dbd395073b51968bc2e91d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga583bd9f7a0ae2cabfecf6b2843adcc56" id="r_ga583bd9f7a0ae2cabfecf6b2843adcc56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga583bd9f7a0ae2cabfecf6b2843adcc56">ethosu_get_hw_info</a> (struct <a class="el" href="group__ethosu__driver__structs.html#structethosu__driver">ethosu_driver</a> *drv, struct ethosu_hw_info *hw)</td></tr>
+<tr class="memitem:ga583bd9f7a0ae2cabfecf6b2843adcc56" id="r_ga583bd9f7a0ae2cabfecf6b2843adcc56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga583bd9f7a0ae2cabfecf6b2843adcc56">ethosu_get_hw_info</a> (struct <a class="el" href="group__ethosu__driver__structs.html#structethosu__driver">ethosu_driver</a> *drv, struct <a class="el" href="group__ethosu__driver__structs.html#structethosu__hw__info">ethosu_hw_info</a> *hw)</td></tr>
 <tr class="separator:ga583bd9f7a0ae2cabfecf6b2843adcc56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6965f708d5951842cd6f8cfe26a35868" id="r_ga6965f708d5951842cd6f8cfe26a35868"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3</a> (struct <a class="el" href="group__ethosu__driver__structs.html#structethosu__driver">ethosu_driver</a> *drv, const void *custom_data_ptr, const int custom_data_size, uint64_t *const base_addr, const size_t *base_addr_size, const int num_base_addr, void *user_arg)</td></tr>
 <tr class="separator:ga6965f708d5951842cd6f8cfe26a35868"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,10 +211,10 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
-<p>In platform startup flow, this is typically called from target setup before main() starts running application logic.</p>
-<p>Fast memory is used for Ethos-U65/U85 spilling use cases.</p>
-<p>Initialization registers the driver instance in the internal list of available drivers.</p>
-<p>Expected mapping is one driver instance per NPU device. </p>
+<p>Initializes and registers driver instance for one NPU. Fast memory is used for Ethos-U65/U85 spilling.</p>
+<p>When the platform overrides the weak mutex or semaphore hooks, the hooks must be able to create synchronization objects during this call.</p>
+<p>Initialized handle must not be copied, moved or initialized more than once without an intervening call to <a class="el" href="#ga7d07a2c3e7c66236d31986c191c7c6e1">ethosu_deinit()</a>.</p>
+<dl class="section note"><dt>Note</dt><dd>Before the first inference, route and enable the NPU interrupt so that the target interrupt handler calls <a class="el" href="#ga55fec2a7ca5b5b51dc7c3d18914a3f03">ethosu_irq_handler()</a>. </dd></dl>
 
 </div>
 </div>
@@ -239,7 +239,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Deinitialization removes the driver instance from the internal list of available drivers. </p>
+<p>Deregisters the driver and destroys allocated resources. The driver must be idle. Do not call this function while the handle is reserved by another task or while an asynchronous job is running or waiting to be finalized. Storage for the handle must remain valid until <a class="el" href="#ga7d07a2c3e7c66236d31986c191c7c6e1">ethosu_deinit()</a> completes. </p>
 
 </div>
 </div>
@@ -265,7 +265,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
-<p>Useful for clearing error conditions without affecting the host system state. </p>
+<p>Resets the NPU, restores its configuration, and reapplies power and clock settings. </p>
 
 </div>
 </div>
@@ -291,7 +291,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
-<p>Power requests are reference counted. Increments the counter to keep NPU powered while work is pending. </p>
+<p>Adds a reference-counted request that disables Q-channel clock and power gating. The first request soft-resets the NPU. </p>
 
 </div>
 </div>
@@ -316,7 +316,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Power requests are reference counted. Decrements the counter; NPU may be powered down when count reaches zero. </p>
+<p>Releases one request and enables Q-channel clock and power gating when the count reaches zero. </p>
 
 </div>
 </div>
@@ -337,10 +337,16 @@ Functions</h2></td></tr>
 <p>Get Ethos-U driver version.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ver</td><td>Driver version struct </td></tr>
+    <tr><td class="paramname">ver</td><td>Driver version struct</td></tr>
   </table>
   </dd>
 </dl>
+<p>Retrieves the driver version.</p>
+<p>After function return, structure <a class="el" href="group__ethosu__driver__structs.html#structethosu__driver__version">ethosu_driver_version</a> members hold driver version. Member</p><ul>
+<li><b>major:</b> contains the value of ETHOSU_DRIVER_VERSION_MAJOR</li>
+<li><b>minor:</b> contains the value of ETHOSU_DRIVER_VERSION_MINOR</li>
+<li><b>patch:</b> contains the value of ETHOSU_DRIVER_VERSION_PATCH </li>
+</ul>
 
 </div>
 </div>
@@ -358,7 +364,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">struct ethosu_hw_info *</td>          <td class="paramname"><span class="paramname"><em>hw</em></span>&#160;)</td>
+          <td class="paramtype">struct <a class="el" href="group__ethosu__driver__structs.html#structethosu__hw__info">ethosu_hw_info</a> *</td>          <td class="paramname"><span class="paramname"><em>hw</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -366,11 +372,23 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">drv</td><td>Pointer to driver handle </td></tr>
-    <tr><td class="paramname">hw</td><td>Hardware information struct </td></tr>
+    <tr><td class="paramname">hw</td><td>Hardware information struct</td></tr>
   </table>
   </dd>
 </dl>
-
+<p>Retrieves the NPU hardware information.</p>
+<p>Example: </p><div class="fragment"><div class="line"><span class="keyword">static</span> <span class="keyword">struct </span><a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> EthosDriver;</div>
+<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__hw__info" title="Hardware Information.">ethosu_hw_info</a>       hw_info;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="#ga583bd9f7a0ae2cabfecf6b2843adcc56">ethosu_get_hw_info</a>(&amp;EthosDriver, &amp;hw_info);</div>
+<div class="line"> </div>
+<div class="line">printf(<span class="stringliteral">&quot;Ethos-U version info:\n&quot;</span>);</div>
+<div class="line">printf(<span class="stringliteral">&quot;\tArch:       v%u.%u.%u\n&quot;</span>, hw_info.version.arch_major_rev,</div>
+<div class="line">                                    hw_info.version.arch_minor_rev,</div>
+<div class="line">                                    hw_info.version.arch_patch_rev);</div>
+<div class="line">printf(<span class="stringliteral">&quot;\tMACs/cc:    %u\n&quot;</span>, (uint32_t)(1 &lt;&lt; hw_info.cfg.macs_per_cc));</div>
+<div class="line">printf(<span class="stringliteral">&quot;\tCmd stream: v%u\n&quot;</span>, hw_info.cfg.cmd_stream_version);</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="ga6965f708d5951842cd6f8cfe26a35868" name="ga6965f708d5951842cd6f8cfe26a35868"></a>
@@ -431,9 +449,13 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
 <p>Blocks until inference completes.</p>
-<p>In driver unit test usage, base addresses are passed as indexed arrays (for example ETHOSU_BASEP_INDEXES entries) and each entry has a matching size in base_addr_size.</p>
-<p>user_arg is forwarded to <a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a> and <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>.</p>
-<p>Synchronous and asynchronous invocation styles can be mixed in one application. </p>
+<p>custom_data_ptr must contain a trusted Vela Custom Operator Payload 1. The driver verifies the payload identifier, word alignment, optimizer compatibility, and supported driver actions, but it is not a parser for untrusted or arbitrarily malformed input.</p>
+<p>base_addr and base_addr_size must have matching entries for at most eight 16-byte-aligned base addresses. num_base_addr must be in the range 0 through</p><ol type="1">
+<li>The command stream must also be 16-byte aligned.</li>
+</ol>
+<p>The sizes are used for cache maintenance and fast-memory validation. They do not create hardware bounds around NPU accesses and do not prove that offsets in the command stream stay within a supplied region.</p>
+<p>When fast memory is configured and base-address index 2 exists, the driver validates its size and replaces base_addr[2] with the fast-memory address. base_addr is mutable for this reason.</p>
+<p>user_arg is passed to the inference callbacks. Synchronous and asynchronous invocation may be mixed sequentially; a driver supports one outstanding job. </p>
 
 </div>
 </div>
@@ -482,9 +504,21 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Invoke command stream using async interface. Must be followed by call(s) to <a class="el" href="#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> upon successful return.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3</a> for documentation.</dd></dl>
-<p>Returns immediately and does not complete the inference lifecycle by itself.</p>
-<p>Must be followed by <a class="el" href="#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> polling or blocking calls.</p>
-<p>Synchronous and asynchronous invocation styles can be mixed in one application. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">drv</td><td>Pointer to driver handle. </td></tr>
+    <tr><td class="paramname">custom_data_ptr</td><td>Pointer to the command stream payload. </td></tr>
+    <tr><td class="paramname">custom_data_size</td><td>Size in bytes of the command stream payload. </td></tr>
+    <tr><td class="paramname">base_addr</td><td>Array of base address pointers for tensor arenas and weight buffers. </td></tr>
+    <tr><td class="paramname">base_addr_size</td><td>Array of sizes in bytes, one entry per base address. </td></tr>
+    <tr><td class="paramname">num_base_addr</td><td>Number of entries in base_addr and base_addr_size. </td></tr>
+    <tr><td class="paramname">user_arg</td><td>User argument passed to <a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a> and <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code.</dd></dl>
+<p>Starts one job and returns before inference completion.</p>
+<p>After a successful call, keep the payload and both base-address arrays valid until <a class="el" href="#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> returns 0 or -1. Complete the job with polling or blocking calls to <a class="el" href="#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a>. The memory referenced by the base-address array must also remain allocated and under NPU ownership for that interval. </p>
 
 </div>
 </div>
@@ -515,8 +549,10 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>-2 on inference not invoked, -1 on inference error, 0 on success, 1 on inference running</dd></dl>
-<p>Used with <a class="el" href="#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>. When block=true, waits for completion; when block=false, polls without blocking.</p>
-<p>If called from another thread concurrently with <a class="el" href="#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>, caller ordering must guarantee wait is entered only after successful async invoke completion. </p><dl class="section return"><dt>Returns</dt><dd>-2: not invoked, -1: error, 0: success, 1: still running. </dd></dl>
+<p>Finalizes a job started by <a class="el" href="#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>. When block=true, waits for completion; when block=false, returns 1 while the job is running.</p>
+<p>The timeout value used by a blocking inference wait is ETHOSU_SEMAPHORE_WAIT_INFERENCE. Its unit and timeout behavior are defined by the platform implementation of <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725">ethosu_semaphore_take()</a>; the default value requests an indefinite wait.</p>
+<p>Finalizing a completed or timed-out job invalidates the configured cache regions, calls <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>, releases the inference power request, and resets the internal job state.</p>
+<p>If called from another thread concurrently with <a class="el" href="#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>, caller ordering must guarantee wait is entered only after successful async invoke completion. </p>
 
 </div>
 </div>
@@ -537,8 +573,7 @@ Functions</h2></td></tr>
 <p>Reserves a driver to execute inference with. Call will block until a driver is available.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to driver handle.</dd></dl>
 <p>In multi-NPU usage, this call is serialized with mutex operations and may block on a semaphore when no driver instance is free.</p>
-<p>Waiting for an available driver instance uses the global driver semaphore with forever-wait semantics.</p>
-<p>Used with ethosu_invoke_v2() wrapper for backwards compatibility. </p>
+<p>Waiting for an available driver instance uses the global driver semaphore with forever-wait semantics. At least one driver must have been successfully initialized and registered before this function is called. </p>
 
 </div>
 </div>
@@ -563,8 +598,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Marks the driver available for other inference tasks.</p>
-<p>In multi-NPU usage, this is paired with semaphore signaling to wake tasks blocked while waiting for a free driver. </p>
+<p>Marks the driver available and wakes a task waiting for a driver. Complete an asynchronous job with <a class="el" href="#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> before release; releasing a running job may reset the NPU without calling <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>. </p>
 
 </div>
 </div>
@@ -589,8 +623,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Called from target IRQ glue (for example, vector-table entry wired with NVIC_SetVector/NVIC_EnableIRQ in platform setup).</p>
-<p>Processes NPU interrupt completion and updates job state. </p>
+<p>This function must be called from the target NPU interrupt handler.</p>
+<p>It acknowledges the interrupt, records the job result, and unblocks tasks waiting for the job completion. </p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['callbacks_0',['Callbacks',['../../drivers/group__ethosu__callback__api.html',1,'']]]
+  ['functions_0',['Functions',['../../drivers/group__ethosu__public__api.html',1,'']]]
 ];
