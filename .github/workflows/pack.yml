@@ -34,3 +34,4 @@ jobs:
           gen-pack-script: ./gen_pack.sh --no-preprocess
           gen-pack-output: ./output
           gh-pages-branch: gh-pages
+          pack-artifact-format: pack
