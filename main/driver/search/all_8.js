@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['limits_0',['limits',['../index.html#autotoc_md12',1,'Ethos-U55 and Ethos-U65 AXI limits'],['../index.html#autotoc_md15',1,'Ethos-U85 AXI limits']]],
-  ['logging_1',['Logging',['../index.html#autotoc_md16',1,'']]]
+  ['memory_20attributes_0',['Ethos-U85 memory attributes',['../index.html#autotoc_md14',1,'']]],
+  ['monitoring_20unit_20api_1',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
+  ['monitoring_20unit_20pmu_2',['Performance Monitoring Unit (PMU)',['../index.html#autotoc_md17',1,'']]],
+  ['mutex_20and_20semaphores_3',['Mutex and semaphores',['../index.html#mutex-and-semaphores',1,'']]]
 ];

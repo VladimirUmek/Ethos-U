@@ -135,7 +135,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 <li>Starts the NPU and handles completion or fault interrupts;</li>
 <li>Supports synchronous and asynchronous invocation;</li>
 <li>Provides access to the Ethos-U Performance Monitoring Unit (PMU);</li>
-<li>Exposes weak platform hooks for power, cache, address, and RTOS integration.</li>
+<li>Exposes weak <a class="el" href="group__ethosu__callback__api.html">platform-specific functions</a> for power, cache, address, and RTOS integration.</li>
 </ul>
 <p>The input to the Ethos-U driver must provide:</p>
 <ul>
@@ -203,7 +203,7 @@ API functions</h1>
 <p>See <a class="el" href="group__ethosu__public__api.html">Driver functions</a> for the complete generated API and <a class="el" href="group__ethosu__driver__structs.html">Driver structures</a> for public data types.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Platform-specific functions</h1>
-<p>The driver provides default implementations for platform-specific functions listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.</p>
+<p>The driver provides default implementations for <a class="el" href="group__ethosu__callback__api.html">platform-specific functions</a> listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">API Function   </th><th class="markdownTableHeadNone">When an overwrite is needed    </th></tr>
@@ -214,7 +214,7 @@ Platform-specific functions</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a">ethosu_config_select()</a>   </td><td class="markdownTableBodyNone">Memory-region attributes depend on the address or run-time placement.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Mutex and semaphore hooks in <a class="el" href="group__ethosu__callback__api.html">Callbacks</a>   </td><td class="markdownTableBodyNone">Multiple tasks or NPUs can use the driver and require <a class="el" href="#mutex-and-semaphores">platform-specific RTOS locking</a>.    </td></tr>
+<td class="markdownTableBodyNone">Mutex and semaphore functions in <a class="el" href="group__ethosu__callback__api.html">Platform-specific functions</a>   </td><td class="markdownTableBodyNone">Multiple tasks or NPUs can use the driver and require <a class="el" href="#mutex-and-semaphores">platform-specific RTOS locking</a>.    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a>, <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a>   </td><td class="markdownTableBodyNone"><a class="el" href="#beginend-inference-callbacks">Inference tracing, power control, or application callbacks are required</a>.   </td></tr>
 </table>

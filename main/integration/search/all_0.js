@@ -9,6 +9,6 @@ var searchData=
   ['and_20configuration_20to_20version_20control_6',['Add ML model and configuration to version control',['../index.html#autotoc_md4',1,'']]],
   ['and_20the_20linker_20script_7',['Configure memory placement and the linker script',['../index.html#integration_configure_memory',1,'']]],
   ['and_20tune_8',['Validate and tune',['../index.html#integration_validate_tune',1,'']]],
-  ['api_9',['API',['../../driver/group__ethosu__driver__api.html',1,'Driver API'],['../../driver/group__ethosu__pmu__api.html',1,'Performance Monitoring Unit API']]],
+  ['api_9',['API',['../../driver/group__ethosu__driver__api.html',1,'Ethos-U Driver API'],['../../driver/group__ethosu__pmu__api.html',1,'Performance Monitoring Unit API']]],
   ['application_20integration_10',['Complete application integration',['../index.html#integration_complete_application',1,'']]]
 ];

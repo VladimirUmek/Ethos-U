@@ -1,10 +1,14 @@
 var searchData=
 [
-  ['semaphores_0',['Mutex and semaphores',['../index.html#mutex-and-semaphores',1,'']]],
-  ['software_20component_1',['CMSIS Software component',['../index.html#autotoc_md1',1,'']]],
-  ['source_20code_2',['Ethos-U driver source code',['../index.html#autotoc_md0',1,'']]],
-  ['specific_20functions_3',['Platform-specific functions',['../index.html#autotoc_md4',1,'']]],
-  ['stream_20and_20base_20pointer_20routing_4',['Command-stream and base-pointer routing',['../index.html#autotoc_md11',1,'']]],
-  ['structures_5',['Structures',['../group__ethosu__driver__structs.html',1,'']]],
-  ['synchronous_20invocation_6',['Synchronous invocation',['../index.html#autotoc_md6',1,'']]]
+  ['u_20driver_20api_0',['Ethos-U Driver API',['../group__ethosu__driver__api.html',1,'']]],
+  ['u_20driver_20source_20code_1',['Ethos-U driver source code',['../index.html#autotoc_md0',1,'']]],
+  ['u55_20and_20ethos_20u65_20axi_20limits_2',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#autotoc_md12',1,'']]],
+  ['u65_20axi_20limits_3',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#autotoc_md12',1,'']]],
+  ['u85_20axi_20limits_4',['Ethos-U85 AXI limits',['../index.html#autotoc_md15',1,'']]],
+  ['u85_20memory_20attributes_5',['Ethos-U85 memory attributes',['../index.html#autotoc_md14',1,'']]],
+  ['u85_20power_20ramping_6',['Ethos-U85 power ramping',['../index.html#autotoc_md13',1,'']]],
+  ['unit_20api_7',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
+  ['unit_20pmu_8',['Performance Monitoring Unit (PMU)',['../index.html#autotoc_md17',1,'']]],
+  ['up_20checklist_9',['Bring-up checklist',['../index.html#autotoc_md19',1,'']]],
+  ['usage_10',['Driver Usage',['../index.html#autotoc_md5',1,'']]]
 ];

@@ -32,15 +32,8 @@
   </compound>
   <compound kind="group">
     <name>ethosu_driver_api</name>
-    <title>Driver API</title>
+    <title>Ethos-U Driver API</title>
     <filename>group__ethosu__driver__api.html</filename>
-    <subgroup>ethosu_core_api</subgroup>
-    <subgroup>ethosu_pmu_api</subgroup>
-  </compound>
-  <compound kind="group">
-    <name>ethosu_core_api</name>
-    <title>Core driver</title>
-    <filename>group__ethosu__core__api.html</filename>
     <subgroup>ethosu_driver_structs</subgroup>
     <subgroup>ethosu_public_api</subgroup>
     <subgroup>ethosu_callback_api</subgroup>
@@ -154,7 +147,7 @@
   </compound>
   <compound kind="group">
     <name>ethosu_callback_api</name>
-    <title>Platform hooks</title>
+    <title>Platform-specific functions</title>
     <filename>group__ethosu__callback__api.html</filename>
     <member kind="function">
       <type>void</type>
