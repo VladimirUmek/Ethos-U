@@ -1,14 +1,10 @@
 /**
-\defgroup ethosu_driver_api Driver API
-\brief Interfaces for controlling an Ethos-U NPU and its Performance Monitoring Unit.
-\details
-The public interface is provided by two headers:
-- \c ethosu_driver.h contains the core driver types, functions, and platform hooks.
-- \c pmu_ethosu.h contains the Performance Monitoring Unit (PMU) interface.
-*/
-
-/**
-\defgroup ethosu_core_api Core driver
-\ingroup ethosu_driver_api
+\defgroup ethosu_driver_api Ethos-U Driver API
 \brief Types and functions declared in \c ethosu_driver.h.
+\details
+The public driver interface is provided by two headers. This group contains the
+core driver types, functions, and platform-specific functions from
+\c ethosu_driver.h. The
+Performance Monitoring Unit interface from \c pmu_ethosu.h is documented in
+\ref ethosu_pmu_api.
 */

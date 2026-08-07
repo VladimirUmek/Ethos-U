@@ -9,7 +9,8 @@ The Ethos-U driver operations and features at a glance:
 - Starts the NPU and handles completion or fault interrupts;
 - Supports synchronous and asynchronous invocation;
 - Provides access to the Ethos-U Performance Monitoring Unit (PMU);
-- Exposes weak platform hooks for power, cache, address, and RTOS integration.
+- Exposes weak \ref ethosu_callback_api "platform-specific functions" for
+  power, cache, address, and RTOS integration.
 
 The input to the Ethos-U driver must provide:
 
@@ -81,14 +82,17 @@ and \ref ethosu_driver_structs "Driver structures" for public data types.
 
 ## Platform-specific functions
 
-The driver provides default implementations for platform-specific functions listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.
+The driver provides default implementations for
+\ref ethosu_callback_api "platform-specific functions" listed below. The
+default weak function implementation of the driver should be carefully review
+and overwritten when needed.
 
 | API Function | When an overwrite is needed |
 | --- | --- |
 | \ref ethosu_flush_dcache "ethosu_flush_dcache()", \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" | CPU-cached memory is shared with the NPU and requires [platform-specific cache maintenance](#data-caching). |
 | \ref ethosu_address_remap "ethosu_address_remap()" | The CPU and NPU use different addresses for the same storage. |
 | \ref ethosu_config_select "ethosu_config_select()" | Memory-region attributes depend on the address or run-time placement. |
-| Mutex and semaphore hooks in \ref ethosu_callback_api "Callbacks" | Multiple tasks or NPUs can use the driver and require [platform-specific RTOS locking](#mutex-and-semaphores). |
+| Mutex and semaphore functions in \ref ethosu_callback_api "Platform-specific functions" | Multiple tasks or NPUs can use the driver and require [platform-specific RTOS locking](#mutex-and-semaphores). |
 | \ref ethosu_inference_begin "ethosu_inference_begin()", \ref ethosu_inference_end "ethosu_inference_end()" | [Inference tracing, power control, or application callbacks are required](#beginend-inference-callbacks). |
 
 Cache policy, linker placement, and region configuration are system-level 
