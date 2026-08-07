@@ -225,11 +225,10 @@ Driver Usage</h1>
 <h2><a class="anchor" id="autotoc_md6"></a>
 Synchronous invocation</h2>
 <p>A typical usage of the driver can be the following:</p>
-<div class="fragment"><div class="line"> [C]</div>
-<div class="line">// reserve a driver to be used (this call could block until a driver is available)</div>
-<div class="line">struct ethosu_driver *drv = ethosu_reserve_driver();</div>
+<div class="fragment"><div class="line"><span class="comment">// reserve a driver to be used (this call could block until a driver is available)</span></div>
+<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv = <a class="code hl_function" href="group__ethosu__public__api.html#ga92c30eeceb5152d6f06ff9c5859a1381">ethosu_reserve_driver</a>();</div>
 <div class="line">...</div>
-<div class="line">// run one or more inferences</div>
+<div class="line"><span class="comment">// run one or more inferences</span></div>
 <div class="line">int result = ethosu_invoke(drv,</div>
 <div class="line">                           custom_data_ptr,</div>
 <div class="line">                           custom_data_size,</div>
@@ -237,17 +236,16 @@ Synchronous invocation</h2>
 <div class="line">                           base_addr_size,</div>
 <div class="line">                           num_base_addr);</div>
 <div class="line">...</div>
-<div class="line">// release the driver for others to use</div>
+<div class="line"><span class="comment">// release the driver for others to use</span></div>
 <div class="line">ethosu_release_driver(drv);</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
 Asynchronous invocation</h2>
 <p>A typical usage of the driver can be the following:</p>
-<div class="fragment"><div class="line"> [C]</div>
-<div class="line">// reserve a driver to be used (this call could block until a driver is available)</div>
-<div class="line">struct ethosu_driver *drv = ethosu_reserve_driver();</div>
+<div class="fragment"><div class="line"><span class="comment">// reserve a driver to be used (this call could block until a driver is available)</span></div>
+<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv = <a class="code hl_function" href="group__ethosu__public__api.html#ga92c30eeceb5152d6f06ff9c5859a1381">ethosu_reserve_driver</a>();</div>
 <div class="line">...</div>
-<div class="line">// run one or more inferences</div>
-<div class="line">int result = ethosu_invoke_async(drv,</div>
+<div class="line"><span class="comment">// run one or more inferences</span></div>
+<div class="line">int result = <a class="code hl_function" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async</a>(drv,</div>
 <div class="line">                                 custom_data_ptr,</div>
 <div class="line">                                 custom_data_size,</div>
 <div class="line">                                 base_addr,</div>
@@ -255,33 +253,23 @@ Asynchronous invocation</h2>
 <div class="line">                                 num_base_addr,</div>
 <div class="line">                                 user_arg);</div>
 <div class="line">...</div>
-<div class="line">// do some other work</div>
+<div class="line"><span class="comment">// do some other work</span></div>
 <div class="line">...</div>
-<div class="line">int ret;</div>
-<div class="line">do {</div>
-<div class="line">    // true = blocking, false = non-blocking</div>
-<div class="line">    // ret &gt; 0 means inference not completed (only for non-blocking mode)</div>
-<div class="line">    ret = ethosu_wait(drv, &lt;true|false&gt;);</div>
-<div class="line">} while(ret &gt; 0);</div>
+<div class="line"><span class="keywordtype">int</span> ret;</div>
+<div class="line"><span class="keywordflow">do</span> {</div>
+<div class="line">    <span class="comment">// true = blocking, false = non-blocking</span></div>
+<div class="line">    <span class="comment">// ret &gt; 0 means inference not completed (only for non-blocking mode)</span></div>
+<div class="line">    ret = <a class="code hl_function" href="group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait</a>(drv, &lt;<span class="keyword">true</span>|<span class="keyword">false</span>&gt;);</div>
+<div class="line">} <span class="keywordflow">while</span>(ret &gt; 0);</div>
 <div class="line">...</div>
-<div class="line">// release the driver for others to use</div>
+<div class="line"><span class="comment">// release the driver for others to use</span></div>
 <div class="line">ethosu_release_driver(drv);</div>
 </div><!-- fragment --><p>Note that if <a class="el" href="group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> is invoked from a different thread and concurrently with <a class="el" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>, the user is responsible to guarantee that <a class="el" href="group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> is called after a successful completion of <a class="el" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>. Otherwise <a class="el" href="group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b">ethosu_wait()</a> might fail and not actually wait for the inference completion.</p>
 <p>The following simplified sequence diagram shows the asynchronous invocation:</p>
-<div class="fragment"><div class="line">sequenceDiagram</div>
-<div class="line">    participant Application</div>
-<div class="line">    participant Driver</div>
-<div class="line">    participant ISR</div>
-<div class="line">    participant Ethos-U NPU</div>
-<div class="line"> </div>
-<div class="line">    Application-&gt;&gt;Driver: ethosu_invoke_async()</div>
-<div class="line">    Driver-&gt;&gt;Ethos-U NPU: Program regions and start</div>
-<div class="line">    Driver--&gt;&gt;Application: Submission result</div>
-<div class="line">    Application-&gt;&gt;Driver: ethosu_wait()</div>
-<div class="line">    Ethos-U NPU-&gt;&gt;ISR: Completion or fault interrupt</div>
-<div class="line">    ISR-&gt;&gt;Driver: ethosu_irq_handler()</div>
-<div class="line">    Driver--&gt;&gt;Application: Wait completes</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+<div class="mscgraph">
+<img src="msc_inline_mscgraph_1.png" alt="msc_inline_mscgraph_1" border="0"/>
+</div>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Driver initialization</h2>
 <p>In order to use a driver it first needs to be initialized by calling <a class="el" href="group__ethosu__public__api.html#gae021e7e1e40a33303dcc17041a1f2911">ethosu_init()</a>, which also registers the handle in the list of available drivers. A driver can be torn down by using <a class="el" href="group__ethosu__public__api.html#ga7d07a2c3e7c66236d31986c191c7c6e1">ethosu_deinit()</a>, which also removes the driver from the list.</p>
 <p>The correct mapping is one driver per NPU device. Note that the NPUs must have the same configuration, indeed the NPU configuration can be only one, which is defined at compile time.</p>
@@ -295,20 +283,19 @@ Data caching</h1>
 <p>The driver also exposes a weakly linked symbol for cache invalidation called <a class="el" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66">ethosu_invalidate_dcache()</a>, that must be overriden when the data cache is used. After an inference completes on the NPU, the driver will call this function to invalidate the data cache, to ensure cache coherency.</p>
 <p>Make sure that any base pointers used for flush/invalidation is aligned to the cache line size of your CPU, typically 32 bytes. Due to the uncertainty of tensor alignment, the driver only flushes/invalidates on base pointer level.</p>
 <p>A simple example implementation for the weak functions, using CMSIS primitives could look like below:</p>
-<div class="fragment"><div class="line"> [C++]</div>
-<div class="line">extern &quot;C&quot; {</div>
-<div class="line">void ethosu_flush_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)</div>
+<div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#gae23e3120197768bbd1b21fd03823183a">ethosu_flush_dcache</a>(<span class="keyword">const</span> uint64_t *base_addr, <span class="keyword">const</span> <span class="keywordtype">size_t</span> *base_addr_size, <span class="keywordtype">int</span> num_base_addr)</div>
 <div class="line">{</div>
-<div class="line">    for (int i = 0; i &lt; num_base_addr; i++)</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; num_base_addr; i++)</div>
 <div class="line">        SCB_CleanDCache_by_Addr((uint32_t *)(uintptr_t)base_addr[i], base_addr_size[i]);</div>
 <div class="line">}</div>
 <div class="line"> </div>
-<div class="line">void ethosu_invalidate_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66">ethosu_invalidate_dcache</a>(<span class="keyword">const</span> uint64_t *base_addr, <span class="keyword">const</span> <span class="keywordtype">size_t</span> *base_addr_size, <span class="keywordtype">int</span> num_base_addr)</div>
 <div class="line">{</div>
-<div class="line">    for (int i = 0; i &lt; num_base_addr; i++)</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; num_base_addr; i++)</div>
 <div class="line">        SCB_InvalidateDCache_by_Addr((uint32_t *)(uintptr_t)base_addr[i], base_addr_size[i]);</div>
 <div class="line">}</div>
-<div class="line">} // extern &quot;C&quot;</div>
+<div class="line">} <span class="comment">// extern &quot;C&quot;</span></div>
 </div><!-- fragment --><p>The NPU contain memory attributes that should be set to match the settings used in the MPU configuration for the memories used. See <code>NPU_MEM_ATTR_[0-3]</code> for Ethos-U85 and the <code>AXI_LIMIT[0-3]_MEM_TYPE</code> for Ethos-U55/Ethos-U65 in corresponding <code>src/ethosu_config_uX5.h</code> files.</p>
 <h1><a class="anchor" id="mutex-and-semaphores"></a>
 Mutex and semaphores</h1>
@@ -318,50 +305,47 @@ Mutex and semaphores</h1>
 <p>The driver allows for an RTOS to set a timeout for the NPU interrupt semaphore. The timeout can be set with the CMake variable <code>ETHOSU_INFERENCE_TIMEOUT</code>, which is then used as <code>timeout</code> argument for the interrupt semaphore take call. Note that the unit is implementation defined, the value is shipped as is to the <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725">ethosu_semaphore_take()</a> function and an override implementation should cast it to the appropriate type and/or convert it to the unit desired.</p>
 <p>A macro <code>ETHOSU_SEMAPHORE_WAIT_FOREVER</code> is defined in the driver header file, and should be made sure to map to the RTOS' equivalent of 'no timeout/wait forever'. Inference timeout value defaults to this if left unset. The macro is used internally in the driver for the available NPU's, thus the driver does NOT support setting a timeout other than forever when waiting for an NPU to become available (global ethosu_semaphore).</p>
 <p>The mutex and semaphore APIs are defined as weak linked functions that can be overridden by the user. The APIs are the usual ones and described below:</p>
-<div class="fragment"><div class="line"> [C]</div>
-<div class="line">// create a mutex by returning back a handle</div>
-<div class="line">void *ethosu_mutex_create(void);</div>
-<div class="line">// lock the given mutex</div>
-<div class="line">int ethosu_mutex_lock(void *mutex);</div>
-<div class="line">// unlock the given mutex</div>
-<div class="line">int ethosu_mutex_unlock(void *mutex);</div>
+<div class="fragment"><div class="line"><span class="comment">// create a mutex by returning back a handle</span></div>
+<div class="line"><span class="keywordtype">void</span> *<a class="code hl_function" href="group__ethosu__callback__api.html#ga263037460610168af74801efae3385a2">ethosu_mutex_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><span class="comment">// lock the given mutex</span></div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="group__ethosu__callback__api.html#ga17827ea06a500bad6bda5aa9e751f4f1">ethosu_mutex_lock</a>(<span class="keywordtype">void</span> *mutex);</div>
+<div class="line"><span class="comment">// unlock the given mutex</span></div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="group__ethosu__callback__api.html#gaa0075944c4284c6ced884698e560eea4">ethosu_mutex_unlock</a>(<span class="keywordtype">void</span> *mutex);</div>
 <div class="line"> </div>
-<div class="line">// create a (binary) semaphore by returning back a handle</div>
-<div class="line">void *ethosu_semaphore_create(void);</div>
-<div class="line">// take from the given semaphore, accepting a timeout (unit impl. defined)</div>
-<div class="line">int ethosu_semaphore_take(void *sem, uint64_t timeout);</div>
-<div class="line">// give from the given semaphore</div>
-<div class="line">int ethosu_semaphore_give(void *sem);</div>
+<div class="line"><span class="comment">// create a (binary) semaphore by returning back a handle</span></div>
+<div class="line"><span class="keywordtype">void</span> *<a class="code hl_function" href="group__ethosu__callback__api.html#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><span class="comment">// take from the given semaphore, accepting a timeout (unit impl. defined)</span></div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725">ethosu_semaphore_take</a>(<span class="keywordtype">void</span> *sem, uint64_t timeout);</div>
+<div class="line"><span class="comment">// give from the given semaphore</span></div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="group__ethosu__callback__api.html#ga71614f92cb653bed7b7632b0362939b4">ethosu_semaphore_give</a>(<span class="keywordtype">void</span> *sem);</div>
 </div><!-- fragment --><h1><a class="anchor" id="beginend-inference-callbacks"></a>
 Begin/End inference callbacks</h1>
 <p>The driver provide weak linked functions as hooks to receive callbacks whenever an inference begins and ends. The user can override such functions when needed. To avoid memory leaks, any allocations done in <a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a> must be balanced by a corresponding free of the memory in <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a> callback.</p>
 <p>The end callback will always be called if the begin callback has been called, including in the event of an interrupt semaphore take timeout.</p>
-<div class="fragment"><div class="line"> [C]</div>
-<div class="line">void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg);</div>
-<div class="line">void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg);</div>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv, <span class="keywordtype">void</span> *user_arg);</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv, <span class="keywordtype">void</span> *user_arg);</div>
 </div><!-- fragment --><p>Note that the <code>void *user_arg</code> pointer passed to <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3()</a> or <a class="el" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a> is the same pointer passed to the <a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin()</a> and <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end()</a> callbacks. For example:</p>
-<div class="fragment"><div class="line"> [C]</div>
-<div class="line">void my_function() {</div>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> my_function() {</div>
 <div class="line">    ...</div>
-<div class="line">    struct my_data data = {...};</div>
-<div class="line">    int result = ethosu_invoke_v3(drv,</div>
+<div class="line">    <span class="keyword">struct </span>my_data data = {...};</div>
+<div class="line">    <span class="keywordtype">int</span> result = <a class="code hl_function" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3</a>(drv,</div>
 <div class="line">                                  custom_data_ptr,</div>
 <div class="line">                                  custom_data_size,</div>
 <div class="line">                                  base_addr,</div>
 <div class="line">                                  base_addr_size,</div>
 <div class="line">                                  num_base_addr,</div>
-<div class="line">                                  (void *)&amp;data);</div>
+<div class="line">                                  (<span class="keywordtype">void</span> *)&amp;data);</div>
 <div class="line">    ....</div>
 <div class="line">}</div>
 <div class="line"> </div>
-<div class="line">void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg) {</div>
-<div class="line">        struct my_data *data = (struct my_data*) user_arg;</div>
-<div class="line">        // use drv and data here</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv, <span class="keywordtype">void</span> *user_arg) {</div>
+<div class="line">        <span class="keyword">struct </span>my_data *data = (<span class="keyword">struct </span>my_data*) user_arg;</div>
+<div class="line">        <span class="comment">// use drv and data here</span></div>
 <div class="line">}</div>
 <div class="line"> </div>
-<div class="line">void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg) {</div>
-<div class="line">        struct my_data *data = (struct my_data*) user_arg;</div>
-<div class="line">        // use drv and data here</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv, <span class="keywordtype">void</span> *user_arg) {</div>
+<div class="line">        <span class="keyword">struct </span>my_data *data = (<span class="keyword">struct </span>my_data*) user_arg;</div>
+<div class="line">        <span class="comment">// use drv and data here</span></div>
 <div class="line">}</div>
 </div><!-- fragment --><p>For a practical use of these callbacks, see the <a class="el" href="#pmu_example">PMU example</a>.</p>
 <h1><a class="anchor" id="driver_configuration"></a>
@@ -601,57 +585,56 @@ Interpreting PMU events</h2>
 <h2><a class="anchor" id="pmu_example"></a>
 PMU example</h2>
 <p>The following example counts NPU-active and NPU-idle events and records the NPU cycle count for one inference. Pass a pointer to <code>struct pmu_results</code> as the <code>user_arg</code> to <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3()</a> or <a class="el" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b">ethosu_invoke_async()</a>. The callbacks use <a class="el" href="group__ethosu__pmu__api.html#ga6e52be0fc9b15f9351e83698bd9b5888">ETHOSU_PMU_Get_NumEventCounters()</a> so the same pattern can be extended with additional events on targets that provide more counters.</p>
-<div class="fragment"><div class="line"> [C]</div>
-<div class="line">#include &quot;ethosu_driver.h&quot;</div>
-<div class="line">#include &quot;pmu_ethosu.h&quot;</div>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;ethosu_driver.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;pmu_ethosu.h&quot;</span></div>
 <div class="line"> </div>
-<div class="line">#define PMU_EXAMPLE_EVENT_COUNT 2U</div>
+<div class="line"><span class="preprocessor">#define PMU_EXAMPLE_EVENT_COUNT 2U</span></div>
 <div class="line"> </div>
-<div class="line">static const enum ethosu_pmu_event_type pmu_events[PMU_EXAMPLE_EVENT_COUNT] = {</div>
+<div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">enum</span> ethosu_pmu_event_type pmu_events[PMU_EXAMPLE_EVENT_COUNT] = {</div>
 <div class="line">    ETHOSU_PMU_NPU_ACTIVE,</div>
 <div class="line">    ETHOSU_PMU_NPU_IDLE,</div>
 <div class="line">};</div>
 <div class="line"> </div>
-<div class="line">struct pmu_results {</div>
+<div class="line"><span class="keyword">struct </span>pmu_results {</div>
 <div class="line">    uint64_t cycle_count;</div>
 <div class="line">    uint32_t event_count[PMU_EXAMPLE_EVENT_COUNT];</div>
 <div class="line">    uint32_t num_events;</div>
 <div class="line">};</div>
 <div class="line"> </div>
-<div class="line">void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg)</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f">ethosu_inference_begin</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv, <span class="keywordtype">void</span> *user_arg)</div>
 <div class="line">{</div>
-<div class="line">    struct pmu_results *results = (struct pmu_results *)user_arg;</div>
-<div class="line">    uint32_t num_events = ETHOSU_PMU_Get_NumEventCounters();</div>
+<div class="line">    <span class="keyword">struct </span>pmu_results *results = (<span class="keyword">struct </span>pmu_results *)user_arg;</div>
+<div class="line">    uint32_t num_events = <a class="code hl_function" href="group__ethosu__pmu__api.html#ga6e52be0fc9b15f9351e83698bd9b5888" title="Get number of PMU event counters.">ETHOSU_PMU_Get_NumEventCounters</a>();</div>
 <div class="line"> </div>
-<div class="line">    if (num_events &gt; PMU_EXAMPLE_EVENT_COUNT) {</div>
+<div class="line">    <span class="keywordflow">if</span> (num_events &gt; PMU_EXAMPLE_EVENT_COUNT) {</div>
 <div class="line">        num_events = PMU_EXAMPLE_EVENT_COUNT;</div>
 <div class="line">    }</div>
 <div class="line">    results-&gt;num_events = num_events;</div>
 <div class="line"> </div>
-<div class="line">    ETHOSU_PMU_Enable(drv);</div>
-<div class="line">    ETHOSU_PMU_CYCCNT_Reset(drv);</div>
-<div class="line">    ETHOSU_PMU_EVCNTR_ALL_Reset(drv);</div>
+<div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#gac4ed0239a963456a74e18ec7a06fd086" title="HW Supported ETHOSU PMU Events.">ETHOSU_PMU_Enable</a>(drv);</div>
+<div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#gabe2a2b4b99bf753d02b5683fab77988c" title="Reset cycle counter.">ETHOSU_PMU_CYCCNT_Reset</a>(drv);</div>
+<div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#ga6bfb8e6dbb653f003fd4a196b895a79d" title="Reset all event counters.">ETHOSU_PMU_EVCNTR_ALL_Reset</a>(drv);</div>
 <div class="line"> </div>
-<div class="line">    for (uint32_t i = 0; i &lt; num_events; ++i) {</div>
-<div class="line">        ETHOSU_PMU_Set_EVTYPER(drv, i, pmu_events[i]);</div>
-<div class="line">        ETHOSU_PMU_CNTR_Enable(drv, 1UL &lt;&lt; i);</div>
+<div class="line">    <span class="keywordflow">for</span> (uint32_t i = 0; i &lt; num_events; ++i) {</div>
+<div class="line">        <a class="code hl_function" href="group__ethosu__pmu__api.html#ga73f8bf9079d47e1d6afe9bf7a49f6999" title="Set event to count for PMU eventer counter.">ETHOSU_PMU_Set_EVTYPER</a>(drv, i, pmu_events[i]);</div>
+<div class="line">        <a class="code hl_function" href="group__ethosu__pmu__api.html#ga100f5c40ed0cfda7fd0f6dae35c51da2" title="Enable counters.">ETHOSU_PMU_CNTR_Enable</a>(drv, 1UL &lt;&lt; i);</div>
 <div class="line">    }</div>
 <div class="line"> </div>
-<div class="line">    ETHOSU_PMU_PMCCNTR_CFG_Set_Start_Event(drv, ETHOSU_PMU_NPU_ACTIVE);</div>
-<div class="line">    ETHOSU_PMU_PMCCNTR_CFG_Set_Stop_Event(drv, ETHOSU_PMU_NPU_IDLE);</div>
-<div class="line">    ETHOSU_PMU_CNTR_Enable(drv, ETHOSU_PMU_CCNT_Msk);</div>
+<div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#gaebaab4ed38f8dee05ad50b1eac8a73b3" title="Set start event number for the cycle counter.">ETHOSU_PMU_PMCCNTR_CFG_Set_Start_Event</a>(drv, ETHOSU_PMU_NPU_ACTIVE);</div>
+<div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#ga8cd24678c33e3d238ec0866e61150bb4" title="Set stop event number for the cycle counter.">ETHOSU_PMU_PMCCNTR_CFG_Set_Stop_Event</a>(drv, ETHOSU_PMU_NPU_IDLE);</div>
+<div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#ga100f5c40ed0cfda7fd0f6dae35c51da2" title="Enable counters.">ETHOSU_PMU_CNTR_Enable</a>(drv, ETHOSU_PMU_CCNT_Msk);</div>
 <div class="line">}</div>
 <div class="line"> </div>
-<div class="line">void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg)</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c">ethosu_inference_end</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv, <span class="keywordtype">void</span> *user_arg)</div>
 <div class="line">{</div>
-<div class="line">    struct pmu_results *results = (struct pmu_results *)user_arg;</div>
+<div class="line">    <span class="keyword">struct </span>pmu_results *results = (<span class="keyword">struct </span>pmu_results *)user_arg;</div>
 <div class="line"> </div>
-<div class="line">    results-&gt;cycle_count = ETHOSU_PMU_Get_CCNTR(drv);</div>
-<div class="line">    for (uint32_t i = 0; i &lt; results-&gt;num_events; ++i) {</div>
-<div class="line">        results-&gt;event_count[i] = ETHOSU_PMU_Get_EVCNTR(drv, i);</div>
+<div class="line">    results-&gt;cycle_count = <a class="code hl_function" href="group__ethosu__pmu__api.html#ga99ab8589f4909184d0a1038887f1228d" title="Read cycle counter (64 bit)">ETHOSU_PMU_Get_CCNTR</a>(drv);</div>
+<div class="line">    <span class="keywordflow">for</span> (uint32_t i = 0; i &lt; results-&gt;num_events; ++i) {</div>
+<div class="line">        results-&gt;event_count[i] = <a class="code hl_function" href="group__ethosu__pmu__api.html#ga61c678210a7d508e9436c144964246ff" title="Read event counter.">ETHOSU_PMU_Get_EVCNTR</a>(drv, i);</div>
 <div class="line">    }</div>
 <div class="line"> </div>
-<div class="line">    ETHOSU_PMU_Disable(drv);</div>
+<div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#gaf976f4e4d18229593591bdf984645018" title="Disable the PMU.">ETHOSU_PMU_Disable</a>(drv);</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>ToDo: does CMSIS-Debugger offer a dialog for Ethos_PMU?</p>
 <h1><a class="anchor" id="autotoc_md19"></a>
