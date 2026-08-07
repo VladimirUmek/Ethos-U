@@ -6,6 +6,7 @@ var searchData=
   ['configuration_20to_20version_20control_3',['Add ML model and configuration to version control',['../index.html#autotoc_md4',1,'']]],
   ['configure_20memory_20placement_20and_20the_20linker_20script_4',['Configure memory placement and the linker script',['../index.html#integration_configure_memory',1,'']]],
   ['control_5',['Add ML model and configuration to version control',['../index.html#autotoc_md4',1,'']]],
-  ['create_20the_20em_20csolution_20project_20em_6',['Create the &lt;em&gt;csolution project&lt;/em&gt;',['../index.html#integration_create_csolution',1,'']]],
-  ['csolution_20project_20em_7',['Create the &lt;em&gt;csolution project&lt;/em&gt;',['../index.html#integration_create_csolution',1,'']]]
+  ['core_20driver_6',['Core driver',['../../driver/group__ethosu__core__api.html',1,'']]],
+  ['create_20the_20em_20csolution_20project_20em_7',['Create the &lt;em&gt;csolution project&lt;/em&gt;',['../index.html#integration_create_csolution',1,'']]],
+  ['csolution_20project_20em_8',['Create the &lt;em&gt;csolution project&lt;/em&gt;',['../index.html#integration_create_csolution',1,'']]]
 ];

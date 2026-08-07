@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['functions_0',['Functions',['../../driver/group__ethosu__public__api.html',1,'']]]
+  ['core_20driver_0',['Core driver',['../../driver/group__ethosu__core__api.html',1,'']]]
 ];

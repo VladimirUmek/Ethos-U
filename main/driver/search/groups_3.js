@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['monitoring_20unit_20api_0',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]]
+  ['functions_0',['Functions',['../group__ethosu__public__api.html',1,'']]]
 ];
