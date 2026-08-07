@@ -44,7 +44,7 @@
   <td id="projectlogo" style="padding: 1em;"><img alt="Logo" src="arm.png"/></td>
   <td style="padding-left: 2em; padding-bottom: 1em;padding-top: 1em;">
   <div id="projectname">Ethos-U Integration for Cortex-M
-   &#160;<span id="projectnumber">Version 1.0.0-dev66</span>
+   &#160;<span id="projectnumber">Version 1.0.0-dev67</span>
    </div>
    <div id="projectbrief">General Information</div>
   </td>
@@ -132,7 +132,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 <ul>
 <li>This chapter introduces the terminology, architecture, and deployment flow for ML models on an Edge AI MCU.</li>
 <li><a href="../vela/index.html">Vela</a> explains how to install and use the Vela compiler, obtain or create an Ethos-U configuration, create matching linker and driver configurations, and publish the configuration in a DFP.</li>
-<li><a href="../drivers/index.html">Drivers</a> describes the low-level Ethos-U driver API, execution contract, platform hooks, and bring-up checks.</li>
+<li><a href="../driver/index.html">Driver</a> describes the low-level Ethos-U driver API, execution contract, platform hooks, and bring-up checks.</li>
 <li><a href="../integration/index.html">Integration</a> explains how to keep the compiled ML model, memory placement, driver settings, and application consistent, and how to budget, validate, and tune the complete system.</li>
 <li><a href="../zephyr/index.html">Zephyr</a> explains how to configure, build, and run an Ethos-U-accelerated Zephyr application.</li>
 </ul>
@@ -167,24 +167,16 @@ Key terms</h1>
 <li><b>System configuration</b> means the performance model for the target memory system defined in <code>vela.ini</code>.</li>
 <li><b>Memory mode</b> means the mapping of model storage roles to memory aliases defined in <code>vela.ini</code>.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<h1><a class="anchor" id="general_system_overview"></a>
 System overview</h1>
 <p>An Ethos-U NPU is a memory-mapped accelerator controlled by Cortex-M software. The Vela compiler performs target-specific compilation before deployment. At runtime, the ML inference runtime locates the generated Ethos-U custom operator and asks the driver to execute its command stream using the model's memory-region base addresses.</p>
-<div class="fragment"><div class="line">quantized ML model</div>
-<div class="line">      |</div>
-<div class="line">      v</div>
-<div class="line">Vela compiler + device-specific system and memory configuration (vela.ini)</div>
-<div class="line">      |</div>
-<div class="line">      v</div>
-<div class="line">optimized ML model: metadata + constants + Ethos-U command stream</div>
-<div class="line">      |</div>
-<div class="line">      v</div>
-<div class="line">application / ML inference runtime -&gt; Ethos-U driver -&gt; NPU</div>
-<div class="line">      ^                                      |</div>
-<div class="line">      +---------- input and output memory ---+</div>
-</div><!-- fragment --><p>The Vela compiler decides which supported operations run on the NPU and how their tensors are scheduled and placed. Unsupported TensorFlow Lite operations can remain CPU operations. At runtime, the CPU provides the command stream and region base addresses; the NPU fetches constants and input data, performs the encoded tensor operations, writes intermediate and output tensors, and signals completion.</p>
-<p>For command-line options and compiler diagnostics, see <a href="../vela/index.html">Vela</a>. For invocation and interrupt contracts, see <a href="../drivers/index.html">Drivers</a>.</p>
-<h1><a class="anchor" id="autotoc_md4"></a>
+<div class="image">
+<img src="development-flow.png" alt=""/>
+<div class="caption">
+Development Flow for Ethos-U</div></div>
+    <p>The Vela compiler decides which supported operations run on the NPU and how their tensors are scheduled and placed. Unsupported TensorFlow Lite operations can remain CPU operations that are executed utilizing <a href="https://www.keil.arm.com/packs/cmsis-nn-arm">CMSIS-NN</a>. At runtime, the CPU provides the command stream and region base addresses to the Ethos-U NPU. The NPU fetches constants and input data, performs the encoded tensor operations, writes intermediate and output tensors, and signals completion.</p>
+<p>For command-line options and compiler diagnostics, see <a href="../vela/index.html">Vela</a>. For invocation and interrupt contracts, see <a href="../driver/index.html">Driver</a>.</p>
+<h1><a class="anchor" id="autotoc_md3"></a>
 Coordinating the device configuration</h1>
 <p>An Edge AI MCU has a fixed Cortex-M, Ethos-U, interconnect, and memory integration. The software descriptions used to build an application must match that finished device:</p>
 <ol type="1">
@@ -194,7 +186,7 @@ Coordinating the device configuration</h1>
 <li>The driver configuration assigns the command stream and model regions to the matching NPU memory-access paths and attributes.</li>
 </ol>
 <p>A DFP can provide these related configuration artifacts, and CMSIS-Toolbox can resolve them for the selected device and build context. The artifacts must be consistent. The full mapping, examples, and consistency checklist are in <a href="../integration/index.html">Integration</a>. The meaning and syntax of <code>vela.ini</code> are in <a href="../vela/index.html">Vela</a>.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md4"></a>
 System configuration and memory modes at a glance</h1>
 <p>Ethos-U uses AXI bus interfaces for DMA memory access. The memory access timing for the different data classes has direct impact to overall performance. Vela optimizes the ML model execution based on system and memory parameters in the <code>vela.ini</code> file.</p>
 <p>Vela uses the alias names to model system and memory performance:</p>
@@ -215,7 +207,7 @@ Ethos-U memory modes</div></div>
 <td class="markdownTableBodyLeft">All data is stored in SRAM. Constants and tensor arena are separate logical areas, but both use SRAM. This mode provides low access latency, but the complete ML model and arena must fit in SRAM.   </td><td class="markdownTableBodyLeft">The tensor arena is stored in SRAM. Read-only constants, such as encoded weights and scales, are stored in Flash, MRAM, or DRAM. This arrangement minimizes SRAM usage.   </td><td class="markdownTableBodyLeft">Constants and tensor arena are outside SRAM, typically in external or higher-capacity memory. The SRAM provides a fast staging area for the NPU. Vela uses spilling and moves selected data through this area to reduce external memory access.   </td></tr>
 </table>
 <p>Vela maps to physical memory with the <code>system-config</code> and <code>memory-mode</code> option. The related performance parameters are obtained from the device-specific <code>vela.ini</code> file. See <a href="../vela/index.html">Vela</a> for command line syntax and <a href="../integration/index.html">Integration</a> for the corresponding linker sections, MPU/SAU attributes, cache policy, and driver region configuration.</p>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="autotoc_md5"></a>
 Deployment lifecycle</h1>
 <ol type="1">
 <li>Select the device and CMSIS-Toolbox build context. Use its DFP when the pack provides the required Ethos-U resources.</li>
@@ -227,14 +219,20 @@ Deployment lifecycle</h1>
 <li>Validate correctness with a small known-good ML model. Then measure the production ML model on hardware and tune the system based on those results.</li>
 </ol>
 <p>The detailed procedure and required evidence are in <a href="../integration/index.html">Integration</a>. The Vela compiler's estimates are useful for comparison but do not replace measurements on the target.</p>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Related resources</h1>
 <ul>
 <li><a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55">Ethos-U55</a>, <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65">Ethos-U65</a>, and <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85">Ethos-U85</a></li>
 <li><a href="https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-vela">Vela source and release documentation</a></li>
 <li><a href="https://www.keil.arm.com/packs/cmsis-nn-arm/overview/">CMSIS-NN</a></li>
 <li><a href="https://github.com/pytorch/executorch/tree/main/examples/arm">ExecuTorch Arm examples</a></li>
-<li><a href="https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms">Arm Fixed Virtual Platforms</a> </li>
+<li><a href="https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms">Arm Fixed Virtual Platforms</a></li>
+</ul>
+<p>The Technical Reference Manuals describe for each Ethos-U NPU functional behavior, interfaces, memory system, programmer's model and registers, performance, and debug features, and are intended primarily for SoC designers, system integrators, verification engineers, and low-level software developers who need hardware-specific details:</p>
+<ul>
+<li><a href="https://developer.arm.com/documentation/102420/">Ethos-U55 NPU Technical Reference Manual</a></li>
+<li><a href="https://developer.arm.com/documentation/102023/">Ethos-U65 NPU Technical Reference Manual</a></li>
+<li><a href="https://developer.arm.com/documentation/102685/">Ethos-U85 NPU Technical Reference Manual</a> </li>
 </ul>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
