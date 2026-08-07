@@ -104,7 +104,7 @@ in a single application.
 
 A typical usage of the driver can be the following:
 
-```[C]
+```c
 // reserve a driver to be used (this call could block until a driver is available)
 struct ethosu_driver *drv = ethosu_reserve_driver();
 ...
@@ -124,7 +124,7 @@ ethosu_release_driver(drv);
 
 A typical usage of the driver can be the following:
 
-```[C]
+```c
 // reserve a driver to be used (this call could block until a driver is available)
 struct ethosu_driver *drv = ethosu_reserve_driver();
 ...
@@ -159,21 +159,20 @@ the inference completion.
 
 The following simplified sequence diagram shows the asynchronous invocation:
 
-```mermaid
-sequenceDiagram
-    participant Application
-    participant Driver
-    participant ISR
-    participant Ethos-U NPU
+\msc
+    application [label="Application"],
+    driver [label="Driver"],
+    isr [label="ISR"],
+    npu [label="Ethos-U NPU"];
 
-    Application->>Driver: ethosu_invoke_async()
-    Driver->>Ethos-U NPU: Program regions and start
-    Driver-->>Application: Submission result
-    Application->>Driver: ethosu_wait()
-    Ethos-U NPU->>ISR: Completion or fault interrupt
-    ISR->>Driver: ethosu_irq_handler()
-    Driver-->>Application: Wait completes
-```
+    application=>driver [label="ethosu_invoke_async()"];
+    driver=>npu [label="Program regions and start"];
+    driver>>application [label="Submission result"];
+    application=>driver [label="ethosu_wait()"];
+    npu=>isr [label="Completion or fault interrupt"];
+    isr=>driver [label="ethosu_irq_handler()"];
+    driver>>application [label="Wait completes"];
+\endmsc
 
 ### Driver initialization
 
@@ -219,7 +218,7 @@ tensor alignment, the driver only flushes/invalidates on base pointer level.
 A simple example implementation for the weak functions, using CMSIS primitives
 could look like below:
 
-```[C++]
+```cpp
 extern "C" {
 void ethosu_flush_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
 {
@@ -272,7 +271,7 @@ for an NPU to become available (global ethosu_semaphore).
 The mutex and semaphore APIs are defined as weak linked functions that can be
 overridden by the user. The APIs are the usual ones and described below:
 
-```[C]
+```c
 // create a mutex by returning back a handle
 void *ethosu_mutex_create(void);
 // lock the given mutex
@@ -300,7 +299,7 @@ corresponding free of the memory in
 The end callback will always be called if the begin callback has been called,
 including in the event of an interrupt semaphore take timeout.
 
-```[C]
+```c
 void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg);
 void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg);
 ```
@@ -311,7 +310,7 @@ Note that the `void *user_arg` pointer passed to
 the \ref ethosu_inference_begin "ethosu_inference_begin()" and
 \ref ethosu_inference_end "ethosu_inference_end()" callbacks. For example:
 
-```[C]
+```c
 void my_function() {
     ...
     struct my_data data = {...};
@@ -610,7 +609,7 @@ cycle count for one inference. Pass a pointer to `struct pmu_results` as the
 same pattern can be extended with additional events on targets that provide more
 counters.
 
-```[C]
+```c
 #include "ethosu_driver.h"
 #include "pmu_ethosu.h"
 
