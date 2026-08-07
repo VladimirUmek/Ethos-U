@@ -2567,7 +2567,7 @@ SKIP_FUNCTION_MACROS   = NO
 # the path). If a tag file is not located in the directory in which Doxygen is
 # run, you must also specify the path to the tagfile here.
 
-TAGFILES               = ../../html/drivers/drivers.tag=../drivers
+TAGFILES               = ../../html/driver/driver.tag=../driver
 
 # When a file name is specified after GENERATE_TAGFILE, Doxygen will create a
 # tag file that is based on the input files it reads. See section "Linking to

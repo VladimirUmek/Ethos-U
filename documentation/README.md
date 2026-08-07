@@ -45,7 +45,7 @@ Directory | Description
 .\doxygen\style_template\ | Additional files defining styles and appearance
 .\doxygen\general\general.dxy | Doxygen configuration for the General section
 .\doxygen\vela\vela.dxy | Doxygen configuration for the Vela section
-.\doxygen\drivers\drivers.dxy | Doxygen configuration for the Drivers section
+.\doxygen\driver\driver.dxy | Doxygen configuration for the Driver section
 .\doxygen\integration\integration.dxy | Doxygen configuration for the Integration section
 .\doxygen\zephyr\zephyr.dxy | Doxygen configuration for the Zephyr section
 .\doxygen\&lt;section&gt;\src\ | Markdown sources for each section
@@ -60,13 +60,13 @@ Section | Content
 :-- | :--
 General | Architecture overview, terminology, and routing to detailed material.
 Vela | Compiler installation, inputs, options, configuration syntax, output, and compiler diagnostics.
-Drivers | Low-level driver behavior, public API, runtime execution contract, interrupts, and platform hooks.
+Driver | Low-level driver behavior, public API, runtime execution contract, interrupts, and platform hooks.
 Integration | Cross-component design: memory topology, linker and MPU/SAU placement, cache policy, Vela-to-driver mapping, RTOS concerns, budgeting, validation, and tuning.
 Zephyr | Zephyr setup, Ethos-U devicetree and Kconfig configuration, west and CMSIS Solution workflows, and an FVP example.
 
 When information affects more than one component, document the complete decision
 in Integration. Keep only the component-specific syntax or API contract in Vela
-or Drivers and link to Integration. General should summarize concepts and link
+or Driver and link to Integration. General should summarize concepts and link
 to the main source of information rather than repeat configuration tables.
 
 ### Authoring for engineers and automated agents

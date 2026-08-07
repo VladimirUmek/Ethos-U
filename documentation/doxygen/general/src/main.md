@@ -7,7 +7,7 @@ This documentation is organized as follows:
 - [Vela](../vela/index.html) explains how to install and use the Vela compiler,
   obtain or create an Ethos-U configuration, create matching linker and driver
   configurations, and publish the configuration in a DFP.
-- [Drivers](../drivers/index.html) describes the low-level Ethos-U driver API,
+- [Driver](../driver/index.html) describes the low-level Ethos-U driver API,
   execution contract, platform hooks, and bring-up checks.
 - [Integration](../integration/index.html) explains how to keep the compiled ML
   model, memory placement, driver settings, and application consistent, and how
@@ -71,7 +71,7 @@ interface:
 - **Memory mode** means the mapping of model storage roles to memory aliases
   defined in `vela.ini`.
 
-## System overview
+## System overview {#general_system_overview}
 
 An Ethos-U NPU is a memory-mapped accelerator controlled by Cortex-M software.
 The Vela compiler performs target-specific compilation before deployment. At
@@ -79,30 +79,16 @@ runtime, the ML inference runtime locates the generated Ethos-U custom operator
 and asks the driver to execute its command stream using the model's memory-region
 base addresses.
 
-```text
-quantized ML model
-      |
-      v
-Vela compiler + device-specific system and memory configuration (vela.ini)
-      |
-      v
-optimized ML model: metadata + constants + Ethos-U command stream
-      |
-      v
-application / ML inference runtime -> Ethos-U driver -> NPU
-      ^                                      |
-      +---------- input and output memory ---+
-```
+![Development Flow for Ethos-U](./images/development-flow.png "Development Flow for Ethos-U")
 
 The Vela compiler decides which supported operations run on the NPU and how
 their tensors are scheduled and placed. Unsupported TensorFlow Lite operations
-can remain CPU operations. At runtime, the CPU provides the command stream and region base
-addresses; the NPU fetches constants and input data, performs the encoded tensor
-operations, writes intermediate and output tensors, and signals completion.
+can remain CPU operations that are executed utilizing [CMSIS-NN](https://www.keil.arm.com/packs/cmsis-nn-arm). At runtime, the CPU provides the command stream and region base
+addresses to the Ethos-U NPU. The NPU fetches constants and input data, performs the encoded tensor operations, writes intermediate and output tensors, and signals completion.
 
 For command-line options and compiler diagnostics, see
 [Vela](../vela/index.html). For invocation and interrupt contracts, see
-[Drivers](../drivers/index.html).
+[Driver](../driver/index.html).
 
 ## Coordinating the device configuration
 
@@ -178,3 +164,13 @@ useful for comparison but do not replace measurements on the target.
 - [CMSIS-NN](https://www.keil.arm.com/packs/cmsis-nn-arm/overview/)
 - [ExecuTorch Arm examples](https://github.com/pytorch/executorch/tree/main/examples/arm)
 - [Arm Fixed Virtual Platforms](https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms)
+
+The Technical Reference Manuals describe for each Ethos-U NPU functional behavior,
+interfaces, memory system, programmer's model and registers, performance, and
+debug features, and are intended primarily for SoC designers, system
+integrators, verification engineers, and low-level software developers who need
+hardware-specific details:
+
+- [Ethos-U55 NPU Technical Reference Manual](https://developer.arm.com/documentation/102420/)
+- [Ethos-U65 NPU Technical Reference Manual](https://developer.arm.com/documentation/102023/)
+- [Ethos-U85 NPU Technical Reference Manual](https://developer.arm.com/documentation/102685/)
