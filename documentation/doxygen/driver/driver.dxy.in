@@ -992,6 +992,7 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ./src/main.md \
+                         ./src/driver.txt \
                          ./src/ethosu_driver.txt \
                          ./src/pmu_ethosu.txt \
                          ../../../source/include/ethosu_driver.h \

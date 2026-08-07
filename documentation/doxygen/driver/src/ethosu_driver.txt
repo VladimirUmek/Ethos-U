@@ -1,5 +1,6 @@
 /**
 \defgroup ethosu_driver_structs Structures
+\ingroup ethosu_core_api
 @{
 */
 
@@ -95,6 +96,7 @@
 
 /**
 \defgroup ethosu_public_api Functions
+\ingroup ethosu_core_api
 @{
 */
 
@@ -277,6 +279,7 @@
 
 /**
 \defgroup ethosu_callback_api Platform hooks
+\ingroup ethosu_core_api
 @{
 */
 

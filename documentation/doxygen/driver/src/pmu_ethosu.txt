@@ -1,5 +1,6 @@
 /**
 \defgroup ethosu_pmu_api Performance Monitoring Unit API
+\ingroup ethosu_driver_api
 \brief Control the Ethos-U Performance Monitoring Unit (PMU).
 \details
 The PMU provides a 64-bit cycle counter and programmable event counters.

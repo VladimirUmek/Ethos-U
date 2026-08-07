@@ -573,8 +573,7 @@ The Technical Reference Manual for each NPU provides the event encoding and a ha
 
 - [Ethos-U55 TRM: `PMU_EVTYPER0..3`](https://support.arm.com/documentation/102420/latest/Programmers-model/Register-page-PMU/PMU-EVTYPER0-----PMU-EVTYPER3) (Table 4-81 in PDF version).
 - [Ethos-U65 TRM: `PMU_EVTYPER0..3`](https://support.arm.com/documentation/102023/latest/Programmers-model/Register-page-PMU/PMU-EVTYPER0-----PMU-EVTYPER3) (Table 4-79 in PDF version)
-- [Ethos-U85 TRM](https://support.arm.com/documentation/102685/latest/Programmers-model/Register-sets-for-NPU-control/PMU-COUNTERS-register-summary):
-  `PMEVTYPER0..7` and the `EV_TYPE` tables.
+- [Ethos-U85 TRM: PMU_COUNTERS register summary](https://support.arm.com/documentation/102685/latest/Programmers-model/Register-sets-for-NPU-control/PMU-COUNTERS-register-summary) - `PMEVTYPER0..7` and the `EV_TYPE` tables.
 
 Use the event descriptions together with the following guidelines:
 
