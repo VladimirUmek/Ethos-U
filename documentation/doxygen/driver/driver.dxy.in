@@ -992,8 +992,10 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ./src/main.md \
-                         ./src/ref_ethos-u.txt \
-                         ../../../source/include/ethosu_driver.h
+                         ./src/ethosu_driver.txt \
+                         ./src/pmu_ethosu.txt \
+                         ../../../source/include/ethosu_driver.h \
+                         ../../../source/include/pmu_ethosu.h
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses
