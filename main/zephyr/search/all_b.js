@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['platform_20hooks_0',['Platform hooks',['../../driver/group__ethosu__callback__api.html',1,'']]],
-  ['prerequisites_1',['Prerequisites',['../index.html#autotoc_md1',1,'']]]
+  ['npu_20in_20devicetree_0',['Describe the NPU in devicetree',['../index.html#autotoc_md2',1,'']]]
 ];

@@ -240,6 +240,179 @@
       <arglist>(uint64_t address, int index)</arglist>
     </member>
   </compound>
+  <compound kind="group">
+    <name>ethosu_pmu_api</name>
+    <title>Performance Monitoring Unit API</title>
+    <filename>group__ethosu__pmu__api.html</filename>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Enable</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gac4ed0239a963456a74e18ec7a06fd086</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Disable</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gaf976f4e4d18229593591bdf984645018</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Set_EVTYPER</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga73f8bf9079d47e1d6afe9bf7a49f6999</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t num, enum ethosu_pmu_event_type type)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint32_t</type>
+      <name>ETHOSU_PMU_Get_NumEventCounters</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga6e52be0fc9b15f9351e83698bd9b5888</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>enum ethosu_pmu_event_type</type>
+      <name>ETHOSU_PMU_Get_EVTYPER</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga2450c677d035e1e2dc51c31b1feb2df8</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t num)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_CYCCNT_Reset</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gabe2a2b4b99bf753d02b5683fab77988c</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_EVCNTR_ALL_Reset</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga6bfb8e6dbb653f003fd4a196b895a79d</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_CNTR_Enable</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga100f5c40ed0cfda7fd0f6dae35c51da2</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t mask)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_CNTR_Disable</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gae13ce2d6a114658e6bf2d9d70135eeb8</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t mask)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint32_t</type>
+      <name>ETHOSU_PMU_CNTR_Status</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga285ba30593341536860b81151ec202f7</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint64_t</type>
+      <name>ETHOSU_PMU_Get_CCNTR</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga99ab8589f4909184d0a1038887f1228d</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Set_CCNTR</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga598367d9920c99b08d062b0684593e9a</anchor>
+      <arglist>(struct ethosu_driver *drv, uint64_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint32_t</type>
+      <name>ETHOSU_PMU_Get_EVCNTR</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga61c678210a7d508e9436c144964246ff</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t num)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Set_EVCNTR</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga9e64f737eaffba38af803a91696f1f19</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t num, uint32_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint32_t</type>
+      <name>ETHOSU_PMU_Get_CNTR_OVS</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga8bd68f0c49c74fe81bf91867fff71c43</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Set_CNTR_OVS</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gab6656b95629a2b087f7e47dc5d0cc897</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t mask)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Set_CNTR_IRQ_Enable</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga25620215f065e2e192299d7cca9c3c39</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t mask)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_Set_CNTR_IRQ_Disable</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga55731dad7fd178f52f3f17bf9e696187</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t mask)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint32_t</type>
+      <name>ETHOSU_PMU_Get_IRQ_Enable</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gabcfa90c7c1a1078a13c608986f65a893</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_CNTR_Increment</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gaab2e8591bd63f87dffb38e1cfa6df5e9</anchor>
+      <arglist>(struct ethosu_driver *drv, uint32_t mask)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_PMCCNTR_CFG_Set_Start_Event</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>gaebaab4ed38f8dee05ad50b1eac8a73b3</anchor>
+      <arglist>(struct ethosu_driver *drv, enum ethosu_pmu_event_type start_event)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ETHOSU_PMU_PMCCNTR_CFG_Set_Stop_Event</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga8cd24678c33e3d238ec0866e61150bb4</anchor>
+      <arglist>(struct ethosu_driver *drv, enum ethosu_pmu_event_type stop_event)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint32_t</type>
+      <name>ETHOSU_PMU_Get_QREAD</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga2530cb39de40e314b7a19e42f220ab2f</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+    <member kind="function">
+      <type>uint32_t</type>
+      <name>ETHOSU_PMU_Get_STATUS</name>
+      <anchorfile>group__ethosu__pmu__api.html</anchorfile>
+      <anchor>ga511b1edd27d2afb94205976f5da84281</anchor>
+      <arglist>(struct ethosu_driver *drv)</arglist>
+    </member>
+  </compound>
   <compound kind="page">
     <name>index</name>
     <title>Driver</title>

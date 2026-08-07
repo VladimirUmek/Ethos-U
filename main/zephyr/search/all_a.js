@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['npu_20in_20devicetree_0',['Describe the NPU in devicetree',['../index.html#autotoc_md2',1,'']]]
+  ['monitoring_20unit_20api_0',['Performance Monitoring Unit API',['../../driver/group__ethosu__pmu__api.html',1,'']]]
 ];

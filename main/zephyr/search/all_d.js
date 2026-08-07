@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['structures_0',['Structures',['../../driver/group__ethosu__driver__structs.html',1,'']]],
-  ['studio_20for_20vs_20code_1',['Build in Arm Keil Studio for VS Code',['../index.html#autotoc_md5',1,'']]]
+  ['references_0',['References',['../index.html#autotoc_md8',1,'']]]
 ];

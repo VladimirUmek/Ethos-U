@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['functions_0',['Functions',['../../driver/group__ethosu__public__api.html',1,'']]]
+  ['api_0',['Performance Monitoring Unit API',['../../driver/group__ethosu__pmu__api.html',1,'']]]
 ];

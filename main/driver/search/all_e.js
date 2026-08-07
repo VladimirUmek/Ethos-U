@@ -6,7 +6,8 @@ var searchData=
   ['u85_20axi_20limits_3',['Ethos-U85 AXI limits',['../index.html#autotoc_md15',1,'']]],
   ['u85_20memory_20attributes_4',['Ethos-U85 memory attributes',['../index.html#autotoc_md14',1,'']]],
   ['u85_20power_20ramping_5',['Ethos-U85 power ramping',['../index.html#autotoc_md13',1,'']]],
-  ['unit_20pmu_6',['Performance Monitoring Unit (PMU)',['../index.html#autotoc_md17',1,'']]],
-  ['up_20checklist_7',['Bring-up checklist',['../index.html#autotoc_md19',1,'']]],
-  ['usage_8',['Driver Usage',['../index.html#autotoc_md5',1,'']]]
+  ['unit_20api_6',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
+  ['unit_20pmu_7',['Performance Monitoring Unit (PMU)',['../index.html#autotoc_md17',1,'']]],
+  ['up_20checklist_8',['Bring-up checklist',['../index.html#autotoc_md19',1,'']]],
+  ['usage_9',['Driver Usage',['../index.html#autotoc_md5',1,'']]]
 ];

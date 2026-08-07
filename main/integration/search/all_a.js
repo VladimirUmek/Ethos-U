@@ -8,5 +8,6 @@ var searchData=
   ['mlops_20information_5',['Add MLOps information',['../index.html#autotoc_md6',1,'']]],
   ['model_20and_20configuration_20to_20version_20control_6',['Add ML model and configuration to version control',['../index.html#autotoc_md4',1,'']]],
   ['model_20for_20the_20device_7',['Compile the ML model for the device',['../index.html#integration_compile_model',1,'']]],
-  ['model_20layer_8',['Add ML model layer',['../index.html#autotoc_md7',1,'']]]
+  ['model_20layer_8',['Add ML model layer',['../index.html#autotoc_md7',1,'']]],
+  ['monitoring_20unit_20api_9',['Performance Monitoring Unit API',['../../driver/group__ethosu__pmu__api.html',1,'']]]
 ];
