@@ -29,7 +29,9 @@ var NAVTREE =
       [ "Determine the memory budget", "index.html#determine-the-memory-budget", null ]
     ] ],
     [ "Integration workflow", "index.html#integration-workflow", [
-      [ "General integration guidance", "index.html#general-integration-guidance", null ],
+      [ "General integration guidance", "index.html#general-integration-guidance", [
+        [ "Example: Move the tensor arena from SRAM to external DRAM", "index.html#example-move-the-tensor-arena-from-sram-to-external-dram", null ]
+      ] ],
       [ "Add ML model and configuration to version control", "index.html#add-ml-model-and-configuration-to-version-control", null ]
     ] ],
     [ "Create the <em>csolution project</em>", "index.html#create-the-csolution-project", [
@@ -39,7 +41,9 @@ var NAVTREE =
     ] ],
     [ "Compile the ML model for the device", "index.html#compile-the-ml-model-for-the-device", null ],
     [ "Configure memory placement and the linker script", "index.html#configure-memory-placement-and-the-linker-script", null ],
-    [ "Complete application integration", "index.html#complete-application-integration", null ],
+    [ "Complete application integration", "index.html#complete-application-integration", [
+      [ "Troubleshoot an inference that does not complete", "index.html#troubleshoot-an-inference-that-does-not-complete", null ]
+    ] ],
     [ "Validate and tune", "index.html#validate-and-tune", null ],
     [ "Ethos-U configuration", "index.html#ethos-u-configuration", null ],
     [ "Linker configuration", "index.html#linker-configuration", null ],

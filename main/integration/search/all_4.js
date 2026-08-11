@@ -59,5 +59,7 @@ var searchData=
   ['ethosu_5fsemaphore_5ftake_56',['ethosu_semaphore_take',['../../driver/group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725',1,]]],
   ['ethosu_5fsoft_5freset_57',['ethosu_soft_reset',['../../driver/group__ethosu__public__api.html#ga480a7f7b324b3be61c1a9ffc92be9f3a',1,]]],
   ['ethosu_5fwait_58',['ethosu_wait',['../../driver/group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b',1,]]],
-  ['example_20and_20add_20device_59',['Use a project example and add device',['../index.html#use-a-project-example-and-add-device',1,'']]]
+  ['example_20and_20add_20device_59',['Use a project example and add device',['../index.html#use-a-project-example-and-add-device',1,'']]],
+  ['example_3a_20move_20the_20tensor_20arena_20from_20sram_20to_20external_20dram_60',['Example: Move the tensor arena from SRAM to external DRAM',['../index.html#example-move-the-tensor-arena-from-sram-to-external-dram',1,'']]],
+  ['external_20dram_61',['Example: Move the tensor arena from SRAM to external DRAM',['../index.html#example-move-the-tensor-arena-from-sram-to-external-dram',1,'']]]
 ];

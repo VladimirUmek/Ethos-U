@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['validate_20and_20tune_0',['Validate and tune',['../index.html#validate-and-tune',1,'']]],
-  ['version_20control_1',['Add ML model and configuration to version control',['../index.html#add-ml-model-and-configuration-to-version-control',1,'']]]
+  ['u_20configuration_0',['Ethos-U configuration',['../index.html#ethos-u-configuration',1,'']]],
+  ['use_20a_20project_20example_20and_20add_20device_1',['Use a project example and add device',['../index.html#use-a-project-example-and-add-device',1,'']]]
 ];

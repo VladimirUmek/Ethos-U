@@ -12,10 +12,12 @@ var NAVTREEINDEX0 =
 "index.html#driver-build-configuration":[10],
 "index.html#driver-weak-hooks":[9],
 "index.html#ethos-u-configuration":[7],
+"index.html#example-move-the-tensor-arena-from-sram-to-external-dram":[1,0,0],
 "index.html#general-integration-guidance":[1,0],
 "index.html#integration-workflow":[1],
 "index.html#linker-configuration":[8],
 "index.html#starting-point":[0],
+"index.html#troubleshoot-an-inference-that-does-not-complete":[5,0],
 "index.html#use-a-project-example-and-add-device":[2,0],
 "index.html#validate-and-tune":[6],
 "pages.html":[]
