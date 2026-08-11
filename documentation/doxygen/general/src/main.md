@@ -1,4 +1,4 @@
-# General {#mainpage}
+# General
 
 This documentation is organized as follows:
 
@@ -33,7 +33,7 @@ software components. Device packs are available from
 [www.keil.arm.com/packs](https://www.keil.arm.com/packs). CMSIS-Toolbox uses
 these resources for the selected device and build context and exposes the
 relevant parameters through its [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
-See [Publish Ethos-U configuration in a DFP](../vela/index.html#vela_publish_configuration)
+See <a href="../vela/index.html#publish-ethos-u-configuration-in-a-dfp">Publish Ethos-U configuration in a DFP</a>
 for the relevant DFP description entries.
 
 When a DFP contains Ethos-U resources, application developers can use the
@@ -71,7 +71,7 @@ interface:
 - **Memory mode** means the mapping of model storage roles to memory aliases
   defined in `vela.ini`.
 
-## System overview {#general_system_overview}
+## System overview
 
 An Ethos-U NPU is a memory-mapped accelerator controlled by Cortex-M software.
 The Vela compiler performs target-specific compilation before deployment. At

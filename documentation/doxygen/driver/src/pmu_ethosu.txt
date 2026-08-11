@@ -4,7 +4,7 @@
 \details
 The PMU provides a 64-bit cycle counter and programmable event counters.
 Use the symbolic values from `enum ethosu_pmu_event_type` to select events.
-See \ref pmu_example for a complete measurement example.
+See \ref pmu-example for a complete measurement example.
 */
 
 /**

@@ -1,4 +1,4 @@
-# Driver {#mainpage}
+# Driver
 
 This chapter is the technical reference for the Ethos-U driver interface.
 
@@ -89,11 +89,11 @@ and overwritten when needed.
 
 | API Function | When an overwrite is needed |
 | --- | --- |
-| \ref ethosu_flush_dcache "ethosu_flush_dcache()", \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" | CPU-cached memory is shared with the NPU and requires [platform-specific cache maintenance](#data-caching). |
+| \ref ethosu_flush_dcache "ethosu_flush_dcache()", \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" | CPU-cached memory is shared with the NPU and requires \ref data-caching "platform-specific cache maintenance". |
 | \ref ethosu_address_remap "ethosu_address_remap()" | The CPU and NPU use different addresses for the same storage. |
 | \ref ethosu_config_select "ethosu_config_select()" | Memory-region attributes depend on the address or run-time placement. |
-| Mutex and semaphore functions in \ref ethosu_callback_api "Platform-specific functions" | Multiple tasks or NPUs can use the driver and require [platform-specific RTOS locking](#mutex-and-semaphores). |
-| \ref ethosu_inference_begin "ethosu_inference_begin()", \ref ethosu_inference_end "ethosu_inference_end()" | [Inference tracing, power control, or application callbacks are required](#beginend-inference-callbacks). |
+| Mutex and semaphore functions in \ref ethosu_callback_api "Platform-specific functions" | Multiple tasks or NPUs can use the driver and require \ref mutex-and-semaphores "platform-specific RTOS locking". |
+| \ref ethosu_inference_begin "ethosu_inference_begin()", \ref ethosu_inference_end "ethosu_inference_end()" | \ref beginend-inference-callbacks "Inference tracing, power control, or application callbacks are required". |
 
 Cache policy, linker placement, and region configuration are system-level 
 decisions. Detailed guidance is in the chapter [Integration](../integration/index.html).
@@ -231,7 +231,7 @@ configurations. Note that the driver can be compiled to target only one NPU
 configuration by specializing the device part at compile time.
 ?? ToDo: how
 
-## Data caching {#data-caching}
+## Data caching
 
 For running the driver on Arm CPUs which are configured with data cache, certain
 caution must be taken to ensure cache coherency. The driver expects that cache
@@ -273,7 +273,7 @@ in the MPU configuration for the memories used. See `NPU_MEM_ATTR_[0-3]` for
 Ethos-U85 and the `AXI_LIMIT[0-3]_MEM_TYPE` for Ethos-U55/Ethos-U65 in
 corresponding `src/ethosu_config_uX5.h` files.
 
-## Mutex and semaphores {#mutex-and-semaphores}
+## Mutex and semaphores
 
 To ensure the correct functionality of the driver mutexes and semaphores are
 used internally. The default implementations of mutexes and semaphores are
@@ -321,7 +321,7 @@ int ethosu_semaphore_take(void *sem, uint64_t timeout);
 int ethosu_semaphore_give(void *sem);
 ```
 
-## Begin/End inference callbacks {#beginend-inference-callbacks}
+## Begin/End inference callbacks
 
 The driver provide weak linked functions as hooks to receive callbacks whenever
 an inference begins and ends. The user can override such functions when needed.
@@ -369,9 +369,9 @@ void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg) {
 }
 ```
 
-For a practical use of these callbacks, see the \ref pmu_example "PMU example".
+For a practical use of these callbacks, see the \ref pmu-example "PMU example".
 
-## Driver Configuration {#driver_configuration}
+## Driver Configuration
 
 The selected driver component supplies a target-specific configuration file:
 
@@ -632,7 +632,7 @@ Event counters are 32-bit and can overflow during a long measurement. Check
 Because only four or eight events can be measured at once, collect additional
 events in repeated runs with identical model, input, memory, and system settings.
 
-### PMU example {#pmu_example}
+### PMU example
 
 The following example counts NPU-active and NPU-idle events and records the NPU
 cycle count for one inference. Pass a pointer to `struct pmu_results` as the

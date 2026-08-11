@@ -1,4 +1,4 @@
-# Integration {#mainpage}
+# Integration
 
 This chapter explains how to integrate a pretrained, quantized ML model into an
 Edge AI MCU based on Cortex-M and Ethos-U. Model training, quantization, and
@@ -10,7 +10,7 @@ The starting point is a pretrained, quantized ML model that meets the
 application's functional requirements. Before selecting a specific Edge AI MCU,
 compile the model with Vela for one or more Ethos-U reference systems as
 described in
-[Compile for an Ethos-U reference system](../vela/index.html#vela_compile_reference_system).
+<a href="../vela/index.html#compile-for-an-ethos-u-reference-system">Compile for an Ethos-U reference system</a>.
 
 The Vela outputs estimates of NPU cycles, memory bandwidth, and
 model memory requirements. Vela also identifies which operations are assigned to
@@ -29,10 +29,10 @@ Most embedded applications are resource constraint and therefore the memory budg
 
 - **Establish the ML model floor.** Compile the ML model and with
   `--optimise Size` and record the reported memory
-  areas. See [Vela memory mode parameters](../vela/index.html#vela_memory_mode).
+  areas. See <a href="../vela/index.html#memory-mode-parameters">Vela memory mode parameters</a>.
 - **Build the system budget.** Add runtime and application data, stacks, heaps,
   alignment, padding, and a safety margin.
-- **Tune and optimize.** Use the remaining memory budget for performance gains. Use different Vela system configurations and memory modes combined with `--arena-cache-size` as described in [Understand arena cache and spilling](../vela/index.html#vela_arena_cache_size).
+- **Tune and optimize.** Use the remaining memory budget for performance gains. Use different Vela system configurations and memory modes combined with `--arena-cache-size` as described in <a href="../vela/index.html#understand-arena-cache-and-spilling">Understand arena cache and spilling</a>.
 
 ## Integration workflow
 
@@ -46,21 +46,21 @@ decisions and measurements.
 2. **Check the DFP resources.** Determine whether the DFP provides a
    device-specific `vela.ini` file, matching linker scripts, and other required
    resources. If it does not, contact the device or SoC vendor or
-   [create a device-specific `vela.ini` file](../vela/index.html#vela_create_configuration).
-3. **[Create the CMSIS-Toolbox project](#integration_create_csolution).** Select the device and build context, and specify the Vela system configuration and memory mode.
+   <a href="../vela/index.html#create-device-specific-velaini-file">create a device-specific <code>vela.ini</code> file</a>.
+3. **\ref create-the-csolution-project "Create the CMSIS-Toolbox project".** Select the device and build context, and specify the Vela system configuration and memory mode.
    Use the generated [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
    to obtain the Vela parameters and resources supplied by the DFP.
-4. **[Compile the ML model for the device](#integration_compile_model).** Run Vela with the device-specific
+4. **\ref compile-the-ml-model-for-the-device "Compile the ML model for the device".** Run Vela with the device-specific
    parameters and confirm that its performance and memory estimates meet the
    application requirements. Treat the performance figures as model-based
    estimates and retain sufficient margin.
-5. **[Configure memory placement and the linker script](#integration_configure_memory).** Keep the Vela memory
+5. **\ref configure-memory-placement-and-the-linker-script "Configure memory placement and the linker script".** Keep the Vela memory
    mode, linker placement, and driver region configuration consistent. Account
    for the ML inference runtime, stacks, heaps, application data, alignment, and
    a safety margin. Build the system and review the compiler and linker reports.
-6. **[Complete application integration](#integration_complete_application).** Add any application-specific RTOS,
+6. **\ref complete-application-integration "Complete application integration".** Add any application-specific RTOS,
    power, timeout, cache, and fault handling.
-7. **[Validate and tune](#integration_validate_tune).** Verify correctness, memory allocation, ML model performance,
+7. **\ref validate-and-tune "Validate and tune".** Verify correctness, memory allocation, ML model performance,
    bandwidth, latency, and concurrency on the actual target system.
 
 A change to a memory mode, linker section, cache attribute, or driver region
@@ -71,10 +71,10 @@ value requires a review of the other descriptions of that memory region.
 - Keep the `vela.ini`, `System_Config`, selected `Memory_Mode`, linker sections,
   MPU/SAU attributes, and driver build definitions consistent.
 - Apply `arena_cache_size` according to the selected memory mode as described in
-  [Understand arena cache and spilling](../vela/index.html#vela_arena_cache_size).
+  <a href="../vela/index.html#understand-arena-cache-and-spilling">Understand arena cache and spilling</a>.
 - Place model constants, activations, and any separate scratch-fast storage as
   described in
-  [Create the linker script](../vela/index.html#vela_create_linker_script).
+  <a href="../vela/index.html#create-the-linker-script">Create the linker script</a>.
 - Override the driver weak hooks when the default integration assumptions do not
   match the platform, especially for data cache maintenance, address remapping,
   and RTOS synchronization.
@@ -92,7 +92,7 @@ CMSIS-Toolbox already records the selected packs and `vela.ini` configuration
 file in the *csolution project* files and in the metafiles `*.cbuild-pack.yml` and `*.cbuild-mlops.yml`.
 Keep these files along with the input ML model under version control.
 
-## Create the *csolution project* {#integration_create_csolution}
+## Create the *csolution project*
 
 CMSIS-Toolbox simplifies MLOps by combining device and DFP data with project
 settings into machine-readable
@@ -152,7 +152,7 @@ and set `model.clayer` to the layer that contains the model. The example omits
 `vela.ini`, so CMSIS-Toolbox uses the configuration supplied by the device or
 DFP.
 
-## Compile the ML model for the device {#integration_compile_model}
+## Compile the ML model for the device
 
 CMSIS-Toolbox combines DFP information with the csolution project configuration
 and generates the MLOps information file `*.cbuild-mlops.yml`. The `vela:` node provides the `ini:` configuration file and `options:` that can be used to invoke Vela.
@@ -161,11 +161,11 @@ and generates the MLOps information file `*.cbuild-mlops.yml`. The `vela:` node 
 vela --config <vela.ini> <vela.options> ml-model.tflite
 ```
 
-## Configure memory placement and the linker script {#integration_configure_memory}
+## Configure memory placement and the linker script
 
 The common relationship between compiler memory areas and driver regions is
 described in
-[Match the driver configuration](../vela/index.html#vela_match_driver_configuration).
+<a href="../vela/index.html#match-the-driver-configuration">Match the driver configuration</a>.
 The generated command stream uses numeric NPU regions, also
 called base pointer indices; it does not use the `Axi0` or `Axi1` aliases.
 
@@ -179,17 +179,17 @@ that must agree with this placement.
 
 Create the physical sections for model constants, the tensor arena, and any
 separate scratch-fast storage as described in
-[Create the linker script](../vela/index.html#vela_create_linker_script). Use the
+<a href="../vela/index.html#create-the-linker-script">Create the linker script</a>. Use the
 linker map to verify that their addresses and sizes match the selected memory
 mode and that every generated NPU region is accessible through the driver
 configuration.
 
-## Complete application integration {#integration_complete_application}
+## Complete application integration
 
 Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver settings.
 
 
-## Validate and tune {#integration_validate_tune}
+## Validate and tune
 
 ----
 
@@ -198,9 +198,9 @@ Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver set
 The Vela guide explains how to select an existing configuration and how to
 create one for a device:
 
-- See [use the Ethos-U configuration](../vela/index.html#vela_use_configuration)
+- See <a href="../vela/index.html#use-the-ethos-u-configuration">use the Ethos-U configuration</a>
   to inspect the resolved `System_Config` and `Memory_Mode`; and
-- See [create device-specific `vela.ini` file](../vela/index.html#vela_create_configuration)
+- See <a href="../vela/index.html#create-device-specific-velaini-file">create device-specific <code>vela.ini</code> file</a>
   for `vela.ini` syntax, memory modes, performance parameters, arena-cache
   behavior, and spilling. The constraints for parsing `vela.ini` can differ
   between Ethos-U cores, so follow the requirements for the selected core.

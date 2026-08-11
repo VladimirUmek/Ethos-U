@@ -1,4 +1,4 @@
-# Vela {#mainpage}
+# Vela
 
 Arm Vela is an ahead-of-time (AOT) neural network model compiler for the
 [Ethos-U55](https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55),
@@ -38,7 +38,7 @@ operations, allowing Vela to use rolling buffers instead of storing complete
 intermediate feature maps.
 
 For the normal deployment flow, see the
-[system overview](../general/index.html#general_system_overview).
+<a href="../general/index.html#system-overview">system overview</a>.
 
 For TFLite output, supported regions become Ethos-U custom operators containing
 the NPU command stream and related data. Unsupported TFLite operators remain in
@@ -120,7 +120,7 @@ through its
 [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
 
 When the DFP does not provide this information, create the equivalent configuration
-manually as described in \ref vela_create_configuration "Create device-specific `vela.ini` file".
+manually as described in \ref create-device-specific-velaini-file "Create device-specific `vela.ini` file".
 
 ## Invocation
 
@@ -212,7 +212,7 @@ TFLite-to-TOSA conversion format.
 | `--verbose-cycle-estimate` | Show cycle-estimation details. |
 | `--verbose-progress` | Show compilation progress. |
 
-## Use the Ethos-U configuration {#vela_use_configuration}
+## Use the Ethos-U configuration
 
 Compiling an ML model requires three selections from the Ethos-U configuration:
 
@@ -253,7 +253,7 @@ The generic `Arm/vela.ini` reference file includes these system configurations:
   `Ethos_U85_SYS_DRAM_Low`, `Ethos_U85_SYS_DRAM_Mid`,
   `Ethos_U85_SYS_DRAM_High`.
 
-### Select a memory mode {#vela_select_memory_mode}
+### Select a memory mode
 
 The reference configuration defines typically memory modes as shown below.
 
@@ -277,7 +277,7 @@ The `vela.ini` file, device interconnect, linker placement, MPU/SAU attributes,
 cache policy, driver region indices, and ML inference runtime tensor arena must
 agree. The Vela compiler cannot validate the complete firmware memory map.
 
-### Understand arena cache and spilling {#vela_arena_cache_size}
+### Understand arena cache and spilling
 
 `cache_mem_area` does not always create a separate cache allocation. When it
 resolves to the same memory type as `arena_mem_area`, the fast-scratch memory region is
@@ -290,7 +290,7 @@ feature-map arena would be placed on that interface. Do not infer the same
 read-only restriction for the logical `Axi1` alias in `vela.ini` on every
 Ethos-U target.
 
-## Create device-specific vela.ini file {#vela_create_configuration}
+## Create device-specific vela.ini file
 
 To support a device manually, create a device-specific `vela.ini` file.
 Application developers normally obtain this file from the silicon vendor,
@@ -339,7 +339,7 @@ ToDo: verify this
   `Ethos_U55`. The Vela compiler uses this prefix when selecting the U55 AXI
   bandwidth width while translating memory-performance values.
 
-### System configuration parameters {#vela_system_configuration}
+### System configuration parameters
 
 The system configuration maps the two logical aliases in `vela.ini` to memory
 types and supplies the performance model. `axi0_port` and `axi1_port` connect
@@ -385,7 +385,7 @@ The values in `vela.ini` are used by the Vela compiler to optimize the ML model 
 The can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated
 command stream. `core_clock` is primarily used to convert cycle estimates to time.
 
-### Memory mode parameters {#vela_memory_mode}
+### Memory mode parameters
 
 | Parameter | Type or values | Description |
 |---|---|---|
@@ -404,7 +404,7 @@ the arena-cache size. With `--optimise Performance`, it uses the configured or
 command-line arena-cache size. If neither is supplied, the compiler uses the
 maximum addressable size for the selected Ethos-U target.
 
-### Create the linker script {#vela_create_linker_script}
+### Create the linker script
 
 The linker script places the generated model artifacts and runtime buffers in
 the physical memories represented by the selected `System_Config` and
@@ -443,7 +443,7 @@ Validate a new linker configuration by checking:
 - the optimized model runs correctly and meets its memory and performance goals
   on the device.
 
-### Match the driver configuration {#vela_match_driver_configuration}
+### Match the driver configuration
 
 The driver configuration must select NPU access paths that match the physical
 placement established by `vela.ini` and the linker script. For the common
@@ -523,7 +523,7 @@ vela model.tflite --config My_vela.ini \
   --verbose-config
 ```
 
-### Publish Ethos-U configuration in a DFP {#vela_publish_configuration}
+### Publish Ethos-U configuration in a DFP
 
 A CMSIS Device Family Pack (DFP) can publish the NPU capabilities, `vela.ini` file, and matching linker scripts in its DFP description. The CMSIS-Toolbox can then select these resources for the device, processor, and toolchain used by a project.
 
@@ -565,7 +565,7 @@ For the complete pack structure and element rules, see:
 
 ## Examples
 
-### Compile for an Ethos-U reference system {#vela_compile_reference_system}
+### Compile for an Ethos-U reference system
 
 ```console
 vela person_detect.tflite \
