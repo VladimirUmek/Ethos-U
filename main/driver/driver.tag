@@ -34,9 +34,30 @@
     <name>ethosu_driver_api</name>
     <title>Ethos-U Driver API</title>
     <filename>group__ethosu__driver__api.html</filename>
+    <subgroup>ethosu_driver_defines</subgroup>
     <subgroup>ethosu_driver_structs</subgroup>
     <subgroup>ethosu_public_api</subgroup>
     <subgroup>ethosu_callback_api</subgroup>
+    <subgroup>ethosu_log_api</subgroup>
+  </compound>
+  <compound kind="group">
+    <name>ethosu_driver_defines</name>
+    <title>Defines</title>
+    <filename>group__ethosu__driver__defines.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_SEMAPHORE_WAIT_INFERENCE</name>
+      <anchorfile>group__ethosu__driver__defines.html</anchorfile>
+      <anchor>ga506814742e046dc5d5f27584dfe3eec6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_SEMAPHORE_WAIT_FOREVER</name>
+      <anchorfile>group__ethosu__driver__defines.html</anchorfile>
+      <anchor>ga8777fdbb65e94313ee5d8e9465373d9d</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="group">
     <name>ethosu_driver_structs</name>
@@ -246,6 +267,88 @@
       <anchorfile>group__ethosu__callback__api.html</anchorfile>
       <anchor>ga872178ba3393d3f21c57c950ed82fb1a</anchor>
       <arglist>(uint64_t address, int index)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>ethosu_log_api</name>
+    <title>Logging</title>
+    <filename>group__ethosu__log__api.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_LOG_ERR</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>ga925b62cb4a7b32b5770f1ebdacb6d8d8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_LOG_WARN</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>gaa04304f007fbd79ba5368c295dc275e6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_LOG_INFO</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>gaec30d1751550d3ecd9996bf56f55c88f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_LOG_DEBUG</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>ga715573525d22ecd62dc3a371f459b7ef</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_LOG_ENABLE</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>gafab8c39657a7823439de4dcec41b6638</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ETHOSU_LOG_SEVERITY</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>gae2521780190d2ccdc7a712a7af419aea</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LOG</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>ga684cbf16ece7e6e25cd49fdef621a475</anchor>
+      <arglist>(f,...)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LOG_ERR</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>ga531b8a1a22e3fdd27811bfab52217e13</anchor>
+      <arglist>(f,...)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LOG_WARN</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>ga0ac9ed4ee5b005ba22993796a63fe4d5</anchor>
+      <arglist>(f,...)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LOG_INFO</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>ga0346634c15a318e68d86de21729d51c9</anchor>
+      <arglist>(f,...)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LOG_DEBUG</name>
+      <anchorfile>group__ethosu__log__api.html</anchorfile>
+      <anchor>ga4cfe278bc804bda9db3a59830b6fbfb8</anchor>
+      <arglist>(f,...)</arglist>
     </member>
   </compound>
   <compound kind="group">

@@ -160,6 +160,9 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('group__ethosu_
   <div class="headertitle"><div class="title">Platform-specific functions <div class="ingroups"><a class="el" href="group__ethosu__driver__api.html">Ethos-U Driver API</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Functions may be overwritten for specific driver and use cases.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -179,7 +182,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga872178ba3393d3f21c57c950ed82fb1a" id="r_ga872178ba3393d3f21c57c950ed82fb1a"><td class="memItemLeft">unsigned int&#160;</td><td class="memItemRight"><a class="el" href="#ga872178ba3393d3f21c57c950ed82fb1a">ethosu_config_select</a> (uint64_t address, int index)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Description</h2>
-<div class="textblock"></div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<div class="textblock"><p>Functions may be overwritten for specific driver and use cases. </p>
+<p>The driver provides weak default implementations for these functions. See <a href="index.html#platform-specific-functions">Platform-specific functions</a> for guidance on when a platform-specific implementation is required. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="gae23e3120197768bbd1b21fd03823183a" name="gae23e3120197768bbd1b21fd03823183a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gae23e3120197768bbd1b21fd03823183a">&#9670;&#160;</a></span>ethosu_flush_dcache()</h2>
 
@@ -215,7 +220,8 @@ Functions</h2></td></tr>
 </dl>
 <p>This callback hook is called before inference for the supplied base-address regions. The command-stream region is not included. The default weak implementation is a no-op.</p>
 <p>Reimplement this function when CPU-cached memory is shared with the NPU to ensure that the data written by CPU is visible to NPU.</p>
-<p>The invocation API requires 16-byte base-address alignment. A cache implementation may require stricter cache-line alignment, commonly 32 bytes, and must handle non-cache-line-sized regions without affecting unrelated data. </p>
+<p>The invocation API requires 16-byte base-address alignment. A cache implementation may require stricter cache-line alignment, commonly 32 bytes, and must handle non-cache-line-sized regions without affecting unrelated data.</p>
+<p>See <a href="index.html#data-caching">Data caching</a> for cache-coherency requirements and an implementation example. </p>
 
 </div>
 </div>
@@ -254,7 +260,8 @@ Functions</h2></td></tr>
 </dl>
 <p>This callback hook is called when finalizing inference for the supplied base-address regions. The default weak implementation is a no-op.</p>
 <p>Reimplement this function when CPU-cached memory is shared with the NPU to ensure that the data written by NPU is visible to CPU.</p>
-<p>From the cache clean before inference until this invalidation completes, the CPU must not write memory owned by the NPU. Cleaning stale dirty CPU cache lines after the NPU has written the same memory can overwrite NPU results. The platform implementation must define and enforce this ownership rule, including for asynchronous invocation. </p>
+<p>From the cache clean before inference until this invalidation completes, the CPU must not write memory owned by the NPU. Cleaning stale dirty CPU cache lines after the NPU has written the same memory can overwrite NPU results. The platform implementation must define and enforce this ownership rule, including for asynchronous invocation.</p>
+<p>See <a href="index.html#data-caching">Data caching</a> for cache-coherency requirements and an implementation example. </p>
 
 </div>
 </div>
@@ -275,7 +282,8 @@ Functions</h2></td></tr>
 <p>Minimal mutex implementation for baremetal applications. See ethosu_driver.c.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to mutex handle</dd></dl>
 <p>Driver provides the default weak implementation that is effectively a no-op.</p>
-<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver.</p>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>
@@ -301,7 +309,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <p>Driver provides the default weak implementation that is effectively a no-op.</p>
-<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver.</p>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>
@@ -322,7 +331,8 @@ Functions</h2></td></tr>
 <p>Minimal sempahore implementation for baremetal applications. See ethosu_driver.c.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to semaphore handle</dd></dl>
 <p>Driver provides the default weak implementation that allocates a minimal bare-metal semaphore.</p>
-<p>Re-implement this function and create an RTOS semaphore with an initial count of zero in multithreaded application. </p>
+<p>Re-implement this function and create an RTOS semaphore with an initial count of zero in multithreaded application.</p>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>
@@ -348,7 +358,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <p>Driver provides the default weak implementation that frees the storage allocated by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a">ethosu_semaphore_create()</a>.</p>
-<p>Re-implement this function in multithreaded application to destroy semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a" title="ethosu_semaphore_create">ethosu_semaphore_create</a>. </p>
+<p>Re-implement this function in multithreaded application to destroy semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a" title="ethosu_semaphore_create">ethosu_semaphore_create</a>.</p>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>
@@ -375,7 +386,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
 <p>Driver provides the default weak implementation that is effectively a no-op.</p>
-<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver.</p>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>
@@ -402,7 +414,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
 <p>Driver provides the default weak implementation that is effectively a no-op.</p>
-<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver. </p>
+<p>Re-implement this function and use an RTOS mutex when Ethos-U NPU is used in multithreaded application or when multiple CPU cores can access the driver.</p>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>
@@ -437,8 +450,9 @@ Functions</h2></td></tr>
 <p>Re-implement this function in multithreaded application to use the semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a" title="ethosu_semaphore_create">ethosu_semaphore_create</a>.</p>
 <ul>
 <li>ETHOSU_SEMAPHORE_WAIT_FOREVER is used to request an indefinite wait.</li>
-<li>ETHOSU_SEMAPHORE_WAIT_INFERENCE is used to wait until inference completes. </li>
+<li>ETHOSU_SEMAPHORE_WAIT_INFERENCE is used to wait until inference completes.</li>
 </ul>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>
@@ -465,7 +479,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, else negative error code</dd></dl>
 <p>Driver provides the default weak implementation that signals an event with SEV.</p>
-<p>Re-implement this function in multithreaded application to use the semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a" title="ethosu_semaphore_create">ethosu_semaphore_create</a>. The implementation must be callable from NPU interrupt context. </p>
+<p>Re-implement this function in multithreaded application to use the semaphore created and returned by <a class="el" href="#ga4bb4d49e7ba5ec009af2796fe77e349a" title="ethosu_semaphore_create">ethosu_semaphore_create</a>. The implementation must be callable from NPU interrupt context.</p>
+<p>See <a href="index.html#mutex-and-semaphores">Mutex and semaphores</a> for RTOS integration requirements. </p>
 
 </div>
 </div>

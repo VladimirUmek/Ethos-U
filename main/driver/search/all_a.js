@@ -6,6 +6,5 @@ var searchData=
   ['pmu_3',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
   ['pmu_20events_4',['Interpreting PMU events',['../index.html#interpreting-pmu-events',1,'']]],
   ['pmu_20example_5',['PMU example',['../index.html#pmu-example',1,'']]],
-  ['pointer_20routing_6',['Command-stream and base-pointer routing',['../index.html#command-stream-and-base-pointer-routing',1,'']]],
-  ['power_20ramping_7',['Ethos-U85 power ramping',['../index.html#ethos-u85-power-ramping',1,'']]]
+  ['pointer_20routing_6',['Command-stream and base-pointer routing',['../index.html#command-stream-and-base-pointer-routing',1,'']]]
 ];

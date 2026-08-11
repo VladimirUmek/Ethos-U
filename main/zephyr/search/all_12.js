@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['west_0',['Build with west',['../index.html#build-with-west',1,'']]],
-  ['with_20west_1',['Build with west',['../index.html#build-with-west',1,'']]],
-  ['works_2',['How the integration works',['../index.html#how-the-integration-works',1,'']]]
+  ['verification_20checklist_0',['Verification checklist',['../index.html#verification-checklist',1,'']]],
+  ['vs_20code_1',['Build in Arm Keil Studio for VS Code',['../index.html#build-in-arm-keil-studio-for-vs-code',1,'']]]
 ];

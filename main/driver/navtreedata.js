@@ -44,10 +44,7 @@ var NAVTREE =
       [ "Configuration Options", "index.html#configuration-options", [
         [ "Command-stream and base-pointer routing", "index.html#command-stream-and-base-pointer-routing", null ]
       ] ],
-      [ "Ethos-U55 and Ethos-U65 AXI limits", "index.html#ethos-u55-and-ethos-u65-axi-limits", null ],
-      [ "Ethos-U85 power ramping", "index.html#ethos-u85-power-ramping", null ],
-      [ "Ethos-U85 memory attributes", "index.html#ethos-u85-memory-attributes", null ],
-      [ "Ethos-U85 AXI limits", "index.html#ethos-u85-axi-limits", null ]
+      [ "Ethos-U85 memory attributes", "index.html#ethos-u85-memory-attributes", null ]
     ] ],
     [ "Logging", "index.html#logging", null ],
     [ "Performance Monitoring Unit (PMU)", "index.html#performance-monitoring-unit-pmu", [

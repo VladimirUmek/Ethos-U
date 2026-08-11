@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.17.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Driver: API Reference</title>
+<title>Driver: Defines</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="codefolding.js"></script>
 <script type="text/javascript" src="clipboard.js"></script>
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
   </div>
 </div>
 <script type="text/javascript">
-document.addEventListener('DOMContentLoaded',() => { initNavTree('topics.html','',''); });
+document.addEventListener('DOMContentLoaded',() => { initNavTree('group__ethosu__driver__defines.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -157,22 +157,66 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('topics.html','
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">API Reference</div></div>
+  <div class="headertitle"><div class="title">Defines <div class="ingroups"><a class="el" href="group__ethosu__driver__api.html">Ethos-U Driver API</a></div></div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all topics with brief descriptions:</div><div class="directory">
-<table class="directory">
-<tr id="row_0_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__ethosu__driver__api.html" target="_self">Ethos-U Driver API</a></td><td class="desc">Driver definitions, types, and functions </td></tr>
-<tr id="row_0_0_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__ethosu__driver__defines.html" target="_self">Defines</a></td><td class="desc">Compile-time definitions in <code>ethosu_driver.h</code> </td></tr>
-<tr id="row_0_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__ethosu__driver__structs.html" target="_self">Structures</a></td><td class="desc">Struct definitions in <code>ethosu_driver.h</code> </td></tr>
-<tr id="row_0_2_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__ethosu__public__api.html" target="_self">Functions</a></td><td class="desc">Public API functions in <code>ethosu_driver.h</code> </td></tr>
-<tr id="row_0_3_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__ethosu__callback__api.html" target="_self">Platform-specific functions</a></td><td class="desc">Functions may be overwritten for specific driver and use cases </td></tr>
-<tr id="row_0_4_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__ethosu__log__api.html" target="_self">Logging</a></td><td class="desc">Compile-time logging controls and macros from <code>ethosu_log.h</code> </td></tr>
-<tr id="row_1_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__ethosu__pmu__api.html" target="_self">Performance Monitoring Unit API</a></td><td class="desc">Control the Ethos-U Performance Monitoring Unit (PMU) </td></tr>
+
+<p>Compile-time definitions in <code>ethosu_driver.h</code>.  
+<a href="#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga506814742e046dc5d5f27584dfe3eec6" id="r_ga506814742e046dc5d5f27584dfe3eec6"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#ga506814742e046dc5d5f27584dfe3eec6">ETHOSU_SEMAPHORE_WAIT_INFERENCE</a>&#160;&#160;&#160;<a class="el" href="#ga8777fdbb65e94313ee5d8e9465373d9d">ETHOSU_SEMAPHORE_WAIT_FOREVER</a></td></tr>
+<tr class="memdesc:ga506814742e046dc5d5f27584dfe3eec6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timeout used while waiting for inference completion.  <br /></td></tr>
+<tr class="memitem:ga8777fdbb65e94313ee5d8e9465373d9d" id="r_ga8777fdbb65e94313ee5d8e9465373d9d"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#ga8777fdbb65e94313ee5d8e9465373d9d">ETHOSU_SEMAPHORE_WAIT_FOREVER</a>&#160;&#160;&#160;(UINT64_MAX)</td></tr>
+<tr class="memdesc:ga8777fdbb65e94313ee5d8e9465373d9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Value used to request an indefinite semaphore wait.  <br /></td></tr>
 </table>
-</div><!-- directory -->
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Description</h2>
+<div class="textblock"><p>Compile-time definitions in <code>ethosu_driver.h</code>. </p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a id="ga506814742e046dc5d5f27584dfe3eec6" name="ga506814742e046dc5d5f27584dfe3eec6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga506814742e046dc5d5f27584dfe3eec6">&#9670;&#160;</a></span>ETHOSU_SEMAPHORE_WAIT_INFERENCE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ETHOSU_SEMAPHORE_WAIT_INFERENCE&#160;&#160;&#160;<a class="el" href="#ga8777fdbb65e94313ee5d8e9465373d9d">ETHOSU_SEMAPHORE_WAIT_FOREVER</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Timeout used while waiting for inference completion. </p>
+<p>This value is passed to <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take</a> when <a class="el" href="group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b" title="ethosu_wait">ethosu_wait</a> blocks for inference completion. Its unit and interpretation are defined by the platform semaphore implementation. Define it at compile time to select a finite timeout. It defaults to <a class="el" href="#ga8777fdbb65e94313ee5d8e9465373d9d" title="ETHOSU_SEMAPHORE_WAIT_FOREVER">ETHOSU_SEMAPHORE_WAIT_FOREVER</a>. </p>
+
+</div>
+</div>
+<a id="ga8777fdbb65e94313ee5d8e9465373d9d" name="ga8777fdbb65e94313ee5d8e9465373d9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8777fdbb65e94313ee5d8e9465373d9d">&#9670;&#160;</a></span>ETHOSU_SEMAPHORE_WAIT_FOREVER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ETHOSU_SEMAPHORE_WAIT_FOREVER&#160;&#160;&#160;(UINT64_MAX)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Value used to request an indefinite semaphore wait. </p>
+<p>This value is defined as <code>UINT64_MAX</code>. A platform implementation of <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take</a> must interpret it as no timeout. The driver also uses this value while waiting for an NPU driver instance to become available. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

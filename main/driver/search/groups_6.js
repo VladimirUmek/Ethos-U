@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['specific_20functions_0',['Platform-specific functions',['../group__ethosu__callback__api.html',1,'']]],
-  ['structures_1',['Structures',['../group__ethosu__driver__structs.html',1,'']]]
+  ['performance_20monitoring_20unit_20api_0',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
+  ['platform_20specific_20functions_1',['Platform-specific functions',['../group__ethosu__callback__api.html',1,'']]]
 ];

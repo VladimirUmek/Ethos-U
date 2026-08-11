@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['u_20driver_20api_0',['Ethos-U Driver API',['../group__ethosu__driver__api.html',1,'']]],
-  ['unit_20api_1',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]]
+  ['specific_20functions_0',['Platform-specific functions',['../group__ethosu__callback__api.html',1,'']]],
+  ['structures_1',['Structures',['../group__ethosu__driver__structs.html',1,'']]]
 ];
