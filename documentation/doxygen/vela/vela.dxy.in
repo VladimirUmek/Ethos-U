@@ -1468,8 +1468,6 @@ HTML_EXTRA_STYLESHEET  = ../style_template/extra_stylesheet.css \
 
 HTML_EXTRA_FILES       = ../style_template/tab_b.png \
                          ../style_template/tabs.js \
-                         ../style_template/darkmode_toggle.js \
-                         ../style_template/navtree.js \
                          ../style_template/dropdown.png
 
 # The HTML_COLORSTYLE tag can be used to specify if the generated HTML output
