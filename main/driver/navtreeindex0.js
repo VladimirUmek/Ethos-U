@@ -91,7 +91,6 @@ var NAVTREEINDEX0 =
 "index.html#driver-initialization":[4,2],
 "index.html#driver-usage":[4],
 "index.html#ethos-u-driver-source-code":[0],
-"index.html#ethos-u85-memory-attributes":[9,1],
 "index.html#implementation-design":[5],
 "index.html#interpreting-pmu-events":[11,0],
 "index.html#logging":[10],

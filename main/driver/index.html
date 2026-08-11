@@ -258,7 +258,7 @@ Driver Usage</h1>
 <p>Inferences can be invoked in two manners: synchronously or asynchronously. The two types of invocation can be freely mixed in a single application.</p>
 <h2 class="doxsection"><a class="anchor" id="synchronous-invocation"></a>
 Synchronous invocation</h2>
-<p>A typical usage of the driver can be the following:</p>
+<p>The typical usage of the driver is the synchronous invocation as shown below:</p>
 <div class="fragment"><div class="line"><span class="comment">// reserve a driver to be used (this call could block until a driver is available)</span></div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv = <a class="code hl_function" href="group__ethosu__public__api.html#ga92c30eeceb5152d6f06ff9c5859a1381">ethosu_reserve_driver</a>();</div>
 <div class="line"><span class="comment">// ...</span></div>
@@ -295,7 +295,7 @@ sequenceDiagram
 <p>With an RTOS implementation, <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take()</a> blocks the calling task and allows the RTOS scheduler to run other ready threads while the Ethos-U NPU executes the inference. The Ethos-U interrupt handler calls <a class="el" href="group__ethosu__callback__api.html#ga71614f92cb653bed7b7632b0362939b4" title="ethosu_semaphore_give">ethosu_semaphore_give()</a> when the NPU completes or reports a fault, allowing the synchronous invocation to resume. The platform must provide the RTOS-specific semaphore functions described in <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">Mutex and semaphores</a>Mutex and semaphores.</p>
 <h2 class="doxsection"><a class="anchor" id="asynchronous-invocation"></a>
 Asynchronous invocation</h2>
-<p>A typical usage of the driver can be the following:</p>
+<p>In some cases the asynchronous invocation is needed which allows in the same thread the execution of <em>other work</em> after starting the inference on the Ethos-U NPU.</p>
 <div class="fragment"><div class="line"><span class="comment">// reserve a driver to be used (this call could block until a driver is available)</span></div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv = <a class="code hl_function" href="group__ethosu__public__api.html#ga92c30eeceb5152d6f06ff9c5859a1381">ethosu_reserve_driver</a>();</div>
 <div class="line"><span class="comment">// ...</span></div>
@@ -362,6 +362,9 @@ Data caching</h1>
 <div class="line">        SCB_InvalidateDCache_by_Addr((uint32_t *)(uintptr_t)base_addr[i], base_addr_size[i]);</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>The NPU contain memory attributes that should be set to match the settings used in the MPU configuration for the memories used. See <span class="tt">NPU_MEM_ATTR_[0-3]</span> for Ethos-U85 and the <span class="tt">AXI_LIMIT[0-3]_MEM_TYPE</span> for Ethos-U55/Ethos-U65 in corresponding <span class="tt">src/ethosu_config_uX5.h</span> files.</p>
+<p>ToDo: verify this:</p>
+<p>It can be noted that enabling cache hooks approach is very conservative and will clean/invalidate potentially bigger than strictly required The only common CPU/NPU RW parts are edge IFM/OFM and clean / invalidate can be limited to these areas. Cleaning/Invalidating more than expected is safe for coherency but will have performance side effects for the application.</p>
+<p>If application is taking care of this, there is no need to enabling NPU drv hooks.</p>
 <h1 class="doxsection"><a class="anchor" id="mutex-and-semaphores"></a>
 Mutex and semaphores</h1>
 <p>To ensure the correct functionality of the driver mutexes and semaphores are used internally. The default implementations of mutexes and semaphores are designed for a single-threaded baremetal environment. Hence for integration in environemnts where multi-threading is possible, e.g., RTOS, the user is responsible to provide implementation for mutexes and semaphores to be used by the driver.</p>
@@ -455,22 +458,6 @@ Command-stream and base-pointer routing</h3>
 <td class="markdownTableBodyNone"><span class="tt">3</span>  </td><td class="markdownTableBodyNone">AXI1, counter 3  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT3</span>  </td></tr>
 </table>
 <p>On Ethos-U85, the value selects <span class="tt">MEM_ATTR0..3</span> which then specifies the AXI port, memory domain, and memory type.</p>
-<h2 class="doxsection"><a class="anchor" id="ethos-u85-memory-attributes"></a>
-Ethos-U85 memory attributes</h2>
-<p>Ethos-U85 provides four memory-attribute entries configured by <span class="tt">NPU_MEM_ATTR_0..3</span>. Each option is an encoded byte:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Bits  </th><th class="markdownTableHeadNone">Field  </th><th class="markdownTableHeadNone">Values  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">[1:0]</span>  </td><td class="markdownTableBodyNone">memory domain  </td><td class="markdownTableBodyNone"><span class="tt">0</span>: non-shareable; <span class="tt">1</span>: inner shareable; <span class="tt">2</span>: outer shareable; <span class="tt">3</span>: system  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">[2]</span>  </td><td class="markdownTableBodyNone">AXI port  </td><td class="markdownTableBodyNone"><span class="tt">0</span>: SRAM; <span class="tt">1</span>: EXT  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">[3]</span>  </td><td class="markdownTableBodyNone">reserved  </td><td class="markdownTableBodyNone">keep clear  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">[7:4]</span>  </td><td class="markdownTableBodyNone">memory type  </td><td class="markdownTableBodyNone">AXI read and write cache-attribute encoding  </td></tr>
-</table>
-<p><span class="tt">NPU_QCONFIG</span> and each <span class="tt">NPU_REGIONCFG_x</span> select one of these entries. Therefore, changing a <span class="tt">NPU_MEM_ATTR_x</span> option changes every command-stream or base-pointer access routed to that entry.</p>
 <h1 class="doxsection"><a class="anchor" id="logging"></a>
 Logging</h1>
 <p>The driver logging interface is implemented by the private header <span class="tt">source/src/ethosu_log.h</span>. It is a compile-time facility used by the driver and device implementation, rather than a runtime callback API. See <a class="el" href="group__ethosu__log__api.html" title="Logging">Logging</a> for the generated macro reference. The header provides the following <span class="tt">printf</span>-style macros:</p>

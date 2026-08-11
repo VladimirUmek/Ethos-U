@@ -43,8 +43,7 @@ var NAVTREE =
     [ "Driver Configuration", "index.html#driver-configuration", [
       [ "Configuration Options", "index.html#configuration-options", [
         [ "Command-stream and base-pointer routing", "index.html#command-stream-and-base-pointer-routing", null ]
-      ] ],
-      [ "Ethos-U85 memory attributes", "index.html#ethos-u85-memory-attributes", null ]
+      ] ]
     ] ],
     [ "Logging", "index.html#logging", null ],
     [ "Performance Monitoring Unit (PMU)", "index.html#performance-monitoring-unit-pmu", [
