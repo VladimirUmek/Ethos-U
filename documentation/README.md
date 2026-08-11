@@ -7,7 +7,7 @@ This document describes how to generate Doxygen-style documentation.
 ### Windows
 
 - Install bash shell (for example git bash for Windows)
-- Install [Doxygen](https://www.doxygen.nl/download.html) (verified to work with v1.13.2)
+- Install [Doxygen](https://www.doxygen.nl/download.html) v1.17.0 or later
 - Install [Graphviz](http://www.graphviz.org/download/) (verified to work with v14.1.2)
 - Install Java (PlantUML requires Java)
   - Check whether Java is already installed, run `java --version` from the command line
@@ -28,7 +28,7 @@ This document describes how to generate Doxygen-style documentation.
 
 Use your favorite package manager (apt, brew) to download and install:
 
-- Doxygen (verified to work with v1.13.2)
+- Doxygen v1.17.0 or later
 - Graphviz (verified to work with v14.1.2)
 - PlantUML (verified to work with v1.2026.1)
 

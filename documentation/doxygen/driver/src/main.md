@@ -164,7 +164,7 @@ the inference completion.
 The following simplified sequence diagram shows the asynchronous invocation:
 
 ```mermaid
-    sequenceDiagram
+sequenceDiagram
     participant application as Application
     participant driver as Driver
     participant isr as ISR
