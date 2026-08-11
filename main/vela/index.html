@@ -207,7 +207,7 @@ Troubleshooting installation</h3>
 Obtain an Ethos-U configuration for a device</h1>
 <p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <span class="tt">vela.ini</span> configuration file. The <span class="tt">vela.ini</span> file contains <span class="tt">System_Config</span> sections that model device memory performance and <span class="tt">Memory_Mode</span> sections that define where model data is placed.</p>
 <p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/packs">www.keil.arm.com/packs</a>, can provide the Ethos-U configuration information, including the device-specific <span class="tt">vela.ini</span> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
-<p>When the DFP does not provide this information, create the equivalent configuration manually as described in <a class="el" href="#create-device-specific-velaini-file" title="Create device-specific vela.ini file">Create device-specific `vela.ini` file</a>.</p>
+<p>When the DFP does not provide this information, create the equivalent configuration manually as described in <a class="el" href="#create-device-specific-velaini-file" title="Create device-specific vela.ini file">Create device-specific `vela.ini` file</a>Create device-specific <span class="tt">vela.ini</span> file.</p>
 <h1 class="doxsection"><a class="anchor" id="invocation"></a>
 Invocation</h1>
 <div class="fragment"><div class="line">vela [Options] NETWORK</div>

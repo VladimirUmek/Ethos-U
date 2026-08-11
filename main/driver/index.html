@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <li>Starts the NPU and handles completion or fault interrupts;</li>
 <li>Supports synchronous and asynchronous invocation;</li>
 <li>Provides access to the Ethos-U Performance Monitoring Unit (PMU);</li>
-<li>Exposes weak <a class="el" href="group__ethosu__callback__api.html" title="Platform-specific functions">platform-specific functions</a> for power, cache, address, and RTOS integration.</li>
+<li>Exposes weak <a href="group__ethosu__callback__api.html">platform-specific functions</a> for power, cache, address, and RTOS integration.</li>
 </ul>
 <p>The input to the Ethos-U driver must provide:</p>
 <ul>
@@ -234,23 +234,23 @@ API functions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__public__api.html#ga92c30eeceb5152d6f06ff9c5859a1381" title="ethosu_reserve_driver">ethosu_reserve_driver()</a>, <a class="el" href="group__ethosu__public__api.html#ga6e97d1e64ca7d2cbaa89230bce0a2dde" title="ethosu_release_driver">ethosu_release_driver()</a>  </td><td class="markdownTableBodyNone">reserve an instance in a multi-NPU system  </td></tr>
 </table>
-<p>See <a class="el" href="group__ethosu__public__api.html" title="Functions">Driver functions</a> for the complete generated API and <a class="el" href="group__ethosu__driver__structs.html" title="Structures">Driver structures</a> for public data types.</p>
+<p>See <a href="group__ethosu__public__api.html">Driver functions</a> for the complete generated API and <a href="group__ethosu__driver__structs.html">Driver structures</a> for public data types.</p>
 <h1 class="doxsection"><a class="anchor" id="platform-specific-functions"></a>
 Platform-specific functions</h1>
-<p>The driver provides default implementations for <a class="el" href="group__ethosu__callback__api.html" title="Platform-specific functions">platform-specific functions</a> listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.</p>
+<p>The driver provides default implementations for <a href="group__ethosu__callback__api.html">platform-specific functions</a> listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">API Function  </th><th class="markdownTableHeadNone">When an overwrite is needed  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gae23e3120197768bbd1b21fd03823183a" title="ethosu_flush_dcache">ethosu_flush_dcache()</a>, <a class="el" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66" title="ethosu_invalidate_dcache">ethosu_invalidate_dcache()</a>  </td><td class="markdownTableBodyNone">CPU-cached memory is shared with the NPU and requires <a class="el" href="#data-caching" title="Data caching">platform-specific cache maintenance</a>.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gae23e3120197768bbd1b21fd03823183a" title="ethosu_flush_dcache">ethosu_flush_dcache()</a>, <a class="el" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66" title="ethosu_invalidate_dcache">ethosu_invalidate_dcache()</a>  </td><td class="markdownTableBodyNone">CPU-cached memory is shared with the NPU and requires <a class="el" href="#data-caching" title="Data caching">platform-specific cache maintenance</a>platform-specific cache maintenance.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gaada1c421a052cbdcfd5f1c8c31cd8c4a" title="ethosu_address_remap">ethosu_address_remap()</a>  </td><td class="markdownTableBodyNone">The CPU and NPU use different addresses for the same storage.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a" title="ethosu_config_select">ethosu_config_select()</a>  </td><td class="markdownTableBodyNone">Memory-region attributes depend on the address or run-time placement.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Mutex and semaphore functions in <a class="el" href="group__ethosu__callback__api.html" title="Platform-specific functions">Platform-specific functions</a>  </td><td class="markdownTableBodyNone">Multiple tasks or NPUs can use the driver and require <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">platform-specific RTOS locking</a>.  </td></tr>
+<td class="markdownTableBodyNone">Mutex and semaphore functions in <a href="group__ethosu__callback__api.html">Platform-specific functions</a>  </td><td class="markdownTableBodyNone">Multiple tasks or NPUs can use the driver and require <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">platform-specific RTOS locking</a>platform-specific RTOS locking.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f" title="ethosu_inference_begin">ethosu_inference_begin()</a>, <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c" title="ethosu_inference_end">ethosu_inference_end()</a>  </td><td class="markdownTableBodyNone"><a class="el" href="#beginend-inference-callbacks" title="Begin/End inference callbacks">Inference tracing, power control, or application callbacks are required</a>.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f" title="ethosu_inference_begin">ethosu_inference_begin()</a>, <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c" title="ethosu_inference_end">ethosu_inference_end()</a>  </td><td class="markdownTableBodyNone"><a class="el" href="#beginend-inference-callbacks" title="Begin/End inference callbacks">Inference tracing, power control, or application callbacks are required</a>Inference tracing, power control, or application callbacks are required.  </td></tr>
 </table>
 <p>Cache policy, linker placement, and region configuration are system-level decisions. Detailed guidance is in the chapter <a href="../integration/index.html">Integration</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="driver-usage"></a>
@@ -292,7 +292,7 @@ sequenceDiagram
     rtos--&gt;&gt;driver: Resume ML thread
     driver--&gt;&gt;application: Inference result</pre>
 </div>
-<p>With an RTOS implementation, <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take()</a> blocks the calling task and allows the RTOS scheduler to run other ready threads while the Ethos-U NPU executes the inference. The Ethos-U interrupt handler calls <a class="el" href="group__ethosu__callback__api.html#ga71614f92cb653bed7b7632b0362939b4" title="ethosu_semaphore_give">ethosu_semaphore_give()</a> when the NPU completes or reports a fault, allowing the synchronous invocation to resume. The platform must provide the RTOS-specific semaphore functions described in <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">Mutex and semaphores</a>.</p>
+<p>With an RTOS implementation, <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take()</a> blocks the calling task and allows the RTOS scheduler to run other ready threads while the Ethos-U NPU executes the inference. The Ethos-U interrupt handler calls <a class="el" href="group__ethosu__callback__api.html#ga71614f92cb653bed7b7632b0362939b4" title="ethosu_semaphore_give">ethosu_semaphore_give()</a> when the NPU completes or reports a fault, allowing the synchronous invocation to resume. The platform must provide the RTOS-specific semaphore functions described in <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">Mutex and semaphores</a>Mutex and semaphores.</p>
 <h2 class="doxsection"><a class="anchor" id="asynchronous-invocation"></a>
 Asynchronous invocation</h2>
 <p>A typical usage of the driver can be the following:</p>
@@ -414,7 +414,7 @@ Begin/End inference callbacks</h1>
 <div class="line">        <span class="keyword">struct </span>my_data *data = (<span class="keyword">struct </span>my_data*) user_arg;</div>
 <div class="line">        <span class="comment">// use drv and data here</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><p>For a practical use of these callbacks, see the <a class="el" href="#pmu-example" title="PMU example">PMU example</a>.</p>
+</div><!-- fragment --><p>For a practical use of these callbacks, see the <a class="el" href="#pmu-example" title="PMU example">PMU example</a>PMU example.</p>
 <h1 class="doxsection"><a class="anchor" id="driver-configuration"></a>
 Driver Configuration</h1>
 <p>The selected driver component supplies a target-specific configuration file:</p>
