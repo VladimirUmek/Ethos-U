@@ -471,6 +471,9 @@ guidance on when a platform-specific implementation is required.
   \details
   Called immediately before starting the command stream. The default weak
   implementation is a no-op.
+
+  See <a href="index.html#beginend-inference-callbacks">Begin/End inference
+  callbacks</a> for usage and lifecycle requirements.
 */
 
 /**
@@ -479,6 +482,9 @@ guidance on when a platform-specific implementation is required.
   Called by ethosu_wait() when finalizing a started job, including error and
   timeout paths. It is not guaranteed if a running driver is released. The
   default weak implementation is a no-op.
+
+  See <a href="index.html#beginend-inference-callbacks">Begin/End inference
+  callbacks</a> for usage and lifecycle requirements.
 */
 
 /**
