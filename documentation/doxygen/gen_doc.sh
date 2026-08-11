@@ -5,7 +5,7 @@
 #
 # Pre-requisites:
 # - bash shell (for Windows: install git for Windows)
-# - doxygen 1.13.2
+# - doxygen 1.17.0
 
 set -o pipefail
 
@@ -14,7 +14,7 @@ REQUIRED_GEN_PACK_LIB="0.14.0"
 
 DIRNAME=$(dirname $(readlink -f $0))
 GENDIR=../html
-REQ_DXY_VERSION="1.13.2"
+REQ_DXY_VERSION="1.17.0"
 
 function usage() {
   echo "Usage: $(basename "$0") [-h] [-s] [-c <comp>]"

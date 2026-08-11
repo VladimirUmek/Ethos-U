@@ -124,6 +124,37 @@ int result = ethosu_invoke(drv,
 ethosu_release_driver(drv);
 ```
 
+The following simplified sequence diagram shows the synchronous invocation in
+an RTOS environment:
+
+```mermaid
+sequenceDiagram
+    participant application as ML thread
+    participant driver as Driver
+    participant npu as Ethos-U NPU
+    participant rtos as RTOS
+    participant threads as Other threads
+
+    application->>driver: ethosu_invoke()
+    driver->>npu: Program regions and start
+    driver->>rtos: ethosu_semaphore_take(): Block ML thread
+    rtos->>threads: Schedule other ready threads
+    Note over threads,npu: Other threads can run while the NPU is busy
+    npu->>driver: Completion or fault interrupt
+    driver->>rtos: ethosu_semaphore_give(): Make ML thread ready
+    rtos-->>driver: Resume ML thread
+    driver-->>application: Inference result
+```
+
+With an RTOS implementation, \ref ethosu_semaphore_take
+"ethosu_semaphore_take()" blocks the calling task and allows the RTOS scheduler to
+run other ready threads while the Ethos-U NPU executes the inference. The
+Ethos-U interrupt handler calls \ref ethosu_semaphore_give
+"ethosu_semaphore_give()" when the NPU completes or reports a
+fault, allowing the synchronous invocation to resume. The platform must provide
+the RTOS-specific semaphore functions described in
+\ref mutex-and-semaphores "Mutex and semaphores".
+
 ### Asynchronous invocation
 
 A typical usage of the driver can be the following:
