@@ -98,8 +98,6 @@ function generate() {
 
   mkdir -p "${DIRNAME}/${GENDIR}/$1/search/"
   cp -f "${DIRNAME}/style_template/search.css" "${DIRNAME}/${GENDIR}/$1/search/"
-  cp -f "${DIRNAME}/style_template/navtree.js" "${DIRNAME}/${GENDIR}/$1/"
-  cp -f "${DIRNAME}/style_template/resize.js" "${DIRNAME}/${GENDIR}/$1/"
 
   sed -e "s/{datetime}/${datetime}/" "${DIRNAME}/style_template/footer.js.in" \
     | sed -e "s/{year}/${year}/" \
