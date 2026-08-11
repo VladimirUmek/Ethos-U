@@ -111,7 +111,7 @@ A typical usage of the driver can be the following:
 ```c
 // reserve a driver to be used (this call could block until a driver is available)
 struct ethosu_driver *drv = ethosu_reserve_driver();
-...
+// ...
 // run one or more inferences
 int result = ethosu_invoke_v3(drv,
                               custom_data_ptr,
@@ -119,7 +119,7 @@ int result = ethosu_invoke_v3(drv,
                               base_addr,
                               base_addr_size,
                               num_base_addr);
-...
+// ...
 // release the driver for others to use
 ethosu_release_driver(drv);
 ```
@@ -162,7 +162,7 @@ A typical usage of the driver can be the following:
 ```c
 // reserve a driver to be used (this call could block until a driver is available)
 struct ethosu_driver *drv = ethosu_reserve_driver();
-...
+// ...
 // run one or more inferences
 int result = ethosu_invoke_async(drv,
                                  custom_data_ptr,
@@ -171,16 +171,16 @@ int result = ethosu_invoke_async(drv,
                                  base_addr_size,
                                  num_base_addr,
                                  user_arg);
-...
+// ...
 // do some other work
-...
+// ...
 int ret;
 do {
     // true = blocking, false = non-blocking
     // ret > 0 means inference not completed (only for non-blocking mode)
     ret = ethosu_wait(drv, <true|false>);
 } while(ret > 0);
-...
+// ...
 // release the driver for others to use
 ethosu_release_driver(drv);
 ```
@@ -253,7 +253,6 @@ A simple example implementation for the weak functions, using CMSIS primitives
 could look like below:
 
 ```cpp
-extern "C" {
 void ethosu_flush_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
 {
     for (int i = 0; i < num_base_addr; i++)
@@ -265,7 +264,6 @@ void ethosu_invalidate_dcache(const uint64_t *base_addr, const size_t *base_addr
     for (int i = 0; i < num_base_addr; i++)
         SCB_InvalidateDCache_by_Addr((uint32_t *)(uintptr_t)base_addr[i], base_addr_size[i]);
 }
-} // extern "C"
 ```
 
 The NPU contain memory attributes that should be set to match the settings used
@@ -346,7 +344,7 @@ the \ref ethosu_inference_begin "ethosu_inference_begin()" and
 
 ```c
 void my_function() {
-    ...
+    // ...
     struct my_data data = {...};
     int result = ethosu_invoke_v3(drv,
                                   custom_data_ptr,
@@ -355,7 +353,7 @@ void my_function() {
                                   base_addr_size,
                                   num_base_addr,
                                   (void *)&data);
-    ....
+    // ...
 }
 
 void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg) {
@@ -413,68 +411,6 @@ transaction counter, and AXI limit entry:
 On Ethos-U85, the value selects `MEM_ATTR0..3` which then specifies the AXI port,
 memory domain, and memory type.
 
-### Ethos-U55 and Ethos-U65 AXI limits
-
-Ethos-U55 and Ethos-U65 provide four independently configured limit entries:
-
-- `AXI_LIMIT0` and `AXI_LIMIT1` apply to the two AXI0 counters;
-- `AXI_LIMIT2` and `AXI_LIMIT3` apply to the two AXI1 counters.
-
-Each entry has the following options:
-
-| Option                              | Purpose                                       |
-| ----------------------------------- | --------------------------------------------- |
-| `AXI_LIMITx_MAX_BEATS_BYTES`        | boundary at which the NPU splits an AXI burst |
-| `AXI_LIMITx_MEM_TYPE`               | AXI read and write cache attributes           |
-| `AXI_LIMITx_MAX_OUTSTANDING_READS`  | maximum outstanding read transactions         |
-| `AXI_LIMITx_MAX_OUTSTANDING_WRITES` | maximum outstanding write transactions        |
-
-`AXI_LIMITx_MAX_BEATS_BYTES` limits the span of each burst to meet the boundary
-requirements of the AXI interconnect and memory system.
-
-It can have the following values:
-
-| Value  | Burst Limit |
-| ------ | ----------- |
-| 0      | 64 bytes    |
-| 1 or 2 | 128 bytes   |
-
-`AXI_LIMITx_MEM_TYPE` encoding is common to U55, U65, and the U85 `MEM_ATTR` entries:
-
-| Value | Memory type                            |
-| ----- | -------------------------------------- |
-| `0x0` | Device non-bufferable                  |
-| `0x1` | Device bufferable                      |
-| `0x2` | Normal non-cacheable, non-bufferable   |
-| `0x3` | Normal non-cacheable, bufferable       |
-| `0x4` | Write-through, no allocate             |
-| `0x5` | Write-through, read allocate           |
-| `0x6` | Write-through, write allocate          |
-| `0x7` | Write-through, read and write allocate |
-| `0x8` | Write-back, no allocate                |
-| `0x9` | Write-back, read allocate              |
-| `0xA` | Write-back, write allocate             |
-| `0xB` | Write-back, read and write allocate    |
-
-The outstanding-transaction options configure the maximum number of outstanding
-AXI transactions,
-
-| Option                              | U55 range | U65 range |
-| ----------------------------------- | --------- | --------- |
-| `AXI_LIMITx_MAX_OUTSTANDING_READS`  | `1..32`   | `1..64`   |
-| `AXI_LIMITx_MAX_OUTSTANDING_WRITES` | `1..16`   | `1..32`   |
-
-### Ethos-U85 power ramping
-
-`NPU_MAC_PWR_RAMP_CYCLES` sets the interval between MAC-unit steps during power
-ramp-up and ramp-down:
-
-| Value   | Interval                                       |
-| ------- | ---------------------------------------------- |
-| `0..63` | `4 * NPU_MAC_PWR_RAMP_CYCLES` NPU clock cycles |
-
-Value `0` disabled ramping.
-
 ### Ethos-U85 memory attributes
 
 Ethos-U85 provides four memory-attribute entries configured by `NPU_MEM_ATTR_0..3`.
@@ -485,43 +421,19 @@ Each option is an encoded byte:
 | `[1:0]` | memory domain | `0`: non-shareable; `1`: inner shareable; `2`: outer shareable; `3`: system |
 | `[2]`   | AXI port      | `0`: SRAM; `1`: EXT                                                         |
 | `[3]`   | reserved      | keep clear                                                                  |
-| `[7:4]` | memory type   | `0x0` to `0xB` as listed in the memory-type table above                     |
+| `[7:4]` | memory type   | AXI read and write cache-attribute encoding                                 |
 
 `NPU_QCONFIG` and each `NPU_REGIONCFG_x` select one of these entries. Therefore,
 changing a `NPU_MEM_ATTR_x` option changes every command-stream or base-pointer
 access routed to that entry.
 
-### Ethos-U85 AXI limits
-
-Ethos-U85 applies separate settings to the SRAM and EXT AXI ports:
-
-| Option                                    | Values  | Purpose                                  |
-| ----------------------------------------- | ------: | ---------------------------------------- |
-| `AXI_LIMIT_SRAM_MAX_OUTSTANDING_READ_M1`  | `1..12` | maximum outstanding reads per SRAM port  |
-| `AXI_LIMIT_SRAM_MAX_OUTSTANDING_WRITE_M1` | `1..16` | maximum outstanding writes per SRAM port |
-| `AXI_LIMIT_SRAM_MAX_BEATS`                | `0..2`  | SRAM burst-split alignment               |
-| `AXI_LIMIT_EXT_MAX_OUTSTANDING_READ_M1`   | `1..64` | maximum outstanding reads per EXT port   |
-| `AXI_LIMIT_EXT_MAX_OUTSTANDING_WRITE_M1`  | `1..32` | maximum outstanding writes per EXT port  |
-| `AXI_LIMIT_EXT_MAX_BEATS`                 | `0..2`  | EXT burst-split alignment                |
-
-Either of `*_MAX_BEATS` defines can have the following values:
-
-| Value  | Burst Limit |
-| ------ | ----------- |
-| 0      | 64 bytes    |
-| 1      | 128 bytes   |
-| 2      | 256 bytes   |
-
-meaning that an AXI burst that crosses the selected aligned boundary is split into multiple bursts.
-
 ## Logging
-
-ToDo: should ethosu_log.h be a configuration file?  Add useful example.
 
 The driver logging interface is implemented by the private header
 `source/src/ethosu_log.h`. It is a compile-time facility used by the driver and
-device implementation, rather than a runtime callback API. It provides the
-following `printf`-style macros:
+device implementation, rather than a runtime callback API. See
+\ref ethosu_log_api "Logging" for the generated macro reference. The header
+provides the following `printf`-style macros:
 
 | Macro | Output |
 | --- | --- |

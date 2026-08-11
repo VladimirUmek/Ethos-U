@@ -1029,8 +1029,10 @@ WARN_LOGFILE           =
 INPUT                  = ./src/main.md \
                          ./src/driver.txt \
                          ./src/ethosu_driver.txt \
+                         ./src/ethosu_log.txt \
                          ./src/pmu_ethosu.txt \
                          ../../../source/include/ethosu_driver.h \
+                         ../../../source/src/ethosu_log.h \
                          ../../../source/include/pmu_ethosu.h
 
 # This tag can be used to specify the character encoding of the source files
