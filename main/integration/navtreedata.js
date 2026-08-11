@@ -25,26 +25,26 @@
 var NAVTREE =
 [
   [ "Integration", "index.html", [
-    [ "Starting point", "index.html#autotoc_md0", [
-      [ "Determine the memory budget", "index.html#autotoc_md1", null ]
+    [ "Starting point", "index.html#starting-point", [
+      [ "Determine the memory budget", "index.html#determine-the-memory-budget", null ]
     ] ],
-    [ "Integration workflow", "index.html#autotoc_md2", [
-      [ "General integration guidance", "index.html#autotoc_md3", null ],
-      [ "Add ML model and configuration to version control", "index.html#autotoc_md4", null ]
+    [ "Integration workflow", "index.html#integration-workflow", [
+      [ "General integration guidance", "index.html#general-integration-guidance", null ],
+      [ "Add ML model and configuration to version control", "index.html#add-ml-model-and-configuration-to-version-control", null ]
     ] ],
-    [ "Create the <em>csolution project</em>", "index.html#integration_create_csolution", [
-      [ "Use a project example and add device", "index.html#autotoc_md5", null ],
-      [ "Add MLOps information", "index.html#autotoc_md6", null ],
-      [ "Add ML model layer", "index.html#autotoc_md7", null ]
+    [ "Create the <em>csolution project</em>", "index.html#create-the-csolution-project", [
+      [ "Use a project example and add device", "index.html#use-a-project-example-and-add-device", null ],
+      [ "Add MLOps information", "index.html#add-mlops-information", null ],
+      [ "Add ML model layer", "index.html#add-ml-model-layer", null ]
     ] ],
-    [ "Compile the ML model for the device", "index.html#integration_compile_model", null ],
-    [ "Configure memory placement and the linker script", "index.html#integration_configure_memory", null ],
-    [ "Complete application integration", "index.html#integration_complete_application", null ],
-    [ "Validate and tune", "index.html#integration_validate_tune", null ],
-    [ "Ethos-U configuration", "index.html#autotoc_md9", null ],
-    [ "Linker configuration", "index.html#autotoc_md10", null ],
-    [ "Driver weak hooks", "index.html#autotoc_md11", null ],
-    [ "Driver build configuration", "index.html#autotoc_md12", null ]
+    [ "Compile the ML model for the device", "index.html#compile-the-ml-model-for-the-device", null ],
+    [ "Configure memory placement and the linker script", "index.html#configure-memory-placement-and-the-linker-script", null ],
+    [ "Complete application integration", "index.html#complete-application-integration", null ],
+    [ "Validate and tune", "index.html#validate-and-tune", null ],
+    [ "Ethos-U configuration", "index.html#ethos-u-configuration", null ],
+    [ "Linker configuration", "index.html#linker-configuration", null ],
+    [ "Driver weak hooks", "index.html#driver-weak-hooks", null ],
+    [ "Driver build configuration", "index.html#driver-build-configuration", null ]
   ] ]
 ];
 

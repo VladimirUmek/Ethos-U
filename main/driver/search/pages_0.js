@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['and_20base_20pointer_20routing_0',['Command-stream and base-pointer routing',['../index.html#autotoc_md11',1,'']]],
-  ['and_20ethos_20u65_20axi_20limits_1',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#autotoc_md12',1,'']]],
+  ['and_20base_20pointer_20routing_0',['Command-stream and base-pointer routing',['../index.html#command-stream-and-base-pointer-routing',1,'']]],
+  ['and_20ethos_20u65_20axi_20limits_1',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#ethos-u55-and-ethos-u65-axi-limits',1,'']]],
   ['and_20semaphores_2',['Mutex and semaphores',['../index.html#mutex-and-semaphores',1,'']]],
-  ['api_3',['Driver API',['../index.html#autotoc_md2',1,'']]],
-  ['api_20functions_4',['API functions',['../index.html#autotoc_md3',1,'']]],
-  ['asynchronous_20invocation_5',['Asynchronous invocation',['../index.html#autotoc_md7',1,'']]],
-  ['attributes_6',['Ethos-U85 memory attributes',['../index.html#autotoc_md14',1,'']]],
-  ['axi_20limits_7',['AXI limits',['../index.html#autotoc_md12',1,'Ethos-U55 and Ethos-U65 AXI limits'],['../index.html#autotoc_md15',1,'Ethos-U85 AXI limits']]]
+  ['api_3',['Driver API',['../index.html#driver-api',1,'']]],
+  ['api_20functions_4',['API functions',['../index.html#api-functions',1,'']]],
+  ['asynchronous_20invocation_5',['Asynchronous invocation',['../index.html#asynchronous-invocation',1,'']]],
+  ['attributes_6',['Ethos-U85 memory attributes',['../index.html#ethos-u85-memory-attributes',1,'']]],
+  ['axi_20limits_7',['AXI limits',['../index.html#ethos-u55-and-ethos-u65-axi-limits',1,'Ethos-U55 and Ethos-U65 AXI limits'],['../index.html#ethos-u85-axi-limits',1,'Ethos-U85 AXI limits']]]
 ];

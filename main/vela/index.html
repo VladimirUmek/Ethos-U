@@ -160,10 +160,10 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
   <div class="headertitle"><div class="title">Vela </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="mainpage"></a></p>
+<div class="textblock"><p><a class="anchor" id="md_src_2main"></a></p>
 <p>Arm Vela is an ahead-of-time (AOT) neural network model compiler for the <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55">Ethos-U55</a>, <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65">Ethos-U65</a>, and <a href="https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u85">Ethos-U85</a> NPUs. It converts a quantized TensorFlow Lite (<span class="tt">.tflite</span>) or TOSA (<span class="tt">.tosa</span>) ML model into command streams and encoded constant data for a selected Ethos-U configuration.</p>
 <p>This chapter covers Vela 5.1 and later. Use <span class="tt">vela --version</span> to identify the installed version and consult its release notes for version-specific changes.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md0"></a>
+<h1 class="doxsection"><a class="anchor" id="feature-overview"></a>
 Feature overview</h1>
 <p>The Vela compiler performs the offline, target-specific part of an Ethos-U deployment:</p>
 <ul>
@@ -178,21 +178,21 @@ Feature overview</h1>
 <li>Reports operator placement, estimated cycles, bandwidth, and memory use.</li>
 </ul>
 <p>Striping divides feature maps into smaller regions to reduce the active working set. Cascading feeds each region directly through a sequence of compatible operations, allowing Vela to use rolling buffers instead of storing complete intermediate feature maps.</p>
-<p>For the normal deployment flow, see the <a href="../general/index.html#general_system_overview">system overview</a>.</p>
+<p>For the normal deployment flow, see the <a href="../general/index.html#system-overview">system overview</a>.</p>
 <p>For TFLite output, supported regions become Ethos-U custom operators containing the NPU command stream and related data. Unsupported TFLite operators remain in the model for CPU execution, commonly using TensorFlow Lite Micro reference or <a href="https://www.keil.arm.com/packs/cmsis-nn-arm">CMSIS-NN</a> kernels. Always review compiler warnings and <span class="tt">--show-cpu-operations</span>; a successful compilation does not imply that every operation runs on the NPU.</p>
 <p>The Vela compiler's cycle and bandwidth figures are cost-model estimates. Use them to guide compiler decisions and compare like-for-like builds. Validate final performance on an FPGA or target silicon; an <a href="https://www.arm.com/products/development-tools/simulation/fixed-virtual-platforms">Arm Fixed Virtual Platform (FVP)</a> can provide approximate behavior.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md1"></a>
+<h1 class="doxsection"><a class="anchor" id="installation"></a>
 Installation</h1>
 <p>The Vela compiler runs on Linux, macOS, and Windows. The released package requires Python 3.10 or newer:</p>
 <div class="fragment"><div class="line">python -m pip install ethos-u-vela</div>
 <div class="line">vela --version</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="update-an-existing-installation"></a>
 Update an existing installation</h2>
 <p>Plain <span class="tt">pip install</span> considers an already installed version satisfactory and does not necessarily install a newer release. Request an upgrade explicitly:</p>
 <div class="fragment"><div class="line">python -m pip install --upgrade ethos-u-vela</div>
 <div class="line">python -m pip show ethos-u-vela</div>
 <div class="line">vela --version</div>
-</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
+</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="troubleshooting-installation"></a>
 Troubleshooting installation</h3>
 <p>If PyPI reports a newer package but <span class="tt">vela --version</span> still shows the old version, the <span class="tt">pip</span> command and the <span class="tt">vela</span> executable usually belong to different Python environments. Locate both and compare them:</p>
 <div class="fragment"><div class="line">python -c &quot;import sys; print(sys.executable)&quot;</div>
@@ -203,12 +203,12 @@ Troubleshooting installation</h3>
 <div class="line">vela --version</div>
 </div><!-- fragment --><p>Use <span class="tt">py -m pip ...</span> instead of <span class="tt">python -m pip ...</span> on Windows when the Python launcher is how the intended interpreter is selected. Avoid <span class="tt">pip</span> without <span class="tt">python -m</span>: it is easier for that command to address a different environment.</p>
 <p>PyPI supplies wheels for supported host combinations. If no matching wheel is available, <span class="tt">pip</span> builds from source and requires Python development headers, CMake, a C99 compiler, and a C++17 compiler. The package depends on FlatBuffers and NumPy 1.23 or newer.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+<h1 class="doxsection"><a class="anchor" id="obtain-an-ethos-u-configuration-for-a-device"></a>
 Obtain an Ethos-U configuration for a device</h1>
 <p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <span class="tt">vela.ini</span> configuration file. The <span class="tt">vela.ini</span> file contains <span class="tt">System_Config</span> sections that model device memory performance and <span class="tt">Memory_Mode</span> sections that define where model data is placed.</p>
 <p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/packs">www.keil.arm.com/packs</a>, can provide the Ethos-U configuration information, including the device-specific <span class="tt">vela.ini</span> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
-<p>When the DFP does not provide this information, create the equivalent configuration manually as described in <a class="el" href="#vela_create_configuration" title="Create device-specific vela.ini file">Create device-specific `vela.ini` file</a>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
+<p>When the DFP does not provide this information, create the equivalent configuration manually as described in <a class="el" href="#create-device-specific-velaini-file" title="Create device-specific vela.ini file">Create device-specific `vela.ini` file</a>.</p>
+<h1 class="doxsection"><a class="anchor" id="invocation"></a>
 Invocation</h1>
 <div class="fragment"><div class="line">vela [Options] NETWORK</div>
 </div><!-- fragment --><ul>
@@ -224,7 +224,7 @@ Invocation</h1>
 <div class="line">  --system-config DEVICE_SYSTEM_CONFIG \</div>
 <div class="line">  --memory-mode DEVICE_MEMORY_MODE \</div>
 <div class="line">  --optimise Performance</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="options-for-input-output-and-discovery"></a>
 Options for input, output, and discovery</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -255,7 +255,7 @@ Options for input, output, and discovery</h2>
 <td class="markdownTableBodyNone"><span class="tt">--force-symmetric-int-weights</span>  </td><td class="markdownTableBodyNone">Force signed integer weight zero-points to zero.  </td></tr>
 </table>
 <p>Raw output holds command streams, weight data, and tensor quantization metadata for Ethos-U regions. It omits CPU regions and therefore is not a general TFLite-to-TOSA conversion format.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+<h2 class="doxsection"><a class="anchor" id="options-for-ethos-u-target-and-scheduling"></a>
 Options for Ethos-U target and scheduling</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -287,7 +287,7 @@ Options for Ethos-U target and scheduling</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">--ignore-ops OP[,OP...]</span>  </td><td class="markdownTableBodyNone">Force named TFLite builtin operator types, such as <span class="tt">ADD,ARGMAX</span>, onto the CPU. Repeatable and ignored for TOSA.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+<h2 class="doxsection"><a class="anchor" id="options-for-reporting-and-diagnostics"></a>
 Options for reporting and diagnostics</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -329,7 +329,7 @@ Options for reporting and diagnostics</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">--verbose-progress</span>  </td><td class="markdownTableBodyNone">Show compilation progress.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="vela_use_configuration"></a>
+<h1 class="doxsection"><a class="anchor" id="use-the-ethos-u-configuration"></a>
 Use the Ethos-U configuration</h1>
 <p>Compiling an ML model requires three selections from the Ethos-U configuration:</p>
 <table class="markdownTable">
@@ -353,7 +353,7 @@ Use the Ethos-U configuration</h1>
 <li>Ethos-U65: <span class="tt">Ethos_U65_Embedded</span>, <span class="tt">Ethos_U65_Mid_End</span>, <span class="tt">Ethos_U65_High_End</span>, <span class="tt">Ethos_U65_Client_Server</span>.</li>
 <li>Ethos-U85: <span class="tt">Ethos_U85_SYS_Flash_Low</span>, <span class="tt">Ethos_U85_SYS_Flash_High</span>, <span class="tt">Ethos_U85_SYS_DRAM_Low</span>, <span class="tt">Ethos_U85_SYS_DRAM_Mid</span>, <span class="tt">Ethos_U85_SYS_DRAM_High</span>.</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="vela_select_memory_mode"></a>
+<h2 class="doxsection"><a class="anchor" id="select-a-memory-mode"></a>
 Select a memory mode</h2>
 <p>The reference configuration defines typically memory modes as shown below.</p>
 <table class="markdownTable">
@@ -373,11 +373,11 @@ Select a memory mode</h2>
 <p>The names <span class="tt">Axi0</span> and <span class="tt">Axi1</span> are logical aliases in <span class="tt">vela.ini</span>. Their physical memory types come from the selected system configuration.</p>
 <p>Ethos-U85 can have up to six AXI port interfaces, which Vela maps to <span class="tt">Axi0</span> and <span class="tt">Axi1</span>. The <span class="tt">vela.ini</span> parameter <span class="tt">&lt;Memory&gt;_ports_used</span> contains the number of physical AXI ports that map to a logical alias.</p>
 <p>The <span class="tt">vela.ini</span> file, device interconnect, linker placement, MPU/SAU attributes, cache policy, driver region indices, and ML inference runtime tensor arena must agree. The Vela compiler cannot validate the complete firmware memory map.</p>
-<h2 class="doxsection"><a class="anchor" id="vela_arena_cache_size"></a>
+<h2 class="doxsection"><a class="anchor" id="understand-arena-cache-and-spilling"></a>
 Understand arena cache and spilling</h2>
 <p><span class="tt">cache_mem_area</span> does not always create a separate cache allocation. When it resolves to the same memory type as <span class="tt">arena_mem_area</span>, the fast-scratch memory region is folded into <span class="tt">arena_mem_area</span>. <span class="tt">cache_mem_area</span> is a distinct area only when <span class="tt">arena_mem_area</span> is in a different memory type.</p>
 <p>The Ethos-U55 hardware AXI1 port is a read-only interface. Consequently, <span class="tt">Dedicated_Sram</span> is not a practical Ethos-U55 execution model when the writable feature-map arena would be placed on that interface. Do not infer the same read-only restriction for the logical <span class="tt">Axi1</span> alias in <span class="tt">vela.ini</span> on every Ethos-U target.</p>
-<h1 class="doxsection"><a class="anchor" id="vela_create_configuration"></a>
+<h1 class="doxsection"><a class="anchor" id="create-device-specific-velaini-file"></a>
 Create device-specific vela.ini file</h1>
 <p>To support a device manually, create a device-specific <span class="tt">vela.ini</span> file. Application developers normally obtain this file from the silicon vendor, either directly or from a DFP through CMSIS-Toolbox.</p>
 <p>Creating an Ethos-U configuration requires these steps:</p>
@@ -403,7 +403,7 @@ Create device-specific vela.ini file</h1>
 <li>Underscores in memory type names are not permitted. The Vela compiler splits a memory type such as <span class="tt">&lt;Memory&gt;_clock_scale</span> at the first underscore. ToDo: verify this</li>
 <li>Start the name of a custom Ethos-U55 system configuration with <span class="tt">Ethos_U55</span>. The Vela compiler uses this prefix when selecting the U55 AXI bandwidth width while translating memory-performance values.</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="vela_system_configuration"></a>
+<h2 class="doxsection"><a class="anchor" id="system-configuration-parameters"></a>
 System configuration parameters</h2>
 <p>The system configuration maps the two logical aliases in <span class="tt">vela.ini</span> to memory types and supplies the performance model. <span class="tt">axi0_port</span> and <span class="tt">axi1_port</span> connect the aliases used by a memory mode to those types; they do not by themselves identify a physical memory or hardware port. Parameters for a memory type are needed only when <span class="tt">axi0_port</span> or <span class="tt">axi1_port</span> selects that type.</p>
 <p>Derive the values from the device data sheet, interconnect description, and measured memory behavior:</p>
@@ -441,7 +441,7 @@ System configuration parameters</h2>
 </table>
 <p>The option reference lists the full metric set for <span class="tt">Sram</span>, <span class="tt">Dram</span>, and <span class="tt">OffChipFlash</span>, and lists <span class="tt">OnChipFlash_clock_scale</span> for on-chip Flash. Use <span class="tt">--verbose-config</span> with the installed Vela version to inspect the resolved properties supported by that version.</p>
 <p>The values in <span class="tt">vela.ini</span> are used by the Vela compiler to optimize the ML model for the target and the output report. The can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated command stream. <span class="tt">core_clock</span> is primarily used to convert cycle estimates to time.</p>
-<h2 class="doxsection"><a class="anchor" id="vela_memory_mode"></a>
+<h2 class="doxsection"><a class="anchor" id="memory-mode-parameters"></a>
 Memory mode parameters</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -459,7 +459,7 @@ Memory mode parameters</h2>
 </table>
 <p>The memory-area mapping must be consistent with the Ethos-U driver, the ML inference runtime tensor arena, the linker script, and the physical memory system. These options guide compilation; they do not configure the hardware.</p>
 <p>With <span class="tt">--optimise Size</span>, the Vela compiler minimizes SRAM use and does not use the arena-cache size. With <span class="tt">--optimise Performance</span>, it uses the configured or command-line arena-cache size. If neither is supplied, the compiler uses the maximum addressable size for the selected Ethos-U target.</p>
-<h2 class="doxsection"><a class="anchor" id="vela_create_linker_script"></a>
+<h2 class="doxsection"><a class="anchor" id="create-the-linker-script"></a>
 Create the linker script</h2>
 <p>The linker script places the generated model artifacts and runtime buffers in the physical memories represented by the selected <span class="tt">System_Config</span> and <span class="tt">Memory_Mode</span>. It does not use the logical names <span class="tt">Axi0</span> and <span class="tt">Axi1</span> directly. Instead, it provides sections or memory regions for the Ethos-U I/O resources.</p>
 <p>The linker section names are device- and runtime-specific. The examples provided with this pack use the following section names.</p>
@@ -484,7 +484,7 @@ in examples  </th><th class="markdownTableHeadNone">Content  </th><th class="mar
 <li>MPU/SAU and cache attributes match the driver cache-maintenance policy; and</li>
 <li>the optimized model runs correctly and meets its memory and performance goals on the device.</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="vela_match_driver_configuration"></a>
+<h2 class="doxsection"><a class="anchor" id="match-the-driver-configuration"></a>
 Match the driver configuration</h2>
 <p>The driver configuration must select NPU access paths that match the physical placement established by <span class="tt">vela.ini</span> and the linker script. For the common embedded output flow, verify these relationships:</p>
 <table class="markdownTable">
@@ -501,7 +501,7 @@ Match the driver configuration</h2>
 </table>
 <p>The numeric values of these driver settings are target-specific. Additional base regions can be present in specialized output flows, so use the generated command stream and the device integration information as the authority. Also configure address translation and cache maintenance when Cortex-M software and the NPU access the same physical memory through different addresses or cache policies.</p>
 <p>See <a href="../integration/index.html">Integration</a> for system validation, platform hooks, target-specific driver build configuration, cache maintenance, and address-remapping guidance.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+<h2 class="doxsection"><a class="anchor" id="complete-my_velaini-example"></a>
 Complete <span class="tt">My_vela.ini</span> example</h2>
 <div class="fragment"><div class="line">; Ethos-U55 at 500 MHz with SRAM on AXI0 and read-only Flash on AXI1</div>
 <div class="line">[System_Config.My_Ethos_U55_System]</div>
@@ -546,7 +546,7 @@ Complete <span class="tt">My_vela.ini</span> example</h2>
 <div class="line">  --system-config My_Ethos_U55_System \</div>
 <div class="line">  --memory-mode My_Shared_Sram \</div>
 <div class="line">  --verbose-config</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="vela_publish_configuration"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="publish-ethos-u-configuration-in-a-dfp"></a>
 Publish Ethos-U configuration in a DFP</h2>
 <p>A CMSIS Device Family Pack (DFP) can publish the NPU capabilities, <span class="tt">vela.ini</span> file, and matching linker scripts in its DFP description. The CMSIS-Toolbox can then select these resources for the device, processor, and toolchain used by a project.</p>
 <p>Declare each integrated NPU with a device <span class="tt">feature</span>. The <span class="tt">n</span> attribute identifies the Ethos-U variant, <span class="tt">m</span> identifies its MAC configuration, and <span class="tt">Pname</span> associates it with a processor when the device contains more than one:</p>
@@ -567,9 +567,9 @@ Publish Ethos-U configuration in a DFP</h2>
 <li><a href="https://open-cmsis-pack.github.io/Open-CMSIS-Pack-Spec/main/html/pdsc_family_pg.html#element_environment"><span class="tt">environment</span> element</a>; and</li>
 <li><a href="https://open-cmsis-pack.github.io/Open-CMSIS-Pack-Spec/main/html/pdsc_components_pg.html#element_file">component <span class="tt">file</span> element</a>.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+<h1 class="doxsection"><a class="anchor" id="examples"></a>
 Examples</h1>
-<h2 class="doxsection"><a class="anchor" id="vela_compile_reference_system"></a>
+<h2 class="doxsection"><a class="anchor" id="compile-for-an-ethos-u-reference-system"></a>
 Compile for an Ethos-U reference system</h2>
 <div class="fragment"><div class="line">vela person_detect.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-128 \</div>
@@ -580,20 +580,20 @@ Compile for an Ethos-U reference system</h2>
 <div class="line">  --verbose-cycle-estimate</div>
 </div><!-- fragment --><p>The <span class="tt">output</span> directory contains the optimized ML model <span class="tt">person_detect_vela.tflite</span> and a report. The optimized model is for deployment to the Edge AI MCU.</p>
 <p>The console output shows several details including configuration parameters, memory usage, and with <span class="tt">--verbose-cycle-estimate</span> a rough estimation of the inference time.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+<h2 class="doxsection"><a class="anchor" id="minimize-peak-sram"></a>
 Minimize peak SRAM</h2>
 <div class="fragment"><div class="line">vela keyword_spotting.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-64 \</div>
 <div class="line">  --optimise Size</div>
 </div><!-- fragment --><p><span class="tt">Size</span> scheduling favors tensor reuse and cascading. It can reread more weights and reduce throughput, so measure both memory and performance.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+<h2 class="doxsection"><a class="anchor" id="set-a-performance-scheduler-sram-budget"></a>
 Set a performance-scheduler SRAM budget</h2>
 <div class="fragment"><div class="line">vela person_detect.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-128 \</div>
 <div class="line">  --optimise Performance \</div>
 <div class="line">  --arena-cache-size 61440</div>
 </div><!-- fragment --><p>This supplies a 60 KiB cache budget. Reducing it may increase AXI1 traffic as weights or feature-map data are reread. The reported <span class="tt">Total SRAM used</span> covers the model's NPU-visible tensors and working buffers, not the RTOS, stacks, application allocations, CPU kernels, or other firmware state.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+<h2 class="doxsection"><a class="anchor" id="compile-tosa-for-ethos-u85-raw-output"></a>
 Compile TOSA for Ethos-U85 raw output</h2>
 <div class="fragment"><div class="line">vela my_network.tosa \</div>
 <div class="line">  --config Arm/vela.ini \</div>
@@ -602,7 +602,7 @@ Compile TOSA for Ethos-U85 raw output</h2>
 <div class="line">  --memory-mode Dedicated_Sram_384KB \</div>
 <div class="line">  --output-format raw</div>
 </div><!-- fragment --><p>The resulting <span class="tt">.npz</span> contains the NPU command streams, constants, and quantization metadata required by an integration that consumes raw compiler output.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+<h2 class="doxsection"><a class="anchor" id="inspect-placement-and-compiler-decisions"></a>
 Inspect placement and compiler decisions</h2>
 <div class="fragment"><div class="line">vela model.tflite \</div>
 <div class="line">  --accelerator-config ethos-u85-512 \</div>
@@ -612,12 +612,12 @@ Inspect placement and compiler decisions</h2>
 <div class="line">  --verbose-performance \</div>
 <div class="line">  --enable-debug-db</div>
 </div><!-- fragment --><p>Start with focused reports. <span class="tt">--verbose-all</span> can produce impractically large logs for representative ML models.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+<h2 class="doxsection"><a class="anchor" id="embed-an-optimized-tflite-model-in-firmware"></a>
 Embed an optimized TFLite model in firmware</h2>
 <p>On hosts that provide <span class="tt">xxd</span>, convert the Vela compiler output to a C array:</p>
 <div class="fragment"><div class="line">xxd -i output/my_network_vela.tflite my_network_model.h</div>
 </div><!-- fragment --><p>Place the generated data in the linker region that matches the memory configuration selected from <span class="tt">vela.ini</span>. Ensure that the ML inference runtime registers the Ethos-U custom operator and uses an Ethos-U driver compatible with the compiled command stream.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+<h1 class="doxsection"><a class="anchor" id="executorch-arm-example-flow"></a>
 ExecuTorch Arm example flow</h1>
 <p>?ToDo: update this?</p>
 <p>The <a href="https://github.com/pytorch/executorch/tree/main/examples/arm">ExecuTorch Arm examples</a> demonstrate an integrated PyTorch-to-Ethos-U workflow. The setup script installs the Arm toolchain, TOSA tools, the Vela compiler, and <a href="https://www.arm.com/products/silicon-ip-subsystems">Corstone</a> FVPs. The AOT Arm backend exports and quantizes a PyTorch model, lowers supported partitions through TOSA and the Vela compiler, and packages the result in an ExecuTorch <span class="tt">.pte</span>/<span class="tt">.bpte</span> program. In this flow the compiler is called by the backend; users normally run the example helper rather than invoke Vela on a <span class="tt">.pte</span> file.</p>
@@ -628,7 +628,7 @@ ExecuTorch Arm example flow</h1>
 <div class="line">  --model_name=examples/arm/example_modules/add.py \</div>
 <div class="line">  --target=ethos-u85-128</div>
 </div><!-- fragment --><p>The <span class="tt">run.sh</span> script runs the AOT compiler, builds the matching ML inference runtime, and starts the target simulator unless build-only mode is selected. Other examples include a minimal Ethos-U notebook, a quantizer tutorial, a pruning example, an image-classification application, and Zephyr and <a href="https://www.keil.arm.com/packs/cmsis-arm/overview/">CMSIS</a> project templates. Treat the ExecuTorch branch and Vela version as a tested toolchain because backend-generated Vela options can evolve independently from the standalone CLI examples above.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+<h1 class="doxsection"><a class="anchor" id="troubleshooting"></a>
 Troubleshooting</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['ethos_20u_20configuration_0',['Ethos-U configuration',['../index.html#autotoc_md9',1,'']]],
+  ['ethos_20u_20configuration_0',['Ethos-U configuration',['../index.html#ethos-u-configuration',1,'']]],
   ['ethos_20u_20driver_20api_1',['Ethos-U Driver API',['../../driver/group__ethosu__driver__api.html',1,'']]],
   ['ethosu_5faddress_5fremap_2',['ethosu_address_remap',['../../driver/group__ethosu__callback__api.html#gaada1c421a052cbdcfd5f1c8c31cd8c4a',1,]]],
   ['ethosu_5fconfig_3',['ethosu_config',['../../driver/group__ethosu__driver__structs.html',1,'']]],
@@ -59,5 +59,5 @@ var searchData=
   ['ethosu_5fsemaphore_5ftake_56',['ethosu_semaphore_take',['../../driver/group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725',1,]]],
   ['ethosu_5fsoft_5freset_57',['ethosu_soft_reset',['../../driver/group__ethosu__public__api.html#ga480a7f7b324b3be61c1a9ffc92be9f3a',1,]]],
   ['ethosu_5fwait_58',['ethosu_wait',['../../driver/group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b',1,]]],
-  ['example_20and_20add_20device_59',['Use a project example and add device',['../index.html#autotoc_md5',1,'']]]
+  ['example_20and_20add_20device_59',['Use a project example and add device',['../index.html#use-a-project-example-and-add-device',1,'']]]
 ];

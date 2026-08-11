@@ -2,12 +2,12 @@ var searchData=
 [
   ['end_20inference_20callbacks_0',['Begin/End inference callbacks',['../index.html#beginend-inference-callbacks',1,'']]],
   ['ethos_20u_20driver_20api_1',['Ethos-U Driver API',['../group__ethosu__driver__api.html',1,'']]],
-  ['ethos_20u_20driver_20source_20code_2',['Ethos-U driver source code',['../index.html#autotoc_md0',1,'']]],
-  ['ethos_20u55_20and_20ethos_20u65_20axi_20limits_3',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#autotoc_md12',1,'']]],
-  ['ethos_20u65_20axi_20limits_4',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#autotoc_md12',1,'']]],
-  ['ethos_20u85_20axi_20limits_5',['Ethos-U85 AXI limits',['../index.html#autotoc_md15',1,'']]],
-  ['ethos_20u85_20memory_20attributes_6',['Ethos-U85 memory attributes',['../index.html#autotoc_md14',1,'']]],
-  ['ethos_20u85_20power_20ramping_7',['Ethos-U85 power ramping',['../index.html#autotoc_md13',1,'']]],
+  ['ethos_20u_20driver_20source_20code_2',['Ethos-U driver source code',['../index.html#ethos-u-driver-source-code',1,'']]],
+  ['ethos_20u55_20and_20ethos_20u65_20axi_20limits_3',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#ethos-u55-and-ethos-u65-axi-limits',1,'']]],
+  ['ethos_20u65_20axi_20limits_4',['Ethos-U55 and Ethos-U65 AXI limits',['../index.html#ethos-u55-and-ethos-u65-axi-limits',1,'']]],
+  ['ethos_20u85_20axi_20limits_5',['Ethos-U85 AXI limits',['../index.html#ethos-u85-axi-limits',1,'']]],
+  ['ethos_20u85_20memory_20attributes_6',['Ethos-U85 memory attributes',['../index.html#ethos-u85-memory-attributes',1,'']]],
+  ['ethos_20u85_20power_20ramping_7',['Ethos-U85 power ramping',['../index.html#ethos-u85-power-ramping',1,'']]],
   ['ethosu_5faddress_5fremap_8',['ethosu_address_remap',['../group__ethosu__callback__api.html#gaada1c421a052cbdcfd5f1c8c31cd8c4a',1,'ethosu_driver.h']]],
   ['ethosu_5fconfig_9',['ethosu_config',['../group__ethosu__driver__structs.html#structethosu__config',1,'']]],
   ['ethosu_5fconfig_5fselect_10',['ethosu_config_select',['../group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a',1,'ethosu_driver.h']]],
@@ -65,6 +65,6 @@ var searchData=
   ['ethosu_5fsemaphore_5ftake_62',['ethosu_semaphore_take',['../group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725',1,'ethosu_driver.h']]],
   ['ethosu_5fsoft_5freset_63',['ethosu_soft_reset',['../group__ethosu__public__api.html#ga480a7f7b324b3be61c1a9ffc92be9f3a',1,'ethosu_driver.h']]],
   ['ethosu_5fwait_64',['ethosu_wait',['../group__ethosu__public__api.html#ga33e63dcf2625e5b10d07193490b6323b',1,'ethosu_driver.h']]],
-  ['events_65',['Interpreting PMU events',['../index.html#autotoc_md18',1,'']]],
-  ['example_66',['PMU example',['../index.html#pmu_example',1,'']]]
+  ['events_65',['Interpreting PMU events',['../index.html#interpreting-pmu-events',1,'']]],
+  ['example_66',['PMU example',['../index.html#pmu-example',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hooks_0',['Driver weak hooks',['../index.html#autotoc_md11',1,'']]]
+  ['hooks_0',['Driver weak hooks',['../index.html#driver-weak-hooks',1,'']]]
 ];

@@ -25,36 +25,36 @@
 var NAVTREE =
 [
   [ "Driver", "index.html", [
-    [ "Ethos-U driver source code", "index.html#autotoc_md0", [
-      [ "CMSIS Software component", "index.html#autotoc_md1", null ]
+    [ "Ethos-U driver source code", "index.html#ethos-u-driver-source-code", [
+      [ "CMSIS Software component", "index.html#cmsis-software-component", null ]
     ] ],
-    [ "Driver API", "index.html#autotoc_md2", null ],
-    [ "API functions", "index.html#autotoc_md3", null ],
-    [ "Platform-specific functions", "index.html#autotoc_md4", null ],
-    [ "Driver Usage", "index.html#autotoc_md5", [
-      [ "Synchronous invocation", "index.html#autotoc_md6", null ],
-      [ "Asynchronous invocation", "index.html#autotoc_md7", null ],
-      [ "Driver initialization", "index.html#autotoc_md8", null ]
+    [ "Driver API", "index.html#driver-api", null ],
+    [ "API functions", "index.html#api-functions", null ],
+    [ "Platform-specific functions", "index.html#platform-specific-functions", null ],
+    [ "Driver Usage", "index.html#driver-usage", [
+      [ "Synchronous invocation", "index.html#synchronous-invocation", null ],
+      [ "Asynchronous invocation", "index.html#asynchronous-invocation", null ],
+      [ "Driver initialization", "index.html#driver-initialization", null ]
     ] ],
-    [ "Implementation design", "index.html#autotoc_md9", null ],
+    [ "Implementation design", "index.html#implementation-design", null ],
     [ "Data caching", "index.html#data-caching", null ],
     [ "Mutex and semaphores", "index.html#mutex-and-semaphores", null ],
     [ "Begin/End inference callbacks", "index.html#beginend-inference-callbacks", null ],
-    [ "Driver Configuration", "index.html#driver_configuration", [
-      [ "Configuration Options", "index.html#autotoc_md10", [
-        [ "Command-stream and base-pointer routing", "index.html#autotoc_md11", null ]
+    [ "Driver Configuration", "index.html#driver-configuration", [
+      [ "Configuration Options", "index.html#configuration-options", [
+        [ "Command-stream and base-pointer routing", "index.html#command-stream-and-base-pointer-routing", null ]
       ] ],
-      [ "Ethos-U55 and Ethos-U65 AXI limits", "index.html#autotoc_md12", null ],
-      [ "Ethos-U85 power ramping", "index.html#autotoc_md13", null ],
-      [ "Ethos-U85 memory attributes", "index.html#autotoc_md14", null ],
-      [ "Ethos-U85 AXI limits", "index.html#autotoc_md15", null ]
+      [ "Ethos-U55 and Ethos-U65 AXI limits", "index.html#ethos-u55-and-ethos-u65-axi-limits", null ],
+      [ "Ethos-U85 power ramping", "index.html#ethos-u85-power-ramping", null ],
+      [ "Ethos-U85 memory attributes", "index.html#ethos-u85-memory-attributes", null ],
+      [ "Ethos-U85 AXI limits", "index.html#ethos-u85-axi-limits", null ]
     ] ],
-    [ "Logging", "index.html#autotoc_md16", null ],
-    [ "Performance Monitoring Unit (PMU)", "index.html#autotoc_md17", [
-      [ "Interpreting PMU events", "index.html#autotoc_md18", null ],
-      [ "PMU example", "index.html#pmu_example", null ]
+    [ "Logging", "index.html#logging", null ],
+    [ "Performance Monitoring Unit (PMU)", "index.html#performance-monitoring-unit-pmu", [
+      [ "Interpreting PMU events", "index.html#interpreting-pmu-events", null ],
+      [ "PMU example", "index.html#pmu-example", null ]
     ] ],
-    [ "Bring-up checklist", "index.html#autotoc_md19", null ],
+    [ "Bring-up checklist", "index.html#bring-up-checklist", null ],
     [ "API Reference", "topics.html", "topics" ]
   ] ]
 ];

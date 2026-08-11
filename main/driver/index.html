@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
   <div class="headertitle"><div class="title">Driver </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="mainpage"></a></p>
+<div class="textblock"><p><a class="anchor" id="md_src_2main"></a></p>
 <p>This chapter is the technical reference for the Ethos-U driver interface.</p>
 <p>The Ethos-U driver operations and features at a glance:</p>
 <ul>
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <li>The base addresses and sizes of the memory regions referenced by the command stream.</li>
 </ul>
 <p>The driver does not compile models, allocate the ML framework's tensor arena, choose a memory mode in <span class="tt">vela.ini</span>, or place sections in physical memory.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md0"></a>
+<h1 class="doxsection"><a class="anchor" id="ethos-u-driver-source-code"></a>
 Ethos-U driver source code</h1>
 <p>The driver is provided by the software pack <span class="tt">ARM::Ethos-U</span> and can be added to a CMSIS-based application as a software component. The pack also includes CMSIS-RTOS2 and cache-management interfaces as optional source templates.</p>
 <p>The <a href="https://github.com/ARM-software/CMSIS-Ethos-U">CMSIS-Ethos-U GitHub repository</a> provides access to the source code for other build environments.</p>
@@ -200,7 +200,7 @@ Ethos-U driver source code</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">LICENSE.txt</span>, <span class="tt">SECURITY.md</span>  </td><td class="markdownTableBodyNone">License and security information for the driver source.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md1"></a>
+<h2 class="doxsection"><a class="anchor" id="cmsis-software-component"></a>
 CMSIS Software component</h2>
 <p>The pack <span class="tt">Arm::CMSIS-Ethos-U</span> provides the software component <span class="tt">ARM::Machine Learning:NPU Support:Ethos-U Driver</span> in multiple variants. For using the driver add one variant of the component as shown below:</p>
 <div class="fragment"><div class="line">components:</div>
@@ -209,10 +209,10 @@ CMSIS Software component</h2>
 <div class="line">  - component: &quot;ARM::Machine Learning:NPU Support:Ethos-U Driver&amp;Generic U65&quot; # For Ethos-U65</div>
 </div><!-- fragment --><div class="fragment"><div class="line">components:</div>
 <div class="line">  - component: &quot;ARM::Machine Learning:NPU Support:Ethos-U Driver&amp;Generic U85&quot; # For Ethos-U85</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="driver-api"></a>
 Driver API</h1>
 <p>The driver API is defined in <span class="tt">include/ethosu_driver.h</span> with related types in <span class="tt">include/ethosu_types.h</span>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
+<h1 class="doxsection"><a class="anchor" id="api-functions"></a>
 API functions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -235,28 +235,28 @@ API functions</h1>
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__public__api.html#ga92c30eeceb5152d6f06ff9c5859a1381" title="ethosu_reserve_driver">ethosu_reserve_driver()</a>, <a class="el" href="group__ethosu__public__api.html#ga6e97d1e64ca7d2cbaa89230bce0a2dde" title="ethosu_release_driver">ethosu_release_driver()</a>  </td><td class="markdownTableBodyNone">reserve an instance in a multi-NPU system  </td></tr>
 </table>
 <p>See <a class="el" href="group__ethosu__public__api.html" title="Functions">Driver functions</a> for the complete generated API and <a class="el" href="group__ethosu__driver__structs.html" title="Structures">Driver structures</a> for public data types.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+<h1 class="doxsection"><a class="anchor" id="platform-specific-functions"></a>
 Platform-specific functions</h1>
 <p>The driver provides default implementations for <a class="el" href="group__ethosu__callback__api.html" title="Platform-specific functions">platform-specific functions</a> listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">API Function  </th><th class="markdownTableHeadNone">When an overwrite is needed  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gae23e3120197768bbd1b21fd03823183a" title="ethosu_flush_dcache">ethosu_flush_dcache()</a>, <a class="el" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66" title="ethosu_invalidate_dcache">ethosu_invalidate_dcache()</a>  </td><td class="markdownTableBodyNone">CPU-cached memory is shared with the NPU and requires <a class="el" href="#data-caching" title="Data caching">platform-specific cache maintenance</a>platform-specific cache maintenance.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gae23e3120197768bbd1b21fd03823183a" title="ethosu_flush_dcache">ethosu_flush_dcache()</a>, <a class="el" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66" title="ethosu_invalidate_dcache">ethosu_invalidate_dcache()</a>  </td><td class="markdownTableBodyNone">CPU-cached memory is shared with the NPU and requires <a class="el" href="#data-caching" title="Data caching">platform-specific cache maintenance</a>.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gaada1c421a052cbdcfd5f1c8c31cd8c4a" title="ethosu_address_remap">ethosu_address_remap()</a>  </td><td class="markdownTableBodyNone">The CPU and NPU use different addresses for the same storage.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a" title="ethosu_config_select">ethosu_config_select()</a>  </td><td class="markdownTableBodyNone">Memory-region attributes depend on the address or run-time placement.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Mutex and semaphore functions in <a class="el" href="group__ethosu__callback__api.html" title="Platform-specific functions">Platform-specific functions</a>  </td><td class="markdownTableBodyNone">Multiple tasks or NPUs can use the driver and require <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">platform-specific RTOS locking</a>platform-specific RTOS locking.  </td></tr>
+<td class="markdownTableBodyNone">Mutex and semaphore functions in <a class="el" href="group__ethosu__callback__api.html" title="Platform-specific functions">Platform-specific functions</a>  </td><td class="markdownTableBodyNone">Multiple tasks or NPUs can use the driver and require <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">platform-specific RTOS locking</a>.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f" title="ethosu_inference_begin">ethosu_inference_begin()</a>, <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c" title="ethosu_inference_end">ethosu_inference_end()</a>  </td><td class="markdownTableBodyNone"><a class="el" href="#beginend-inference-callbacks" title="Begin/End inference callbacks">Inference tracing, power control, or application callbacks are required</a>Inference tracing, power control, or application callbacks are required.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f" title="ethosu_inference_begin">ethosu_inference_begin()</a>, <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c" title="ethosu_inference_end">ethosu_inference_end()</a>  </td><td class="markdownTableBodyNone"><a class="el" href="#beginend-inference-callbacks" title="Begin/End inference callbacks">Inference tracing, power control, or application callbacks are required</a>.  </td></tr>
 </table>
 <p>Cache policy, linker placement, and region configuration are system-level decisions. Detailed guidance is in the chapter <a href="../integration/index.html">Integration</a>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
+<h1 class="doxsection"><a class="anchor" id="driver-usage"></a>
 Driver Usage</h1>
 <p>Inferences can be invoked in two manners: synchronously or asynchronously. The two types of invocation can be freely mixed in a single application.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+<h2 class="doxsection"><a class="anchor" id="synchronous-invocation"></a>
 Synchronous invocation</h2>
 <p>A typical usage of the driver can be the following:</p>
 <div class="fragment"><div class="line"><span class="comment">// reserve a driver to be used (this call could block until a driver is available)</span></div>
@@ -293,7 +293,7 @@ sequenceDiagram
     driver--&gt;&gt;application: Inference result</pre>
 </div>
 <p>With an RTOS implementation, <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take()</a> blocks the calling task and allows the RTOS scheduler to run other ready threads while the Ethos-U NPU executes the inference. The Ethos-U interrupt handler calls <a class="el" href="group__ethosu__callback__api.html#ga71614f92cb653bed7b7632b0362939b4" title="ethosu_semaphore_give">ethosu_semaphore_give()</a> when the NPU completes or reports a fault, allowing the synchronous invocation to resume. The platform must provide the RTOS-specific semaphore functions described in <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">Mutex and semaphores</a>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+<h2 class="doxsection"><a class="anchor" id="asynchronous-invocation"></a>
 Asynchronous invocation</h2>
 <p>A typical usage of the driver can be the following:</p>
 <div class="fragment"><div class="line"><span class="comment">// reserve a driver to be used (this call could block until a driver is available)</span></div>
@@ -336,11 +336,11 @@ sequenceDiagram
     npu-&gt;&gt;driver: Completion or fault interrupt
     driver--&gt;&gt;application: Wait completes</pre>
 </div>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+<h2 class="doxsection"><a class="anchor" id="driver-initialization"></a>
 Driver initialization</h2>
 <p>Initialize each driver instance with <a class="el" href="group__ethosu__public__api.html#gae021e7e1e40a33303dcc17041a1f2911" title="ethosu_init">ethosu_init()</a>. This registers the instance and makes it available for running inference. Call <a class="el" href="group__ethosu__public__api.html#ga7d07a2c3e7c66236d31986c191c7c6e1" title="ethosu_deinit">ethosu_deinit()</a> to unregister and tear down the instance.</p>
 <p>Create one driver instance for each NPU device. All registered NPUs must use the same compile-time NPU configuration because a driver build supports only one configuration.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+<h1 class="doxsection"><a class="anchor" id="implementation-design"></a>
 Implementation design</h1>
 <p>The driver is structured in two main parts: the driver, which is responsible to provide an unified API to the user; and the device part, which deals with the details at the hardware level.</p>
 <p>In order to do its task the driver needs a device implementation. There could be multiple device implementation for different hardware model and/or configurations. Note that the driver can be compiled to target only one NPU configuration by specializing the device part at compile time. ?? ToDo: how</p>
@@ -414,8 +414,8 @@ Begin/End inference callbacks</h1>
 <div class="line">        <span class="keyword">struct </span>my_data *data = (<span class="keyword">struct </span>my_data*) user_arg;</div>
 <div class="line">        <span class="comment">// use drv and data here</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><p>For a practical use of these callbacks, see the <a class="el" href="#pmu_example" title="PMU example">PMU example</a>.</p>
-<h1 class="doxsection"><a class="anchor" id="driver_configuration"></a>
+</div><!-- fragment --><p>For a practical use of these callbacks, see the <a class="el" href="#pmu-example" title="PMU example">PMU example</a>.</p>
+<h1 class="doxsection"><a class="anchor" id="driver-configuration"></a>
 Driver Configuration</h1>
 <p>The selected driver component supplies a target-specific configuration file:</p>
 <table class="markdownTable">
@@ -430,9 +430,9 @@ Driver Configuration</h1>
 </table>
 <p>For CMSIS based projects, the configuration header file is copied to the RTE directory from the pack locally to the project where one may modify the configuration defines. Each configuration define provides annotations for CMSIS Configuration Wizard and is guarded by <span class="tt">#ifndef</span>, so it may be changed on solution level as well.</p>
 <p>The headers configure how the driver programs the NPU.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+<h2 class="doxsection"><a class="anchor" id="configuration-options"></a>
 Configuration Options</h2>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+<h3 class="doxsection"><a class="anchor" id="command-stream-and-base-pointer-routing"></a>
 Command-stream and base-pointer routing</h3>
 <p>All three driver variants use the define <span class="tt">NPU_QCONFIG</span> and <span class="tt">NPU_REGIONCFG_0</span> to <span class="tt">NPU_REGIONCFG_7</span>, but the selected value has target-specific meaning:</p>
 <table class="markdownTable">
@@ -457,7 +457,7 @@ Command-stream and base-pointer routing</h3>
 <td class="markdownTableBodyNone"><span class="tt">3</span>  </td><td class="markdownTableBodyNone">AXI1, counter 3  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT3</span>  </td></tr>
 </table>
 <p>On Ethos-U85, the value selects <span class="tt">MEM_ATTR0..3</span> which then specifies the AXI port, memory domain, and memory type.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+<h2 class="doxsection"><a class="anchor" id="ethos-u55-and-ethos-u65-axi-limits"></a>
 Ethos-U55 and Ethos-U65 AXI limits</h2>
 <p>Ethos-U55 and Ethos-U65 provide four independently configured limit entries:</p>
 <ul>
@@ -525,7 +525,7 @@ Ethos-U55 and Ethos-U65 AXI limits</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">AXI_LIMITx_MAX_OUTSTANDING_WRITES</span>  </td><td class="markdownTableBodyNone"><span class="tt">1..16</span>  </td><td class="markdownTableBodyNone"><span class="tt">1..32</span>  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+<h2 class="doxsection"><a class="anchor" id="ethos-u85-power-ramping"></a>
 Ethos-U85 power ramping</h2>
 <p><span class="tt">NPU_MAC_PWR_RAMP_CYCLES</span> sets the interval between MAC-unit steps during power ramp-up and ramp-down:</p>
 <table class="markdownTable">
@@ -535,7 +535,7 @@ Ethos-U85 power ramping</h2>
 <td class="markdownTableBodyNone"><span class="tt">0..63</span>  </td><td class="markdownTableBodyNone"><span class="tt">4 * NPU_MAC_PWR_RAMP_CYCLES</span> NPU clock cycles  </td></tr>
 </table>
 <p>Value <span class="tt">0</span> disabled ramping.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+<h2 class="doxsection"><a class="anchor" id="ethos-u85-memory-attributes"></a>
 Ethos-U85 memory attributes</h2>
 <p>Ethos-U85 provides four memory-attribute entries configured by <span class="tt">NPU_MEM_ATTR_0..3</span>. Each option is an encoded byte:</p>
 <table class="markdownTable">
@@ -551,7 +551,7 @@ Ethos-U85 memory attributes</h2>
 <td class="markdownTableBodyNone"><span class="tt">[7:4]</span>  </td><td class="markdownTableBodyNone">memory type  </td><td class="markdownTableBodyNone"><span class="tt">0x0</span> to <span class="tt">0xB</span> as listed in the memory-type table above  </td></tr>
 </table>
 <p><span class="tt">NPU_QCONFIG</span> and each <span class="tt">NPU_REGIONCFG_x</span> select one of these entries. Therefore, changing a <span class="tt">NPU_MEM_ATTR_x</span> option changes every command-stream or base-pointer access routed to that entry.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+<h2 class="doxsection"><a class="anchor" id="ethos-u85-axi-limits"></a>
 Ethos-U85 AXI limits</h2>
 <p>Ethos-U85 applies separate settings to the SRAM and EXT AXI ports:</p>
 <table class="markdownTable">
@@ -582,7 +582,7 @@ Ethos-U85 AXI limits</h2>
 <td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone">256 bytes  </td></tr>
 </table>
 <p>meaning that an AXI burst that crosses the selected aligned boundary is split into multiple bursts.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+<h1 class="doxsection"><a class="anchor" id="logging"></a>
 Logging</h1>
 <p>ToDo: should ethosu_log.h be a configuration file? Add useful example.</p>
 <p>The driver logging interface is implemented by the private header <span class="tt">source/src/ethosu_log.h</span>. It is a compile-time facility used by the driver and device implementation, rather than a runtime callback API. It provides the following <span class="tt">printf</span>-style macros:</p>
@@ -609,7 +609,7 @@ Logging</h1>
 </div><!-- fragment --><p>The accepted CMake severity values are <span class="tt">err</span>, <span class="tt">warning</span>, <span class="tt">info</span>, and <span class="tt">debug</span>. For other build systems, define the equivalent macros while compiling the driver sources, for example:</p>
 <div class="fragment"><div class="line">ETHOSU_LOG_ENABLE=1</div>
 <div class="line">ETHOSU_LOG_SEVERITY=ETHOSU_LOG_INFO</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="performance-monitoring-unit-pmu"></a>
 Performance Monitoring Unit (PMU)</h1>
 <p>The driver exposes the Ethos-U PMU through <span class="tt">pmu_ethosu.h</span>. The API supports a 64-bit cycle counter and programmable event counters. Ethos-U55 and Ethos-U65 builds provide four event counters; Ethos-U85 builds provide eight. Use <a class="el" href="group__ethosu__pmu__api.html#ga6e52be0fc9b15f9351e83698bd9b5888" title="ETHOSU_PMU_Get_NumEventCounters">ETHOSU_PMU_Get_NumEventCounters()</a> when code must work with more than one Ethos-U target.</p>
 <p>The target-specific <span class="tt">enum ethosu_pmu_event_type</span> lists the supported events. They include NPU and MAC activity or stalls, weight-decoder and activation-output activity, memory transactions and stalls, latency ranges, and ECC events. The available event names differ between Ethos-U55/U65 and Ethos-U85. Use the symbolic enum values with <a class="el" href="group__ethosu__pmu__api.html#ga73f8bf9079d47e1d6afe9bf7a49f6999" title="ETHOSU_PMU_Set_EVTYPER">ETHOSU_PMU_Set_EVTYPER()</a>; do not program hardware event numbers directly.</p>
@@ -632,7 +632,7 @@ Performance Monitoring Unit (PMU)</h1>
 </table>
 <p>Counter masks use <span class="tt">ETHOSU_PMU_CNT1_Msk</span> and the other event-counter masks, plus <span class="tt">ETHOSU_PMU_CCNT_Msk</span> for the cycle counter. Enabling the PMU requests NPU power; disabling it releases that request, so always pair the two operations.</p>
 <p>Override <a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f" title="ethosu_inference_begin">ethosu_inference_begin()</a> to select and reset events immediately before an inference, and override <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c" title="ethosu_inference_end">ethosu_inference_end()</a> to read the counters and disable the PMU afterward. These callbacks receive the same <span class="tt">user_arg</span> that was passed to <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868" title="ethosu_invoke_v3">ethosu_invoke_v3()</a> or <a class="el" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b" title="ethosu_invoke_async">ethosu_invoke_async()</a>, which can identify where the results should be stored. PMU measurements are hardware observations; compare them with Vela compiler estimates, but do not treat the estimates as cycle-accurate measurements.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
+<h2 class="doxsection"><a class="anchor" id="interpreting-pmu-events"></a>
 Interpreting PMU events</h2>
 <p>The Technical Reference Manual for each NPU provides the event encoding and a hardware-level description of what each event counts:</p>
 <ul>
@@ -649,7 +649,7 @@ Interpreting PMU events</h2>
 <li>ECC events indicate corrected or uncorrected memory errors and should normally remain zero.</li>
 </ul>
 <p>Event counters are 32-bit and can overflow during a long measurement. Check <a class="el" href="group__ethosu__pmu__api.html#ga8bd68f0c49c74fe81bf91867fff71c43" title="ETHOSU_PMU_Get_CNTR_OVS">ETHOSU_PMU_Get_CNTR_OVS()</a> when this is possible. Because only four or eight events can be measured at once, collect additional events in repeated runs with identical model, input, memory, and system settings.</p>
-<h2 class="doxsection"><a class="anchor" id="pmu_example"></a>
+<h2 class="doxsection"><a class="anchor" id="pmu-example"></a>
 PMU example</h2>
 <p>The following example counts NPU-active and NPU-idle events and records the NPU cycle count for one inference. Pass a pointer to <span class="tt">struct pmu_results</span> as the <span class="tt">user_arg</span> to <a class="el" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868" title="ethosu_invoke_v3">ethosu_invoke_v3()</a> or <a class="el" href="group__ethosu__public__api.html#ga7a052a3c7ea0c14992b3dc2cd6e20d0b" title="ethosu_invoke_async">ethosu_invoke_async()</a>. The callbacks use <a class="el" href="group__ethosu__pmu__api.html#ga6e52be0fc9b15f9351e83698bd9b5888" title="ETHOSU_PMU_Get_NumEventCounters">ETHOSU_PMU_Get_NumEventCounters()</a> so the same pattern can be extended with additional events on targets that provide more counters.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;ethosu_driver.h&quot;</span></div>
@@ -704,7 +704,7 @@ PMU example</h2>
 <div class="line">    <a class="code hl_function" href="group__ethosu__pmu__api.html#gaf976f4e4d18229593591bdf984645018" title="Disable the PMU.">ETHOSU_PMU_Disable</a>(drv);</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>ToDo: does CMSIS-Debugger offer a dialog for Ethos_PMU?</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
+<h1 class="doxsection"><a class="anchor" id="bring-up-checklist"></a>
 Bring-up checklist</h1>
 <ul>
 <li>Confirm the NPU identity and MAC configuration match the Vela compiler target.</li>

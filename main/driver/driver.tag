@@ -425,11 +425,6 @@
     <name>index</name>
     <title>Driver</title>
     <filename>index.html</filename>
-    <docanchor file="index.html" title="Driver">mainpage</docanchor>
-    <docanchor file="index.html" title="Data caching">data-caching</docanchor>
-    <docanchor file="index.html" title="Mutex and semaphores">mutex-and-semaphores</docanchor>
-    <docanchor file="index.html" title="Begin/End inference callbacks">beginend-inference-callbacks</docanchor>
-    <docanchor file="index.html" title="Driver Configuration">driver_configuration</docanchor>
-    <docanchor file="index.html" title="PMU example">pmu_example</docanchor>
+    <docanchor file="index.html" title="Driver">md_src_2main</docanchor>
   </compound>
 </tagfile>
