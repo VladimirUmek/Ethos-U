@@ -120,7 +120,7 @@ through its
 [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
 
 When the DFP does not provide this information, create the equivalent configuration
-manually as described in \ref create-device-specific-velaini-file "Create device-specific `vela.ini` file".
+manually as described in [Create device-specific `vela.ini` file](#create-device-specific-velaini-file).
 
 ## Invocation
 

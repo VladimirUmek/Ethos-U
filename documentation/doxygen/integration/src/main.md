@@ -46,10 +46,10 @@ measurements.
 
 ```mermaid
 flowchart LR
-    setup["Select Edge AI MCU and DFP<br/>Check DFP resources<br/>Create CMSIS-Toolbox project"] --> compile["Compile ML model<br/>for device"]
-    compile --> configure["Configure memory placement<br/>and linker script"]
-    configure --> integrate["Complete application<br/>integration"]
-    integrate --> validate["Validate<br/>and tune"]
+    setup["Select MCU and DFP<br/>Check DFP resources<br/>Create CMSIS-Toolbox project"] --> compile["Compile ML model<br/>for device"]
+    compile --> configure["Configure memory placement and linker script"]
+    configure --> integrate["Complete application integration"]
+    integrate --> validate["Validate and tune"]
     validate -. Iterate .-> compile
 ```
 
@@ -65,16 +65,16 @@ flowchart LR
    <a href="../vela/index.html#create-device-specific-velaini-file">create a device-specific <code>vela.ini</code> file</a>,
    or contact the Arm CMSIS support team at
    [CMSIS@arm.com](mailto:CMSIS@arm.com) for assistance.
-3. **\ref create-the-csolution-project "Create the CMSIS-Toolbox project".** Select the device and build context, and specify the Vela system configuration and memory mode.
+3. **[Create the CMSIS-Toolbox project](#create-the-csolution-project).** Select the device and build context, and specify the Vela system configuration and memory mode.
    Use the generated [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
    to obtain the Vela parameters and resources supplied by the DFP.
-4. **\ref compile-the-ml-model-for-the-device "Compile the ML model for the device".** Run Vela with the device-specific
+4. **[Compile the ML model for the device](#compile-the-ml-model-for-the-device).** Run Vela with the device-specific
    parameters and confirm that its performance and memory estimates meet the
    application requirements. Treat the performance figures as first-order,
    model-dependent estimates. As initial guidance, budget for the cycle count
    or latency to be 30% higher than the Vela estimate, and refine this margin
    after the first target benchmarks.
-5. **\ref configure-memory-placement-and-the-linker-script "Configure memory placement and the linker script".** Keep the Vela memory
+5. **[Configure memory placement and the linker script](#configure-memory-placement-and-the-linker-script).** Keep the Vela memory
    mode, linker placement, and driver region configuration consistent. Account
    for the ML inference runtime, stacks, heaps, application data, alignment, and
    a safety margin. Build the system and inspect the linker map. Ensure that the
@@ -82,9 +82,9 @@ flowchart LR
    the expected physical memories, fit within their allocated regions, and are
    accessible to the runtime and NPU. The examples use the linker sections
    `ethos_model`, `ethos_arena`, and `ethos_cache`, respectively.
-6. **\ref complete-application-integration "Complete application integration".** Add any application-specific RTOS,
+6. **[Complete application integration](#complete-application-integration).** Add any application-specific RTOS,
    power, timeout, cache, and fault handling.
-7. **\ref validate-and-tune "Validate and tune".** Verify correctness, memory allocation, ML model performance,
+7. **[Validate and tune](#validate-and-tune).** Verify correctness, memory allocation, ML model performance,
    bandwidth, latency, and concurrency on the actual target system.
 
 Treat memory placement as a system-wide property. Reflect every placement change

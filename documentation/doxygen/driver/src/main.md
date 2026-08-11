@@ -9,7 +9,7 @@ The Ethos-U driver operations and features at a glance:
 - Starts the NPU and handles completion or fault interrupts;
 - Supports synchronous and asynchronous invocation;
 - Provides access to the Ethos-U Performance Monitoring Unit (PMU);
-- Exposes weak \ref ethosu_callback_api "platform-specific functions" for
+- Exposes weak [platform-specific functions](group__ethosu__callback__api.html) for
   power, cache, address, and RTOS integration.
 
 The input to the Ethos-U driver must provide:
@@ -77,23 +77,23 @@ in `include/ethosu_types.h`.
 | \ref ethosu_request_power "ethosu_request_power()", \ref ethosu_release_power "ethosu_release_power()" | manage power lifetime |
 | \ref ethosu_reserve_driver "ethosu_reserve_driver()", \ref ethosu_release_driver "ethosu_release_driver()" | reserve an instance in a multi-NPU system |
 
-See \ref ethosu_public_api "Driver functions" for the complete generated API
-and \ref ethosu_driver_structs "Driver structures" for public data types.
+See [Driver functions](group__ethosu__public__api.html) for the complete generated API
+and [Driver structures](group__ethosu__driver__structs.html) for public data types.
 
 ## Platform-specific functions
 
 The driver provides default implementations for
-\ref ethosu_callback_api "platform-specific functions" listed below. The
+[platform-specific functions](group__ethosu__callback__api.html) listed below. The
 default weak function implementation of the driver should be carefully review
 and overwritten when needed.
 
 | API Function | When an overwrite is needed |
 | --- | --- |
-| \ref ethosu_flush_dcache "ethosu_flush_dcache()", \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" | CPU-cached memory is shared with the NPU and requires \ref data-caching "platform-specific cache maintenance". |
+| \ref ethosu_flush_dcache "ethosu_flush_dcache()", \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" | CPU-cached memory is shared with the NPU and requires [platform-specific cache maintenance](#data-caching). |
 | \ref ethosu_address_remap "ethosu_address_remap()" | The CPU and NPU use different addresses for the same storage. |
 | \ref ethosu_config_select "ethosu_config_select()" | Memory-region attributes depend on the address or run-time placement. |
-| Mutex and semaphore functions in \ref ethosu_callback_api "Platform-specific functions" | Multiple tasks or NPUs can use the driver and require \ref mutex-and-semaphores "platform-specific RTOS locking". |
-| \ref ethosu_inference_begin "ethosu_inference_begin()", \ref ethosu_inference_end "ethosu_inference_end()" | \ref beginend-inference-callbacks "Inference tracing, power control, or application callbacks are required". |
+| Mutex and semaphore functions in [Platform-specific functions](group__ethosu__callback__api.html) | Multiple tasks or NPUs can use the driver and require [platform-specific RTOS locking](#mutex-and-semaphores). |
+| \ref ethosu_inference_begin "ethosu_inference_begin()", \ref ethosu_inference_end "ethosu_inference_end()" | [Inference tracing, power control, or application callbacks are required](#beginend-inference-callbacks). |
 
 Cache policy, linker placement, and region configuration are system-level 
 decisions. Detailed guidance is in the chapter [Integration](../integration/index.html).
@@ -153,7 +153,7 @@ Ethos-U interrupt handler calls \ref ethosu_semaphore_give
 "ethosu_semaphore_give()" when the NPU completes or reports a
 fault, allowing the synchronous invocation to resume. The platform must provide
 the RTOS-specific semaphore functions described in
-\ref mutex-and-semaphores "Mutex and semaphores".
+[Mutex and semaphores](#mutex-and-semaphores).
 
 ### Asynchronous invocation
 
@@ -369,7 +369,7 @@ void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg) {
 }
 ```
 
-For a practical use of these callbacks, see the \ref pmu-example "PMU example".
+For a practical use of these callbacks, see the [PMU example](#pmu-example).
 
 ## Driver Configuration
 
