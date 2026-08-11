@@ -101,7 +101,7 @@
 }
 
 #side-nav {
-  padding:0 2px 0 0;
+  padding:0 6px 0 0;
   margin: 0px;
   display:block;
   position: absolute;
@@ -114,14 +114,14 @@
 }
 
 .ui-resizable-e {
-  background-color: var(--nav-splitbar-color);
-  background-repeat:repeat-y;
-  background-attachment: scroll;
-  cursor:ew-resize;
-  height:100%;
-  right:0;
-  top:0;
-  width:1px;
+  background-color:transparent;
+  cursor:col-resize;
+  width:12px;
+}
+
+.ui-resizable-e::after {
+  left:auto;
+  right:1px;
 }
 
 .ui-resizable-handle {
