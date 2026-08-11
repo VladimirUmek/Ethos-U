@@ -196,30 +196,28 @@ The following simplified sequence diagram shows the asynchronous invocation:
 
 ```mermaid
 sequenceDiagram
-    participant application as Application
+    participant application as ML thread
     participant driver as Driver
-    participant isr as ISR
     participant npu as Ethos-U NPU
 
     application->>driver: ethosu_invoke_async()
     driver->>npu: Program regions and start
     driver-->>application: Submission result
+    Note over application,npu: ML thread can do other work while the NPU is busy
     application->>driver: ethosu_wait()
-    npu->>isr: Completion or fault interrupt
-    isr->>driver: ethosu_irq_handler()
+    npu->>driver: Completion or fault interrupt
     driver-->>application: Wait completes
 ```
 
 ### Driver initialization
 
-In order to use a driver it first needs to be initialized by calling
-\ref ethosu_init "ethosu_init()", which also registers the handle in the list of
-available drivers. A driver can be torn down by using
-\ref ethosu_deinit "ethosu_deinit()", which also removes the driver from the list.
+Initialize each driver instance with \ref ethosu_init "ethosu_init()". This
+registers the instance and makes it available for reservation. Call
+\ref ethosu_deinit "ethosu_deinit()" to unregister and tear down the instance.
 
-The correct mapping is one driver per NPU device. Note that the NPUs must have
-the same configuration, indeed the NPU configuration can be only one, which is
-defined at compile time.
+Create one driver instance for each NPU device. All registered NPUs must use the
+same compile-time NPU configuration because a driver build supports only one
+configuration.
 
 ## Implementation design
 
