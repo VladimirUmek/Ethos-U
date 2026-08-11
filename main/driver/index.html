@@ -22,51 +22,10 @@
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', init_search);
 </script>
-<script type="text/javascript" src="darkmode_toggle.js"></script>
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-const theme = DarkModeToggle.darkModeEnabled ? 'dark' : 'default'
+const theme = 'default';
 mermaid.initialize({ startOnLoad: true, theme: theme });
-(function() {
-  const elementCode = '.mermaid';
-  const loadMermaid = function(theme) {
-    mermaid.initialize({theme})
-    mermaid.init({theme}, document.querySelectorAll(elementCode))
-  }
-  const saveOriginalData = function() {
-    return new Promise((resolve, reject) => {
-      try {
-        var els = document.querySelectorAll(elementCode), count = els.length;
-        els.forEach(element => {
-          element.setAttribute('data-original-code', element.innerHTML)
-          count--
-          if (count == 0) { resolve() }
-        });
-      } catch (error) { reject(error) }
-    })
-  }
-  const resetProcessed = function(){
-    return new Promise((resolve, reject) => {
-      try {
-        var els = document.querySelectorAll(elementCode), count = els.length;
-        els.forEach(element => {
-          if (element.getAttribute('data-original-code') != null) {
-              element.removeAttribute('data-processed')
-              element.innerHTML = element.getAttribute('data-original-code')
-          }
-          count--
-          if(count == 0) { resolve() }
-        });
-      } catch (error) { reject(error) }
-    })
-  }
-  saveOriginalData()
-  const original = DarkModeToggle.enableDarkMode.bind(DarkModeToggle);
-  DarkModeToggle.enableDarkMode = function(enable) {
-      original(enable);
-      resetProcessed().then(loadMermaid(enable ? 'dark' : 'default')).catch(console.error)
-  };
-})();
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="extra_stylesheet.css" rel="stylesheet" type="text/css"/>
@@ -85,7 +44,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
   <td id="projectalign" style="padding-left: 2em; padding-bottom: 1em; padding-top: 1em;">
    <div id="projectname">Ethos-U Integration for Cortex-M
    </div>
-   <div id="projectbrief">Ethos-U Driver Documentation</div>
+   <div id="projectbrief">Ethos-U Driver</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -262,12 +221,12 @@ Synchronous invocation</h2>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="group__ethosu__driver__structs.html#structethosu__driver" title="Driver handle.">ethosu_driver</a> *drv = <a class="code hl_function" href="group__ethosu__public__api.html#ga92c30eeceb5152d6f06ff9c5859a1381">ethosu_reserve_driver</a>();</div>
 <div class="line">...</div>
 <div class="line"><span class="comment">// run one or more inferences</span></div>
-<div class="line">int result = ethosu_invoke(drv,</div>
-<div class="line">                           custom_data_ptr,</div>
-<div class="line">                           custom_data_size,</div>
-<div class="line">                           base_addr,</div>
-<div class="line">                           base_addr_size,</div>
-<div class="line">                           num_base_addr);</div>
+<div class="line">int result = <a class="code hl_function" href="group__ethosu__public__api.html#ga6965f708d5951842cd6f8cfe26a35868">ethosu_invoke_v3</a>(drv,</div>
+<div class="line">                              custom_data_ptr,</div>
+<div class="line">                              custom_data_size,</div>
+<div class="line">                              base_addr,</div>
+<div class="line">                              base_addr_size,</div>
+<div class="line">                              num_base_addr);</div>
 <div class="line">...</div>
 <div class="line"><span class="comment">// release the driver for others to use</span></div>
 <div class="line">ethosu_release_driver(drv);</div>
@@ -281,7 +240,7 @@ sequenceDiagram
     participant rtos as RTOS
     participant threads as Other threads
 
-    application-&gt;&gt;driver: ethosu_invoke()
+    application-&gt;&gt;driver: ethosu_invoke_v3()
     driver-&gt;&gt;npu: Program regions and start
     driver-&gt;&gt;rtos: ethosu_semaphore_take(): Block ML thread
     rtos-&gt;&gt;threads: Schedule other ready threads
@@ -337,7 +296,7 @@ sequenceDiagram
 </div>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
 Driver initialization</h2>
-<p>Initialize each driver instance with <a class="el" href="group__ethosu__public__api.html#gae021e7e1e40a33303dcc17041a1f2911" title="ethosu_init">ethosu_init()</a>. This registers the instance and makes it available for reservation. Call <a class="el" href="group__ethosu__public__api.html#ga7d07a2c3e7c66236d31986c191c7c6e1" title="ethosu_deinit">ethosu_deinit()</a> to unregister and tear down the instance.</p>
+<p>Initialize each driver instance with <a class="el" href="group__ethosu__public__api.html#gae021e7e1e40a33303dcc17041a1f2911" title="ethosu_init">ethosu_init()</a>. This registers the instance and makes it available for running inference. Call <a class="el" href="group__ethosu__public__api.html#ga7d07a2c3e7c66236d31986c191c7c6e1" title="ethosu_deinit">ethosu_deinit()</a> to unregister and tear down the instance.</p>
 <p>Create one driver instance for each NPU device. All registered NPUs must use the same compile-time NPU configuration because a driver build supports only one configuration.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
 Implementation design</h1>

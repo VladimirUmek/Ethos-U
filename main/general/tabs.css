@@ -1,21 +1,21 @@
 .tabs, .tabs2, .tabs3 {
-    background-color: var(--nav-menu-background-color);
+    background-color: white;
     width: 100%;
     z-index: 101;
-    font-size: var(--nav-font-size-level1);
-    font-family: var(--font-family-nav);
+    font-size: 13px;
+    font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
     display: table;
 }
 
 #navrow2, #navrow3, #navrow4 {
-    border-top: 1px solid var(--nav-border-color);
+    border-top: 1px solid #C4CFE5;
 }
 
 .tabs2 {
-    font-size: var(--nav-font-size-level2);
+    font-size: 10px;
 }
 .tabs3 {
-    font-size: var(--nav-font-size-level3);
+    font-size: 9px;
 }
 
 .tablist {
@@ -27,7 +27,7 @@
 .tablist li {
     float: left;
     display: table-cell;
-    background-color: var(--nav-menu-background-color);
+    background-color: white;
     line-height: 36px;
     list-style: none;
 }
@@ -36,8 +36,8 @@
     display: block;
     margin: 5px 0;
     padding: 0px 20px;
-    background-color: var(--nav-menu-background-color);
-    color: var(--nav-text-normal-color);
+    background-color: white;
+    color: #283A5D;
     text-decoration: none;
     outline: none;
 }
@@ -53,7 +53,7 @@
 }
 
 .tablist a:hover {
-    background-color: var(--nav-menu-active-bg);
+    background-color: #DCE2EF;
     border-radius: 5px;
     text-decoration: none;
 }
@@ -70,8 +70,8 @@
 	top: 35px;
 	height: 1px;
 	display: block;
-	background-color: var(--nav-menu-active-color);
-	border: 1px solid var(--nav-menu-active-color);
+	background-color: #9CAFD4;
+	border: 1px solid #9CAFD4;
 	border-radius: 2px 2px 0px 0px;
 }
 
