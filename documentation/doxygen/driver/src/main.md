@@ -106,7 +106,7 @@ in a single application.
 
 ### Synchronous invocation
 
-A typical usage of the driver can be the following:
+The typical usage of the driver is the synchronous invocation as shown below:
 
 ```c
 // reserve a driver to be used (this call could block until a driver is available)
@@ -157,7 +157,8 @@ the RTOS-specific semaphore functions described in
 
 ### Asynchronous invocation
 
-A typical usage of the driver can be the following:
+In some cases the asynchronous invocation is needed which allows in the same thread 
+the execution of *other work* after starting the inference on the Ethos-U NPU.
 
 ```c
 // reserve a driver to be used (this call could block until a driver is available)
@@ -270,6 +271,15 @@ The NPU contain memory attributes that should be set to match the settings used
 in the MPU configuration for the memories used. See `NPU_MEM_ATTR_[0-3]` for
 Ethos-U85 and the `AXI_LIMIT[0-3]_MEM_TYPE` for Ethos-U55/Ethos-U65 in
 corresponding `src/ethosu_config_uX5.h` files.
+
+ToDo: verify this:
+
+It can be noted that enabling cache hooks approach is very conservative and will clean/invalidate potentially bigger than strictly required
+The only common CPU/NPU RW parts are edge IFM/OFM and clean / invalidate can be limited to these areas.
+Cleaning/Invalidating more than expected is safe for coherency but will have performance side effects for the application.
+
+If application is taking care of this, there is no need to enabling NPU drv hooks.
+
 
 ## Mutex and semaphores
 
@@ -410,22 +420,6 @@ transaction counter, and AXI limit entry:
 
 On Ethos-U85, the value selects `MEM_ATTR0..3` which then specifies the AXI port,
 memory domain, and memory type.
-
-### Ethos-U85 memory attributes
-
-Ethos-U85 provides four memory-attribute entries configured by `NPU_MEM_ATTR_0..3`.
-Each option is an encoded byte:
-
-| Bits    | Field         | Values                                                                      |
-| ------- | ------------- | --------------------------------------------------------------------------- |
-| `[1:0]` | memory domain | `0`: non-shareable; `1`: inner shareable; `2`: outer shareable; `3`: system |
-| `[2]`   | AXI port      | `0`: SRAM; `1`: EXT                                                         |
-| `[3]`   | reserved      | keep clear                                                                  |
-| `[7:4]` | memory type   | AXI read and write cache-attribute encoding                                 |
-
-`NPU_QCONFIG` and each `NPU_REGIONCFG_x` select one of these entries. Therefore,
-changing a `NPU_MEM_ATTR_x` option changes every command-stream or base-pointer
-access routed to that entry.
 
 ## Logging
 

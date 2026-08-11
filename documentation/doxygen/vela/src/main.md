@@ -257,7 +257,7 @@ The generic `Arm/vela.ini` reference file includes these system configurations:
 
 The reference configuration defines typically memory modes as shown below.
 
-| Memory Mode       | `const`<br/>`_mem_area` | `arena`<br/>`_mem_area` | `cache`<br/>`_mem_area` | Content |
+| Memory Mode       | const<br/>_mem_area     | arena<br/>_mem_area     | cache<br/>_mem_area     | Content |
 |-------------------|:-----------------------:|:-----------------------:|:-----------------------:|---------|
 | `Sram_Only`       | `Axi0`                  | `Axi0`                  | `Axi0`                  | All model storage uses the memory type selected for `Axi0`. |
 | `Shared_Sram`     | `Axi1`                  | `Axi0`                  | `Axi0`                  | Constants remain in the memory selected for `Axi1`; arena and cache share the `Axi0` memory. |
