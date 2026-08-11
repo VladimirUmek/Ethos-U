@@ -163,20 +163,21 @@ the inference completion.
 
 The following simplified sequence diagram shows the asynchronous invocation:
 
-\msc
-    application [label="Application"],
-    driver [label="Driver"],
-    isr [label="ISR"],
-    npu [label="Ethos-U NPU"];
+```mermaid
+    sequenceDiagram
+    participant application as Application
+    participant driver as Driver
+    participant isr as ISR
+    participant npu as Ethos-U NPU
 
-    application=>driver [label="ethosu_invoke_async()"];
-    driver=>npu [label="Program regions and start"];
-    driver>>application [label="Submission result"];
-    application=>driver [label="ethosu_wait()"];
-    npu=>isr [label="Completion or fault interrupt"];
-    isr=>driver [label="ethosu_irq_handler()"];
-    driver>>application [label="Wait completes"];
-\endmsc
+    application->>driver: ethosu_invoke_async()
+    driver->>npu: Program regions and start
+    driver-->>application: Submission result
+    application->>driver: ethosu_wait()
+    npu->>isr: Completion or fault interrupt
+    isr->>driver: ethosu_irq_handler()
+    driver-->>application: Wait completes
+```
 
 ### Driver initialization
 
