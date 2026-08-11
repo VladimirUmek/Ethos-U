@@ -113,12 +113,12 @@ A typical usage of the driver can be the following:
 struct ethosu_driver *drv = ethosu_reserve_driver();
 ...
 // run one or more inferences
-int result = ethosu_invoke(drv,
-                           custom_data_ptr,
-                           custom_data_size,
-                           base_addr,
-                           base_addr_size,
-                           num_base_addr);
+int result = ethosu_invoke_v3(drv,
+                              custom_data_ptr,
+                              custom_data_size,
+                              base_addr,
+                              base_addr_size,
+                              num_base_addr);
 ...
 // release the driver for others to use
 ethosu_release_driver(drv);
@@ -135,7 +135,7 @@ sequenceDiagram
     participant rtos as RTOS
     participant threads as Other threads
 
-    application->>driver: ethosu_invoke()
+    application->>driver: ethosu_invoke_v3()
     driver->>npu: Program regions and start
     driver->>rtos: ethosu_semaphore_take(): Block ML thread
     rtos->>threads: Schedule other ready threads
@@ -212,7 +212,7 @@ sequenceDiagram
 ### Driver initialization
 
 Initialize each driver instance with \ref ethosu_init "ethosu_init()". This
-registers the instance and makes it available for reservation. Call
+registers the instance and makes it available for running inference. Call
 \ref ethosu_deinit "ethosu_deinit()" to unregister and tear down the instance.
 
 Create one driver instance for each NPU device. All registered NPUs must use the
