@@ -1468,6 +1468,7 @@ HTML_EXTRA_STYLESHEET  = ../style_template/extra_stylesheet.css \
 
 HTML_EXTRA_FILES       = ../style_template/tab_b.png \
                          ../style_template/tabs.js \
+                         ../style_template/theme_toggle.js \
                          ../style_template/dropdown.png
 
 # The HTML_COLORSTYLE tag can be used to specify if the generated HTML output
@@ -1481,7 +1482,7 @@ HTML_EXTRA_FILES       = ../style_template/tab_b.png \
 # The default value is: AUTO_LIGHT.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_COLORSTYLE        = LIGHT
+HTML_COLORSTYLE        = TOGGLE
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the style sheet and background images according to
