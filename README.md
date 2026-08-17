@@ -8,7 +8,7 @@ This repository contains the source of the CMSIS software pack [`Arm::CMSIS-Etho
 
 The pack exposes a generic driver component for each supported NPU family. Applications can use the driver to initialize an NPU, invoke optimized neural-network command streams synchronously or asynchronously, handle interrupts, and collect performance-monitoring data.
 
-Refer to the [CMSIS-Ethos-U documentation](https://https://arm-software.github.io/CMSIS-Ethos-U/main/index.html) for architecture concepts, Vela configuration, driver usage, and system-integration guidance.
+Refer to the [CMSIS-Ethos-U documentation](https://https://arm-software.github.io/CMSIS-Ethos-U/main/general/index.html) for architecture concepts, Vela configuration, driver usage, and system-integration guidance.
 
 ## Supported NPUs
 
