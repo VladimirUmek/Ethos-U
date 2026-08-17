@@ -382,7 +382,7 @@ Use `--verbose-config` with the installed Vela version to inspect the resolved
 properties supported by that version.
 
 The values in `vela.ini` are used by the Vela compiler to optimize the ML model for the target and the output report.
-The can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated
+They can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated
 command stream. `core_clock` is primarily used to convert cycle estimates to time.
 
 ### Memory mode parameters
@@ -390,7 +390,7 @@ command stream. `core_clock` is primarily used to convert cycle estimates to tim
 | Parameter | Type or values | Description |
 |---|---|---|
 | `const_mem_area` | `Axi0` or `Axi1` | Location for read-only constants, including weights, scales, biases, and constant tensors. |
-| `arena_mem_area` | `Axi0` or `Axi1` | Location for read/write feature maps, intermediate tensors, and internal buffers. |
+| `arena_mem_area` | `Axi0` or `Axi1` | Location for read/write feature maps, intermediate tensors, and Vela-managed working storage. |
 | `cache_mem_area` | `Axi0` or `Axi1` | Staging or fast-scratch location. It is separate from the arena only when it resolves to a different memory type from `arena_mem_area`. |
 | `arena_cache_size` | Integer, bytes | Scheduler's fast-memory budget: the arena target when arena and cache resolve to the same memory type, or the separate staging-cache size when they differ. The CLI `--arena-cache-size` overrides it for `Performance` optimization. |
 | `inherit` | `Part.Name` | Parent section whose parameters are inherited. Child values take precedence. |

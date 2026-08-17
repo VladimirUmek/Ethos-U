@@ -108,8 +108,10 @@ hooks.
   "ethosu_irq_handler()" and ensure that it remains serviceable. Very low jitter
   is usually not required for inference workloads, but completion handling must
   not be postponed indefinitely.
-- During bring-up, use timeouts, fault reporting, and a minimal known-good model
-  before moving to full application graphs.
+- During bring-up, follow the
+  <a href="../driver/index.html#driver-bring-up-checklist">Driver bring-up checklist</a>.
+  Use timeouts, fault reporting, and a minimal known-good model before moving to
+  full application graphs.
 
 #### Example: Move the tensor arena from SRAM to external DRAM
 
@@ -248,7 +250,11 @@ configuration.
 
 ## Complete application integration
 
-Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver settings.
+Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver
+settings. Use the
+<a href="../driver/index.html#driver-bring-up-checklist">Driver bring-up checklist</a>
+for the first target execution, then complete the end-to-end validation in
+<a href="#validate-and-tune">Validate and tune</a>.
 
 ### Troubleshoot an inference that does not complete
 

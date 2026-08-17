@@ -988,6 +988,40 @@ Ethos-U driver configuration is therefore the same as in the case for TFLite
 except that BASEP3..7 are not used, hence their configuration is irrelevant.
 
 
+## Memory Configuration Terminology
+
+const_mem_area
+This is the memory area in which the compiler will store all constant data such as weights, scales & biases, and constant value tensors
+
+arena_mem_area
+This is the memory area in which the compiler will look to access the TensorFlow Lite for Microcontrollers Tensor Arena
+cache_mem_area
+
+This is the memory area in which the compiler uses as a cache memory if required by the selected 
+memory mode
+
+arena_cache_size
+This is the size of the memory area available to the compiler for use by either the arena or cache depending upon the memory mode
+It is a maximum size, not the final size
+It is also ignored if optimising for Size
+
+
 ----
 
 https://github.com/ArmDeveloperEcosystem/arm-learning-paths/compare/main...matt-cossins:arm-learning-paths:alif_conformer
+
+----
+
+Feedback from Fabien regarding Cache:
+
+It can be noted that enabling cache hooks approach is very conservative and will clean/invalidate potentially bigger than strictly required
+The only common CPU/NPU RW parts are edge IFM/OFM and clean / invalidate can be limited to these areas.
+Cleaning/Invalidating more than expected is safe for coherency but will have performance side effects for the application.
+
+If application is taking care of this, there is no need to enabling NPU drv hooks.
+
+This needs to be checked against the runtime we provide:
+
+If the ML runtime performs equivalent cache maintenance at the correct
+ownership transitions, the driver hooks can remain no-ops. Use one consistent
+cache-ownership strategy. 
