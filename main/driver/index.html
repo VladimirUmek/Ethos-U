@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <p>For the first execution on a target, follow the <a href="#driver-bring-up-checklist">Driver bring-up checklist</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="ethos-u-driver-source-code"></a>
 Ethos-U driver source code</h1>
-<p>The driver is provided by the software pack <span class="tt">ARM::Ethos-U</span> and can be added to a CMSIS-based application as a software component. The pack also includes CMSIS-RTOS2 and cache-management interfaces as optional source templates.</p>
+<p>The driver is provided by the software pack <span class="tt">ARM::CMSIS-Ethos-U</span> and can be added to a CMSIS-based application as a software component. The pack also includes CMSIS-RTOS2 and cache-management interfaces as optional source templates.</p>
 <p>The <a href="https://github.com/ARM-software/CMSIS-Ethos-U">CMSIS-Ethos-U GitHub repository</a> provides access to the source code for other build environments.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -203,7 +203,7 @@ Ethos-U driver source code</h1>
 </table>
 <h2 class="doxsection"><a class="anchor" id="cmsis-software-component"></a>
 CMSIS Software component</h2>
-<p>The pack <span class="tt">Arm::CMSIS-Ethos-U</span> provides the software component <span class="tt">ARM::Machine Learning:NPU Support:Ethos-U Driver</span> in multiple variants. For using the driver add one variant of the component as shown below:</p>
+<p>The pack <span class="tt">ARM::CMSIS-Ethos-U</span> provides the software component <span class="tt">ARM::Machine Learning:NPU Support:Ethos-U Driver</span> in multiple variants. For using the driver add one variant of the component as shown below:</p>
 <div class="fragment"><div class="line">components:</div>
 <div class="line">  - component: &quot;ARM::Machine Learning:NPU Support:Ethos-U Driver&amp;Generic U55&quot; # For Ethos-U55</div>
 </div><!-- fragment --><div class="fragment"><div class="line">components:</div>

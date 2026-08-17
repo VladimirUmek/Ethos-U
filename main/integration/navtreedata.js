@@ -35,8 +35,7 @@ var NAVTREE =
       [ "Add ML model and configuration to version control", "index.html#add-ml-model-and-configuration-to-version-control", null ]
     ] ],
     [ "Create the <em>csolution project</em>", "index.html#create-the-csolution-project", [
-      [ "Use a project example and add device", "index.html#use-a-project-example-and-add-device", null ],
-      [ "Add MLOps information", "index.html#add-mlops-information", null ],
+      [ "MLOps information", "index.html#mlops-information", null ],
       [ "Add ML model layer", "index.html#add-ml-model-layer", null ]
     ] ],
     [ "Compile the ML model for the device", "index.html#compile-the-ml-model-for-the-device", null ],
@@ -45,6 +44,12 @@ var NAVTREE =
       [ "Troubleshoot an inference that does not complete", "index.html#troubleshoot-an-inference-that-does-not-complete", null ]
     ] ],
     [ "Validate and tune", "index.html#validate-and-tune", null ],
+    [ "Work with an Example", "index.html#work-with-an-example", [
+      [ "Select Ethos-U variant", "index.html#select-ethos-u-variant", null ],
+      [ "Integrate your model", "index.html#integrate-your-model", null ],
+      [ "Change system and/or memory mode", "index.html#change-system-andor-memory-mode", null ],
+      [ "Target physical devices", "index.html#target-physical-devices", null ]
+    ] ],
     [ "Ethos-U configuration", "index.html#ethos-u-configuration", null ],
     [ "Linker configuration", "index.html#linker-configuration", null ],
     [ "Driver weak hooks", "index.html#driver-weak-hooks", null ],
