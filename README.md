@@ -4,7 +4,7 @@
 
 # Arm CMSIS Ethos-U
 
-This repository contains the source of the CMSIS software pack [`Arm::CMSIS-Ethos-U`](https://www.open-cmsis-pack.org/) containing the Arm Ethos-U NPU core driver and supporting documentation. The driver supplies the low-level interface between embedded software and Arm Ethos-U55, Ethos-U65, and Ethos-U85 NPUs.
+This repository contains the source of the CMSIS software pack [`ARM::CMSIS-Ethos-U`](https://www.open-cmsis-pack.org/) containing the Arm Ethos-U NPU core driver and supporting documentation. The driver supplies the low-level interface between embedded software and Arm Ethos-U55, Ethos-U65, and Ethos-U85 NPUs.
 
 The pack exposes a generic driver component for each supported NPU family. Applications can use the driver to initialize an NPU, invoke optimized neural-network command streams synchronously or asynchronously, handle interrupts, and collect performance-monitoring data.
 

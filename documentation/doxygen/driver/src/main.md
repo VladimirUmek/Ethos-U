@@ -28,7 +28,7 @@ For the first execution on a target, follow the
 
 ## Ethos-U driver source code
 
-The driver is provided by the software pack `ARM::Ethos-U` and can be added to a CMSIS-based application as a software component.
+The driver is provided by the software pack `ARM::CMSIS-Ethos-U` and can be added to a CMSIS-based application as a software component.
 The pack also includes CMSIS-RTOS2 and cache-management interfaces as optional source templates.
 
 The [CMSIS-Ethos-U GitHub repository](https://github.com/ARM-software/CMSIS-Ethos-U) provides access to the source code for other build environments.
@@ -45,7 +45,7 @@ The [CMSIS-Ethos-U GitHub repository](https://github.com/ARM-software/CMSIS-Etho
 
 ### CMSIS Software component
 
-The pack `Arm::CMSIS-Ethos-U` provides the software component `ARM::Machine Learning:NPU Support:Ethos-U Driver` in multiple variants. For using the driver add one variant of the component as shown below:
+The pack `ARM::CMSIS-Ethos-U` provides the software component `ARM::Machine Learning:NPU Support:Ethos-U Driver` in multiple variants. For using the driver add one variant of the component as shown below:
 
 ```yaml
 components:

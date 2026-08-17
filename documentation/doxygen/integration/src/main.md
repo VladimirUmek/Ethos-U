@@ -152,31 +152,8 @@ settings into machine-readable
 that tools can use to compile the pretrained ML model for the selected target
 and test the resulting artifacts on hardware or a simulator.
 
-### Use a project example and add device
 
-This pack includes [examples](https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html) for FVP simulation models that show the Ethos-U NPU integration in a Cortex-M target. These projects are [reference applications](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications) that can be deployed to other boards that provide a board layer with an [STDOUT connection](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/#connections).
-
-Target Board (FVP Simulator)   | NPU       | Example project
-:------------------------------|:----------|:---------------------------
-V2M-MPS3-SSE-300-FVP           | Ethos-U55 | `Hello-Ethos-U55.csolution.yml`
-V2M-MPS3-SSE-300-FVP           | Ethos-U65 | `Hello-Ethos-U65.csolution.yml`
-SSE-320                        | Ethos-U85 | `Hello-Ethos-U85.csolution.yml`
-
-A hardware target can be added in the `*.csolution.yml` file as shown below:
-
-```yaml
-  packs:
-    - pack: AlifSemiconductor::Ensemble      # Add DFP and optional BSP
-
-  target-types:
-    - type: MyHardware                       # Add hardware target
-      device: AE722F80F55D5LS
-      board: AppKit-E7-AIML
-// todo
-    - type: SSE-300-U55
-```
-
-### Add MLOps information
+### MLOps information
 
 The `mlops:` node in the `*.csolution.yml` file configures [MLOps Management](https://open-cmsis-pack.github.io/cmsis-toolbox/YML-Input-Format/#mlops-management).
 CMSIS-Toolbox combines this information with the selected device and DFP and generates the [`*.cbuild-mlops.yml`](https://open-cmsis-pack.github.io/cmsis-toolbox/YML-CBuild-Format/#cbuild-mlopsyml) file for the MLOps workflow.
@@ -290,6 +267,73 @@ following areas:
 
 
 ## Validate and tune
+
+
+## Work with an Example
+
+### Select Ethos-U variant
+
+The `ARM::CMSIS-Ethos-U` pack includes [examples](https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html) for FVP simulation models that show the Ethos-U NPU integration in a Cortex-M target.
+
+Example Project                 | NPU       | MLOps Information                  | Target Board (FVP Simulation)
+:-------------------------------|:----------|:-----------------------------------|:-----------------------------
+`Hello-Ethos-U55.csolution.yml` | Ethos-U55 | `Hello-Ethos-U55.cbuild-mlops.yml` | V2M-MPS3-SSE-300-FVP
+`Hello-Ethos-U65.csolution.yml` | Ethos-U65 | `Hello-Ethos-U65.cbuild-mlops.yml` | V2M-MPS3-SSE-300-FVP
+`Hello-Ethos-U85.csolution.yml` | Ethos-U85 | `Hello-Ethos-U85.cbuild-mlops.yml` | SSE-320
+
+Each NPU-specific solution selects the target board and FVP model, and then includes the shared application project. The project combines the matching board layer with the ML model layer and application sources.
+
+```mermaid
+flowchart TD
+    solution["NPU-specific example<br/>Hello-Ethos-Uxx.csolution.yml"] -->  project["Shared application project<br/>Hello-Ethos-U.cproject.yml"]
+    solution --> mlops["MLOps configuration<br/>NPU, Vela, and model"]
+    project --> sources["Application sources<br/>Source/test_main.cpp"]
+    project --> board["Board layer<br/>Board/.../Board-Uxx.clayer.yml"]
+    project --> model["ML model layer<br/>Model/ML-Model.clayer.yml"]
+    mlops --> model
+```
+
+The example uses TinyCNN, a small quantized TensorFlow Lite (`int8`) image classifier that Vela compiles into an NPU-optimized model for the selected Ethos-U target.
+
+To create the optimized model and run the example:
+
+1. Open the NPU-specific `*.csolution.yml` example in Keil Studio. Keil Studio executes `cbuild setup`, which resolves the target configuration and generates the corresponding `*.cbuild-mlops.yml` file.
+2. Open the generated `*.cbuild-mlops.yml` file and use the Vela command-line parameters stored in its `cbuild-mlops.vela.options` entry. This entry supplies `--accelerator-config`, `--system-config`, and `--memory-mode`; for example, the Ethos-U55 command is:
+
+   ```console
+   vela Model/tiny_cnn/tiny_cnn_int8.tflite \
+     --accelerator-config ethos-u55-256 \
+     --system-config Ethos_U55_High_End_Embedded \
+     --memory-mode Shared_Sram \
+     --output-dir Model/tiny_cnn
+   ```
+
+3. ToDo: generate `tiny_cnn_model.c`.
+4. Compile the example in Keil Studio and run it on the FVP simulation selected by the solution.
+
+### Integrate your model
+
+### Change system and/or memory mode
+
+
+### Target physical devices
+
+These projects are [reference applications](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications) that can be deployed to other boards that provide a board layer with an [STDOUT connection](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/#connections).
+
+A hardware target can be added in the `*.csolution.yml` file as shown below:
+
+```yaml
+  packs:
+    - pack: AlifSemiconductor::Ensemble      # Add DFP and optional BSP
+
+  target-types:
+    - type: MyHardware                       # Add hardware target
+      device: AE722F80F55D5LS
+      board: AppKit-E7-AIML
+// todo
+    - type: SSE-300-U55
+```
+
 
 ----
 
