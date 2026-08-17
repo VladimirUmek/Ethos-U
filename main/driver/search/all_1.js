@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['base_20pointer_20routing_0',['Command-stream and base-pointer routing',['../index.html#command-stream-and-base-pointer-routing',1,'']]],
-  ['begin_20end_20inference_20callbacks_1',['Begin/End inference callbacks',['../index.html#beginend-inference-callbacks',1,'']]],
-  ['bring_20up_20checklist_2',['Bring-up checklist',['../index.html#bring-up-checklist',1,'']]]
+  ['2_20ethos_20u55_20and_20ethos_20u65_0',['2. Ethos-U55 and Ethos-U65',['../index.html#autotoc_md2-ethos-u55-and-ethos-u65',1,'']]]
 ];

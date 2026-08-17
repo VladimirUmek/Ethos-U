@@ -205,7 +205,7 @@ General integration guidance</h2>
 <li>Place model constants, activations, and any separate scratch-fast storage as described in <a href="../vela/index.html#create-the-linker-script">Create the linker script</a>.</li>
 <li>Override the driver weak hooks when the default integration assumptions do not match the platform, especially for data cache maintenance, address remapping, and RTOS synchronization.</li>
 <li>Route the NPU completion and fault interrupt to <a class="elRef" href="../driver/group__ethosu__public__api.html#ga55fec2a7ca5b5b51dc7c3d18914a3f03" title="ethosu_irq_handler">ethosu_irq_handler()</a> and ensure that it remains serviceable. Very low jitter is usually not required for inference workloads, but completion handling must not be postponed indefinitely.</li>
-<li>During bring-up, use timeouts, fault reporting, and a minimal known-good model before moving to full application graphs.</li>
+<li>During bring-up, follow the <a href="../driver/index.html#driver-bring-up-checklist">Driver bring-up checklist</a>. Use timeouts, fault reporting, and a minimal known-good model before moving to full application graphs.</li>
 </ul>
 <h3 class="doxsection"><a class="anchor" id="example-move-the-tensor-arena-from-sram-to-external-dram"></a>
 Example: Move the tensor arena from SRAM to external DRAM</h3>
@@ -287,7 +287,7 @@ flowchart LR
 <p>Create the physical sections for model constants, the tensor arena, and any separate scratch-fast storage as described in <a href="../vela/index.html#create-the-linker-script">Create the linker script</a>. Use the linker map to verify that their addresses and sizes match the selected memory mode and that every generated NPU region is accessible through the driver configuration.</p>
 <h1 class="doxsection"><a class="anchor" id="complete-application-integration"></a>
 Complete application integration</h1>
-<p>Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver settings.</p>
+<p>Validate interrupt wiring alongside Vela, linker, MPU/SAU, cache, and driver settings. Use the <a href="../driver/index.html#driver-bring-up-checklist">Driver bring-up checklist</a> for the first target execution, then complete the end-to-end validation in <a href="#validate-and-tune">Validate and tune</a>.</p>
 <h2 class="doxsection"><a class="anchor" id="troubleshoot-an-inference-that-does-not-complete"></a>
 Troubleshoot an inference that does not complete</h2>
 <p>During bring-up, provide a watchdog or RTOS timeout so that a missing completion interrupt does not block the application indefinitely. If an inference times out, capture the driver logs and NPU state before resetting the NPU. Check the following areas:</p>

@@ -440,7 +440,7 @@ System configuration parameters</h2>
 <td class="markdownTableBodyNone"><span class="tt">&lt;Memory&gt;_max_writes</span>  </td><td class="markdownTableBodyNone">Integer  </td><td class="markdownTableBodyNone">Maximum outstanding writes. Use <span class="tt">0</span> for a read-only memory when appropriate.  </td></tr>
 </table>
 <p>The option reference lists the full metric set for <span class="tt">Sram</span>, <span class="tt">Dram</span>, and <span class="tt">OffChipFlash</span>, and lists <span class="tt">OnChipFlash_clock_scale</span> for on-chip Flash. Use <span class="tt">--verbose-config</span> with the installed Vela version to inspect the resolved properties supported by that version.</p>
-<p>The values in <span class="tt">vela.ini</span> are used by the Vela compiler to optimize the ML model for the target and the output report. The can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated command stream. <span class="tt">core_clock</span> is primarily used to convert cycle estimates to time.</p>
+<p>The values in <span class="tt">vela.ini</span> are used by the Vela compiler to optimize the ML model for the target and the output report. They can alter scheduling, buffering, DMA insertion, allocation sizes, and the generated command stream. <span class="tt">core_clock</span> is primarily used to convert cycle estimates to time.</p>
 <h2 class="doxsection"><a class="anchor" id="memory-mode-parameters"></a>
 Memory mode parameters</h2>
 <table class="markdownTable">
@@ -449,7 +449,7 @@ Memory mode parameters</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">const_mem_area</span>  </td><td class="markdownTableBodyNone"><span class="tt">Axi0</span> or <span class="tt">Axi1</span>  </td><td class="markdownTableBodyNone">Location for read-only constants, including weights, scales, biases, and constant tensors.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">arena_mem_area</span>  </td><td class="markdownTableBodyNone"><span class="tt">Axi0</span> or <span class="tt">Axi1</span>  </td><td class="markdownTableBodyNone">Location for read/write feature maps, intermediate tensors, and internal buffers.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">arena_mem_area</span>  </td><td class="markdownTableBodyNone"><span class="tt">Axi0</span> or <span class="tt">Axi1</span>  </td><td class="markdownTableBodyNone">Location for read/write feature maps, intermediate tensors, and Vela-managed working storage.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">cache_mem_area</span>  </td><td class="markdownTableBodyNone"><span class="tt">Axi0</span> or <span class="tt">Axi1</span>  </td><td class="markdownTableBodyNone">Staging or fast-scratch location. It is separate from the arena only when it resolves to a different memory type from <span class="tt">arena_mem_area</span>.  </td></tr>
 <tr class="markdownTableRowEven">

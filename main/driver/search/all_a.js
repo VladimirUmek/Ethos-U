@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['performance_20monitoring_20unit_20api_0',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
-  ['performance_20monitoring_20unit_20pmu_1',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
-  ['platform_20specific_20functions_2',['Platform specific functions',['../group__ethosu__callback__api.html',1,'Platform-specific functions'],['../index.html#platform-specific-functions',1,'Platform-specific functions']]],
-  ['pmu_3',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
-  ['pmu_20events_4',['Interpreting PMU events',['../index.html#interpreting-pmu-events',1,'']]],
-  ['pmu_20example_5',['PMU example',['../index.html#pmu-example',1,'']]],
-  ['pointer_20routing_6',['Command-stream and base-pointer routing',['../index.html#command-stream-and-base-pointer-routing',1,'']]]
+  ['log_0',['LOG',['../group__ethosu__log__api.html#ga684cbf16ece7e6e25cd49fdef621a475',1,'ethosu_log.h']]],
+  ['log_5fdebug_1',['LOG_DEBUG',['../group__ethosu__log__api.html#ga4cfe278bc804bda9db3a59830b6fbfb8',1,'ethosu_log.h']]],
+  ['log_5ferr_2',['LOG_ERR',['../group__ethosu__log__api.html#ga531b8a1a22e3fdd27811bfab52217e13',1,'ethosu_log.h']]],
+  ['log_5finfo_3',['LOG_INFO',['../group__ethosu__log__api.html#ga0346634c15a318e68d86de21729d51c9',1,'ethosu_log.h']]],
+  ['log_5fwarn_4',['LOG_WARN',['../group__ethosu__log__api.html#ga0ac9ed4ee5b005ba22993796a63fe4d5',1,'ethosu_log.h']]],
+  ['logging_5',['Logging',['../group__ethosu__log__api.html',1,'Logging'],['../index.html#logging',1,'Logging']]]
 ];

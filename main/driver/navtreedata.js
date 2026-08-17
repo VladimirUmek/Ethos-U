@@ -36,13 +36,20 @@ var NAVTREE =
       [ "Asynchronous invocation", "index.html#asynchronous-invocation", null ],
       [ "Driver initialization", "index.html#driver-initialization", null ]
     ] ],
+    [ "Driver bring-up checklist", "index.html#driver-bring-up-checklist", null ],
     [ "Implementation design", "index.html#implementation-design", null ],
     [ "Data caching", "index.html#data-caching", null ],
-    [ "Mutex and semaphores", "index.html#mutex-and-semaphores", null ],
+    [ "Mutex and semaphores", "index.html#mutex-and-semaphores", [
+      [ "Driver ownership", "index.html#driver-ownership", null ],
+      [ "Platform synchronization requirements", "index.html#platform-synchronization-requirements", null ]
+    ] ],
     [ "Begin/End inference callbacks", "index.html#beginend-inference-callbacks", null ],
-    [ "Driver Configuration", "index.html#driver-configuration", [
-      [ "Configuration Options", "index.html#configuration-options", [
-        [ "Command-stream and base-pointer routing", "index.html#command-stream-and-base-pointer-routing", null ]
+    [ "Memory access configuration", "index.html#memory-access-configuration", [
+      [ "Embedded application developers", "index.html#embedded-application-developers", null ],
+      [ "Silicon vendors and platform maintainers", "index.html#silicon-vendors-and-platform-maintainers", [
+        [ "1. Common traffic selectors", "index.html#autotoc_md1-common-traffic-selectors", null ],
+        [ "2. Ethos-U55 and Ethos-U65", "index.html#autotoc_md2-ethos-u55-and-ethos-u65", null ],
+        [ "3. Ethos-U85", "index.html#autotoc_md3-ethos-u85", null ]
       ] ]
     ] ],
     [ "Logging", "index.html#logging", null ],
@@ -50,7 +57,6 @@ var NAVTREE =
       [ "Interpreting PMU events", "index.html#interpreting-pmu-events", null ],
       [ "PMU example", "index.html#pmu-example", null ]
     ] ],
-    [ "Bring-up checklist", "index.html#bring-up-checklist", null ],
     [ "API Reference", "topics.html", "topics" ]
   ] ]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['monitoring_20unit_20pmu_0',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
-  ['mutex_20and_20semaphores_1',['Mutex and semaphores',['../index.html#mutex-and-semaphores',1,'']]]
+  ['functions_0',['functions',['../index.html#api-functions',1,'API functions'],['../index.html#platform-specific-functions',1,'Platform-specific functions']]]
 ];
