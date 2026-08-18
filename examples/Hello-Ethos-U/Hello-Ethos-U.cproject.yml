@@ -25,7 +25,7 @@ project:
     - component: CMSIS:RTOS2:Keil RTX5&Source
 
   layers:
-    - layer: $SolutionDir()$/Model/ML-Model.clayer.yml
+    - layer: $SolutionDir()$/Model/ML-TinyCNN.clayer.yml
 
     - layer: $Board-Layer$
       type: Board

@@ -50,7 +50,7 @@ solution:
       system: Ethos_U65_Embedded
       memory: Shared_Sram
     model:
-      clayer: ./Model/ML-Model.clayer.yml
+      clayer: ./Model/ML-TinyCNN.clayer.yml
       name: TinyCNN
 #    simulator:
 #      target-type: SSE-300-U65

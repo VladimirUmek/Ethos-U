@@ -30,6 +30,37 @@ See the [General documentation](https://arm-software.github.io/CMSIS-Ethos-U/mai
 for memory-mode concepts and the [Integration documentation](https://arm-software.github.io/CMSIS-Ethos-U/main/integration/index.html)
 for linker placement, memory attributes, cache policy, and driver configuration.
 
+## Integration and tutorial
+
+The [Integration guide](https://arm-software.github.io/CMSIS-Ethos-U/main/integration/index.html)
+describes the end-to-end workflow for creating an ML application for selected
+target hardware. It covers selecting the device configuration, creating a CMSIS
+solution project, compiling the model with Vela, placing the generated model
+regions in physical memory, configuring the driver, and validating the complete
+system.
+
+The [tutorial](https://arm-software.github.io/CMSIS-Ethos-U/main/integration/index.html#tutorial)
+uses Keil Studio for VS Code to start from an example that matches the target's
+Ethos-U NPU. It shows how to obtain the resolved MLOps and Vela settings,
+generate an NPU-optimized model, build the application, and extend the solution
+with a board layer and configuration for the physical target.
+
+## Examples
+
+The pack includes three `Hello-Ethos-U` CMSIS solution examples. Select the
+example that matches the NPU in the target hardware:
+
+| Pack example | NPU | Initial target configuration |
+|---|---|---|
+| `Hello-Ethos-U55` | Ethos-U55 | V2M-MPS3-SSE-300 FVP |
+| `Hello-Ethos-U65` | Ethos-U65 | V2M-MPS3-SSE-300 FVP |
+| `Hello-Ethos-U85` | Ethos-U85 | SSE-320 FVP |
+
+The examples provide an application project, board and ML model layers,
+quantized models, Vela configuration, and self-checking test sources.
+The FVP configuration supports initial validation; use the tutorial to
+add the selected physical target hardware.
+
 ## Features
 
 - Generic core-driver components for Arm Ethos-U55, Ethos-U65, and Ethos-U85.

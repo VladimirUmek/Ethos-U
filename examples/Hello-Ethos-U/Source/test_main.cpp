@@ -11,8 +11,9 @@
  * below; the expected values come from the host TensorFlow reference
  * interpreter, so they are independent of the NPU being tested.
  *
- * Regenerate the models and these vectors with Model/gen/generate.py, which
- * prints a ready-to-paste copy of the arrays below.
+ * Regenerate the models and these vectors with
+ * Model/hello_world/gen/generate.py, which prints a ready-to-paste copy of the
+ * arrays below.
  *---------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -35,8 +36,9 @@
     input   x = (-55 - (-128)) * 0.024574 = 1.794 rad
     output  y = (124 -     3)  * 0.008061 = 0.975     sin(1.794) = 0.975
 
-  Model/gen/generate.py reads those scales out of the model and applies them
-  when it captures the vector, so nothing here has to convert at runtime.
+  Model/hello_world/gen/generate.py reads those scales out of the model and
+  applies them when it captures the vector, so nothing here has to convert at
+  runtime.
 */
 static const int8_t hello_world_input[] = {
     -55,

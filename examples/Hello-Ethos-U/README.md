@@ -1,6 +1,6 @@
 # Hello-Ethos-U
 
-*This CMSIS-Toolbox example provides target solutions for Arm Ethos-U55,
+This CMSIS-Toolbox example provides target solutions for Arm Ethos-U55,
 Ethos-U65, and Ethos-U85 NPUs. The shared project runs on the matching
 Corstone FVP simulation or hardware when used as a
 [reference application](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/).*
@@ -90,25 +90,25 @@ workloads depend on. It classifies synthetic 16x16 stripe patterns generated
 in-process, so retraining needs no dataset download.
 
 Both models are trained, quantized, and Vela-compiled by
-`Model/gen/generate.py`, and both compile to **zero CPU operators** — the whole
+`Model/hello_world/gen/generate.py`, and both compile to **zero CPU operators** — the whole
 graph runs on the NPU. Only the Vela builds are linked into the firmware; the
 original `.tflite` files is provided so the models can be
 recompiled for a different NPU configuration or memory mode.
 
 ## Regenerate or check the models
 
-The generator requires Python packages pinned in `Model/gen/requirements.txt`.
+The generator requires Python packages pinned in `Model/hello_world/gen/requirements.txt`.
 Install them and check that the committed Vela output is current:
 
 ```console
-python3 -m pip install -r Model/gen/requirements.txt
-python3 Model/gen/generate.py --check
+python3 -m pip install -r Model/hello_world/gen/requirements.txt
+python3 Model/hello_world/gen/generate.py --check
 ```
 
 To retrain, quantize, and Vela-compile both models:
 
 ```console
-python3 Model/gen/generate.py
+python3 Model/hello_world/gen/generate.py
 ```
 
 The full generation command updates each model's `.tflite`, generated C array,
@@ -136,7 +136,7 @@ memory-region mismatch can select the wrong NPU access path or cause the NPU to
 read outside the configured buffer.
 
 The `mps4_board.subsystem.ethosu.num_macs=256` setting in `fvp_config.txt` must
-match the `ethos-u85-256` accelerator selected in `Model/gen/generate.py`.
+match the `ethos-u85-256` accelerator selected in `Model/hello_world/gen/generate.py`.
 Otherwise, the models are compiled for an NPU configuration that differs from
 the simulated hardware.
 

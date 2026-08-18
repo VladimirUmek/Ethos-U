@@ -33,7 +33,8 @@ solution:
             - project-context: Hello-Ethos-U.Debug
 
   # The NPU_* values below must stay consistent with the Vela --memory-mode used
-  # to compile the model in Model/gen/regenerate.sh. The committed model is built
+  # to compile the model in Model/hello_world/gen/generate.py. The committed
+  # model is built
   # for Dedicated_Sram_384KB: model constants and command stream via Axi1
   # (values 2/3), the arena via Axi1, and the NPU cache via Axi0 (values 0/1).
   # See Model/vela.ini and README.md ("Exploring memory modes").
@@ -62,7 +63,7 @@ solution:
       system: Ethos_U85_SYS_DRAM_Mid # system-config from the Vela config
       memory: Shared_Sram # memory-mode from the Vela config
     model:
-      clayer: ./Model/ML-Model.clayer.yml
+      clayer: ./Model/ML-TinyCNN.clayer.yml
       name: TinyCNN
 #    simulator:
 #      target-type: SSE-320-U85
