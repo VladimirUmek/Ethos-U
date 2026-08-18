@@ -277,37 +277,48 @@ Troubleshoot an inference that does not complete</h2>
 </ul>
 <h1 class="doxsection"><a class="anchor" id="validate-and-tune"></a>
 Validate and tune</h1>
-<h1 class="doxsection"><a class="anchor" id="work-with-an-example"></a>
-Work with an Example</h1>
-<h2 class="doxsection"><a class="anchor" id="select-ethos-u-variant"></a>
-Select Ethos-U variant</h2>
-<p>The <span class="tt">ARM::CMSIS-Ethos-U</span> pack includes <a href="https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html">examples</a> for FVP simulation models that show the Ethos-U NPU integration in a Cortex-M target.</p>
+<h1 class="doxsection"><a class="anchor" id="tutorial"></a>
+Tutorial</h1>
+<p>This tutorial explains the end-to-end process of generating an ML application for a selected hardware target. It assumes that the hardware target was selected using the guidelines under <a href="#determine-the-memory-budget">Determine the memory budget</a>. We use Keil Studio for VS Code as the development environment throughout this tutorial.</p>
+<h2 class="doxsection"><a class="anchor" id="prerequisites"></a>
+Prerequisites</h2>
+<ul>
+<li>Install <a href="https://marketplace.visualstudio.com/items?itemName=Arm.keil-studio-pack">Keil Studio for VS Code from the VS Code Marketplace</a>.</li>
+<li>Follow the Vela installation instructionsVela installation instructions</li>
+</ul>
+<p>.</p><ul>
+<li>Selected ML model with the chosen system and memory mode.</li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="start-development-with-an-example"></a>
+Start development with an example</h2>
+<p>The <span class="tt">ARM::CMSIS-Ethos-U</span> pack provides <a href="https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html">example solutions</a> that demonstrate how to integrate an Ethos-U NPU into a Cortex-M application. Use the example that matches the NPU in your selected hardware target as the starting point for the ML application.</p>
+<p>In Keil Studio, open the <a href="https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html">Create Solution...</a> dialog. Select the target board first, and then select the corresponding example project shown below. The supplied target boards provide an FVP configuration for initial validation; the same solution can later be extended with the physical target hardware.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadLeft">Example Project  </th><th class="markdownTableHeadLeft">NPU  </th><th class="markdownTableHeadLeft">MLOps Information  </th><th class="markdownTableHeadLeft">Target Board (FVP Simulation)  </th></tr>
+<th class="markdownTableHeadLeft">Target Board  </th><th class="markdownTableHeadLeft">Example Project  </th><th class="markdownTableHeadLeft">NPU  </th><th class="markdownTableHeadLeft">MLOps Information  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U55.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U55  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U55.cbuild-mlops.yml</span>  </td><td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td></tr>
+<td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U55.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U55  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U55.cbuild-mlops.yml</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U65.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U65  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U65.cbuild-mlops.yml</span>  </td><td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td></tr>
+<td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U65.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U65  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U65.cbuild-mlops.yml</span>  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U85.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U85  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U85.cbuild-mlops.yml</span>  </td><td class="markdownTableBodyLeft">SSE-320  </td></tr>
+<td class="markdownTableBodyLeft">SSE-320  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U85.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U85  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U85.cbuild-mlops.yml</span>  </td></tr>
 </table>
-<p>Each NPU-specific solution selects the target board and FVP model, and then includes the shared application project. The project combines the matching board layer with the ML model layer and application sources.</p>
+<p>Each NPU-specific solution defines the target configuration and MLOps settings, and includes the shared application project. The project combines the matching board layer with the ML model layer and application sources.</p>
 <div class="mermaidgraph">
 <pre class="mermaid">
 flowchart TD
-    solution[&quot;NPU-specific example&lt;br/&gt;Hello-Ethos-Uxx.csolution.yml&quot;] --&gt;  project[&quot;Shared application project&lt;br/&gt;Hello-Ethos-U.cproject.yml&quot;]
-    solution --&gt; mlops[&quot;MLOps configuration&lt;br/&gt;NPU, Vela, and model&quot;]
-    project --&gt; sources[&quot;Application sources&lt;br/&gt;Source/test_main.cpp&quot;]
-    project --&gt; board[&quot;Board layer&lt;br/&gt;Board/.../Board-Uxx.clayer.yml&quot;]
-    project --&gt; model[&quot;ML model layer&lt;br/&gt;Model/ML-Model.clayer.yml&quot;]
+    solution[&quot;&lt;b&gt;NPU-specific example&lt;/b&gt;&lt;br/&gt;Hello-Ethos-Uxx.csolution.yml&quot;] --&gt;  project[&quot;&lt;b&gt;Shared application project&lt;/b&gt;&lt;br/&gt;Hello-Ethos-U.cproject.yml&quot;]
+    solution --&gt; mlops[&quot;&lt;b&gt;MLOps configuration&lt;/b&gt;&lt;br/&gt;NPU, Vela, and model&quot;]
+    project --&gt; sources[&quot;&lt;b&gt;Application sources&lt;/b&gt;&lt;br/&gt;Source/test_main.cpp&quot;]
+    project --&gt; board[&quot;&lt;b&gt;Board layer&lt;/b&gt;&lt;br/&gt;Board/.../Board-Uxx.clayer.yml&quot;]
+    project --&gt; model[&quot;&lt;b&gt;ML model layer&lt;/b&gt;&lt;br/&gt;Model/ML-TinyCNN.clayer.yml&quot;]
     mlops --&gt; model</pre>
 </div>
-<p>The example uses TinyCNN, a small quantized TensorFlow Lite (<span class="tt">int8</span>) image classifier that Vela compiles into an NPU-optimized model for the selected Ethos-U target.</p>
-<p>To create the optimized model and run the example:</p>
+<p>The example uses TinyCNN, a small quantized TensorFlow Lite (<span class="tt">int8</span>) image classifier that Vela compiles for the selected Ethos-U target.</p>
+<p>To generate the NPU-optimized model and build the example:</p>
 <ol type="1">
-<li>Open the NPU-specific <span class="tt">*.csolution.yml</span> example in Keil Studio. Keil Studio executes <span class="tt">cbuild setup</span>, which resolves the target configuration and generates the corresponding <span class="tt">*.cbuild-mlops.yml</span> file.</li>
-<li><p class="startli">Open the generated <span class="tt">*.cbuild-mlops.yml</span> file and use the Vela command-line parameters stored in its <span class="tt">cbuild-mlops.vela.options</span> entry. This entry supplies <span class="tt">--accelerator-config</span>, <span class="tt">--system-config</span>, and <span class="tt">--memory-mode</span>; for example, the Ethos-U55 command is:</p>
+<li>Open the NPU-specific <span class="tt">*.csolution.yml</span> file created by Keil Studio. Keil Studio runs <span class="tt">cbuild setup</span> to resolve the target configuration and generate the corresponding <span class="tt">*.cbuild-mlops.yml</span> file.</li>
+<li><p class="startli">Open the generated <span class="tt">*.cbuild-mlops.yml</span> file. Use the Vela command-line parameters from <span class="tt">cbuild-mlops.vela.options</span> to compile the model. These parameters specify <span class="tt">--accelerator-config</span>, <span class="tt">--system-config</span>, and <span class="tt">--memory-mode</span>. For example, use the following command for Ethos-U55:</p>
 <div class="fragment"><div class="line">vela Model/tiny_cnn/tiny_cnn_int8.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-256 \</div>
 <div class="line">  --system-config Ethos_U55_High_End_Embedded \</div>
@@ -315,16 +326,14 @@ flowchart TD
 <div class="line">  --output-dir Model/tiny_cnn</div>
 </div><!-- fragment --></li>
 <li>ToDo: generate <span class="tt">tiny_cnn_model.c</span>.</li>
-<li>Compile the example in Keil Studio and run it on the FVP simulation selected by the solution.</li>
+<li>Build the example in Keil Studio and run it on the target selected by the solution. Use the supplied FVP for initial validation or the physical target after adding its board layer and target configuration.</li>
 </ol>
-<h2 class="doxsection"><a class="anchor" id="integrate-your-model"></a>
-Integrate your model</h2>
-<h2 class="doxsection"><a class="anchor" id="change-system-andor-memory-mode"></a>
-Change system and/or memory mode</h2>
-<h2 class="doxsection"><a class="anchor" id="target-physical-devices"></a>
-Target physical devices</h2>
-<p>These projects are <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications">reference applications</a> that can be deployed to other boards that provide a board layer with an <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/#connections">STDOUT connection</a>.</p>
-<p>A hardware target can be added in the <span class="tt">*.csolution.yml</span> file as shown below:</p>
+<dl class="section remark"><dt>Remarks</dt><dd>The <span class="tt">ML-TinyCNN.clayer.yml</span> layer contains a minimal ML model that runs on Ethos-U. Use it to verify the integration before adding the application model.</dd></dl>
+<h2 class="doxsection"><a class="anchor" id="add-physical-target-device"></a>
+Add physical target device</h2>
+<p>These <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications"><span class="tt">csolution</span> projects</a> can be extended with target hardware, allowing you to switch between simulation and a physical target. Add or create a layer for your hardware target that provides an <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/#connections">STDOUT connection</a>.</p>
+<dl class="section remark"><dt>Remarks</dt><dd>The CMSIS-Toolbox command <span class="tt">csolution list layers</span> lists board layers that are provided in packs. Inspect this layer and copy it to the application.</dd></dl>
+<p>Add the hardware target to the <span class="tt">*.csolution.yml</span> file as shown below:</p>
 <div class="fragment"><div class="line">  packs:</div>
 <div class="line">    - pack: AlifSemiconductor::Ensemble      # Add DFP and optional BSP</div>
 <div class="line"> </div>
@@ -334,7 +343,11 @@ Target physical devices</h2>
 <div class="line">      board: AppKit-E7-AIML</div>
 <div class="line">// todo</div>
 <div class="line">    - type: SSE-300-U55</div>
-</div><!-- fragment --><hr  />
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="integrate-your-model"></a>
+Integrate your model</h2>
+<h2 class="doxsection"><a class="anchor" id="change-system-andor-memory-mode"></a>
+Change system and/or memory mode</h2>
+<hr  />
 <h1 class="doxsection"><a class="anchor" id="ethos-u-configuration"></a>
 Ethos-U configuration</h1>
 <p>The Vela guide explains how to select an existing configuration and how to create one for a device:</p>

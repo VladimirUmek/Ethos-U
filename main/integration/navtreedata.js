@@ -44,11 +44,12 @@ var NAVTREE =
       [ "Troubleshoot an inference that does not complete", "index.html#troubleshoot-an-inference-that-does-not-complete", null ]
     ] ],
     [ "Validate and tune", "index.html#validate-and-tune", null ],
-    [ "Work with an Example", "index.html#work-with-an-example", [
-      [ "Select Ethos-U variant", "index.html#select-ethos-u-variant", null ],
+    [ "Tutorial", "index.html#tutorial", [
+      [ "Prerequisites", "index.html#prerequisites", null ],
+      [ "Start development with an example", "index.html#start-development-with-an-example", null ],
+      [ "Add physical target device", "index.html#add-physical-target-device", null ],
       [ "Integrate your model", "index.html#integrate-your-model", null ],
-      [ "Change system and/or memory mode", "index.html#change-system-andor-memory-mode", null ],
-      [ "Target physical devices", "index.html#target-physical-devices", null ]
+      [ "Change system and/or memory mode", "index.html#change-system-andor-memory-mode", null ]
     ] ],
     [ "Ethos-U configuration", "index.html#ethos-u-configuration", null ],
     [ "Linker configuration", "index.html#linker-configuration", null ],
