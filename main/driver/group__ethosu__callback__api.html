@@ -329,6 +329,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Minimal sempahore implementation for baremetal applications. See ethosu_driver.c.</p>
+<p>When overriding this function with an RTOS counting semaphore, create it with an initial count of zero. The maximum count must be large enough for the reservation waiter semaphore, which can hold one token per available registered driver of the same NPU variant. A safe value is the maximum number of NPU driver instances in the system.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to semaphore handle</dd></dl>
 <p>Driver provides the default weak implementation that allocates a minimal bare-metal semaphore.</p>
 <p>Re-implement this function and create an RTOS semaphore with an initial count of zero in multithreaded application.</p>
@@ -565,6 +566,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Remapping command stream and base pointer addresses.</p>
+<p>When the multi variant feature is off, the driver provides a weak function that can be overriden. When the multi variant feature is on, the function pointer in the device user ops struct (per driver) must be set instead.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">address</td><td>Address to be remapped. </td></tr>
@@ -597,7 +599,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Select configuration for region access.</p>
-<p>Default implementation uses NPU_QCONFIG and NPU_REGIONCFG_n defines.</p>
+<p>When the multi variant feature is off, the driver provides a weak function that can be overriden. When the multi variant feature is on, the function pointer in the device user ops struct (per driver) must be set instead.</p>
+<p>Default weak implementation uses NPU_QCONFIG and NPU_REGIONCFG_n defines.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">address</td><td>Address of region. </td></tr>

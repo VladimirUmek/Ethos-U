@@ -7,5 +7,6 @@ var searchData=
   ['pmu_4',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
   ['pmu_20events_5',['Interpreting PMU events',['../index.html#interpreting-pmu-events',1,'']]],
   ['pmu_20example_6',['PMU example',['../index.html#pmu-example',1,'']]],
-  ['pointers_7',['Command stream regions and base pointers',['../index.html#command-stream-regions-and-base-pointers',1,'']]]
+  ['pointers_7',['Command stream regions and base pointers',['../index.html#command-stream-regions-and-base-pointers',1,'']]],
+  ['product_5fmajor_8',['product_major',['../group__ethosu__driver__structs.html#a16172a7c18f4f087e9f80857f53a2b82',1,'ethosu_id']]]
 ];
