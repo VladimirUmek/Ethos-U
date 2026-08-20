@@ -1031,7 +1031,11 @@ INPUT                  = ./src/main.md \
                          ./src/ethosu_driver.txt \
                          ./src/ethosu_log.txt \
                          ./src/pmu_ethosu.txt \
+                         ../../../source/include/ethosu_device.h \
                          ../../../source/include/ethosu_driver.h \
+                         ../../../source/include/ethosu_pmu_funcs.h \
+                         ../../../source/include/ethosu_pmu_types.h \
+                         ../../../source/include/ethosu_types.h \
                          ../../../source/src/ethosu_log.h \
                          ../../../source/include/pmu_ethosu.h
 

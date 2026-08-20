@@ -298,16 +298,22 @@ in `include/ethosu_types.h`.
 
 ## API functions
 
-| API Function | Description |
-| --- | --- |
-| \ref ethosu_init "ethosu_init()", \ref ethosu_deinit "ethosu_deinit()" | initialize or remove an NPU instance |
-| \ref ethosu_invoke_v3 "ethosu_invoke_v3()" | invoke and wait synchronously |
-| \ref ethosu_invoke_async "ethosu_invoke_async()", \ref ethosu_wait "ethosu_wait()" | submit asynchronously and poll or block |
-| \ref ethosu_irq_handler "ethosu_irq_handler()" | handle the target interrupt |
-| \ref ethosu_get_driver_version "ethosu_get_driver_version()", \ref ethosu_get_hw_info "ethosu_get_hw_info()" | inspect driver and hardware versions |
-| \ref ethosu_soft_reset "ethosu_soft_reset()" | recover the NPU from an error |
-| \ref ethosu_request_power "ethosu_request_power()", \ref ethosu_release_power "ethosu_release_power()" | manage power lifetime |
-| \ref ethosu_reserve_driver "ethosu_reserve_driver()", \ref ethosu_release_driver "ethosu_release_driver()" | reserve an instance in a multi-NPU system |
+| API Function | Build | Description |
+| --- | --- | --- |
+| \ref ethosu_init "ethosu_init()" | Single-variant | Initialize and register an NPU instance using the compile-time device selection. |
+| \ref ethosu_init_ex "ethosu_init_ex()" | Multi-variant | Initialize and register an NPU instance using a device descriptor, run-time configuration, and optional per-driver user operations. |
+| \ref ethosu_deinit "ethosu_deinit()" | Both | Unregister an idle NPU instance and release its synchronization resources. |
+| \ref ethosu_invoke_v3 "ethosu_invoke_v3()" | Both | Submit an inference to a specified driver and wait synchronously for completion. |
+| \ref ethosu_invoke_async "ethosu_invoke_async()", \ref ethosu_wait "ethosu_wait()" | Both | Submit an inference asynchronously, then poll or block for completion. |
+| \ref ethosu_invoke_auto "ethosu_invoke_auto()" | Multi-variant | Read the network's NPU requirements, reserve a matching driver, run the inference, and release the driver. |
+| \ref ethosu_get_product_config_from_cop_data "ethosu_get_product_config_from_cop_data()" | Both | Read the Ethos-U product and MAC configuration from a Vela custom-operator payload. |
+| \ref ethosu_irq_handler "ethosu_irq_handler()" | Both | Handle an NPU completion or fault interrupt for a driver instance. |
+| \ref ethosu_get_driver_version "ethosu_get_driver_version()", \ref ethosu_get_hw_info "ethosu_get_hw_info()" | Both | Inspect the driver version and an NPU instance's hardware information. |
+| \ref ethosu_soft_reset "ethosu_soft_reset()" | Both | Reset an NPU instance and restore its configuration. |
+| \ref ethosu_request_power "ethosu_request_power()", \ref ethosu_release_power "ethosu_release_power()" | Both | Manage reference-counted NPU power requests. |
+| \ref ethosu_reserve_driver "ethosu_reserve_driver()" | Single-variant | Block until an instance of the compile-time NPU variant is available and reserve it. |
+| \ref ethosu_reserve_driver_ex "ethosu_reserve_driver_ex()" | Both | Block until an instance matching the requested product and MAC configuration is available and reserve it. |
+| \ref ethosu_release_driver "ethosu_release_driver()" | Both | Release a reserved driver instance. |
 
 See [Driver functions](group__ethosu__public__api.html) for the complete generated API
 and [Driver structures](group__ethosu__driver__structs.html) for public data types.
@@ -719,8 +725,9 @@ ETHOSU_LOG_SEVERITY=ETHOSU_LOG_INFO
 The driver exposes the Ethos-U PMU through `pmu_ethosu.h`. The API supports a
 64-bit cycle counter and programmable event counters. Ethos-U55 and Ethos-U65
 builds provide four event counters; Ethos-U85 builds provide eight. Use
-\ref ETHOSU_PMU_Get_NumEventCounters "ETHOSU_PMU_Get_NumEventCounters()" when
-code must work with more than one Ethos-U target.
+\ref ETHOSU_PMU_Get_NumEventCountersForDrv
+"ETHOSU_PMU_Get_NumEventCountersForDrv()" when code must work with more than
+one Ethos-U target or with a multi-variant build.
 
 The target-specific `enum ethosu_pmu_event_type` lists the supported events.
 They include NPU and MAC activity or stalls, weight-decoder and activation-output
@@ -735,6 +742,7 @@ The main API groups are:
 | API Function | Description |
 |---|---|
 | \ref ETHOSU_PMU_Enable "ETHOSU_PMU_Enable()", \ref ETHOSU_PMU_Disable "ETHOSU_PMU_Disable()" | Enable or disable the PMU |
+| \ref ETHOSU_PMU_Get_NumEventCounters "ETHOSU_PMU_Get_NumEventCounters()", \ref ETHOSU_PMU_Get_NumEventCountersForDrv "ETHOSU_PMU_Get_NumEventCountersForDrv()" | Get the number of counters for the compile-time NPU or a specific driver |
 | \ref ETHOSU_PMU_Set_EVTYPER "ETHOSU_PMU_Set_EVTYPER()", \ref ETHOSU_PMU_Get_EVTYPER "ETHOSU_PMU_Get_EVTYPER()" | Select an event |
 | \ref ETHOSU_PMU_CYCCNT_Reset "ETHOSU_PMU_CYCCNT_Reset()", \ref ETHOSU_PMU_EVCNTR_ALL_Reset "ETHOSU_PMU_EVCNTR_ALL_Reset()" | Reset counters |
 | \ref ETHOSU_PMU_CNTR_Enable "ETHOSU_PMU_CNTR_Enable()", \ref ETHOSU_PMU_CNTR_Disable "ETHOSU_PMU_CNTR_Disable()" | Enable or disable counters |
@@ -792,9 +800,9 @@ The following example counts NPU-active and NPU-idle events and records the NPU
 cycle count for one inference. Pass a pointer to `struct pmu_results` as the
 `user_arg` to \ref ethosu_invoke_v3 "ethosu_invoke_v3()" or
 \ref ethosu_invoke_async "ethosu_invoke_async()". The callbacks use
-\ref ETHOSU_PMU_Get_NumEventCounters "ETHOSU_PMU_Get_NumEventCounters()" so the
-same pattern can be extended with additional events on targets that provide more
-counters.
+\ref ETHOSU_PMU_Get_NumEventCountersForDrv
+"ETHOSU_PMU_Get_NumEventCountersForDrv()" so the same pattern can be extended
+with additional events on targets that provide more counters.
 
 ```c
 #include "ethosu_driver.h"
@@ -816,7 +824,7 @@ struct pmu_results {
 void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg)
 {
     struct pmu_results *results = (struct pmu_results *)user_arg;
-    uint32_t num_events = ETHOSU_PMU_Get_NumEventCounters();
+    uint32_t num_events = ETHOSU_PMU_Get_NumEventCountersForDrv(drv);
 
     if (num_events > PMU_EXAMPLE_EVENT_COUNT) {
         num_events = PMU_EXAMPLE_EVENT_COUNT;
