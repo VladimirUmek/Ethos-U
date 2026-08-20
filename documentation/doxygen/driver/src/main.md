@@ -28,16 +28,18 @@ For the first execution on a target, follow the
 
 ## Ethos-U driver source code
 
-The driver is provided by the software pack `ARM::CMSIS-Ethos-U` and can be added to a CMSIS-based application as a software component.
-The pack also includes CMSIS-RTOS2 and cache-management interfaces as optional source templates.
-
-The [CMSIS-Ethos-U GitHub repository](https://github.com/ARM-software/CMSIS-Ethos-U) provides access to the source code for other build environments.
+The driver source is maintained in the
+[Ethos-U core-driver repository](https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-core-driver).
+The software pack `ARM::CMSIS-Ethos-U` includes this source code unchanged and
+makes it available to CMSIS-based applications as a software component. The
+same source can therefore be obtained directly from the repository for use with
+other build environments. The pack also includes CMSIS-RTOS2, FreeRTOS and
+cache-management interfaces as optional source code templates.
 
 | File or directory | Content |
 | --- | --- |
-| `config/` | Configurable headers for the Generic U55, U65, and U85 component variants. |
-| `include/` | Public driver, data-type, and PMU header files. |
-| `src/` | Common driver and PMU implementations, NPU-specific device implementations, and private headers. |
+| `include/` | Public driver, device, data-type, and PMU header files. |
+| `src/` | Common driver code, variant-specific backend and PMU implementations, default configuration headers, register interfaces, and private headers. |
 | `zephyr/` | Metadata for using the driver as a Zephyr module. |
 | `CMakeLists.txt` | Build description for integrating or building the driver with CMake. |
 | `README.md` | Standalone build instructions and driver API examples. |
@@ -61,6 +63,233 @@ components:
 components:
   - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Generic U85" # For Ethos-U85
 ```
+
+## Compile-time configuration
+
+The Ethos-U driver is configured with preprocessor `#define` statements. The following tables
+list the supported configuration statements.
+
+### Single-variant build
+
+A single-variant build supports one Ethos-U variant selected at compile time.
+Define exactly one Ethos-U family together with its MAC configuration. Do not
+define `ETHOSU_MULTI_VARIANT`.
+
+| `#define` | Purpose |
+| --- | --- |
+| `ETHOSU55`, `ETHOSU65`, or `ETHOSU85` | Select the Ethos-U family. Define exactly one. |
+| `ETHOSU_MACS` | Select the MAC configuration, for example `128` for an Ethos-U55-128 variant. |
+
+### Multi-variant build
+
+A multi-variant build includes support for Ethos-U55, Ethos-U65, and Ethos-U85.
+The Ethos-U variant and MAC configuration are selected for each driver instance
+at run time. Do not define the single-variant `ETHOSU55`, `ETHOSU65`,
+`ETHOSU85`, or `ETHOSU_MACS` statements in this build.
+
+| `#define` | Purpose |
+| --- | --- |
+| `ETHOSU_MULTI_VARIANT` | Enable multi-variant support. This changes the initialization, reservation, platform-operation, and PMU APIs available to the application. |
+
+### Common configuration
+
+The following `#define` statements apply in either a single-variant or
+multi-variant build. In a multi-variant build, the memory-routing statements
+initialize the default configuration for each included Ethos-U family.
+
+`NPU_QCONFIG` and `NPU_REGIONCFG_0` through `NPU_REGIONCFG_7` provide default
+memory-access selectors; they do not contain addresses. `NPU_QCONFIG` selects
+the access configuration used to fetch the command stream. The suffix in
+`NPU_REGIONCFG_n` identifies the corresponding `base_addr[n]` region, while the
+value selects its access configuration. On Ethos-U55 and Ethos-U65, the value
+selects an `AXI_LIMITx` access profile. On Ethos-U85, it selects a `MEM_ATTR`
+entry. See
+[Command stream regions and base pointers](#command-stream-regions-and-base-pointers).
+
+| `#define` | Purpose |
+| --- | --- |
+| `ETHOSU_MAX_WAITERS` | Set the maximum number of distinct Ethos-U variants tracked by driver reservation. The default is `4`. |
+| `ETHOSU_SEMAPHORE_WAIT_INFERENCE` | Set the timeout passed to the platform semaphore while waiting for inference completion. The default is `ETHOSU_SEMAPHORE_WAIT_FOREVER`; the platform defines the time unit. See [Mutex and semaphores](#mutex-and-semaphores). |
+| `NPU_QCONFIG` | Set the default memory-access selector for fetching the command stream. |
+| `NPU_REGIONCFG_0` through `NPU_REGIONCFG_7` | Set the default memory-access selector for each corresponding `base_addr[0]` through `base_addr[7]` region. |
+
+### Text logging
+
+The following `#define` statements configure driver text logging through the C
+standard I/O streams. See [Logging](#logging) for the output format and stream
+requirements.
+
+| `#define` | Purpose |
+| --- | --- |
+| `ETHOSU_LOG_ENABLE` | Enable or disable logging. The default is `1`. |
+| `ETHOSU_LOG_SEVERITY` | Select the most verbose compiled log level: `ETHOSU_LOG_ERR`, `ETHOSU_LOG_WARN`, `ETHOSU_LOG_INFO`, or `ETHOSU_LOG_DEBUG`. The default is `ETHOSU_LOG_WARN`. |
+
+### Variant-specific hardware configuration
+
+The configuration headers provide default values for the following hardware
+`#define` statements. A silicon vendor can supply values validated for its NPU,
+interconnect, memory system, cache policy, and security configuration to adjust
+the driver defaults. Do not tune these settings independently. See
+[Command stream regions and base pointers](#command-stream-regions-and-base-pointers).
+
+| Ethos-U variant | `#define` statements |
+| --- | --- |
+| Ethos-U55 and Ethos-U65 | `AXI_LIMITx_MAX_BEATS_BYTES`, `AXI_LIMITx_MEM_TYPE`, `AXI_LIMITx_MAX_OUTSTANDING_READS`, and `AXI_LIMITx_MAX_OUTSTANDING_WRITES`, where `x` is `0` through `3`. |
+| Ethos-U85 | `NPU_MAC_PWR_RAMP_CYCLES`, `NPU_MEM_ATTR_0` through `NPU_MEM_ATTR_3`, `AXI_LIMIT_SRAM_MAX_OUTSTANDING_READ`, `AXI_LIMIT_SRAM_MAX_OUTSTANDING_WRITE`, `AXI_LIMIT_SRAM_MAX_BEATS`, `AXI_LIMIT_EXT_MAX_OUTSTANDING_READ`, `AXI_LIMIT_EXT_MAX_OUTSTANDING_WRITE`, and `AXI_LIMIT_EXT_MAX_BEATS`. |
+
+For Ethos-U55 and Ethos-U65, each `AXI_LIMITx` register defines a complete AXI
+access profile, despite the register name suggesting that it contains only
+transaction limits. The corresponding `AXI_LIMITx_*` `#define` statements
+configure its maximum burst size, memory type, and maximum number of
+outstanding read and write transactions. In particular, `AXI_LIMITx_MEM_TYPE`
+sets the memory type used to encode the AXI AxCACHE signals.
+
+## Command stream regions and base pointers
+
+[Vela](../vela/index.html) emits command streams that address data as offsets
+within numbered memory regions. The invoke API supplies the base address of
+each region in `base_addr[]`: `base_addr[0]` is used for region 0,
+`base_addr[1]` for region 1, and so on. The matching field in the NPU
+`REGIONCFG` register selects the access configuration for each region, including
+the AXI port and memory attributes used for its transactions.
+
+`QBASE` holds the base address of the command stream. `QCONFIG` selects the
+access configuration used to fetch it, using the same selector encoding as
+`REGIONCFG`.
+
+The address and access-configuration inputs are related as follows:
+
+| NPU access | Address programmed by the driver | Access-configuration selector | Default `#define` |
+| --- | --- | --- | --- |
+| Command stream | `QBASE`, from the command-stream pointer passed to the invoke API | `QCONFIG` | `NPU_QCONFIG` |
+| Base-pointer region `n` | `BASEP[n]`, from `base_addr[n]` | `REGIONCFG[n]` | `NPU_REGIONCFG_n` |
+
+The default selector values are listed under
+[Ethos-U55 and Ethos-U65](#ethos-u55-and-ethos-u65) and
+[Ethos-U85](#ethos-u85). An application developer can select a Vela system
+configuration and memory mode supported by the target to meet the application's
+requirements. The selector values must match the resulting memory placement
+and memory system. See
+<a href="../general/index.html#system-configuration-and-memory-modes-at-a-glance">System configuration and memory modes at a glance</a>.
+In a [single-variant build](#single-variant-build), an override of
+\ref ethosu_config_select "ethosu_config_select()" can replace the defaults. In
+a [multi-variant build](#multi-variant-build), the values come from the device
+configuration passed to \ref ethosu_init_ex "ethosu_init_ex()", or from a
+per-driver `config_select` user operation.
+
+The selected
+<a href="../vela/index.html#memory-mode-parameters">Vela memory mode</a>
+determines the memory areas used for constants, scratch, and optional fast
+scratch. The following table shows the common mappings. The runtime base
+pointers and the access configurations selected by `REGIONCFG` must match the
+actual placement.
+
+| Vela memory mode | Region 0 constants | Region 1 scratch | Region 2 fast scratch |
+| --- | --- | --- | --- |
+| `Sram_Only` | SRAM | SRAM | Not used |
+| `Shared_Sram` | DRAM/Flash | SRAM | Not used |
+| `Dedicated_Sram` | DRAM/Flash | DRAM | SRAM |
+
+In `Dedicated_Sram` mode, Vela uses region 2 for fast scratch. The driver calls
+this region `FAST_MEMORY`. The driver must know the actual fast memory address
+and size through the `fast_memory` and `fast_memory_size` arguments to
+\ref ethosu_init "ethosu_init()" or \ref ethosu_init_ex "ethosu_init_ex()". If
+fast memory is configured and the invoke call includes base pointer 2, the
+driver checks that `base_addr_size[2]` fits inside `fast_memory_size` and
+rewrites `base_addr[2]` to the configured fast memory address before programming
+the NPU. The driver therefore applies the fast-memory address without requiring
+the framework to replace base pointer 2.
+
+### Ethos-U55 and Ethos-U65
+
+Ethos-U55 and Ethos-U65 provide the `AXI0` and `AXI1` access paths.
+
+| Memory placement | AXI port |
+| --- | --- |
+| SRAM | `AXI0` |
+| DRAM/Flash | `AXI1` |
+
+The driver provides the following default values:
+
+| Ethos-U variant | `NPU_QCONFIG` | `NPU_REGIONCFG_0` | `NPU_REGIONCFG_1` | `NPU_REGIONCFG_2` |
+| --- | --- | --- | --- | --- |
+| Ethos-U55 | `2` -> `AXI1` | `3` -> `AXI1` | `0` -> `AXI0` | `1` -> `AXI0` |
+| Ethos-U65 | `2` -> `AXI1` | `3` -> `AXI1` | `0` -> `AXI0` | `1` -> `AXI0` |
+
+For Ethos-U55 and Ethos-U65, `QCONFIG` and the `REGIONCFG[0..7]` fields accept
+values 0 through 3. Each value selects both an AXI port and the complete
+`AXI_LIMITx` access profile used for transactions:
+
+| Value | AXI port | AXI access profile |
+| --- | --- | --- |
+| `0` | `AXI0` | `AXI_LIMIT0` |
+| `1` | `AXI0` | `AXI_LIMIT1` |
+| `2` | `AXI1` | `AXI_LIMIT2` |
+| `3` | `AXI1` | `AXI_LIMIT3` |
+
+Each `AXI_LIMITx` access profile contains the burst split alignment, the memory
+type used to encode AxCACHE, and the maximum number of outstanding read and
+write transactions. These fields are configured by
+`AXI_LIMITx_MAX_BEATS_BYTES`, `AXI_LIMITx_MEM_TYPE`,
+`AXI_LIMITx_MAX_OUTSTANDING_READS`, and
+`AXI_LIMITx_MAX_OUTSTANDING_WRITES`, respectively.
+
+The Ethos-U55 `AXI1` port is read-only. If region 1 contains writable scratch
+data, it must not be routed through `AXI1`.
+
+### Ethos-U85
+
+The AXI ports are referred to as `AXI_SRAM` and `AXI_EXT`.
+
+| Memory placement | AXI port |
+| --- | --- |
+| SRAM | `AXI_SRAM` |
+| DRAM/Flash | `AXI_EXT` |
+
+The driver provides the following default values:
+
+| Ethos-U variant | `NPU_QCONFIG` | `NPU_REGIONCFG_0` | `NPU_REGIONCFG_1` | `NPU_REGIONCFG_2` |
+| --- | --- | --- | --- | --- |
+| Ethos-U85 | `2` -> `MEM_ATTR_2` -> `AXI_EXT` | `3` -> `MEM_ATTR_3` -> `AXI_EXT` | `0` -> `MEM_ATTR_0` -> `AXI_SRAM` | `1` -> `MEM_ATTR_1` -> `AXI_SRAM` |
+
+For Ethos-U85, each `NPU_MEM_ATTR_n` `#define` supplies the packed value written
+to the corresponding `MEM_ATTR[n]` register. The suffix `n` identifies the
+entry; it is not the value assigned to the `#define`. Each entry selects the AXI
+port and specifies the memory domain and the memory type used to encode the
+AxCACHE signals.
+
+`QCONFIG` and each `REGIONCFG` field contain an index from 0 through 3 that
+selects one of these `MEM_ATTR` entries. The default `MEM_ATTR_0` and
+`MEM_ATTR_1` entries use `AXI_SRAM`, while `MEM_ATTR_2` and `MEM_ATTR_3` use
+`AXI_EXT`. For example, `NPU_QCONFIG` defaults to `2`, selecting `MEM_ATTR_2`;
+the default packed value of `NPU_MEM_ATTR_2` is `(1 << 2)`, or `4`, which
+selects `AXI_EXT`.
+
+These default `MEM_ATTR` values are set by the driver to replicate the default
+Ethos-U55 and Ethos-U65 behavior, making it easier to correlate configurations
+across variants, but the `MEM_ATTR` values can be configured by the user.
+
+Ethos-U85 AXI limits are configured in the `AXI_SRAM` and `AXI_EXT` registers.
+There is one `AXI_SRAM` register and one `AXI_EXT` register, so those limit
+settings apply to all ports in each group.
+
+Ethos-U85 AXI information:
+
+| U85 configuration (MACs/CC) | Number of SRAM ports | Maximum outstanding reads per port | Maximum outstanding writes per port |
+| --- | --- | --- | --- |
+| 128 | 2 | 12 | 16 |
+| 256 | 2 | 12 | 16 |
+| 512 | 2 | 12 | 16 |
+| 1024 | 2 | 12 | 16 |
+| 2048 | 4 | 12 | 16 |
+
+| U85 configuration (MACs/CC) | Number of EXT ports | Maximum outstanding reads per port | Maximum outstanding writes per port |
+| --- | --- | --- | --- |
+| 128 | 1 | 32 | 32 |
+| 256 | 1 | 32 | 32 |
+| 512 | 1 | 64 | 32 |
+| 1024 | 2 | 64 | 32 |
+| 2048 | 2 | 64 | 32 |
 
 ## Driver API
 
@@ -439,104 +668,6 @@ void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg) {
 ```
 
 For a practical use of these callbacks, see the [PMU example](#pmu-example).
-
-## Memory access configuration
-
-The silicon vendor supplies and validates the device-specific platform
-configuration. It is a coordinated set of settings that includes:
-
-- Vela system configuration and supported memory modes.
-- Driver routing, memory attributes, and AXI transaction limits.
-- Linker and runtime placement in physical memory.
-- Cache, MPU, and security settings.
-- The available arena or cache size.
-
-A platform maintainer can package and integrate this configuration for a board
-or software environment, but the hardware-specific values originate from the
-silicon vendor.
-
-### Embedded application developers
-
-Select a memory mode supported by the silicon vendor. When changing memory
-mode, recompile the model and use the corresponding platform configuration and
-memory placement. Do not change `NPU_QCONFIG`, `NPU_REGIONCFG_n`, `MEM_ATTR`, or
-`AXI_LIMIT` settings independently. These are hardware-integration settings,
-not application tuning options.
-
-### Silicon vendors and platform maintainers
-
-The platform configuration must make the Vela memory-mode mapping agree with
-the paths by which the NPU accesses the command stream and base-pointer
-regions. The following sections describe the target-specific settings needed
-to establish that agreement.
-
-#### 1. Common traffic selectors
-
-All Ethos-U variants use a two-bit selector for the command stream and each
-base-pointer region. The driver obtains the selector by calling
-\ref ethosu_config_select "ethosu_config_select()":
-
-| Function argument `index` | NPU access being configured | Default setting |
-| --- | --- | --- |
-| `-1` | Command stream (`QCONFIG`) | `NPU_QCONFIG` |
-| `0..7` | Corresponding base-pointer region (`REGIONCFG`) | `NPU_REGIONCFG_0..7` |
-
-The selector is not a memory address and does not identify a Vela memory mode.
-It tells the NPU which access path and attributes to use for an address supplied
-by the runtime. The default implementation returns the compile-time settings
-shown above. A platform can override `ethosu_config_select()` if the result must
-depend on the address or runtime placement.
-
-The generated command stream defines how the base-pointer regions are used. A
-common mapping is:
-
-| NPU access | Typical Vela storage role |
-| --- | --- |
-| Command stream | Stored with the compiled model |
-| Base-pointer region 0 | `const_mem_area` |
-| Base-pointer region 1 | `arena_mem_area` |
-| Base-pointer region 2 | `cache_mem_area`, when separate fast storage is used |
-
-This is a convention used by current Vela-generated models, not an intrinsic
-meaning of the `REGIONCFG` fields. A platform integration must follow the
-base-pointer layout used by the generated model and runtime.
-
-#### 2. Ethos-U55 and Ethos-U65
-
-On Ethos-U55 and Ethos-U65, each selector chooses an AXI interface and one of
-two outstanding-transaction trackers associated with that interface. Each
-tracker has a corresponding AXI access profile:
-
-| Selector | AXI interface and tracker | Access profile |
-| --- | --- | --- |
-| `0` | AXI0, tracker 0 | `AXI_LIMIT0` |
-| `1` | AXI0, tracker 1 | `AXI_LIMIT1` |
-| `2` | AXI1, tracker 2 | `AXI_LIMIT2` |
-| `3` | AXI1, tracker 3 | `AXI_LIMIT3` |
-
-An `AXI_LIMIT` profile specifies the AXI memory type, burst-split alignment,
-and maximum numbers of outstanding reads and writes. The two profiles on an
-interface allow traffic classes with different access requirements to share
-that interface. The silicon vendor must choose values compatible with the SoC
-interconnect and the memory reached through each interface.
-
-#### 3. Ethos-U85
-
-On Ethos-U85, each selector chooses one of `MEM_ATTR0..3`. A `MEM_ATTR` entry
-specifies the SRAM or external-memory port class, AXI memory type, and memory
-domain and shareability attributes. The silicon vendor must make these
-attributes agree with the SoC memory map, interconnect, cache policy, and
-MPU/SAU configuration.
-
-Ethos-U85 configures burst length and outstanding-transaction limits separately
-for the SRAM and external-memory port classes. The `AXI_LIMIT_SRAM_*` and
-`AXI_LIMIT_EXT_*` settings therefore do not form part of the `QCONFIG` or
-`REGIONCFG` selector. They must still be validated for the integrated memory
-system.
-
-The target-specific defaults are declared in `ethosu_config_u55.h`,
-`ethosu_config_u65.h`, and `ethosu_config_u85.h`. They are starting points for
-a platform integration, not a substitute for silicon-vendor validation.
 
 ## Logging
 
