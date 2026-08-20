@@ -120,7 +120,7 @@ through its
 [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information).
 
 When the DFP does not provide this information, create the equivalent configuration
-manually as described in [Create device-specific `vela.ini` file](#create-device-specific-velaini-file).
+manually as described in <a href="#create-device-specific-velaini-file">Create device-specific <code>vela.ini</code> file</a>.
 
 ## Invocation
 
@@ -463,7 +463,7 @@ configure address translation and cache maintenance when Cortex-M software and
 the NPU access the same physical memory through different addresses or cache
 policies.
 
-See [Integration](../integration/index.html) for system validation, platform
+See <a href="../integration/index.html">Integration</a> for system validation, platform
 hooks, target-specific driver build configuration, cache maintenance, and
 address-remapping guidance.
 

@@ -4,15 +4,15 @@ This documentation is organized as follows:
 
 - This chapter introduces the terminology, architecture, and deployment flow for
   ML models on an Edge AI MCU.
-- [Vela](../vela/index.html) explains how to install and use the Vela compiler,
+- <a href="../vela/index.html">Vela</a> explains how to install and use the Vela compiler,
   obtain or create an Ethos-U configuration, create matching linker and driver
   configurations, and publish the configuration in a DFP.
-- [Driver](../driver/index.html) describes the low-level Ethos-U driver API,
+- <a href="../driver/index.html">Driver</a> describes the low-level Ethos-U driver API,
   execution contract, platform hooks, and bring-up checks.
-- [Integration](../integration/index.html) explains how to keep the compiled ML
+- <a href="../integration/index.html">Integration</a> explains how to keep the compiled ML
   model, memory placement, driver settings, and application consistent, and how
   to budget, validate, and tune the complete system.
-- [Zephyr](../zephyr/index.html) explains how to configure, build, and run an
+- <a href="../zephyr/index.html">Zephyr</a> explains how to configure, build, and run an
   Ethos-U-accelerated Zephyr application.
 
 ## Target audiences
@@ -146,8 +146,8 @@ supported operations, memory interfaces, and configuration details are
 described in the corresponding Technical Reference Manual.
 
 For command-line options and compiler diagnostics, see
-[Vela](../vela/index.html). For invocation and interrupt contracts, see
-[Driver](../driver/index.html).
+<a href="../vela/index.html">Vela</a>. For invocation and interrupt contracts, see
+<a href="../driver/index.html">Driver</a>.
 
 ## Coordinating the device configuration
 
@@ -167,8 +167,8 @@ that finished device:
 A DFP can provide these related configuration artifacts, and CMSIS-Toolbox can
 resolve them for the selected device and build context. The artifacts must be
 consistent. The full mapping, examples, and consistency checklist are in
-[Integration](../integration/index.html). The meaning and syntax of `vela.ini`
-are in [Vela](../vela/index.html).
+<a href="../integration/index.html">Integration</a>. The meaning and syntax of `vela.ini`
+are in <a href="../vela/index.html">Vela</a>.
 
 ## Memory configuration terminology
 
@@ -227,8 +227,8 @@ read-only.
 
 Vela maps to physical memory with the `system-config` and `memory-mode` options.
 The related performance parameters are obtained from the device-specific
-`vela.ini` file. See [Vela](../vela/index.html) for command-line syntax and
-[Integration](../integration/index.html) for the corresponding linker sections,
+`vela.ini` file. See <a href="../vela/index.html">Vela</a> for command-line syntax and
+<a href="../integration/index.html">Integration</a> for the corresponding linker sections,
 MPU/SAU attributes, cache policy, and driver region configuration.
 
 ## Deployment lifecycle
@@ -248,7 +248,7 @@ MPU/SAU attributes, cache policy, and driver region configuration.
    production ML model on hardware and tune the system based on those results.
 
 The detailed procedure and required evidence are in
-[Integration](../integration/index.html). The Vela compiler's estimates are
+<a href="../integration/index.html">Integration</a>. The Vela compiler's estimates are
 useful for comparison but do not replace measurements on the target.
 
 ## Related resources

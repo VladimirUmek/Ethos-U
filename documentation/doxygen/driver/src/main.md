@@ -9,7 +9,7 @@ The Ethos-U driver operations and features at a glance:
 - Starts the NPU and handles completion or fault interrupts;
 - Supports synchronous and asynchronous invocation;
 - Provides access to the Ethos-U Performance Monitoring Unit (PMU);
-- Exposes weak [platform-specific functions](group__ethosu__callback__api.html) for
+- Exposes weak <a href="group__ethosu__callback__api.html">platform-specific functions</a> for
   power, cache, address, and RTOS integration.
 
 The input to the Ethos-U driver must provide:
@@ -109,12 +109,12 @@ the access configuration used to fetch the command stream. The suffix in
 value selects its access configuration. On Ethos-U55 and Ethos-U65, the value
 selects an `AXI_LIMITx` access profile. On Ethos-U85, it selects a `MEM_ATTR`
 entry. See
-[Command stream regions and base pointers](#command-stream-regions-and-base-pointers).
+<a href="#command-stream-regions-and-base-pointers">Command stream regions and base pointers</a>.
 
 | Definition | Purpose |
 | --- | --- |
 | `ETHOSU_MAX_WAITERS` | Set the maximum number of distinct Ethos-U variants tracked by driver reservation. The default is `4`. |
-| `ETHOSU_SEMAPHORE_WAIT_INFERENCE` | Set the timeout passed to the platform semaphore while waiting for inference completion. The default is `ETHOSU_SEMAPHORE_WAIT_FOREVER`; the platform defines the time unit. See [Mutex and semaphores](#mutex-and-semaphores). |
+| `ETHOSU_SEMAPHORE_WAIT_INFERENCE` | Set the timeout passed to the platform semaphore while waiting for inference completion. The default is `ETHOSU_SEMAPHORE_WAIT_FOREVER`; the platform defines the time unit. See <a href="#mutex-and-semaphores">Mutex and semaphores</a>. |
 | `NPU_QCONFIG` | Set the default memory-access selector for fetching the command stream. |
 | `NPU_REGIONCFG_0` through `NPU_REGIONCFG_7` | Set the default memory-access selector for each corresponding `base_addr[0]` through `base_addr[7]` region. |
 
@@ -135,7 +135,7 @@ The configuration headers provide default values for the following hardware
 `#define` statements. A silicon vendor can supply values validated for its NPU,
 interconnect, memory system, cache policy, and security configuration to adjust
 the driver defaults. Do not tune these settings independently. See
-[Command stream regions and base pointers](#command-stream-regions-and-base-pointers).
+<a href="#command-stream-regions-and-base-pointers">Command stream regions and base pointers</a>.
 
 | Ethos-U variant | Configuration definitions |
 | --- | --- |
@@ -151,7 +151,7 @@ sets the memory type used to encode the AXI AxCACHE signals.
 
 ## Command stream regions and base pointers
 
-[Vela](../vela/index.html) emits command streams that address data as offsets
+<a href="../vela/index.html">Vela</a> emits command streams that address data as offsets
 within numbered memory regions. The invoke API supplies the base address of
 each region in `base_addr[]`: `base_addr[0]` is used for region 0,
 `base_addr[1]` for region 1, and so on. The matching field in the NPU
@@ -170,15 +170,15 @@ The address and access-configuration inputs are related as follows:
 | Base-pointer region `n` | `BASEP[n]`, from `base_addr[n]` | `REGIONCFG[n]` | `NPU_REGIONCFG_n` |
 
 The default selector values are listed under
-[Ethos-U55 and Ethos-U65](#ethos-u55-and-ethos-u65) and
-[Ethos-U85](#ethos-u85). An application developer can select a Vela system
+<a href="#ethos-u55-and-ethos-u65">Ethos-U55 and Ethos-U65</a> and
+<a href="#ethos-u85">Ethos-U85</a>. An application developer can select a Vela system
 configuration and memory mode supported by the target to meet the application's
 requirements. The selector values must match the resulting memory placement
 and memory system. See
 <a href="../general/index.html#system-configuration-and-memory-modes-at-a-glance">System configuration and memory modes at a glance</a>.
-In a [single-variant build](#single-variant-build), an override of
+In a <a href="#single-variant-build">single-variant build</a>, an override of
 \ref ethosu_config_select "ethosu_config_select()" can replace the defaults. In
-a [multi-variant build](#multi-variant-build), the values come from the device
+a <a href="#multi-variant-build">multi-variant build</a>, the values come from the device
 configuration passed to \ref ethosu_init_ex "ethosu_init_ex()", or from a
 per-driver `config_select` user operation.
 
@@ -320,26 +320,26 @@ in `include/ethosu_types.h`.
 | \ref ethosu_reserve_driver_ex "ethosu_reserve_driver_ex()" | Both | Block until an instance matching the requested product and MAC configuration is available and reserve it. |
 | \ref ethosu_release_driver "ethosu_release_driver()" | Both | Release a reserved driver instance. |
 
-See [Driver functions](group__ethosu__public__api.html) for the complete generated API
-and [Driver structures](group__ethosu__driver__structs.html) for public data types.
+See <a href="group__ethosu__public__api.html">Driver functions</a> for the complete generated API
+and <a href="group__ethosu__driver__structs.html">Driver structures</a> for public data types.
 
 ## Platform-specific functions
 
 The driver provides default implementations for
-[platform-specific functions](group__ethosu__callback__api.html) listed below. The
+<a href="group__ethosu__callback__api.html">platform-specific functions</a> listed below. The
 default weak function implementation of the driver should be carefully review
 and overwritten when needed.
 
 | API Function | When an overwrite is needed |
 | --- | --- |
-| \ref ethosu_flush_dcache "ethosu_flush_dcache()", \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" | CPU-cached memory is shared with the NPU and requires [platform-specific cache maintenance](#data-caching). |
+| \ref ethosu_flush_dcache "ethosu_flush_dcache()", \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" | CPU-cached memory is shared with the NPU and requires <a href="#data-caching">platform-specific cache maintenance</a>. |
 | \ref ethosu_address_remap "ethosu_address_remap()" | The CPU and NPU use different addresses for the same storage. |
 | \ref ethosu_config_select "ethosu_config_select()" | Memory-region attributes depend on the address or run-time placement. |
-| Mutex and semaphore functions in [Platform-specific functions](group__ethosu__callback__api.html) | Multiple threads or NPUs can use the driver and require [platform-specific RTOS locking](#mutex-and-semaphores). |
-| \ref ethosu_inference_begin "ethosu_inference_begin()", \ref ethosu_inference_end "ethosu_inference_end()" | [Inference tracing, power control, or application callbacks are required](#beginend-inference-callbacks). |
+| Mutex and semaphore functions in <a href="group__ethosu__callback__api.html">Platform-specific functions</a> | Multiple threads or NPUs can use the driver and require <a href="#mutex-and-semaphores">platform-specific RTOS locking</a>. |
+| \ref ethosu_inference_begin "ethosu_inference_begin()", \ref ethosu_inference_end "ethosu_inference_end()" | <a href="#beginend-inference-callbacks">Inference tracing, power control, or application callbacks are required</a>. |
 
 Cache policy, linker placement, and region configuration are system-level 
-decisions. Detailed guidance is in the chapter [Integration](../integration/index.html).
+decisions. Detailed guidance is in the chapter <a href="../integration/index.html">Integration</a>.
 
 ## Driver Usage
 
@@ -396,7 +396,7 @@ Ethos-U interrupt handler calls \ref ethosu_semaphore_give
 "ethosu_semaphore_give()" when the NPU completes or reports a
 fault, allowing the synchronous invocation to resume. The platform must provide
 the RTOS-specific semaphore functions described in
-[Mutex and semaphores](#mutex-and-semaphores).
+<a href="#mutex-and-semaphores">Mutex and semaphores</a>.
 
 ### Asynchronous invocation
 
@@ -625,7 +625,7 @@ The default mutex functions are no-ops, and the default semaphore uses a small
 counter with the Arm `WFE` and `SEV` instructions. These defaults are intended
 for a single-threaded bare-metal application. A platform must override them
 when multiple threads or CPU cores can access the driver. See
-[Platform-specific functions](group__ethosu__callback__api.html) for the hook
+<a href="group__ethosu__callback__api.html">Platform-specific functions</a> for the hook
 signatures.
 
 ToDo: add information about templates
@@ -678,7 +678,7 @@ void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg) {
 }
 ```
 
-For a practical use of these callbacks, see the [PMU example](#pmu-example).
+For a practical use of these callbacks, see the <a href="#pmu-example">PMU example</a>.
 
 ## Performance Monitoring Unit (PMU)
 

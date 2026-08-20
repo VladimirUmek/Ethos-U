@@ -64,7 +64,7 @@ flowchart LR
    provide this configuration, contact the device or SoC vendor. See
    <a href="../vela/index.html#create-device-specific-velaini-file">create a device-specific <code>vela.ini</code> file</a>,
    or contact the Arm CMSIS support team at
-   [CMSIS@arm.com](mailto:CMSIS@arm.com) for assistance.
+   <a href="mailto:CMSIS@arm.com">CMSIS@arm.com</a> for assistance.
 3. <a href="#create-the-csolution-project"><strong>Create the CMSIS-Toolbox project.</strong></a> Select the device and build context, and specify the Vela system configuration and memory mode.
    Use the generated [MLOps information](https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information)
    to obtain the Vela parameters and resources supplied by the DFP.
@@ -278,7 +278,7 @@ tutorial.
 ### Prerequisites
 
 - Install [Keil Studio for VS Code from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Arm.keil-studio-pack).
-- Follow the [Vela installation instructions](../vela/index.html#installation).
+- Follow the <a href="../vela/index.html#installation">Vela installation instructions</a>.
 - Selected ML model with the chosen system and memory mode.
 
 ### Start development with an example
