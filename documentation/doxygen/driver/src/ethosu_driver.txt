@@ -28,6 +28,55 @@
 @}
 */
 
+/**
+\addtogroup ethosu_log_api
+@{
+
+\par Implementation details
+
+The private \c source/src/ethosu_log.h header implements compile-time,
+printf-style logging for the driver and device backends. It does not provide a
+run-time callback or logging backend.
+
+| Macro | Output |
+| --- | --- |
+| \c LOG() | Unprefixed text on \c stdout; no newline is appended. |
+| \c LOG_ERR() | Error text on \c stderr, prefixed with \c E:, the source file, and the source line. |
+| \c LOG_WARN() | Warning text on \c stdout, prefixed with \c W:. |
+| \c LOG_INFO() | Informational text on \c stdout, prefixed with \c I:. |
+| \c LOG_DEBUG() | Debug text on \c stdout, prefixed with \c D: and the function name. |
+
+\ref ETHOSU_LOG_ENABLE defaults to 1 and controls every logging macro.
+\ref ETHOSU_LOG_SEVERITY defaults to \ref ETHOSU_LOG_WARN and controls the
+severity-based macros. The unprefixed \ref LOG macro is controlled by
+\ref ETHOSU_LOG_ENABLE but is not filtered by \ref ETHOSU_LOG_SEVERITY.
+
+The macros write through the C library \c stdout and \c stderr streams. An
+embedded target that enables logging must retarget those streams to an output
+such as a UART, semihosting, or an ITM channel. Disabling logging avoids pulling
+formatted I/O into an application that does not require driver output.
+
+For CMake, the corresponding options accept \c ON or \c OFF for
+\c ETHOSU_LOG_ENABLE and \c err, \c warning, \c info, or \c debug for
+\c ETHOSU_LOG_SEVERITY. For example:
+
+\code{.sh}
+cmake -S source -B build \
+    -DETHOSU_LOG_ENABLE=ON \
+    -DETHOSU_LOG_SEVERITY=debug
+\endcode
+
+Other build systems define the equivalent preprocessor values while compiling
+the driver sources, for example:
+
+\code{.text}
+ETHOSU_LOG_ENABLE=1
+ETHOSU_LOG_SEVERITY=ETHOSU_LOG_INFO
+\endcode
+
+@}
+*/
+
 
 /**
 \defgroup ethosu_driver_structs Structures

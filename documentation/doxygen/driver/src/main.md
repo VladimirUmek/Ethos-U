@@ -51,17 +51,22 @@ The pack `ARM::CMSIS-Ethos-U` provides the software component `ARM::Machine Lear
 
 ```yaml
 components:
-  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Generic U55" # For Ethos-U55
+  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Generic U55" # For Ethos-U55 single-variant
 ```
 
 ```yaml
 components:
-  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Generic U65" # For Ethos-U65
+  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Generic U65" # For Ethos-U65 single-variant
 ```
 
 ```yaml
 components:
-  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Generic U85" # For Ethos-U85
+  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Generic U85" # For Ethos-U85 single-variant
+```
+
+```yaml
+components:
+  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Multi-Variant" # For runtime Ethos-U55, Ethos-U65, or Ethos-U85 selection
 ```
 
 ## Compile-time configuration
@@ -75,7 +80,7 @@ A single-variant build supports one Ethos-U variant selected at compile time.
 Define exactly one Ethos-U family together with its MAC configuration. Do not
 define `ETHOSU_MULTI_VARIANT`.
 
-| `#define` | Purpose |
+| Definition | Purpose |
 | --- | --- |
 | `ETHOSU55`, `ETHOSU65`, or `ETHOSU85` | Select the Ethos-U family. Define exactly one. |
 | `ETHOSU_MACS` | Select the MAC configuration, for example `128` for an Ethos-U55-128 variant. |
@@ -87,7 +92,7 @@ The Ethos-U variant and MAC configuration are selected for each driver instance
 at run time. Do not define the single-variant `ETHOSU55`, `ETHOSU65`,
 `ETHOSU85`, or `ETHOSU_MACS` statements in this build.
 
-| `#define` | Purpose |
+| Definition | Purpose |
 | --- | --- |
 | `ETHOSU_MULTI_VARIANT` | Enable multi-variant support. This changes the initialization, reservation, platform-operation, and PMU APIs available to the application. |
 
@@ -106,7 +111,7 @@ selects an `AXI_LIMITx` access profile. On Ethos-U85, it selects a `MEM_ATTR`
 entry. See
 [Command stream regions and base pointers](#command-stream-regions-and-base-pointers).
 
-| `#define` | Purpose |
+| Definition | Purpose |
 | --- | --- |
 | `ETHOSU_MAX_WAITERS` | Set the maximum number of distinct Ethos-U variants tracked by driver reservation. The default is `4`. |
 | `ETHOSU_SEMAPHORE_WAIT_INFERENCE` | Set the timeout passed to the platform semaphore while waiting for inference completion. The default is `ETHOSU_SEMAPHORE_WAIT_FOREVER`; the platform defines the time unit. See [Mutex and semaphores](#mutex-and-semaphores). |
@@ -116,10 +121,10 @@ entry. See
 ### Text logging
 
 The following `#define` statements configure driver text logging through the C
-standard I/O streams. See [Logging](#logging) for the output format and stream
-requirements.
+standard I/O streams. See \ref ethosu_log_api "Logging" for the generated macro
+reference and implementation details.
 
-| `#define` | Purpose |
+| Definition | Purpose |
 | --- | --- |
 | `ETHOSU_LOG_ENABLE` | Enable or disable logging. The default is `1`. |
 | `ETHOSU_LOG_SEVERITY` | Select the most verbose compiled log level: `ETHOSU_LOG_ERR`, `ETHOSU_LOG_WARN`, `ETHOSU_LOG_INFO`, or `ETHOSU_LOG_DEBUG`. The default is `ETHOSU_LOG_WARN`. |
@@ -132,7 +137,7 @@ interconnect, memory system, cache policy, and security configuration to adjust
 the driver defaults. Do not tune these settings independently. See
 [Command stream regions and base pointers](#command-stream-regions-and-base-pointers).
 
-| Ethos-U variant | `#define` statements |
+| Ethos-U variant | Configuration definitions |
 | --- | --- |
 | Ethos-U55 and Ethos-U65 | `AXI_LIMITx_MAX_BEATS_BYTES`, `AXI_LIMITx_MEM_TYPE`, `AXI_LIMITx_MAX_OUTSTANDING_READS`, and `AXI_LIMITx_MAX_OUTSTANDING_WRITES`, where `x` is `0` through `3`. |
 | Ethos-U85 | `NPU_MAC_PWR_RAMP_CYCLES`, `NPU_MEM_ATTR_0` through `NPU_MEM_ATTR_3`, `AXI_LIMIT_SRAM_MAX_OUTSTANDING_READ`, `AXI_LIMIT_SRAM_MAX_OUTSTANDING_WRITE`, `AXI_LIMIT_SRAM_MAX_BEATS`, `AXI_LIMIT_EXT_MAX_OUTSTANDING_READ`, `AXI_LIMIT_EXT_MAX_OUTSTANDING_WRITE`, and `AXI_LIMIT_EXT_MAX_BEATS`. |
@@ -159,7 +164,7 @@ access configuration used to fetch it, using the same selector encoding as
 
 The address and access-configuration inputs are related as follows:
 
-| NPU access | Address programmed by the driver | Access-configuration selector | Default `#define` |
+| NPU access | Address programmed by the driver | Access-configuration selector | Default definition |
 | --- | --- | --- | --- |
 | Command stream | `QBASE`, from the command-stream pointer passed to the invoke API | `QCONFIG` | `NPU_QCONFIG` |
 | Base-pointer region `n` | `BASEP[n]`, from `base_addr[n]` | `REGIONCFG[n]` | `NPU_REGIONCFG_n` |
@@ -211,7 +216,7 @@ Ethos-U55 and Ethos-U65 provide the `AXI0` and `AXI1` access paths.
 
 The driver provides the following default values:
 
-| Ethos-U variant | `NPU_QCONFIG` | `NPU_REGIONCFG_0` | `NPU_REGIONCFG_1` | `NPU_REGIONCFG_2` |
+| Ethos-U variant | NPU_QCONFIG | NPU_REGIONCFG_0 | NPU_REGIONCFG_1 | NPU_REGIONCFG_2 |
 | --- | --- | --- | --- | --- |
 | Ethos-U55 | `2` -> `AXI1` | `3` -> `AXI1` | `0` -> `AXI0` | `1` -> `AXI0` |
 | Ethos-U65 | `2` -> `AXI1` | `3` -> `AXI1` | `0` -> `AXI0` | `1` -> `AXI0` |
@@ -248,7 +253,7 @@ The AXI ports are referred to as `AXI_SRAM` and `AXI_EXT`.
 
 The driver provides the following default values:
 
-| Ethos-U variant | `NPU_QCONFIG` | `NPU_REGIONCFG_0` | `NPU_REGIONCFG_1` | `NPU_REGIONCFG_2` |
+| Ethos-U variant | NPU_QCONFIG | NPU_REGIONCFG_0 | NPU_REGIONCFG_1 | NPU_REGIONCFG_2 |
 | --- | --- | --- | --- | --- |
 | Ethos-U85 | `2` -> `MEM_ATTR_2` -> `AXI_EXT` | `3` -> `MEM_ATTR_3` -> `AXI_EXT` | `0` -> `MEM_ATTR_0` -> `AXI_SRAM` | `1` -> `MEM_ATTR_1` -> `AXI_SRAM` |
 
@@ -483,7 +488,7 @@ application graphs:
 - Use <a href="#performance-monitoring-unit-pmu">PMU</a> cycle, activity, stall,
   and memory events when validating performance or investigating a difference
   from compiler estimates.
-- Enable <a href="#logging">driver logging</a> and capture fault information
+- Enable \ref ethosu_log_api "driver logging" and capture fault information
   before resetting the NPU after an error.
 
 After these driver checks, continue with the end-to-end
@@ -674,51 +679,6 @@ void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg) {
 ```
 
 For a practical use of these callbacks, see the [PMU example](#pmu-example).
-
-## Logging
-
-The driver logging interface is implemented by the private header
-`source/src/ethosu_log.h`. It is a compile-time facility used by the driver and
-device implementation, rather than a runtime callback API. See
-\ref ethosu_log_api "Logging" for the generated macro reference. The header
-provides the following `printf`-style macros:
-
-| Macro | Output |
-| --- | --- |
-| `LOG()` | An unprefixed message on `stdout`; no newline is added automatically. |
-| `LOG_ERR()` | An error on `stderr`, prefixed with `E:` and the source file and line. |
-| `LOG_WARN()` | A warning on `stdout`, prefixed with `W:`. |
-| `LOG_INFO()` | An informational message on `stdout`, prefixed with `I:`. |
-| `LOG_DEBUG()` | A debug message on `stdout`, prefixed with `D:` and the function name. |
-
-`ETHOSU_LOG_ENABLE` enables or disables all driver logging and defaults to `1`.
-`ETHOSU_LOG_SEVERITY` selects the most verbose severity that is compiled in:
-`ETHOSU_LOG_ERR`, `ETHOSU_LOG_WARN`, `ETHOSU_LOG_INFO`, or
-`ETHOSU_LOG_DEBUG`. The default is `ETHOSU_LOG_WARN`, which includes error and
-warning messages. `LOG()` is not filtered by severity, but is disabled by
-`ETHOSU_LOG_ENABLE`.
-
-The macros write through the C library `stdout` and `stderr` streams. An embedded
-target must therefore retarget these streams to an available output, such as a
-UART, semihosting, or an ITM channel. If no output is required, disable logging
-to avoid pulling the formatted I/O implementation into the application.
-
-For a CMake build, enable debug-level logging as follows:
-
-```bash
-cmake -S source -B build \
-    -DETHOSU_LOG_ENABLE=ON \
-    -DETHOSU_LOG_SEVERITY=debug
-```
-
-The accepted CMake severity values are `err`, `warning`, `info`, and `debug`.
-For other build systems, define the equivalent macros while compiling the driver
-sources, for example:
-
-```text
-ETHOSU_LOG_ENABLE=1
-ETHOSU_LOG_SEVERITY=ETHOSU_LOG_INFO
-```
 
 ## Performance Monitoring Unit (PMU)
 
