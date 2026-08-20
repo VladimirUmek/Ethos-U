@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <li>Starts the NPU and handles completion or fault interrupts;</li>
 <li>Supports synchronous and asynchronous invocation;</li>
 <li>Provides access to the Ethos-U Performance Monitoring Unit (PMU);</li>
-<li>Exposes weak platform-specific functions for power, cache, address, and RTOS integration.</li>
+<li>Exposes weak <a href="group__ethosu__callback__api.html">platform-specific functions</a> for power, cache, address, and RTOS integration.</li>
 </ul>
 <p>The input to the Ethos-U driver must provide:</p>
 <ul>
@@ -225,14 +225,14 @@ Multi-variant build</h2>
 <h2 class="doxsection"><a class="anchor" id="common-configuration"></a>
 Common configuration</h2>
 <p>The following <span class="tt">#define</span> statements apply in either a single-variant or multi-variant build. In a multi-variant build, the memory-routing statements initialize the default configuration for each included Ethos-U family.</p>
-<p><span class="tt">NPU_QCONFIG</span> and <span class="tt">NPU_REGIONCFG_0</span> through <span class="tt">NPU_REGIONCFG_7</span> provide default memory-access selectors; they do not contain addresses. <span class="tt">NPU_QCONFIG</span> selects the access configuration used to fetch the command stream. The suffix in <span class="tt">NPU_REGIONCFG_n</span> identifies the corresponding <span class="tt">base_addr[n]</span> region, while the value selects its access configuration. On Ethos-U55 and Ethos-U65, the value selects an <span class="tt">AXI_LIMITx</span> access profile. On Ethos-U85, it selects a <span class="tt">MEM_ATTR</span> entry. See <a class="el" href="#command-stream-regions-and-base-pointers" title="Command stream regions and base pointers">Command stream regions and base pointers</a>.</p>
+<p><span class="tt">NPU_QCONFIG</span> and <span class="tt">NPU_REGIONCFG_0</span> through <span class="tt">NPU_REGIONCFG_7</span> provide default memory-access selectors; they do not contain addresses. <span class="tt">NPU_QCONFIG</span> selects the access configuration used to fetch the command stream. The suffix in <span class="tt">NPU_REGIONCFG_n</span> identifies the corresponding <span class="tt">base_addr[n]</span> region, while the value selects its access configuration. On Ethos-U55 and Ethos-U65, the value selects an <span class="tt">AXI_LIMITx</span> access profile. On Ethos-U85, it selects a <span class="tt">MEM_ATTR</span> entry. See <a href="#command-stream-regions-and-base-pointers">Command stream regions and base pointers</a>.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Definition  </th><th class="markdownTableHeadNone">Purpose  </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ETHOSU_MAX_WAITERS</span>  </td><td class="markdownTableBodyNone">Set the maximum number of distinct Ethos-U variants tracked by driver reservation. The default is <span class="tt">4</span>.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="group__ethosu__driver__defines.html#ga506814742e046dc5d5f27584dfe3eec6" title="Timeout used while waiting for inference completion.">ETHOSU_SEMAPHORE_WAIT_INFERENCE</a></span>  </td><td class="markdownTableBodyNone">Set the timeout passed to the platform semaphore while waiting for inference completion. The default is <span class="tt"><a class="el" href="group__ethosu__driver__defines.html#ga8777fdbb65e94313ee5d8e9465373d9d" title="Value used to request an indefinite semaphore wait.">ETHOSU_SEMAPHORE_WAIT_FOREVER</a></span>; the platform defines the time unit. See <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">Mutex and semaphores</a>.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="group__ethosu__driver__defines.html#ga506814742e046dc5d5f27584dfe3eec6" title="Timeout used while waiting for inference completion.">ETHOSU_SEMAPHORE_WAIT_INFERENCE</a></span>  </td><td class="markdownTableBodyNone">Set the timeout passed to the platform semaphore while waiting for inference completion. The default is <span class="tt"><a class="el" href="group__ethosu__driver__defines.html#ga8777fdbb65e94313ee5d8e9465373d9d" title="Value used to request an indefinite semaphore wait.">ETHOSU_SEMAPHORE_WAIT_FOREVER</a></span>; the platform defines the time unit. See <a href="#mutex-and-semaphores">Mutex and semaphores</a>.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>  </td><td class="markdownTableBodyNone">Set the default memory-access selector for fetching the command stream.  </td></tr>
 <tr class="markdownTableRowEven">
@@ -251,7 +251,7 @@ Text logging</h2>
 </table>
 <h2 class="doxsection"><a class="anchor" id="variant-specific-hardware-configuration"></a>
 Variant-specific hardware configuration</h2>
-<p>The configuration headers provide default values for the following hardware <span class="tt">#define</span> statements. A silicon vendor can supply values validated for its NPU, interconnect, memory system, cache policy, and security configuration to adjust the driver defaults. Do not tune these settings independently. See <a class="el" href="#command-stream-regions-and-base-pointers" title="Command stream regions and base pointers">Command stream regions and base pointers</a>.</p>
+<p>The configuration headers provide default values for the following hardware <span class="tt">#define</span> statements. A silicon vendor can supply values validated for its NPU, interconnect, memory system, cache policy, and security configuration to adjust the driver defaults. Do not tune these settings independently. See <a href="#command-stream-regions-and-base-pointers">Command stream regions and base pointers</a>.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Ethos-U variant  </th><th class="markdownTableHeadNone">Configuration definitions  </th></tr>
@@ -263,7 +263,7 @@ Variant-specific hardware configuration</h2>
 <p>For Ethos-U55 and Ethos-U65, each <span class="tt">AXI_LIMITx</span> register defines a complete AXI access profile, despite the register name suggesting that it contains only transaction limits. The corresponding <span class="tt">AXI_LIMITx_*</span> <span class="tt">#define</span> statements configure its maximum burst size, memory type, and maximum number of outstanding read and write transactions. In particular, <span class="tt">AXI_LIMITx_MEM_TYPE</span> sets the memory type used to encode the AXI AxCACHE signals.</p>
 <h1 class="doxsection"><a class="anchor" id="command-stream-regions-and-base-pointers"></a>
 Command stream regions and base pointers</h1>
-<p>Vela emits command streams that address data as offsets within numbered memory regions. The invoke API supplies the base address of each region in <span class="tt">base_addr[]</span>: <span class="tt">base_addr[0]</span> is used for region 0, <span class="tt">base_addr[1]</span> for region 1, and so on. The matching field in the NPU <span class="tt">REGIONCFG</span> register selects the access configuration for each region, including the AXI port and memory attributes used for its transactions.</p>
+<p><a href="../vela/index.html">Vela</a> emits command streams that address data as offsets within numbered memory regions. The invoke API supplies the base address of each region in <span class="tt">base_addr[]</span>: <span class="tt">base_addr[0]</span> is used for region 0, <span class="tt">base_addr[1]</span> for region 1, and so on. The matching field in the NPU <span class="tt">REGIONCFG</span> register selects the access configuration for each region, including the AXI port and memory attributes used for its transactions.</p>
 <p><span class="tt">QBASE</span> holds the base address of the command stream. <span class="tt">QCONFIG</span> selects the access configuration used to fetch it, using the same selector encoding as <span class="tt">REGIONCFG</span>.</p>
 <p>The address and access-configuration inputs are related as follows:</p>
 <table class="markdownTable">
@@ -274,7 +274,7 @@ Command stream regions and base pointers</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Base-pointer region <span class="tt">n</span>  </td><td class="markdownTableBodyNone"><span class="tt">BASEP[n]</span>, from <span class="tt">base_addr[n]</span>  </td><td class="markdownTableBodyNone"><span class="tt">REGIONCFG[n]</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_n</span>  </td></tr>
 </table>
-<p>The default selector values are listed under <a class="el" href="#ethos-u55-and-ethos-u65" title="Ethos-U55 and Ethos-U65">Ethos-U55 and Ethos-U65</a> and <a class="el" href="#ethos-u85" title="Ethos-U85">Ethos-U85</a>. An application developer can select a Vela system configuration and memory mode supported by the target to meet the application's requirements. The selector values must match the resulting memory placement and memory system. See <a href="../general/index.html#system-configuration-and-memory-modes-at-a-glance">System configuration and memory modes at a glance</a>. In a <a class="el" href="#single-variant-build" title="Single-variant build">single-variant build</a>, an override of <a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a" title="ethosu_config_select">ethosu_config_select()</a> can replace the defaults. In a <a class="el" href="#multi-variant-build" title="Multi-variant build">multi-variant build</a>, the values come from the device configuration passed to <a class="el" href="group__ethosu__public__api.html#ga6fa5aa9f7aeb278d80a55cd7f5d9f69c" title="ethosu_init_ex">ethosu_init_ex()</a>, or from a per-driver <span class="tt">config_select</span> user operation.</p>
+<p>The default selector values are listed under <a href="#ethos-u55-and-ethos-u65">Ethos-U55 and Ethos-U65</a> and <a href="#ethos-u85">Ethos-U85</a>. An application developer can select a Vela system configuration and memory mode supported by the target to meet the application's requirements. The selector values must match the resulting memory placement and memory system. See <a href="../general/index.html#system-configuration-and-memory-modes-at-a-glance">System configuration and memory modes at a glance</a>. In a <a href="#single-variant-build">single-variant build</a>, an override of <a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a" title="ethosu_config_select">ethosu_config_select()</a> can replace the defaults. In a <a href="#multi-variant-build">multi-variant build</a>, the values come from the device configuration passed to <a class="el" href="group__ethosu__public__api.html#ga6fa5aa9f7aeb278d80a55cd7f5d9f69c" title="ethosu_init_ex">ethosu_init_ex()</a>, or from a per-driver <span class="tt">config_select</span> user operation.</p>
 <p>The selected <a href="../vela/index.html#memory-mode-parameters">Vela memory mode</a> determines the memory areas used for constants, scratch, and optional fast scratch. The following table shows the common mappings. The runtime base pointers and the access configurations selected by <span class="tt">REGIONCFG</span> must match the actual placement.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -410,25 +410,25 @@ API functions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__public__api.html#ga6e97d1e64ca7d2cbaa89230bce0a2dde" title="ethosu_release_driver">ethosu_release_driver()</a>  </td><td class="markdownTableBodyNone">Both  </td><td class="markdownTableBodyNone">Release a reserved driver instance.  </td></tr>
 </table>
-<p>See Driver functions for the complete generated API and Driver structures for public data types.</p>
+<p>See <a href="group__ethosu__public__api.html">Driver functions</a> for the complete generated API and <a href="group__ethosu__driver__structs.html">Driver structures</a> for public data types.</p>
 <h1 class="doxsection"><a class="anchor" id="platform-specific-functions"></a>
 Platform-specific functions</h1>
-<p>The driver provides default implementations for platform-specific functions listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.</p>
+<p>The driver provides default implementations for <a href="group__ethosu__callback__api.html">platform-specific functions</a> listed below. The default weak function implementation of the driver should be carefully review and overwritten when needed.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">API Function  </th><th class="markdownTableHeadNone">When an overwrite is needed  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gae23e3120197768bbd1b21fd03823183a" title="ethosu_flush_dcache">ethosu_flush_dcache()</a>, <a class="el" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66" title="ethosu_invalidate_dcache">ethosu_invalidate_dcache()</a>  </td><td class="markdownTableBodyNone">CPU-cached memory is shared with the NPU and requires <a class="el" href="#data-caching" title="Data caching">platform-specific cache maintenance</a>.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gae23e3120197768bbd1b21fd03823183a" title="ethosu_flush_dcache">ethosu_flush_dcache()</a>, <a class="el" href="group__ethosu__callback__api.html#ga608e58ae2673e286df81660936889f66" title="ethosu_invalidate_dcache">ethosu_invalidate_dcache()</a>  </td><td class="markdownTableBodyNone">CPU-cached memory is shared with the NPU and requires <a href="#data-caching">platform-specific cache maintenance</a>.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#gaada1c421a052cbdcfd5f1c8c31cd8c4a" title="ethosu_address_remap">ethosu_address_remap()</a>  </td><td class="markdownTableBodyNone">The CPU and NPU use different addresses for the same storage.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a" title="ethosu_config_select">ethosu_config_select()</a>  </td><td class="markdownTableBodyNone">Memory-region attributes depend on the address or run-time placement.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Mutex and semaphore functions in Platform-specific functions  </td><td class="markdownTableBodyNone">Multiple threads or NPUs can use the driver and require <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">platform-specific RTOS locking</a>.  </td></tr>
+<td class="markdownTableBodyNone">Mutex and semaphore functions in <a href="group__ethosu__callback__api.html">Platform-specific functions</a>  </td><td class="markdownTableBodyNone">Multiple threads or NPUs can use the driver and require <a href="#mutex-and-semaphores">platform-specific RTOS locking</a>.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f" title="ethosu_inference_begin">ethosu_inference_begin()</a>, <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c" title="ethosu_inference_end">ethosu_inference_end()</a>  </td><td class="markdownTableBodyNone"><a class="el" href="#beginend-inference-callbacks" title="Begin/End inference callbacks">Inference tracing, power control, or application callbacks are required</a>.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="group__ethosu__callback__api.html#ga04b34ee5d2328ecdfc7d464761f6cb7f" title="ethosu_inference_begin">ethosu_inference_begin()</a>, <a class="el" href="group__ethosu__callback__api.html#gabe0e7014df596c89393c3bce70c4ee0c" title="ethosu_inference_end">ethosu_inference_end()</a>  </td><td class="markdownTableBodyNone"><a href="#beginend-inference-callbacks">Inference tracing, power control, or application callbacks are required</a>.  </td></tr>
 </table>
-<p>Cache policy, linker placement, and region configuration are system-level decisions. Detailed guidance is in the chapter Integration.</p>
+<p>Cache policy, linker placement, and region configuration are system-level decisions. Detailed guidance is in the chapter <a href="../integration/index.html">Integration</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="driver-usage"></a>
 Driver Usage</h1>
 <p>Inferences can be invoked in two manners: synchronously or asynchronously. The two types of invocation can be freely mixed in a single application.</p>
@@ -468,7 +468,7 @@ sequenceDiagram
     rtos--&gt;&gt;driver: Resume ML thread
     driver--&gt;&gt;application: Inference result</pre>
 </div>
-<p>With an RTOS implementation, <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take()</a> blocks the calling thread and allows the RTOS scheduler to run other ready threads while the Ethos-U NPU executes the inference. The Ethos-U interrupt handler calls <a class="el" href="group__ethosu__callback__api.html#ga71614f92cb653bed7b7632b0362939b4" title="ethosu_semaphore_give">ethosu_semaphore_give()</a> when the NPU completes or reports a fault, allowing the synchronous invocation to resume. The platform must provide the RTOS-specific semaphore functions described in <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">Mutex and semaphores</a>.</p>
+<p>With an RTOS implementation, <a class="el" href="group__ethosu__callback__api.html#ga9792e5bb9f00971f20037db9a9982725" title="ethosu_semaphore_take">ethosu_semaphore_take()</a> blocks the calling thread and allows the RTOS scheduler to run other ready threads while the Ethos-U NPU executes the inference. The Ethos-U interrupt handler calls <a class="el" href="group__ethosu__callback__api.html#ga71614f92cb653bed7b7632b0362939b4" title="ethosu_semaphore_give">ethosu_semaphore_give()</a> when the NPU completes or reports a fault, allowing the synchronous invocation to resume. The platform must provide the RTOS-specific semaphore functions described in <a href="#mutex-and-semaphores">Mutex and semaphores</a>.</p>
 <h2 class="doxsection"><a class="anchor" id="asynchronous-invocation"></a>
 Asynchronous invocation</h2>
 <p>In some cases the asynchronous invocation is needed which allows in the same thread the execution of <em>other work</em> after starting the inference on the Ethos-U NPU.</p>
@@ -586,7 +586,7 @@ Platform synchronization requirements</h2>
 <li>A negative return from the inference completion wait reports a timeout to the driver. Global availability waits must not time out.</li>
 <li>Objects returned by the create functions remain valid until their matching destroy functions are called.</li>
 </ul>
-<p>The default mutex functions are no-ops, and the default semaphore uses a small counter with the Arm <span class="tt">WFE</span> and <span class="tt">SEV</span> instructions. These defaults are intended for a single-threaded bare-metal application. A platform must override them when multiple threads or CPU cores can access the driver. See Platform-specific functions for the hook signatures.</p>
+<p>The default mutex functions are no-ops, and the default semaphore uses a small counter with the Arm <span class="tt">WFE</span> and <span class="tt">SEV</span> instructions. These defaults are intended for a single-threaded bare-metal application. A platform must override them when multiple threads or CPU cores can access the driver. See <a href="group__ethosu__callback__api.html">Platform-specific functions</a> for the hook signatures.</p>
 <p>ToDo: add information about templates</p>
 <h1 class="doxsection"><a class="anchor" id="beginend-inference-callbacks"></a>
 Begin/End inference callbacks</h1>
@@ -617,7 +617,7 @@ Begin/End inference callbacks</h1>
 <div class="line">        <span class="keyword">struct </span>my_data *data = (<span class="keyword">struct </span>my_data*) user_arg;</div>
 <div class="line">        <span class="comment">// use drv and data here</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><p>For a practical use of these callbacks, see the <a class="el" href="#pmu-example" title="PMU example">PMU example</a>.</p>
+</div><!-- fragment --><p>For a practical use of these callbacks, see the <a href="#pmu-example">PMU example</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="performance-monitoring-unit-pmu"></a>
 Performance Monitoring Unit (PMU)</h1>
 <p>The driver exposes the Ethos-U PMU through <span class="tt">pmu_ethosu.h</span>. The API supports a 64-bit cycle counter and programmable event counters. Ethos-U55 and Ethos-U65 builds provide four event counters; Ethos-U85 builds provide eight. Use <a class="el" href="group__ethosu__pmu__api.html#ga6f27ab539babbec56b72cdbc5a190f39" title="ETHOSU_PMU_Get_NumEventCountersForDrv">ETHOSU_PMU_Get_NumEventCountersForDrv()</a> when code must work with more than one Ethos-U target or with a multi-variant build.</p>

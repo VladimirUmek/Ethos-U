@@ -152,7 +152,7 @@ Troubleshooting installation</h3>
 Obtain an Ethos-U configuration for a device</h1>
 <p>The Vela compiler requires the selected Ethos-U variant and MAC configuration, plus a <span class="tt">vela.ini</span> configuration file. The <span class="tt">vela.ini</span> file contains <span class="tt">System_Config</span> sections that model device memory performance and <span class="tt">Memory_Mode</span> sections that define where model data is placed.</p>
 <p>For an Edge AI MCU, a Device Family Pack (DFP), available from <a href="https://www.keil.arm.com/packs">www.keil.arm.com/packs</a>, can provide the Ethos-U configuration information, including the device-specific <span class="tt">vela.ini</span> file. CMSIS-Toolbox exports these resources for the selected device and build context through its <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps information</a>.</p>
-<p>When the DFP does not provide this information, create the equivalent configuration manually as described in <a class="el" href="#create-device-specific-velaini-file" title="Create device-specific vela.ini file">Create device-specific `vela.ini` file</a>.</p>
+<p>When the DFP does not provide this information, create the equivalent configuration manually as described in <a href="#create-device-specific-velaini-file">Create device-specific <code>vela.ini</code> file</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="invocation"></a>
 Invocation</h1>
 <div class="fragment"><div class="line">vela [Options] NETWORK</div>
@@ -445,7 +445,7 @@ Match the driver configuration</h2>
 <td class="markdownTableBodyNone">Base region 2: optional scratch-fast storage  </td><td class="markdownTableBodyNone"><span class="tt">cache_mem_area</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_2</span>  </td></tr>
 </table>
 <p>The numeric values of these driver settings are target-specific. Additional base regions can be present in specialized output flows, so use the generated command stream and the device integration information as the authority. Also configure address translation and cache maintenance when Cortex-M software and the NPU access the same physical memory through different addresses or cache policies.</p>
-<p>See Integration for system validation, platform hooks, target-specific driver build configuration, cache maintenance, and address-remapping guidance.</p>
+<p>See <a href="../integration/index.html">Integration</a> for system validation, platform hooks, target-specific driver build configuration, cache maintenance, and address-remapping guidance.</p>
 <h2 class="doxsection"><a class="anchor" id="complete-my_velaini-example"></a>
 Complete <span class="tt">My_vela.ini</span> example</h2>
 <div class="fragment"><div class="line">; Ethos-U55 at 500 MHz with SRAM on AXI0 and read-only Flash on AXI1</div>

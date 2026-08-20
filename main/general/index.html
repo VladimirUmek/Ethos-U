@@ -36,7 +36,7 @@
  <tr id="projectrow" style="height: 55px;">
   <td id="projectlogo" style="padding: 1em;"><img alt="Logo" src="arm.png"/></td>
   <td id="projectalign" style="padding-left: 2em; padding-bottom: 1em; padding-top: 1em;">
-   <div id="projectname">Ethos-U Integration for Cortex-M<span id="projectnumber">&#160;Version 1.0.0-dev93</span>
+   <div id="projectname">Ethos-U Integration for Cortex-M<span id="projectnumber">&#160;Version 1.0.0-dev94</span>
    </div>
    <div id="projectbrief">General Information</div>
   </td>
@@ -109,10 +109,10 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <p>This documentation is organized as follows:</p>
 <ul>
 <li>This chapter introduces the terminology, architecture, and deployment flow for ML models on an Edge AI MCU.</li>
-<li>Vela explains how to install and use the Vela compiler, obtain or create an Ethos-U configuration, create matching linker and driver configurations, and publish the configuration in a DFP.</li>
-<li>Driver describes the low-level Ethos-U driver API, execution contract, platform hooks, and bring-up checks.</li>
-<li>Integration explains how to keep the compiled ML model, memory placement, driver settings, and application consistent, and how to budget, validate, and tune the complete system.</li>
-<li>Zephyr explains how to configure, build, and run an Ethos-U-accelerated Zephyr application.</li>
+<li><a href="../vela/index.html">Vela</a> explains how to install and use the Vela compiler, obtain or create an Ethos-U configuration, create matching linker and driver configurations, and publish the configuration in a DFP.</li>
+<li><a href="../driver/index.html">Driver</a> describes the low-level Ethos-U driver API, execution contract, platform hooks, and bring-up checks.</li>
+<li><a href="../integration/index.html">Integration</a> explains how to keep the compiled ML model, memory placement, driver settings, and application consistent, and how to budget, validate, and tune the complete system.</li>
+<li><a href="../zephyr/index.html">Zephyr</a> explains how to configure, build, and run an Ethos-U-accelerated Zephyr application.</li>
 </ul>
 <h1 class="doxsection"><a class="anchor" id="target-audiences"></a>
 Target audiences</h1>
@@ -175,7 +175,7 @@ What is the command stream?</h2>
 <h3 class="doxsection"><a class="anchor" id="target-specific-command-streams"></a>
 Target-specific command streams</h3>
 <p>The overall execution flow is common to Ethos-U55, Ethos-U65, and Ethos-U85, but command streams are compiled for a specific architecture and MAC configuration. Always compile for the exact target. Hardware pipelines, supported operations, memory interfaces, and configuration details are described in the corresponding Technical Reference Manual.</p>
-<p>For command-line options and compiler diagnostics, see Vela. For invocation and interrupt contracts, see Driver.</p>
+<p>For command-line options and compiler diagnostics, see <a href="../vela/index.html">Vela</a>. For invocation and interrupt contracts, see <a href="../driver/index.html">Driver</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="coordinating-the-device-configuration"></a>
 Coordinating the device configuration</h1>
 <p>An Edge AI MCU has a fixed Cortex-M, Ethos-U, interconnect, and memory integration. The software descriptions used to build an application must match that finished device:</p>
@@ -185,7 +185,7 @@ Coordinating the device configuration</h1>
 <li>The linker and MPU/SAU configuration place code and data in the device's physical memory regions with suitable CPU attributes.</li>
 <li>The driver configuration assigns the command stream and model regions to the matching NPU memory-access paths and attributes.</li>
 </ol>
-<p>A DFP can provide these related configuration artifacts, and CMSIS-Toolbox can resolve them for the selected device and build context. The artifacts must be consistent. The full mapping, examples, and consistency checklist are in Integration. The meaning and syntax of <span class="tt">vela.ini</span> are in Vela.</p>
+<p>A DFP can provide these related configuration artifacts, and CMSIS-Toolbox can resolve them for the selected device and build context. The artifacts must be consistent. The full mapping, examples, and consistency checklist are in <a href="../integration/index.html">Integration</a>. The meaning and syntax of <span class="tt">vela.ini</span> are in <a href="../vela/index.html">Vela</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="memory-configuration-terminology"></a>
 Memory configuration terminology</h1>
 <p>Memory configuration spans several description layers. Similar names at different layers do not refer to the same object:</p>
@@ -223,7 +223,7 @@ Ethos-U memory modes</div></div>
 <td class="markdownTableBodyLeft">All Vela-managed model storage is placed in SRAM. Constants and the writable arena remain separate logical areas, but both use the same physical memory type. This mode provides low access latency, but the complete compiled model and arena must fit in SRAM.  </td><td class="markdownTableBodyLeft">The writable arena is stored in SRAM. Read-only constants, such as encoded weights and scales, are stored in Flash, MRAM, or DRAM. This arrangement minimizes SRAM usage.  </td><td class="markdownTableBodyLeft">Constants and the writable arena are outside the fast SRAM, normally in DRAM. SRAM is dedicated to fast staging storage. Vela uses spilling to move selected data through this area and reduce external-memory traffic.  </td></tr>
 </table>
 <p>The diagram uses "Other Memory (Flash / DRAM)" as a compact label shared by the three examples. In Dedicated-SRAM mode, <span class="tt">arena_mem_area</span> requires writable memory, normally DRAM; read-only Flash can hold constants but not the arena. The common Dedicated-SRAM flow applies to Ethos-U65 and Ethos-U85. It is not a practical Ethos-U55 mode because the Ethos-U55 AXI1 hardware interface is read-only.</p>
-<p>Vela maps to physical memory with the <span class="tt">system-config</span> and <span class="tt">memory-mode</span> options. The related performance parameters are obtained from the device-specific <span class="tt">vela.ini</span> file. See Vela for command-line syntax and Integration for the corresponding linker sections, MPU/SAU attributes, cache policy, and driver region configuration.</p>
+<p>Vela maps to physical memory with the <span class="tt">system-config</span> and <span class="tt">memory-mode</span> options. The related performance parameters are obtained from the device-specific <span class="tt">vela.ini</span> file. See <a href="../vela/index.html">Vela</a> for command-line syntax and <a href="../integration/index.html">Integration</a> for the corresponding linker sections, MPU/SAU attributes, cache policy, and driver region configuration.</p>
 <h1 class="doxsection"><a class="anchor" id="deployment-lifecycle"></a>
 Deployment lifecycle</h1>
 <ol type="1">
@@ -235,7 +235,7 @@ Deployment lifecycle</h1>
 <li>Implement target hooks for interrupts, cache maintenance, address remapping, and RTOS synchronization as needed.</li>
 <li>Validate correctness with a small known-good ML model. Then measure the production ML model on hardware and tune the system based on those results.</li>
 </ol>
-<p>The detailed procedure and required evidence are in Integration. The Vela compiler's estimates are useful for comparison but do not replace measurements on the target.</p>
+<p>The detailed procedure and required evidence are in <a href="../integration/index.html">Integration</a>. The Vela compiler's estimates are useful for comparison but do not replace measurements on the target.</p>
 <h1 class="doxsection"><a class="anchor" id="related-resources"></a>
 Related resources</h1>
 <ul>
