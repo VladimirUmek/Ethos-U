@@ -1,11 +1,10 @@
 var searchData=
 [
-  ['selectors_0',['1. Common traffic selectors',['../index.html#autotoc_md1-common-traffic-selectors',1,'']]],
-  ['semaphores_1',['Mutex and semaphores',['../index.html#mutex-and-semaphores',1,'']]],
-  ['silicon_20vendors_20and_20platform_20maintainers_2',['Silicon vendors and platform maintainers',['../index.html#silicon-vendors-and-platform-maintainers',1,'']]],
-  ['software_20component_3',['CMSIS Software component',['../index.html#cmsis-software-component',1,'']]],
-  ['source_20code_4',['Ethos-U driver source code',['../index.html#ethos-u-driver-source-code',1,'']]],
-  ['specific_20functions_5',['Platform-specific functions',['../index.html#platform-specific-functions',1,'']]],
-  ['synchronization_20requirements_6',['Platform synchronization requirements',['../index.html#platform-synchronization-requirements',1,'']]],
-  ['synchronous_20invocation_7',['Synchronous invocation',['../index.html#synchronous-invocation',1,'']]]
+  ['u_20driver_20source_20code_0',['Ethos-U driver source code',['../index.html#ethos-u-driver-source-code',1,'']]],
+  ['u55_20and_20ethos_20u65_1',['Ethos-U55 and Ethos-U65',['../index.html#ethos-u55-and-ethos-u65',1,'']]],
+  ['u65_2',['Ethos-U55 and Ethos-U65',['../index.html#ethos-u55-and-ethos-u65',1,'']]],
+  ['u85_3',['Ethos-U85',['../index.html#ethos-u85',1,'']]],
+  ['unit_20pmu_4',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
+  ['up_20checklist_5',['Driver bring-up checklist',['../index.html#driver-bring-up-checklist',1,'']]],
+  ['usage_6',['Driver Usage',['../index.html#driver-usage',1,'']]]
 ];

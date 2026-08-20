@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['implementation_20design_0',['Implementation design',['../index.html#implementation-design',1,'']]],
-  ['inference_20callbacks_1',['Begin/End inference callbacks',['../index.html#beginend-inference-callbacks',1,'']]],
-  ['initialization_2',['Driver initialization',['../index.html#driver-initialization',1,'']]],
-  ['interpreting_20pmu_20events_3',['Interpreting PMU events',['../index.html#interpreting-pmu-events',1,'']]],
-  ['invocation_4',['invocation',['../index.html#asynchronous-invocation',1,'Asynchronous invocation'],['../index.html#synchronous-invocation',1,'Synchronous invocation']]]
+  ['monitoring_20unit_20api_0',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
+  ['monitoring_20unit_20pmu_1',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
+  ['multi_20variant_20build_2',['Multi-variant build',['../index.html#multi-variant-build',1,'']]],
+  ['mutex_20and_20semaphores_3',['Mutex and semaphores',['../index.html#mutex-and-semaphores',1,'']]]
 ];

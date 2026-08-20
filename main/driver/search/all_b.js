@@ -1,8 +1,11 @@
 var searchData=
 [
-  ['maintainers_0',['Silicon vendors and platform maintainers',['../index.html#silicon-vendors-and-platform-maintainers',1,'']]],
-  ['memory_20access_20configuration_1',['Memory access configuration',['../index.html#memory-access-configuration',1,'']]],
-  ['monitoring_20unit_20api_2',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
-  ['monitoring_20unit_20pmu_3',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
-  ['mutex_20and_20semaphores_4',['Mutex and semaphores',['../index.html#mutex-and-semaphores',1,'']]]
+  ['performance_20monitoring_20unit_20api_0',['Performance Monitoring Unit API',['../group__ethosu__pmu__api.html',1,'']]],
+  ['performance_20monitoring_20unit_20pmu_1',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
+  ['platform_20specific_20functions_2',['Platform specific functions',['../group__ethosu__callback__api.html',1,'Platform-specific functions'],['../index.html#platform-specific-functions',1,'Platform-specific functions']]],
+  ['platform_20synchronization_20requirements_3',['Platform synchronization requirements',['../index.html#platform-synchronization-requirements',1,'']]],
+  ['pmu_4',['Performance Monitoring Unit (PMU)',['../index.html#performance-monitoring-unit-pmu',1,'']]],
+  ['pmu_20events_5',['Interpreting PMU events',['../index.html#interpreting-pmu-events',1,'']]],
+  ['pmu_20example_6',['PMU example',['../index.html#pmu-example',1,'']]],
+  ['pointers_7',['Command stream regions and base pointers',['../index.html#command-stream-regions-and-base-pointers',1,'']]]
 ];

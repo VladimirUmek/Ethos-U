@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logging_0',['Logging',['../index.html#logging',1,'']]]
+  ['ownership_0',['Driver ownership',['../index.html#driver-ownership',1,'']]]
 ];

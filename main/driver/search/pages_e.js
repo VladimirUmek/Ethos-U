@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['requirements_0',['Platform synchronization requirements',['../index.html#platform-synchronization-requirements',1,'']]]
+  ['text_20logging_0',['Text logging',['../index.html#text-logging',1,'']]],
+  ['time_20configuration_1',['Compile-time configuration',['../index.html#compile-time-configuration',1,'']]]
 ];

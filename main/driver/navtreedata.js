@@ -28,6 +28,17 @@ var NAVTREE =
     [ "Ethos-U driver source code", "index.html#ethos-u-driver-source-code", [
       [ "CMSIS Software component", "index.html#cmsis-software-component", null ]
     ] ],
+    [ "Compile-time configuration", "index.html#compile-time-configuration", [
+      [ "Single-variant build", "index.html#single-variant-build", null ],
+      [ "Multi-variant build", "index.html#multi-variant-build", null ],
+      [ "Common configuration", "index.html#common-configuration", null ],
+      [ "Text logging", "index.html#text-logging", null ],
+      [ "Variant-specific hardware configuration", "index.html#variant-specific-hardware-configuration", null ]
+    ] ],
+    [ "Command stream regions and base pointers", "index.html#command-stream-regions-and-base-pointers", [
+      [ "Ethos-U55 and Ethos-U65", "index.html#ethos-u55-and-ethos-u65", null ],
+      [ "Ethos-U85", "index.html#ethos-u85", null ]
+    ] ],
     [ "Driver API", "index.html#driver-api", null ],
     [ "API functions", "index.html#api-functions", null ],
     [ "Platform-specific functions", "index.html#platform-specific-functions", null ],
@@ -44,14 +55,6 @@ var NAVTREE =
       [ "Platform synchronization requirements", "index.html#platform-synchronization-requirements", null ]
     ] ],
     [ "Begin/End inference callbacks", "index.html#beginend-inference-callbacks", null ],
-    [ "Memory access configuration", "index.html#memory-access-configuration", [
-      [ "Embedded application developers", "index.html#embedded-application-developers", null ],
-      [ "Silicon vendors and platform maintainers", "index.html#silicon-vendors-and-platform-maintainers", [
-        [ "1. Common traffic selectors", "index.html#autotoc_md1-common-traffic-selectors", null ],
-        [ "2. Ethos-U55 and Ethos-U65", "index.html#autotoc_md2-ethos-u55-and-ethos-u65", null ],
-        [ "3. Ethos-U85", "index.html#autotoc_md3-ethos-u85", null ]
-      ] ]
-    ] ],
     [ "Logging", "index.html#logging", null ],
     [ "Performance Monitoring Unit (PMU)", "index.html#performance-monitoring-unit-pmu", [
       [ "Interpreting PMU events", "index.html#interpreting-pmu-events", null ],

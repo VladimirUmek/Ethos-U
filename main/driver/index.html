@@ -181,24 +181,21 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <p>For the first execution on a target, follow the <a href="#driver-bring-up-checklist">Driver bring-up checklist</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="ethos-u-driver-source-code"></a>
 Ethos-U driver source code</h1>
-<p>The driver is provided by the software pack <span class="tt">ARM::CMSIS-Ethos-U</span> and can be added to a CMSIS-based application as a software component. The pack also includes CMSIS-RTOS2 and cache-management interfaces as optional source templates.</p>
-<p>The <a href="https://github.com/ARM-software/CMSIS-Ethos-U">CMSIS-Ethos-U GitHub repository</a> provides access to the source code for other build environments.</p>
+<p>The driver source is maintained in the <a href="https://gitlab.arm.com/artificial-intelligence/ethos-u/ethos-u-core-driver">Ethos-U core-driver repository</a>. The software pack <span class="tt">ARM::CMSIS-Ethos-U</span> includes this source code unchanged and makes it available to CMSIS-based applications as a software component. The same source can therefore be obtained directly from the repository for use with other build environments. The pack also includes CMSIS-RTOS2, FreeRTOS and cache-management interfaces as optional source code templates.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File or directory  </th><th class="markdownTableHeadNone">Content  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">config/</span>  </td><td class="markdownTableBodyNone">Configurable headers for the Generic U55, U65, and U85 component variants.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">include/</span>  </td><td class="markdownTableBodyNone">Public driver, device, data-type, and PMU header files.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">include/</span>  </td><td class="markdownTableBodyNone">Public driver, data-type, and PMU header files.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">src/</span>  </td><td class="markdownTableBodyNone">Common driver code, variant-specific backend and PMU implementations, default configuration headers, register interfaces, and private headers.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">src/</span>  </td><td class="markdownTableBodyNone">Common driver and PMU implementations, NPU-specific device implementations, and private headers.  </td></tr>
-<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">zephyr/</span>  </td><td class="markdownTableBodyNone">Metadata for using the driver as a Zephyr module.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">CMakeLists.txt</span>  </td><td class="markdownTableBodyNone">Build description for integrating or building the driver with CMake.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">README.md</span>  </td><td class="markdownTableBodyNone">Standalone build instructions and driver API examples.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">CMakeLists.txt</span>  </td><td class="markdownTableBodyNone">Build description for integrating or building the driver with CMake.  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">README.md</span>  </td><td class="markdownTableBodyNone">Standalone build instructions and driver API examples.  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">LICENSE.txt</span>, <span class="tt">SECURITY.md</span>  </td><td class="markdownTableBodyNone">License and security information for the driver source.  </td></tr>
 </table>
 <h2 class="doxsection"><a class="anchor" id="cmsis-software-component"></a>
@@ -210,7 +207,181 @@ CMSIS Software component</h2>
 <div class="line">  - component: &quot;ARM::Machine Learning:NPU Support:Ethos-U Driver&amp;Generic U65&quot; # For Ethos-U65</div>
 </div><!-- fragment --><div class="fragment"><div class="line">components:</div>
 <div class="line">  - component: &quot;ARM::Machine Learning:NPU Support:Ethos-U Driver&amp;Generic U85&quot; # For Ethos-U85</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="driver-api"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="compile-time-configuration"></a>
+Compile-time configuration</h1>
+<p>The Ethos-U driver is configured with preprocessor <span class="tt">#define</span> statements. The following tables list the supported configuration statements.</p>
+<h2 class="doxsection"><a class="anchor" id="single-variant-build"></a>
+Single-variant build</h2>
+<p>A single-variant build supports one Ethos-U variant selected at compile time. Define exactly one Ethos-U family together with its MAC configuration. Do not define <span class="tt">ETHOSU_MULTI_VARIANT</span>.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><span class="tt">#define</span>  </th><th class="markdownTableHeadNone">Purpose  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ETHOSU55</span>, <span class="tt">ETHOSU65</span>, or <span class="tt">ETHOSU85</span>  </td><td class="markdownTableBodyNone">Select the Ethos-U family. Define exactly one.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ETHOSU_MACS</span>  </td><td class="markdownTableBodyNone">Select the MAC configuration, for example <span class="tt">128</span> for an Ethos-U55-128 variant.  </td></tr>
+</table>
+<h2 class="doxsection"><a class="anchor" id="multi-variant-build"></a>
+Multi-variant build</h2>
+<p>A multi-variant build includes support for Ethos-U55, Ethos-U65, and Ethos-U85. The Ethos-U variant and MAC configuration are selected for each driver instance at run time. Do not define the single-variant <span class="tt">ETHOSU55</span>, <span class="tt">ETHOSU65</span>, <span class="tt">ETHOSU85</span>, or <span class="tt">ETHOSU_MACS</span> statements in this build.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><span class="tt">#define</span>  </th><th class="markdownTableHeadNone">Purpose  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ETHOSU_MULTI_VARIANT</span>  </td><td class="markdownTableBodyNone">Enable multi-variant support. This changes the initialization, reservation, platform-operation, and PMU APIs available to the application.  </td></tr>
+</table>
+<h2 class="doxsection"><a class="anchor" id="common-configuration"></a>
+Common configuration</h2>
+<p>The following <span class="tt">#define</span> statements apply in either a single-variant or multi-variant build. In a multi-variant build, the memory-routing statements initialize the default configuration for each included Ethos-U family.</p>
+<p><span class="tt">NPU_QCONFIG</span> and <span class="tt">NPU_REGIONCFG_0</span> through <span class="tt">NPU_REGIONCFG_7</span> provide default memory-access selectors; they do not contain addresses. <span class="tt">NPU_QCONFIG</span> selects the access configuration used to fetch the command stream. The suffix in <span class="tt">NPU_REGIONCFG_n</span> identifies the corresponding <span class="tt">base_addr[n]</span> region, while the value selects its access configuration. On Ethos-U55 and Ethos-U65, the value selects an <span class="tt">AXI_LIMITx</span> access profile. On Ethos-U85, it selects a <span class="tt">MEM_ATTR</span> entry. See <a class="el" href="#command-stream-regions-and-base-pointers" title="Command stream regions and base pointers">Command stream regions and base pointers</a>Command stream regions and base pointers.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><span class="tt">#define</span>  </th><th class="markdownTableHeadNone">Purpose  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ETHOSU_MAX_WAITERS</span>  </td><td class="markdownTableBodyNone">Set the maximum number of distinct Ethos-U variants tracked by driver reservation. The default is <span class="tt">4</span>.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="group__ethosu__driver__defines.html#ga506814742e046dc5d5f27584dfe3eec6" title="Timeout used while waiting for inference completion.">ETHOSU_SEMAPHORE_WAIT_INFERENCE</a></span>  </td><td class="markdownTableBodyNone">Set the timeout passed to the platform semaphore while waiting for inference completion. The default is <span class="tt"><a class="el" href="group__ethosu__driver__defines.html#ga8777fdbb65e94313ee5d8e9465373d9d" title="Value used to request an indefinite semaphore wait.">ETHOSU_SEMAPHORE_WAIT_FOREVER</a></span>; the platform defines the time unit. See <a class="el" href="#mutex-and-semaphores" title="Mutex and semaphores">Mutex and semaphores</a>Mutex and semaphores.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>  </td><td class="markdownTableBodyNone">Set the default memory-access selector for fetching the command stream.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_0</span> through <span class="tt">NPU_REGIONCFG_7</span>  </td><td class="markdownTableBodyNone">Set the default memory-access selector for each corresponding <span class="tt">base_addr[0]</span> through <span class="tt">base_addr[7]</span> region.  </td></tr>
+</table>
+<h2 class="doxsection"><a class="anchor" id="text-logging"></a>
+Text logging</h2>
+<p>The following <span class="tt">#define</span> statements configure driver text logging through the C standard I/O streams. See <a class="el" href="#logging" title="Logging">Logging</a>Logging for the output format and stream requirements.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><span class="tt">#define</span>  </th><th class="markdownTableHeadNone">Purpose  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="group__ethosu__log__api.html#gafab8c39657a7823439de4dcec41b6638" title="Master compile-time switch for driver logging.">ETHOSU_LOG_ENABLE</a></span>  </td><td class="markdownTableBodyNone">Enable or disable logging. The default is <span class="tt">1</span>.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="group__ethosu__log__api.html#gae2521780190d2ccdc7a712a7af419aea" title="Most verbose severity compiled into the driver.">ETHOSU_LOG_SEVERITY</a></span>  </td><td class="markdownTableBodyNone">Select the most verbose compiled log level: <span class="tt"><a class="el" href="group__ethosu__log__api.html#ga925b62cb4a7b32b5770f1ebdacb6d8d8" title="Error severity level.">ETHOSU_LOG_ERR</a></span>, <span class="tt"><a class="el" href="group__ethosu__log__api.html#gaa04304f007fbd79ba5368c295dc275e6" title="Warning severity level.">ETHOSU_LOG_WARN</a></span>, <span class="tt"><a class="el" href="group__ethosu__log__api.html#gaec30d1751550d3ecd9996bf56f55c88f" title="Informational severity level.">ETHOSU_LOG_INFO</a></span>, or <span class="tt"><a class="el" href="group__ethosu__log__api.html#ga715573525d22ecd62dc3a371f459b7ef" title="Debug severity level.">ETHOSU_LOG_DEBUG</a></span>. The default is <span class="tt"><a class="el" href="group__ethosu__log__api.html#gaa04304f007fbd79ba5368c295dc275e6" title="Warning severity level.">ETHOSU_LOG_WARN</a></span>.  </td></tr>
+</table>
+<h2 class="doxsection"><a class="anchor" id="variant-specific-hardware-configuration"></a>
+Variant-specific hardware configuration</h2>
+<p>The configuration headers provide default values for the following hardware <span class="tt">#define</span> statements. A silicon vendor can supply values validated for its NPU, interconnect, memory system, cache policy, and security configuration to adjust the driver defaults. Do not tune these settings independently. See <a class="el" href="#command-stream-regions-and-base-pointers" title="Command stream regions and base pointers">Command stream regions and base pointers</a>Command stream regions and base pointers.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Ethos-U variant  </th><th class="markdownTableHeadNone"><span class="tt">#define</span> statements  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Ethos-U55 and Ethos-U65  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMITx_MAX_BEATS_BYTES</span>, <span class="tt">AXI_LIMITx_MEM_TYPE</span>, <span class="tt">AXI_LIMITx_MAX_OUTSTANDING_READS</span>, and <span class="tt">AXI_LIMITx_MAX_OUTSTANDING_WRITES</span>, where <span class="tt">x</span> is <span class="tt">0</span> through <span class="tt">3</span>.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Ethos-U85  </td><td class="markdownTableBodyNone"><span class="tt">NPU_MAC_PWR_RAMP_CYCLES</span>, <span class="tt">NPU_MEM_ATTR_0</span> through <span class="tt">NPU_MEM_ATTR_3</span>, <span class="tt">AXI_LIMIT_SRAM_MAX_OUTSTANDING_READ</span>, <span class="tt">AXI_LIMIT_SRAM_MAX_OUTSTANDING_WRITE</span>, <span class="tt">AXI_LIMIT_SRAM_MAX_BEATS</span>, <span class="tt">AXI_LIMIT_EXT_MAX_OUTSTANDING_READ</span>, <span class="tt">AXI_LIMIT_EXT_MAX_OUTSTANDING_WRITE</span>, and <span class="tt">AXI_LIMIT_EXT_MAX_BEATS</span>.  </td></tr>
+</table>
+<p>For Ethos-U55 and Ethos-U65, each <span class="tt">AXI_LIMITx</span> register defines a complete AXI access profile, despite the register name suggesting that it contains only transaction limits. The corresponding <span class="tt">AXI_LIMITx_*</span> <span class="tt">#define</span> statements configure its maximum burst size, memory type, and maximum number of outstanding read and write transactions. In particular, <span class="tt">AXI_LIMITx_MEM_TYPE</span> sets the memory type used to encode the AXI AxCACHE signals.</p>
+<h1 class="doxsection"><a class="anchor" id="command-stream-regions-and-base-pointers"></a>
+Command stream regions and base pointers</h1>
+<p><a href="../vela/index.html">Vela</a> emits command streams that address data as offsets within numbered memory regions. The invoke API supplies the base address of each region in <span class="tt">base_addr[]</span>: <span class="tt">base_addr[0]</span> is used for region 0, <span class="tt">base_addr[1]</span> for region 1, and so on. The matching field in the NPU <span class="tt">REGIONCFG</span> register selects the access configuration for each region, including the AXI port and memory attributes used for its transactions.</p>
+<p><span class="tt">QBASE</span> holds the base address of the command stream. <span class="tt">QCONFIG</span> selects the access configuration used to fetch it, using the same selector encoding as <span class="tt">REGIONCFG</span>.</p>
+<p>The address and access-configuration inputs are related as follows:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">NPU access  </th><th class="markdownTableHeadNone">Address programmed by the driver  </th><th class="markdownTableHeadNone">Access-configuration selector  </th><th class="markdownTableHeadNone">Default <span class="tt">#define</span>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Command stream  </td><td class="markdownTableBodyNone"><span class="tt">QBASE</span>, from the command-stream pointer passed to the invoke API  </td><td class="markdownTableBodyNone"><span class="tt">QCONFIG</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Base-pointer region <span class="tt">n</span>  </td><td class="markdownTableBodyNone"><span class="tt">BASEP[n]</span>, from <span class="tt">base_addr[n]</span>  </td><td class="markdownTableBodyNone"><span class="tt">REGIONCFG[n]</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_n</span>  </td></tr>
+</table>
+<p>The default selector values are listed under <a class="el" href="#ethos-u55-and-ethos-u65" title="Ethos-U55 and Ethos-U65">Ethos-U55 and Ethos-U65</a>Ethos-U55 and Ethos-U65 and <a class="el" href="#ethos-u85" title="Ethos-U85">Ethos-U85</a>Ethos-U85. An application developer can select a Vela system configuration and memory mode supported by the target to meet the application's requirements. The selector values must match the resulting memory placement and memory system. See <a href="../general/index.html#system-configuration-and-memory-modes-at-a-glance">System configuration and memory modes at a glance</a>. In a <a class="el" href="#single-variant-build" title="Single-variant build">single-variant build</a>single-variant build, an override of <a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a" title="ethosu_config_select">ethosu_config_select()</a> can replace the defaults. In a <a class="el" href="#multi-variant-build" title="Multi-variant build">multi-variant build</a>multi-variant build, the values come from the device configuration passed to ethosu_init_ex(), or from a per-driver <span class="tt">config_select</span> user operation.</p>
+<p>The selected <a href="../vela/index.html#memory-mode-parameters">Vela memory mode</a> determines the memory areas used for constants, scratch, and optional fast scratch. The following table shows the common mappings. The runtime base pointers and the access configurations selected by <span class="tt">REGIONCFG</span> must match the actual placement.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Vela memory mode  </th><th class="markdownTableHeadNone">Region 0 constants  </th><th class="markdownTableHeadNone">Region 1 scratch  </th><th class="markdownTableHeadNone">Region 2 fast scratch  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">Sram_Only</span>  </td><td class="markdownTableBodyNone">SRAM  </td><td class="markdownTableBodyNone">SRAM  </td><td class="markdownTableBodyNone">Not used  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">Shared_Sram</span>  </td><td class="markdownTableBodyNone">DRAM/Flash  </td><td class="markdownTableBodyNone">SRAM  </td><td class="markdownTableBodyNone">Not used  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">Dedicated_Sram</span>  </td><td class="markdownTableBodyNone">DRAM/Flash  </td><td class="markdownTableBodyNone">DRAM  </td><td class="markdownTableBodyNone">SRAM  </td></tr>
+</table>
+<p>In <span class="tt">Dedicated_Sram</span> mode, Vela uses region 2 for fast scratch. The driver calls this region <span class="tt">FAST_MEMORY</span>. The driver must know the actual fast memory address and size through the <span class="tt">fast_memory</span> and <span class="tt">fast_memory_size</span> arguments to <a class="el" href="group__ethosu__public__api.html#gae021e7e1e40a33303dcc17041a1f2911" title="ethosu_init">ethosu_init()</a> or ethosu_init_ex(). If fast memory is configured and the invoke call includes base pointer 2, the driver checks that <span class="tt">base_addr_size[2]</span> fits inside <span class="tt">fast_memory_size</span> and rewrites <span class="tt">base_addr[2]</span> to the configured fast memory address before programming the NPU. The driver therefore applies the fast-memory address without requiring the framework to replace base pointer 2.</p>
+<h2 class="doxsection"><a class="anchor" id="ethos-u55-and-ethos-u65"></a>
+Ethos-U55 and Ethos-U65</h2>
+<p>Ethos-U55 and Ethos-U65 provide the <span class="tt">AXI0</span> and <span class="tt">AXI1</span> access paths.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Memory placement  </th><th class="markdownTableHeadNone">AXI port  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SRAM  </td><td class="markdownTableBodyNone"><span class="tt">AXI0</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">DRAM/Flash  </td><td class="markdownTableBodyNone"><span class="tt">AXI1</span>  </td></tr>
+</table>
+<p>The driver provides the following default values:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Ethos-U variant  </th><th class="markdownTableHeadNone"><span class="tt">NPU_QCONFIG</span>  </th><th class="markdownTableHeadNone"><span class="tt">NPU_REGIONCFG_0</span>  </th><th class="markdownTableHeadNone"><span class="tt">NPU_REGIONCFG_1</span>  </th><th class="markdownTableHeadNone"><span class="tt">NPU_REGIONCFG_2</span>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Ethos-U55  </td><td class="markdownTableBodyNone"><span class="tt">2</span> -&gt; <span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">3</span> -&gt; <span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span> -&gt; <span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span> -&gt; <span class="tt">AXI0</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Ethos-U65  </td><td class="markdownTableBodyNone"><span class="tt">2</span> -&gt; <span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">3</span> -&gt; <span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span> -&gt; <span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span> -&gt; <span class="tt">AXI0</span>  </td></tr>
+</table>
+<p>For Ethos-U55 and Ethos-U65, <span class="tt">QCONFIG</span> and the <span class="tt">REGIONCFG[0..7]</span> fields accept values 0 through 3. Each value selects both an AXI port and the complete <span class="tt">AXI_LIMITx</span> access profile used for transactions:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Value  </th><th class="markdownTableHeadNone">AXI port  </th><th class="markdownTableHeadNone">AXI access profile  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">0</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT0</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT1</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">2</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT2</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">3</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT3</span>  </td></tr>
+</table>
+<p>Each <span class="tt">AXI_LIMITx</span> access profile contains the burst split alignment, the memory type used to encode AxCACHE, and the maximum number of outstanding read and write transactions. These fields are configured by <span class="tt">AXI_LIMITx_MAX_BEATS_BYTES</span>, <span class="tt">AXI_LIMITx_MEM_TYPE</span>, <span class="tt">AXI_LIMITx_MAX_OUTSTANDING_READS</span>, and <span class="tt">AXI_LIMITx_MAX_OUTSTANDING_WRITES</span>, respectively.</p>
+<p>The Ethos-U55 <span class="tt">AXI1</span> port is read-only. If region 1 contains writable scratch data, it must not be routed through <span class="tt">AXI1</span>.</p>
+<h2 class="doxsection"><a class="anchor" id="ethos-u85"></a>
+Ethos-U85</h2>
+<p>The AXI ports are referred to as <span class="tt">AXI_SRAM</span> and <span class="tt">AXI_EXT</span>.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Memory placement  </th><th class="markdownTableHeadNone">AXI port  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SRAM  </td><td class="markdownTableBodyNone"><span class="tt">AXI_SRAM</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">DRAM/Flash  </td><td class="markdownTableBodyNone"><span class="tt">AXI_EXT</span>  </td></tr>
+</table>
+<p>The driver provides the following default values:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Ethos-U variant  </th><th class="markdownTableHeadNone"><span class="tt">NPU_QCONFIG</span>  </th><th class="markdownTableHeadNone"><span class="tt">NPU_REGIONCFG_0</span>  </th><th class="markdownTableHeadNone"><span class="tt">NPU_REGIONCFG_1</span>  </th><th class="markdownTableHeadNone"><span class="tt">NPU_REGIONCFG_2</span>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Ethos-U85  </td><td class="markdownTableBodyNone"><span class="tt">2</span> -&gt; <span class="tt">MEM_ATTR_2</span> -&gt; <span class="tt">AXI_EXT</span>  </td><td class="markdownTableBodyNone"><span class="tt">3</span> -&gt; <span class="tt">MEM_ATTR_3</span> -&gt; <span class="tt">AXI_EXT</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span> -&gt; <span class="tt">MEM_ATTR_0</span> -&gt; <span class="tt">AXI_SRAM</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span> -&gt; <span class="tt">MEM_ATTR_1</span> -&gt; <span class="tt">AXI_SRAM</span>  </td></tr>
+</table>
+<p>For Ethos-U85, each <span class="tt">NPU_MEM_ATTR_n</span> <span class="tt">#define</span> supplies the packed value written to the corresponding <span class="tt">MEM_ATTR[n]</span> register. The suffix <span class="tt">n</span> identifies the entry; it is not the value assigned to the <span class="tt">#define</span>. Each entry selects the AXI port and specifies the memory domain and the memory type used to encode the AxCACHE signals.</p>
+<p><span class="tt">QCONFIG</span> and each <span class="tt">REGIONCFG</span> field contain an index from 0 through 3 that selects one of these <span class="tt">MEM_ATTR</span> entries. The default <span class="tt">MEM_ATTR_0</span> and <span class="tt">MEM_ATTR_1</span> entries use <span class="tt">AXI_SRAM</span>, while <span class="tt">MEM_ATTR_2</span> and <span class="tt">MEM_ATTR_3</span> use <span class="tt">AXI_EXT</span>. For example, <span class="tt">NPU_QCONFIG</span> defaults to <span class="tt">2</span>, selecting <span class="tt">MEM_ATTR_2</span>; the default packed value of <span class="tt">NPU_MEM_ATTR_2</span> is <span class="tt">(1 &lt;&lt; 2)</span>, or <span class="tt">4</span>, which selects <span class="tt">AXI_EXT</span>.</p>
+<p>These default <span class="tt">MEM_ATTR</span> values are set by the driver to replicate the default Ethos-U55 and Ethos-U65 behavior, making it easier to correlate configurations across variants, but the <span class="tt">MEM_ATTR</span> values can be configured by the user.</p>
+<p>Ethos-U85 AXI limits are configured in the <span class="tt">AXI_SRAM</span> and <span class="tt">AXI_EXT</span> registers. There is one <span class="tt">AXI_SRAM</span> register and one <span class="tt">AXI_EXT</span> register, so those limit settings apply to all ports in each group.</p>
+<p>Ethos-U85 AXI information:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">U85 configuration (MACs/CC)  </th><th class="markdownTableHeadNone">Number of SRAM ports  </th><th class="markdownTableHeadNone">Maximum outstanding reads per port  </th><th class="markdownTableHeadNone">Maximum outstanding writes per port  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">128  </td><td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone">12  </td><td class="markdownTableBodyNone">16  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">256  </td><td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone">12  </td><td class="markdownTableBodyNone">16  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">512  </td><td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone">12  </td><td class="markdownTableBodyNone">16  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">1024  </td><td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone">12  </td><td class="markdownTableBodyNone">16  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">2048  </td><td class="markdownTableBodyNone">4  </td><td class="markdownTableBodyNone">12  </td><td class="markdownTableBodyNone">16  </td></tr>
+</table>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">U85 configuration (MACs/CC)  </th><th class="markdownTableHeadNone">Number of EXT ports  </th><th class="markdownTableHeadNone">Maximum outstanding reads per port  </th><th class="markdownTableHeadNone">Maximum outstanding writes per port  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">128  </td><td class="markdownTableBodyNone">1  </td><td class="markdownTableBodyNone">32  </td><td class="markdownTableBodyNone">32  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">256  </td><td class="markdownTableBodyNone">1  </td><td class="markdownTableBodyNone">32  </td><td class="markdownTableBodyNone">32  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">512  </td><td class="markdownTableBodyNone">1  </td><td class="markdownTableBodyNone">64  </td><td class="markdownTableBodyNone">32  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">1024  </td><td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone">64  </td><td class="markdownTableBodyNone">32  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">2048  </td><td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone">64  </td><td class="markdownTableBodyNone">32  </td></tr>
+</table>
+<h1 class="doxsection"><a class="anchor" id="driver-api"></a>
 Driver API</h1>
 <p>The driver API is defined in <span class="tt">include/ethosu_driver.h</span> with related types in <span class="tt">include/ethosu_types.h</span>.</p>
 <h1 class="doxsection"><a class="anchor" id="api-functions"></a>
@@ -443,70 +614,6 @@ Begin/End inference callbacks</h1>
 <div class="line">        <span class="comment">// use drv and data here</span></div>
 <div class="line">}</div>
 </div><!-- fragment --><p>For a practical use of these callbacks, see the <a class="el" href="#pmu-example" title="PMU example">PMU example</a>PMU example.</p>
-<h1 class="doxsection"><a class="anchor" id="memory-access-configuration"></a>
-Memory access configuration</h1>
-<p>The silicon vendor supplies and validates the device-specific platform configuration. It is a coordinated set of settings that includes:</p>
-<ul>
-<li>Vela system configuration and supported memory modes.</li>
-<li>Driver routing, memory attributes, and AXI transaction limits.</li>
-<li>Linker and runtime placement in physical memory.</li>
-<li>Cache, MPU, and security settings.</li>
-<li>The available arena or cache size.</li>
-</ul>
-<p>A platform maintainer can package and integrate this configuration for a board or software environment, but the hardware-specific values originate from the silicon vendor.</p>
-<h2 class="doxsection"><a class="anchor" id="embedded-application-developers"></a>
-Embedded application developers</h2>
-<p>Select a memory mode supported by the silicon vendor. When changing memory mode, recompile the model and use the corresponding platform configuration and memory placement. Do not change <span class="tt">NPU_QCONFIG</span>, <span class="tt">NPU_REGIONCFG_n</span>, <span class="tt">MEM_ATTR</span>, or <span class="tt">AXI_LIMIT</span> settings independently. These are hardware-integration settings, not application tuning options.</p>
-<h2 class="doxsection"><a class="anchor" id="silicon-vendors-and-platform-maintainers"></a>
-Silicon vendors and platform maintainers</h2>
-<p>The platform configuration must make the Vela memory-mode mapping agree with the paths by which the NPU accesses the command stream and base-pointer regions. The following sections describe the target-specific settings needed to establish that agreement.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md1-common-traffic-selectors"></a>
-1. Common traffic selectors</h3>
-<p>All Ethos-U variants use a two-bit selector for the command stream and each base-pointer region. The driver obtains the selector by calling <a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a" title="ethosu_config_select">ethosu_config_select()</a>:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Function argument <span class="tt">index</span>  </th><th class="markdownTableHeadNone">NPU access being configured  </th><th class="markdownTableHeadNone">Default setting  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">-1</span>  </td><td class="markdownTableBodyNone">Command stream (<span class="tt">QCONFIG</span>)  </td><td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">0..7</span>  </td><td class="markdownTableBodyNone">Corresponding base-pointer region (<span class="tt">REGIONCFG</span>)  </td><td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_0..7</span>  </td></tr>
-</table>
-<p>The selector is not a memory address and does not identify a Vela memory mode. It tells the NPU which access path and attributes to use for an address supplied by the runtime. The default implementation returns the compile-time settings shown above. A platform can override <span class="tt"><a class="el" href="group__ethosu__callback__api.html#ga872178ba3393d3f21c57c950ed82fb1a">ethosu_config_select()</a></span> if the result must depend on the address or runtime placement.</p>
-<p>The generated command stream defines how the base-pointer regions are used. A common mapping is:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">NPU access  </th><th class="markdownTableHeadNone">Typical Vela storage role  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Command stream  </td><td class="markdownTableBodyNone">Stored with the compiled model  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Base-pointer region 0  </td><td class="markdownTableBodyNone"><span class="tt">const_mem_area</span>  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Base-pointer region 1  </td><td class="markdownTableBodyNone"><span class="tt">arena_mem_area</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Base-pointer region 2  </td><td class="markdownTableBodyNone"><span class="tt">cache_mem_area</span>, when separate fast storage is used  </td></tr>
-</table>
-<p>This is a convention used by current Vela-generated models, not an intrinsic meaning of the <span class="tt">REGIONCFG</span> fields. A platform integration must follow the base-pointer layout used by the generated model and runtime.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md2-ethos-u55-and-ethos-u65"></a>
-2. Ethos-U55 and Ethos-U65</h3>
-<p>On Ethos-U55 and Ethos-U65, each selector chooses an AXI interface and one of two outstanding-transaction trackers associated with that interface. Each tracker has a corresponding AXI access profile:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Selector  </th><th class="markdownTableHeadNone">AXI interface and tracker  </th><th class="markdownTableHeadNone">Access profile  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">0</span>  </td><td class="markdownTableBodyNone">AXI0, tracker 0  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT0</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone">AXI0, tracker 1  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT1</span>  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">2</span>  </td><td class="markdownTableBodyNone">AXI1, tracker 2  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT2</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">3</span>  </td><td class="markdownTableBodyNone">AXI1, tracker 3  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT3</span>  </td></tr>
-</table>
-<p>An <span class="tt">AXI_LIMIT</span> profile specifies the AXI memory type, burst-split alignment, and maximum numbers of outstanding reads and writes. The two profiles on an interface allow traffic classes with different access requirements to share that interface. The silicon vendor must choose values compatible with the SoC interconnect and the memory reached through each interface.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md3-ethos-u85"></a>
-3. Ethos-U85</h3>
-<p>On Ethos-U85, each selector chooses one of <span class="tt">MEM_ATTR0..3</span>. A <span class="tt">MEM_ATTR</span> entry specifies the SRAM or external-memory port class, AXI memory type, and memory domain and shareability attributes. The silicon vendor must make these attributes agree with the SoC memory map, interconnect, cache policy, and MPU/SAU configuration.</p>
-<p>Ethos-U85 configures burst length and outstanding-transaction limits separately for the SRAM and external-memory port classes. The <span class="tt">AXI_LIMIT_SRAM_*</span> and <span class="tt">AXI_LIMIT_EXT_*</span> settings therefore do not form part of the <span class="tt">QCONFIG</span> or <span class="tt">REGIONCFG</span> selector. They must still be validated for the integrated memory system.</p>
-<p>The target-specific defaults are declared in <span class="tt">ethosu_config_u55.h</span>, <span class="tt">ethosu_config_u65.h</span>, and <span class="tt">ethosu_config_u85.h</span>. They are starting points for a platform integration, not a substitute for silicon-vendor validation.</p>
 <h1 class="doxsection"><a class="anchor" id="logging"></a>
 Logging</h1>
 <p>The driver logging interface is implemented by the private header <span class="tt">source/src/ethosu_log.h</span>. It is a compile-time facility used by the driver and device implementation, rather than a runtime callback API. See <a class="el" href="group__ethosu__log__api.html" title="Logging">Logging</a> for the generated macro reference. The header provides the following <span class="tt">printf</span>-style macros:</p>

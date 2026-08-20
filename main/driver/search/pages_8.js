@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['functions_0',['functions',['../index.html#api-functions',1,'API functions'],['../index.html#platform-specific-functions',1,'Platform-specific functions']]]
+  ['logging_0',['Logging',['../index.html#logging',1,'']]],
+  ['logging_1',['Text logging',['../index.html#text-logging',1,'']]]
 ];
