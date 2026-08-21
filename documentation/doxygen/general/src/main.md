@@ -182,7 +182,7 @@ different layers do not refer to the same object:
 | Vela logical alias | `Axi0`, `Axi1` | Logical memory domain used by a Vela memory mode. An alias does not necessarily represent one physical AXI port. |
 | Vela data role | `const_mem_area`, `arena_mem_area`, `cache_mem_area` | Kind of generated model data assigned to a logical memory domain. |
 | Runtime allocation | Compiled model, tensor arena, optional fast-scratch buffer | Actual linked or dynamically allocated storage used for inference. |
-| Driver access configuration | `NPU_QCONFIG`, `NPU_REGIONCFG_0..7` | NPU access route and attributes used for the command stream and base-pointer regions. |
+| Driver memory access configuration | `NPU_QCONFIG`, `NPU_REGIONCFG_0..7` | NPU access route and attributes used for the command stream and base-pointer regions. |
 
 The selected memory mode maps Vela data roles to logical aliases. The system
 configuration maps those aliases to Vela memory types. The linker and runtime

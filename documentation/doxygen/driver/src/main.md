@@ -66,7 +66,7 @@ components:
 
 ```yaml
 components:
-  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Multi-Variant" # For runtime Ethos-U55, Ethos-U65, or Ethos-U85 selection
+  - component: "ARM::Machine Learning:NPU Support:Ethos-U Driver&Multi-Variant" # For runtime Ethos-U selection
 ```
 
 ## Compile-time configuration
@@ -78,11 +78,13 @@ list the supported configuration statements.
 
 A single-variant build supports one Ethos-U variant selected at compile time.
 Define exactly one Ethos-U family together with its MAC configuration. Do not
-define `ETHOSU_MULTI_VARIANT`.
+define `ETHOSU_MULTI_VARIANT`. When using the CMSIS pack, selection of a
+single-variant Ethos-U Driver component defines the corresponding Ethos-U
+family automatically.
 
 | Definition | Purpose |
 | --- | --- |
-| `ETHOSU55`, `ETHOSU65`, or `ETHOSU85` | Select the Ethos-U family. Define exactly one. |
+| `ETHOSU55`, `ETHOSU65`, or `ETHOSU85` | Select the Ethos-U family. Define exactly one. The CMSIS component selection defines this automatically. |
 | `ETHOSU_MACS` | Select the MAC configuration, for example `128` for an Ethos-U55-128 variant. |
 
 ### Multi-variant build
@@ -90,11 +92,13 @@ define `ETHOSU_MULTI_VARIANT`.
 A multi-variant build includes support for Ethos-U55, Ethos-U65, and Ethos-U85.
 The Ethos-U variant and MAC configuration are selected for each driver instance
 at run time. Do not define the single-variant `ETHOSU55`, `ETHOSU65`,
-`ETHOSU85`, or `ETHOSU_MACS` statements in this build.
+`ETHOSU85`, or `ETHOSU_MACS` statements in this build. When using the CMSIS
+pack, selection of the Multi-Variant Ethos-U Driver component defines
+`ETHOSU_MULTI_VARIANT` automatically.
 
 | Definition | Purpose |
 | --- | --- |
-| `ETHOSU_MULTI_VARIANT` | Enable multi-variant support. This changes the initialization, reservation, platform-operation, and PMU APIs available to the application. |
+| `ETHOSU_MULTI_VARIANT` | Enable multi-variant support. The CMSIS component selection defines this automatically. This changes the initialization, reservation, platform-operation, and PMU APIs available to the application. |
 
 ### Common configuration
 
@@ -151,59 +155,117 @@ sets the memory type used to encode the AXI AxCACHE signals.
 
 ## Command stream regions and base pointers
 
-<a href="../vela/index.html">Vela</a> emits command streams that address data as offsets
-within numbered memory regions. The invoke API supplies the base address of
-each region in `base_addr[]`: `base_addr[0]` is used for region 0,
-`base_addr[1]` for region 1, and so on. The matching field in the NPU
-`REGIONCFG` register selects the access configuration for each region, including
-the AXI port and memory attributes used for its transactions.
+### Determine the memory regions used by Vela
 
-`QBASE` holds the base address of the command stream. `QCONFIG` selects the
-access configuration used to fetch it, using the same selector encoding as
-`REGIONCFG`.
+<a href="../vela/index.html">Vela</a> generates command streams that refer to
+memory regions. The system configuration and memory mode selected in the
+`vela.ini` file determine the expected memory area for each memory region used
+by the compiled ML model.
 
-The address and access-configuration inputs are related as follows:
+The Ethos-U NPU and driver support eight base pointers and the corresponding
+`REGIONCFG[0] ... REGIONCFG[7]` selectors. Vela currently uses only three
+regions:
 
-| NPU access | Address programmed by the driver | Access-configuration selector | Default definition |
+- region 0: permanent model data, such as constants and weights
+  (`const_mem_area`).
+- region 1: the scratch arena (`arena_mem_area`).
+- region 2: optional fast scratch, used when `cache_mem_area` maps to `Sram` and
+  uses a different logical alias from `arena_mem_area`.
+
+Consequently, only regions 0 through 2 are referenced in the following section.
+
+The memory mode selects which Vela logical alias, `Axi0` or `Axi1`, each memory
+area uses. The following table shows the default `vela.ini` settings. Region 2
+(`cache_mem_area`) is used only when region 1 (`arena_mem_area`) uses a
+different logical alias.
+
+| Vela memory mode | Region 0 (const_mem_area) | Region 1 (arena_mem_area) | Region 2 (cache_mem_area) |
 | --- | --- | --- | --- |
-| Command stream | `QBASE`, from the command-stream pointer passed to the invoke API | `QCONFIG` | `NPU_QCONFIG` |
-| Base-pointer region `n` | `BASEP[n]`, from `base_addr[n]` | `REGIONCFG[n]` | `NPU_REGIONCFG_n` |
+| `Sram_Only` | `Axi0` | `Axi0` | `Axi0` (not used) |
+| `Shared_Sram` | `Axi1` | `Axi0` | `Axi0` (not used) |
+| `Dedicated_Sram` | `Axi1` | `Axi1` | `Axi0` |
 
-The default selector values are listed under
+The system configuration maps each logical alias to a Vela memory type. The
+following tables show two example mappings from the default `vela.ini`
+settings.
+
+**Example using `--system-config Ethos_U55_High_End_Embedded`:**
+
+| Vela memory mode | Region 0 (const_mem_area) | Region 1 (arena_mem_area) | Region 2 (cache_mem_area) |
+| --- | --- | --- | --- |
+| `Sram_Only` | `Sram` | `Sram` | Not used |
+| `Shared_Sram` | `OffChipFlash` | `Sram` | Not used |
+| `Dedicated_Sram` | `OffChipFlash` | `OffChipFlash` (invalid) | `Sram` |
+
+**Example using `--system-config Ethos_U85_SYS_DRAM_Mid`:**
+
+| Vela memory mode | Region 0 (const_mem_area) | Region 1 (arena_mem_area) | Region 2 (cache_mem_area) |
+| --- | --- | --- | --- |
+| `Sram_Only` | `Sram` | `Sram` | Not used |
+| `Shared_Sram` | `Dram` | `Sram` | Not used |
+| `Dedicated_Sram` | `Dram` | `Dram` | `Sram` |
+
+The linker maps each Vela memory type to physical memory. Even when region 0 is
+in `Dram`, it may be placed in ROM (Flash) because it contains constants.
+Driver base addresses and access settings must match the memory placement
+selected by Vela and the linker.
+
+> [!Note]
+> If the physical memory differs from the memory type modeled by the selected
+> system configuration, Vela's performance estimates are no longer accurate.
+
+### Configure memory access with NPU_QCONFIG and NPU_REGIONCFG_x
+
+The simplest setup uses a <a href="#single-variant-build">single-variant
+driver</a> with one fixed memory-access configuration for all ML models. The
+`NPU_QCONFIG` definition selects the memory-access configuration used to
+fetch the command stream. Each `NPU_REGIONCFG_x` definition selects the
+memory-access configuration for region `x`. In the Vela configurations above,
+`x` is 0, 1, or 2.
+
+> [!Note]
+> If the `NPU_QCONFIG` and `NPU_REGIONCFG_x` macros are not defined, the driver
+> uses the default values listed below.
+
+Selector encodings are NPU-specific; see
 <a href="#ethos-u55-and-ethos-u65">Ethos-U55 and Ethos-U65</a> and
-<a href="#ethos-u85">Ethos-U85</a>. An application developer can select a Vela system
-configuration and memory mode supported by the target to meet the application's
-requirements. The selector values must match the resulting memory placement
-and memory system. See
-<a href="../general/index.html#system-configuration-and-memory-modes-at-a-glance">System configuration and memory modes at a glance</a>.
-In a <a href="#single-variant-build">single-variant build</a>, an override of
-\ref ethosu_config_select "ethosu_config_select()" can replace the defaults. In
-a <a href="#multi-variant-build">multi-variant build</a>, the values come from the device
-configuration passed to \ref ethosu_init_ex "ethosu_init_ex()", or from a
-per-driver `config_select` user operation.
+<a href="#ethos-u85">Ethos-U85</a> below.
 
-The selected
-<a href="../vela/index.html#memory-mode-parameters">Vela memory mode</a>
-determines the memory areas used for constants, scratch, and optional fast
-scratch. The following table shows the common mappings. The runtime base
-pointers and the access configurations selected by `REGIONCFG` must match the
-actual placement.
+### Other memory-access setup methods
 
-| Vela memory mode | Region 0 constants | Region 1 scratch | Region 2 fast scratch |
+The memory-access configuration can also be selected at run time:
+
+- In a <a href="#single-variant-build">single-variant build</a>, override the
+  weak \ref ethosu_config_select "ethosu_config_select()" function. The function
+  receives the memory address and an index: `-1` for the command stream, or the
+  region number for a base address.
+- In a <a href="#multi-variant-build">multi-variant build</a>, set `qconfig`
+  and `regioncfg` in the device configuration passed to \ref ethosu_init_ex
+  "ethosu_init_ex()". Alternatively, provide a per-driver `config_select`
+  callback through `ethosu_device_user_ops` when the selection depends on the
+  memory address.
+
+### Memory region usage by the driver
+
+The inference invocation functions (\ref ethosu_invoke_v3
+"ethosu_invoke_v3()", \ref ethosu_invoke_async "ethosu_invoke_async()", and
+\ref ethosu_invoke_auto "ethosu_invoke_auto()") receive `custom_data_ptr`,
+which points to the Vela-generated custom-operator payload. This payload
+contains metadata and the command stream. The `base_addr` argument points to an array containing
+the actual base address of each memory region, and `num_base_addr` specifies the number of entries.
+
+Vela uses memory region 2 for fast scratch memory. The `fast_memory` and
+`fast_memory_size` arguments to \ref ethosu_init "ethosu_init()" or
+\ref ethosu_init_ex "ethosu_init_ex()" specify the physical location and size
+of this memory.
+
+The following table maps invocation parameters to the corresponding NPU
+registers and driver definitions.
+
+| Invocation function parameter | Address register | Access-configuration selector | Default definition |
 | --- | --- | --- | --- |
-| `Sram_Only` | SRAM | SRAM | Not used |
-| `Shared_Sram` | DRAM/Flash | SRAM | Not used |
-| `Dedicated_Sram` | DRAM/Flash | DRAM | SRAM |
-
-In `Dedicated_Sram` mode, Vela uses region 2 for fast scratch. The driver calls
-this region `FAST_MEMORY`. The driver must know the actual fast memory address
-and size through the `fast_memory` and `fast_memory_size` arguments to
-\ref ethosu_init "ethosu_init()" or \ref ethosu_init_ex "ethosu_init_ex()". If
-fast memory is configured and the invoke call includes base pointer 2, the
-driver checks that `base_addr_size[2]` fits inside `fast_memory_size` and
-rewrites `base_addr[2]` to the configured fast memory address before programming
-the NPU. The driver therefore applies the fast-memory address without requiring
-the framework to replace base pointer 2.
+| `custom_data_ptr` | `QBASE` | `QCONFIG` | `NPU_QCONFIG` |
+| `base_addr[n]` | `BASEP[n]` | `REGIONCFG[n]` | `NPU_REGIONCFG_n` |
 
 ### Ethos-U55 and Ethos-U65
 
@@ -214,6 +276,9 @@ Ethos-U55 and Ethos-U65 provide the `AXI0` and `AXI1` access paths.
 | SRAM | `AXI0` |
 | DRAM/Flash | `AXI1` |
 
+> [!Note]
+> On Ethos-U55 `AXI1` port is read-only and cannot access writable scratch data.
+
 The driver provides the following default values:
 
 | Ethos-U variant | NPU_QCONFIG | NPU_REGIONCFG_0 | NPU_REGIONCFG_1 | NPU_REGIONCFG_2 |
@@ -221,16 +286,21 @@ The driver provides the following default values:
 | Ethos-U55 | `2` -> `AXI1` | `3` -> `AXI1` | `0` -> `AXI0` | `1` -> `AXI0` |
 | Ethos-U65 | `2` -> `AXI1` | `3` -> `AXI1` | `0` -> `AXI0` | `1` -> `AXI0` |
 
-For Ethos-U55 and Ethos-U65, `QCONFIG` and the `REGIONCFG[0..7]` fields accept
-values 0 through 3. Each value selects both an AXI port and the complete
-`AXI_LIMITx` access profile used for transactions:
+For Ethos-U55 and Ethos-U65, `QCONFIG` and the `REGIONCFG[0..7]` fields
+accept values 0 through 3. The value selects an AXI port, an outstanding
+transaction counter, and the corresponding `AXI_LIMITx` access profile.
 
-| Value | AXI port | AXI access profile |
-| --- | --- | --- |
-| `0` | `AXI0` | `AXI_LIMIT0` |
-| `1` | `AXI0` | `AXI_LIMIT1` |
-| `2` | `AXI1` | `AXI_LIMIT2` |
-| `3` | `AXI1` | `AXI_LIMIT3` |
+| Value | AXI port | AXI access profile | Transaction counter |
+| --- | --- | --- | --- |
+| `0` | `AXI0` | `AXI_LIMIT0` | `AXI0_OUTSTANDING_COUNTER0` |
+| `1` | `AXI0` | `AXI_LIMIT1` | `AXI0_OUTSTANDING_COUNTER1` |
+| `2` | `AXI1` | `AXI_LIMIT2` | `AXI1_OUTSTANDING_COUNTER2` |
+| `3` | `AXI1` | `AXI_LIMIT3` | `AXI1_OUTSTANDING_COUNTER3` |
+
+Transaction counters enforce the limits in the corresponding
+`AXI_LIMITx` profile. For their use in performance analysis, see
+<a href="#monitoring-axi-transaction-latency">Monitoring AXI transaction
+latency</a>.
 
 Each `AXI_LIMITx` access profile contains the burst split alignment, the memory
 type used to encode AxCACHE, and the maximum number of outstanding read and
@@ -238,9 +308,6 @@ write transactions. These fields are configured by
 `AXI_LIMITx_MAX_BEATS_BYTES`, `AXI_LIMITx_MEM_TYPE`,
 `AXI_LIMITx_MAX_OUTSTANDING_READS`, and
 `AXI_LIMITx_MAX_OUTSTANDING_WRITES`, respectively.
-
-The Ethos-U55 `AXI1` port is read-only. If region 1 contains writable scratch
-data, it must not be routed through `AXI1`.
 
 ### Ethos-U85
 
@@ -696,6 +763,17 @@ available event names differ between Ethos-U55/U65 and Ethos-U85. Use the
 symbolic enum values with
 \ref ETHOSU_PMU_Set_EVTYPER "ETHOSU_PMU_Set_EVTYPER()"; do not program hardware
 event numbers directly.
+
+### Monitoring AXI transaction latency
+
+On Ethos-U55 and Ethos-U65, `PMCAXI_CHAN.AXI_CNT_SEL` selects one of the
+outstanding transaction counters listed under
+<a href="#ethos-u55-and-ethos-u65">Ethos-U55 and Ethos-U65</a>, and
+`PMCAXI_CHAN.CH_SEL` selects the AXI channel to monitor. The
+`ETHOSU_PMU_AXI_LATENCY_*` events count transactions matching both selections.
+Other AXI PMU events, such as accepted or completed transactions, data beats,
+and stalls, are reported per AXI port rather than per outstanding transaction
+counter.
 
 The main API groups are:
 
