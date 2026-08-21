@@ -36,7 +36,7 @@
  <tr id="projectrow" style="height: 55px;">
   <td id="projectlogo" style="padding: 1em;"><img alt="Logo" src="arm.png"/></td>
   <td id="projectalign" style="padding-left: 2em; padding-bottom: 1em; padding-top: 1em;">
-   <div id="projectname">Ethos-U Integration for Cortex-M<span id="projectnumber">&#160;Version 1.0.0-dev94</span>
+   <div id="projectname">Ethos-U Integration for Cortex-M<span id="projectnumber">&#160;Version 1.0.0-dev95</span>
    </div>
    <div id="projectbrief">General Information</div>
   </td>
@@ -203,7 +203,7 @@ Memory configuration terminology</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Runtime allocation  </td><td class="markdownTableBodyNone">Compiled model, tensor arena, optional fast-scratch buffer  </td><td class="markdownTableBodyNone">Actual linked or dynamically allocated storage used for inference.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Driver access configuration  </td><td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>, <span class="tt">NPU_REGIONCFG_0..7</span>  </td><td class="markdownTableBodyNone">NPU access route and attributes used for the command stream and base-pointer regions.  </td></tr>
+<td class="markdownTableBodyNone">Driver memory access configuration  </td><td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>, <span class="tt">NPU_REGIONCFG_0..7</span>  </td><td class="markdownTableBodyNone">NPU access route and attributes used for the command stream and base-pointer regions.  </td></tr>
 </table>
 <p>The selected memory mode maps Vela data roles to logical aliases. The system configuration maps those aliases to Vela memory types. The linker and runtime then place the corresponding allocations in physical memory, and the driver must select matching NPU access routes. See <a href="../vela/index.html#memory-mode-parameters">Vela memory mode parameters</a> for the exact configuration keys and <a href="../integration/index.html#configure-memory-placement-and-the-linker-script">Configure memory placement and the linker script</a> for the end-to-end mapping.</p>
 <h1 class="doxsection"><a class="anchor" id="system-configuration-and-memory-modes-at-a-glance"></a>

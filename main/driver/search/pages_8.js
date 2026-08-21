@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['logging_0',['Text logging',['../index.html#text-logging',1,'']]]
+  ['latency_0',['Monitoring AXI transaction latency',['../index.html#monitoring-axi-transaction-latency',1,'']]],
+  ['logging_1',['Text logging',['../index.html#text-logging',1,'']]]
 ];

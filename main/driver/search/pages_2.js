@@ -9,5 +9,6 @@ var searchData=
   ['common_20configuration_6',['Common configuration',['../index.html#common-configuration',1,'']]],
   ['compile_20time_20configuration_7',['Compile-time configuration',['../index.html#compile-time-configuration',1,'']]],
   ['component_8',['CMSIS Software component',['../index.html#cmsis-software-component',1,'']]],
-  ['configuration_9',['configuration',['../index.html#common-configuration',1,'Common configuration'],['../index.html#compile-time-configuration',1,'Compile-time configuration'],['../index.html#variant-specific-hardware-configuration',1,'Variant-specific hardware configuration']]]
+  ['configuration_9',['configuration',['../index.html#common-configuration',1,'Common configuration'],['../index.html#compile-time-configuration',1,'Compile-time configuration'],['../index.html#variant-specific-hardware-configuration',1,'Variant-specific hardware configuration']]],
+  ['configure_20memory_20access_20with_20npu_5fqconfig_20and_20npu_5fregioncfg_5fx_10',['Configure memory access with NPU_QCONFIG and NPU_REGIONCFG_x',['../index.html#configure-memory-access-with-npu_qconfig-and-npu_regioncfg_x',1,'']]]
 ];
