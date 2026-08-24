@@ -496,12 +496,13 @@ do {
 ethosu_release_driver(drv);
 ```
 
-Note that if \ref ethosu_wait "ethosu_wait()" is invoked from a different thread
-and concurrently with \ref ethosu_invoke_async "ethosu_invoke_async()", the user
-is responsible to guarantee that \ref ethosu_wait "ethosu_wait()" is called after
-a successful completion of \ref ethosu_invoke_async "ethosu_invoke_async()".
-Otherwise \ref ethosu_wait "ethosu_wait()" might fail and not actually wait for
-the inference completion.
+> [!Note]
+> If \ref ethosu_wait "ethosu_wait()" is invoked from a different thread
+> and concurrently with \ref ethosu_invoke_async "ethosu_invoke_async()", the user
+> is responsible to guarantee that \ref ethosu_wait "ethosu_wait()" is called after
+> a successful completion of \ref ethosu_invoke_async "ethosu_invoke_async()".
+> Otherwise \ref ethosu_wait "ethosu_wait()" might fail and not actually wait for
+> the inference completion.
 
 The following simplified sequence diagram shows the asynchronous invocation:
 
@@ -539,7 +540,8 @@ application graphs:
   \ref ethosu_get_hw_info "ethosu_get_hw_info()" match the target used to
   <a href="../integration/index.html#compile-the-ml-model-for-the-device">compile the ML model for the device</a>.
 - Confirm the command stream and every used base-pointer region are accessible
-  to the NPU. Review <a href="#memory-access-configuration">Memory access configuration</a>
+  to the NPU. Review <a href="#command-stream-regions-and-base-pointers">Command
+  stream regions and base pointers</a>
   and <a href="../integration/index.html#configure-memory-placement-and-the-linker-script">Configure memory placement and the linker script</a>.
 - Route the NPU interrupt to
   \ref ethosu_irq_handler "ethosu_irq_handler()" and exercise an inference
@@ -563,75 +565,61 @@ After these driver checks, continue with the end-to-end
 and <a href="../integration/index.html#validate-and-tune">Validate and tune</a>
 before treating platform bring-up as complete.
 
-## Implementation design
-
-The driver is structured in two main parts: the driver, which is responsible to
-provide an unified API to the user; and the device part, which deals with the
-details at the hardware level.
-
-In order to do its task the driver needs a device implementation. There could be
-multiple device implementation for different hardware model and/or
-configurations. Note that the driver can be compiled to target only one NPU
-configuration by specializing the device part at compile time.
-?? ToDo: how
-
 ## Data caching
 
-For running the driver on Arm CPUs which are configured with data cache, certain
-caution must be taken to ensure cache coherency. The driver expects that cache
-clean/flush has been done by the user application before being invoked. The
-driver does provide a deprecated weakly linked function
-\ref ethosu_flush_dcache "ethosu_flush_dcache()" that could be overriden, causing
-the driver to cache flush/clean base pointers before each inference.
+Cache maintenance is required when the CPU and NPU share memory that is cached
+by the CPU. The driver provides weak no-op implementations of two hooks. If the
+ML runtime does not manage the cache, override both hooks:
 
-The driver also exposes a weakly linked symbol for cache invalidation called
-\ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()", that must be overriden
-when the data cache is used. After an inference completes on the NPU, the driver
-will call this function to invalidate the data cache, to ensure cache coherency.
+- \ref ethosu_flush_dcache "ethosu_flush_dcache()" is called before the NPU
+  starts. It must clean cacheable base-address regions so that the NPU sees the data written by the CPU.
+- \ref ethosu_invalidate_dcache "ethosu_invalidate_dcache()" is called when the
+  driver finalizes the inference. It must invalidate cacheable base-address
+  regions so that the CPU sees NPU writes.
 
-Make sure that any base pointers used for flush/invalidation is aligned to the
-cache line size of your CPU, typically 32 bytes. Due to the uncertainty of
-tensor alignment, the driver only flushes/invalidates on base pointer level.
+The hooks receive the `base_addr` regions, but not the command stream. If the
+command stream is in cached memory written by the CPU, the application or ML
+runtime must clean it before invoking the inference. If the ML runtime already
+performs all required cache maintenance, the default weak no-op functions are
+sufficient.
 
-A simple example implementation for the weak functions, using CMSIS primitives
-could look like below:
+For example, a platform can use the driver cache functions as follows:
 
-```cpp
+```c
 void ethosu_flush_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
 {
     for (int i = 0; i < num_base_addr; i++)
+    {
         SCB_CleanDCache_by_Addr((uint32_t *)(uintptr_t)base_addr[i], base_addr_size[i]);
+    }
 }
 
 void ethosu_invalidate_dcache(const uint64_t *base_addr, const size_t *base_addr_size, int num_base_addr)
 {
     for (int i = 0; i < num_base_addr; i++)
+    {
         SCB_InvalidateDCache_by_Addr((uint32_t *)(uintptr_t)base_addr[i], base_addr_size[i]);
+    }
 }
 ```
 
-The NPU memory attributes must match the MPU configuration for the memories
-used. These attributes are part of the silicon-vendor-supplied platform
-configuration described in the Memory access configuration section below.
-
-The hooks receive complete base-pointer regions, so a generic implementation
-cleans or invalidates more memory than an individual inference might require.
-This is conservative but can reduce performance.
-
-Cache maintenance may be restricted to smaller ranges only when the platform
-or ML runtime knows exactly which ranges the NPU reads and writes and enforces
-exclusive ownership during execution. The driver does not provide this
-tensor-level information.
-
-If the ML runtime performs equivalent cache maintenance at the correct
-ownership transitions, the driver hooks can remain no-ops. Use one consistent
-cache-ownership strategy.
+> [!Note]
+>
+> - The example maintains every complete `base_addr` region. This is
+> conservative. A platform or ML runtime can reduce cache-maintenance overhead
+> by maintaining only the tensor ranges accessed by the NPU when it knows those
+> ranges and controls their ownership.
+> - The cache-maintenance ranges must meet the CPU's cache-line alignment
+> requirements. The CPU must not write an NPU-owned region between the clean
+> and invalidate operations.
+> - The NPU memory attributes must match the CPU MPU configuration. See
+> <a href="#command-stream-regions-and-base-pointers">Command stream regions
+> and base pointers</a>.
 
 ## Mutex and semaphores
 
-The driver uses synchronization for two different purposes: assigning an NPU
-driver instance to an RTOS thread and waiting for an inference to complete. One global
-mutex and two categories of semaphore implement these operations:
+The driver uses the following synchronization objects to reserve an NPU instance
+and wait for inference completion:
 
 | Synchronization object | Used by | Purpose |
 | --- | --- | --- |
@@ -639,86 +627,32 @@ mutex and two categories of semaphore implement these operations:
 | Global availability semaphore | Driver registration, deregistration, reservation, and release | Counts the number of driver instances currently available. `ethosu_reserve_driver()` waits on this semaphore when every NPU is reserved. |
 | Per-driver completion semaphore | `ethosu_wait()` and `ethosu_irq_handler()` | Blocks a thread while its NPU is running. The NPU interrupt gives the semaphore after recording successful completion or a fault. |
 
-The global availability semaphore checks whether an NPU is available. After
-taking it, `ethosu_reserve_driver()` locks the global mutex, selects one
-unreserved instance, and marks it as reserved. The semaphore alone is not
-sufficient because it does not identify an instance or protect the linked list
-when multiple threads and multiple NPUs are present.
+> [!Note]
+> Reserving a driver grants exclusive use of that instance until
+> `ethosu_release_driver()` is called. Each instance supports one outstanding
+> inference.
 
-Each initialized driver has its own completion semaphore. A blocking
-`ethosu_wait()` takes this semaphore. `ethosu_irq_handler()` gives it from NPU
-interrupt context so that the waiting thread can resume. Success and fault
-completion use the same semaphore; there is no separate error semaphore. A
-finite inference timeout is also reported through this wait operation.
-
-### Driver ownership
-
-The global mutex is held only while managing the driver registry and
-reservations. It is not held while an inference runs and does not make calls on
-a reserved driver thread-safe. Reserving a driver grants the caller exclusive
-use of that instance until `ethosu_release_driver()` is called. Each driver
-supports one outstanding inference, so applications must not invoke or finalize
-jobs on the same instance concurrently.
-
-Initialize and register all driver instances before allowing threads to reserve
-them. Call `ethosu_deinit()` only when an instance is idle and unreserved.
-Deinitializing a reserved instance can wait indefinitely for an availability
-count that cannot be returned while deregistration holds the global mutex.
-
-### Platform synchronization requirements
-
-The synchronization functions are weak and can be overridden by the platform.
-An RTOS or multicore implementation must meet these requirements:
-
-- `ethosu_semaphore_create()` creates a semaphore with an initial count of
-  zero. The implementation must support counting, not only a binary state,
-  because the global semaphore can represent multiple available NPUs.
-- `ethosu_semaphore_give()` must be callable both from thread context and from
-  the NPU interrupt handler.
-- `ethosu_mutex_lock()` must wait until the mutex is acquired. The driver does
-  not handle a timeout or failure return from the mutex operations.
-- `ETHOSU_SEMAPHORE_WAIT_FOREVER` must request an indefinite wait. It is used
-  for global driver availability and is not configurable.
-- `ETHOSU_SEMAPHORE_WAIT_INFERENCE` controls the per-driver completion wait. It
-  defaults to `ETHOSU_SEMAPHORE_WAIT_FOREVER`, but a platform can define a
-  finite value. The platform defines the value's time unit and converts it to
-  the RTOS timeout representation in `ethosu_semaphore_take()`.
-- A negative return from the inference completion wait reports a timeout to the
-  driver. Global availability waits must not time out.
-- Objects returned by the create functions remain valid until their matching
-  destroy functions are called.
-
-The default mutex functions are no-ops, and the default semaphore uses a small
-counter with the Arm `WFE` and `SEV` instructions. These defaults are intended
-for a single-threaded bare-metal application. A platform must override them
-when multiple threads or CPU cores can access the driver. See
-<a href="group__ethosu__callback__api.html">Platform-specific functions</a> for the hook
-signatures.
-
-ToDo: add information about templates
+The default synchronization functions support a single-threaded bare-metal
+application. An RTOS or multicore application must provide the platform-specific
+mutex and semaphore functions. The pack provides code templates for CMSIS-RTOS2
+and native FreeRTOS implementations. See
+<a href="group__ethosu__callback__api.html">Platform-specific functions</a> for
+the hook signatures.
 
 ## Begin/End inference callbacks
 
-The driver provide weak linked functions as hooks to receive callbacks whenever
-an inference begins and ends. The user can override such functions when needed.
-To avoid memory leaks, any allocations done in
-\ref ethosu_inference_begin "ethosu_inference_begin()" must be balanced by a
-corresponding free of the memory in
-\ref ethosu_inference_end "ethosu_inference_end()" callback.
-
-The end callback will always be called if the begin callback has been called,
-including in the event of an interrupt semaphore take timeout.
+The driver provides weak hooks that applications can override to receive
+inference begin and end callbacks:
 
 ```c
 void ethosu_inference_begin(struct ethosu_driver *drv, void *user_arg);
 void ethosu_inference_end(struct ethosu_driver *drv, void *user_arg);
 ```
 
-Note that the `void *user_arg` pointer passed to
+The `user_arg` passed to
 \ref ethosu_invoke_v3 "ethosu_invoke_v3()" or
-\ref ethosu_invoke_async "ethosu_invoke_async()" is the same pointer passed to
-the \ref ethosu_inference_begin "ethosu_inference_begin()" and
-\ref ethosu_inference_end "ethosu_inference_end()" callbacks. For example:
+\ref ethosu_invoke_async "ethosu_invoke_async()" is forwarded to both
+callbacks. For example:
 
 ```c
 void my_function() {

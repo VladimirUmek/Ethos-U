@@ -563,6 +563,76 @@ For the complete pack structure and element rules, see:
 - [`environment` element](https://open-cmsis-pack.github.io/Open-CMSIS-Pack-Spec/main/html/pdsc_family_pg.html#element_environment); and
 - [component `file` element](https://open-cmsis-pack.github.io/Open-CMSIS-Pack-Spec/main/html/pdsc_components_pg.html#element_file).
 
+## Read the Vela reports
+
+After compilation, Vela prints a summary report and writes a CSV file in the
+output directory. The report reflects the selected accelerator configuration,
+system configuration, memory mode, and optimization strategy.
+
+| Report area | Meaning |
+|---|---|
+| Configuration | Selected accelerator, system and memory configurations, NPU clock, and design peak memory bandwidth. |
+| Memory use | Required storage in each Vela memory type: `Sram`, `Dram`, `OnChipFlash`, or `OffChipFlash`. The selected system configuration and memory mode determine these memory types. |
+| Operator placement | Number and percentage of operators assigned to the CPU and NPU. |
+| Memory traffic | Estimated average bandwidth and bytes transferred for feature maps and weights. |
+| MACs | Number of multiply-accumulate operations per batch. |
+
+The CSV file uses `weights_storage_area` for the Vela memory type selected by
+`const_mem_area` and `feature_map_storage_area` for the type selected by
+`arena_mem_area`. It reports memory use as a total for each Vela memory type. In
+`Dedicated_Sram_256KB`, both data roles resolve to `Dram`, so
+`dram_memory_used` contains their combined requirement.
+`total_npu_encoded_weights` covers only encoded weights, not the complete
+constant area, so it cannot be used to derive the size of `arena_mem_area`.
+
+Use `--verbose-cycle-estimate` to add estimated NPU and memory-access cycles,
+total cycles, inference time, and inferences per second. Use
+`--verbose-performance` to generate a per-layer CSV with memory use, cycle
+estimates, MAC utilization, and the contribution of each layer to the network.
+The summary report is normally sufficient for configuration comparison; use the
+per-layer report to investigate the reason for a difference.
+
+> [!CAUTION]
+> Vela cycle counts and inference times are estimates, not measured
+> performance. They are useful for estimating expected performance and comparing
+> candidates, but the selected configuration must be validated on the target
+> hardware.
+
+## Compare Ethos-U configurations
+
+Before selecting a device, use the Ethos-U reference systems in the generic
+`Arm/vela.ini` file for an initial comparison. They provide example
+system and memory configurations for estimating performance and memory use, but
+do not describe a specific production device. After selecting a device, repeat
+the comparison with its device-specific `vela.ini` file.
+
+Use the same ML model to test each accelerator, system configuration, and memory
+mode.
+
+> [!Tip]
+> Keep the Vela version and other compiler options unchanged. Check that the same
+> operations run on the NPU, and use a separate output directory for every build.
+
+The following example comparison uses the
+[`ad_large_int8.tflite` MicroNet Large INT8 anomaly-detection model](https://github.com/ARM-software/ML-zoo/blob/master/models/anomaly_detection/micronet_large/tflite_int8/ad_large_int8.tflite)
+from the [Arm ML Zoo](https://github.com/ARM-software/ML-zoo) and Vela 5.1.0.
+**Other memory** is `OffChipFlash` for the Ethos-U55 system and `Dram` for the
+Ethos-U85 system.
+
+To optimize for memory size, compile with `--optimise Size`:
+
+| Accelerator | System configuration | Memory mode | SRAM | Other memory | Estimated time |
+|---|---|---|---:|---:|---:|
+| `ethos-u55-128` | `Ethos_U55_Deep_Embedded` | `Shared_Sram` | 136.00 KiB | 425.36 KiB | 27.816 ms |
+| `ethos-u85-256` | `Ethos_U85_SYS_DRAM_High` | `Shared_Sram` | 136.00 KiB | 419.02 KiB | 1.158 ms |
+
+To optimize for performance, compile with `--optimise Performance`:
+
+| Accelerator | System configuration | Memory mode | SRAM | Other memory | Estimated time |
+|---|---|---|---:|---:|---:|
+| `ethos-u55-128` | `Ethos_U55_Deep_Embedded` | `Shared_Sram` | 390.61 KiB | 425.52 KiB | 5.806 ms |
+| `ethos-u85-256` | `Ethos_U85_SYS_DRAM_High` | `Shared_Sram` | 436.77 KiB | 419.11 KiB | 0.458 ms |
+
 ## Examples
 
 ### Compile for an Ethos-U reference system
@@ -652,37 +722,9 @@ the compiled command stream.
 
 ## ExecuTorch Arm example flow
 
-?ToDo: update this?
-
-The
-[ExecuTorch Arm examples](https://github.com/pytorch/executorch/tree/main/examples/arm)
-demonstrate an integrated PyTorch-to-Ethos-U workflow. The setup script installs
-the Arm toolchain, TOSA tools, the Vela compiler, and
-[Corstone](https://www.arm.com/products/silicon-ip-subsystems) FVPs. The AOT Arm
-backend exports and quantizes a
-PyTorch model, lowers supported partitions through TOSA and the Vela compiler,
-and packages the result in an ExecuTorch `.pte`/`.bpte` program. In this flow
-the compiler is called by the backend; users normally run the example helper
-rather than invoke Vela on a `.pte` file.
-
-From an ExecuTorch checkout on Linux:
-
-```console
-./examples/arm/setup.sh --i-agree-to-the-contained-eula
-source examples/arm/arm-scratch/setup_path.sh
-./examples/arm/run.sh \
-  --model_name=examples/arm/example_modules/add.py \
-  --target=ethos-u85-128
-```
-
-The `run.sh` script runs the AOT compiler, builds the matching ML inference runtime, and
-starts the target simulator unless build-only mode is selected. Other examples
-include a minimal Ethos-U notebook, a quantizer tutorial, a pruning example, an
-image-classification application, and Zephyr and
-[CMSIS](https://www.keil.arm.com/packs/cmsis-arm/overview/) project templates.
-Treat the ExecuTorch branch and Vela version as a tested toolchain because
-backend-generated Vela options can evolve independently from the standalone CLI
-examples above.
+For the ExecuTorch Arm integration see the official PyTorch
+[Arm Ethos-U backend documentation](https://docs.pytorch.org/executorch/stable/backends-arm-ethos-u.html)
+for the workflow and examples.
 
 ## Troubleshooting
 

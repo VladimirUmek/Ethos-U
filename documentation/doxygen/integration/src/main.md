@@ -10,16 +10,14 @@ The starting point is a pretrained, quantized ML model that meets the
 application's functional requirements. Before selecting a specific Edge AI MCU,
 compile the model with Vela for one or more Ethos-U reference systems as
 described in
-<a href="../vela/index.html#compile-for-an-ethos-u-reference-system">Compile for an Ethos-U reference system</a>.
+<a href="../vela/index.html#compare-ethos-u-configurations">Compare Ethos-U configurations</a>.
 
-Vela provides estimates of NPU cycles, memory bandwidth, and
-model memory requirements. Vela also identifies which operations are assigned to
-the NPU and which remain on the CPU. Use these results to compare Ethos-U
-configurations and memory modes and to identify Edge AI MCUs with suitable NPU
-performance and memory capacity. The Vela estimates support device selection; they
-do not replace a device-specific compile or measurements on the final target.
+Vela reports operator placement and estimates memory use, bandwidth, and NPU
+cycles. See <a href="../vela/index.html#read-the-vela-reports">Read the Vela reports</a>.
+Use these results for device selection, then validate with a device-specific
+compile and measurements on the target hardware.
 
-Some model zoos already provide corresponding performance and memory data for
+Some model zoos may provide corresponding performance and memory data for
 Ethos-U-based systems. Confirm that the published configuration is relevant to
 the candidate device before using those results.
 
