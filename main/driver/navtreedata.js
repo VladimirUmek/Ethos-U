@@ -52,12 +52,8 @@ var NAVTREE =
       [ "Driver initialization", "index.html#driver-initialization", null ]
     ] ],
     [ "Driver bring-up checklist", "index.html#driver-bring-up-checklist", null ],
-    [ "Implementation design", "index.html#implementation-design", null ],
     [ "Data caching", "index.html#data-caching", null ],
-    [ "Mutex and semaphores", "index.html#mutex-and-semaphores", [
-      [ "Driver ownership", "index.html#driver-ownership", null ],
-      [ "Platform synchronization requirements", "index.html#platform-synchronization-requirements", null ]
-    ] ],
+    [ "Mutex and semaphores", "index.html#mutex-and-semaphores", null ],
     [ "Begin/End inference callbacks", "index.html#beginend-inference-callbacks", null ],
     [ "Performance Monitoring Unit (PMU)", "index.html#performance-monitoring-unit-pmu", [
       [ "Monitoring AXI transaction latency", "index.html#monitoring-axi-transaction-latency", null ],

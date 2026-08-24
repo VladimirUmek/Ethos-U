@@ -9,6 +9,5 @@ var searchData=
   ['specific_20hardware_20configuration_6',['Variant-specific hardware configuration',['../index.html#variant-specific-hardware-configuration',1,'']]],
   ['stream_20regions_20and_20base_20pointers_7',['Command stream regions and base pointers',['../index.html#command-stream-regions-and-base-pointers',1,'']]],
   ['structures_8',['Structures',['../group__ethosu__driver__structs.html',1,'']]],
-  ['synchronization_20requirements_9',['Platform synchronization requirements',['../index.html#platform-synchronization-requirements',1,'']]],
-  ['synchronous_20invocation_10',['Synchronous invocation',['../index.html#synchronous-invocation',1,'']]]
+  ['synchronous_20invocation_9',['Synchronous invocation',['../index.html#synchronous-invocation',1,'']]]
 ];
