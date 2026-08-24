@@ -13,7 +13,7 @@
   <repository type="git">https://github.com/VladimirUmek/Ethos-U.git</repository>
 
   <releases>
-    <release version="1.0.0-dev">
+    <release version="1.99.0-dev">
       Active development...
     </release>
   </releases>

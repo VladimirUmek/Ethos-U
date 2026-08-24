@@ -179,7 +179,7 @@ TFLite-to-TOSA conversion format.
 | `--system-config NAME` | Select `[System_Config.NAME]` from the configuration files. The internal default provides functional defaults, but a platform-specific definition gives useful scheduling estimates. |
 | `--memory-mode NAME` | Select `[Memory_Mode.NAME]`, which maps constants, arena, and cache to the system's memory areas. |
 | `--tensor-allocator {LinearAlloc,Greedy,HillClimb}` | Choose the tensor allocator; defaults to `HillClimb`. |
-| `--max-block-dependency {0,1,2,3}` | Limit the dependency distance between NPU kernel operations; defaults to `3`. Smaller values can improve interrupt latency at a possible performance cost. ?ToDo: don't understand this? |
+| `--max-block-dependency {0,1,2,3}` | Deprecated. Set the maximum block-dependency delay between NPU kernel operations; defaults to `3`. A lower value can increase execution time. |
 | `--optimise {Performance,Size}` | `Performance` is the default and minimizes inference time; `Size` minimizes peak SRAM and ignores the arena-cache size. |
 | `--arena-cache-size BYTES` | Override the selected memory mode's cache capacity for `Performance` optimization. This is a byte count, not KiB. |
 | `--cpu-tensor-alignment BYTES` | Alignment for CPU tensors, including custom-operator inputs and outputs; defaults to `16`. Keep it consistent with the ML inference runtime allocation. |
@@ -331,10 +331,10 @@ It is recommended to define every property that affects the target system.
 
 Any section can contain `inherit=Part.Name` to inherit the values of another section.
 
-- Put a section that is inherited from before the section that inherits it.
-- Underscores in memory type names are not permitted. The Vela compiler splits a
-  memory type such as `<Memory>_clock_scale` at the first underscore.
-ToDo: verify this
+- Inherited sections can appear in any order. Do not create recursive inheritance.
+- `axi0_port` and `axi1_port` accept only the supported Vela memory types
+  `Sram`, `Dram`, `OnChipFlash`, and `OffChipFlash`; custom memory type names are
+  not supported.
 - Start the name of a custom Ethos-U55 system configuration with
   `Ethos_U55`. The Vela compiler uses this prefix when selecting the U55 AXI
   bandwidth width while translating memory-performance values.
