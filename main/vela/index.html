@@ -214,7 +214,7 @@ Options for Ethos-U target and scheduling</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">--tensor-allocator {LinearAlloc,Greedy,HillClimb}</span>  </td><td class="markdownTableBodyNone">Choose the tensor allocator; defaults to <span class="tt">HillClimb</span>.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">--max-block-dependency {0,1,2,3}</span>  </td><td class="markdownTableBodyNone">Limit the dependency distance between NPU kernel operations; defaults to <span class="tt">3</span>. Smaller values can improve interrupt latency at a possible performance cost. ?ToDo: don't understand this?  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">--max-block-dependency {0,1,2,3}</span>  </td><td class="markdownTableBodyNone">Deprecated. Set the maximum block-dependency delay between NPU kernel operations; defaults to <span class="tt">3</span>. A lower value can increase execution time.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">--optimise {Performance,Size}</span>  </td><td class="markdownTableBodyNone"><span class="tt">Performance</span> is the default and minimizes inference time; <span class="tt">Size</span> minimizes peak SRAM and ignores the arena-cache size.  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -344,8 +344,8 @@ Create device-specific vela.ini file</h1>
 </div><!-- fragment --><p><span class="tt">ConfigurationName</span> and <span class="tt">ModeName</span> must not contain spaces. A file can define multiple sections of either type; select them with <span class="tt">--system-config</span> and <span class="tt">--memory-mode</span>. Every property is optional, when omitted it defaults to <span class="tt">1</span>. It is recommended to define every property that affects the target system.</p>
 <p>Any section can contain <span class="tt">inherit=Part.Name</span> to inherit the values of another section.</p>
 <ul>
-<li>Put a section that is inherited from before the section that inherits it.</li>
-<li>Underscores in memory type names are not permitted. The Vela compiler splits a memory type such as <span class="tt">&lt;Memory&gt;_clock_scale</span> at the first underscore. ToDo: verify this</li>
+<li>Inherited sections can appear in any order. Do not create recursive inheritance.</li>
+<li><span class="tt">axi0_port</span> and <span class="tt">axi1_port</span> accept only the supported Vela memory types <span class="tt">Sram</span>, <span class="tt">Dram</span>, <span class="tt">OnChipFlash</span>, and <span class="tt">OffChipFlash</span>; custom memory type names are not supported.</li>
 <li>Start the name of a custom Ethos-U55 system configuration with <span class="tt">Ethos_U55</span>. The Vela compiler uses this prefix when selecting the U55 AXI bandwidth width while translating memory-performance values.</li>
 </ul>
 <h2 class="doxsection"><a class="anchor" id="system-configuration-parameters"></a>
