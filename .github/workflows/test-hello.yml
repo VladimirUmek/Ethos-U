@@ -77,6 +77,7 @@ jobs:
       - name: Run ${{ matrix.target-type }} FVP
         working-directory: ./examples/Hello-Ethos-U
         run: |
+          set -o pipefail
           "${{ matrix.fvp }}" \
             -f "${{ matrix.fvp-config }}" \
             -a "${{ matrix.image }}" \
