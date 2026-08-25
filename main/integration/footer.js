@@ -3,5 +3,5 @@ function writeHeader() {
 };
 
 function writeFooter()  {
-    document.write('Generated on Mon Aug 24 2026 15:24:45 for PROJECT_NAME           = Integration PROJECT_NUMBER         =. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Tue Aug 25 2026 05:01:40 for PROJECT_NAME           = Integration PROJECT_NUMBER         =. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };
