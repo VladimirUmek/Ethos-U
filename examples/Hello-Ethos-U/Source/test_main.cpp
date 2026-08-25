@@ -28,6 +28,16 @@
 #include "cmsis_os2.h"
 #include "main.h"
 
+#if defined(ETHOSU55)
+#define ETHOS_U_VARIANT "Ethos-U55"
+#elif defined(ETHOSU65)
+#define ETHOS_U_VARIANT "Ethos-U65"
+#elif defined(ETHOSU85)
+#define ETHOS_U_VARIANT "Ethos-U85"
+#else
+#error "Unsupported Ethos-U variant"
+#endif
+
 /*
   hello_world. These are int8 *quantized* values, not the sine itself. Each
   tensor carries a scale and a zero point, and the real value is
@@ -135,7 +145,7 @@ void app_main_thread(void *arg) {
 
   RegisterDebugLogCallback(TflmDebugLog);
 
-  printf("\nEthos-U85 / Corstone-320 TFLM integration test\n");
+  printf("\n%s TFLM integration test\n", ETHOS_U_VARIANT);
 
   RunModel("hello_world", hello_world_int8_vela_tflite,
            hello_world_input, sizeof(hello_world_input),
@@ -148,7 +158,7 @@ void app_main_thread(void *arg) {
   printf("\n%d of %d checks passed\n", checks_run - checks_failed, checks_run);
   printf("TEST RESULT: %s\n", (checks_failed == 0) ? "PASS" : "FAIL");
 
-  /* EOT stops the simulation */
+  /* EOT stops the simulation or pyOCD */
   printf("\x04\n");
 
   while(1);
