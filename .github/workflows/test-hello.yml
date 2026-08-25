@@ -15,17 +15,16 @@ concurrency:
 
 jobs:
   test:
-    name: ${{ matrix.context.target-type }} Debug on FVP
+    name: ${{ matrix.target-type }} Debug on FVP
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        context: [
+        include:
           # toolchain, solution, target-type, accelerator, system, memory, FVP, FVP config, image
-          { tool: AC6, solution: Hello-Ethos-U55, target-type: SSE-300-U55, accelerator: ethos-u55-256, system: Ethos_U55_High_End_Embedded, memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config.txt, image: out/Hello-Ethos-U/SSE-300-U55/Debug/Hello-Ethos-U.axf },
-          { tool: AC6, solution: Hello-Ethos-U65, target-type: SSE-300-U65, accelerator: ethos-u65-256, system: Ethos_U65_Embedded,          memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config.txt, image: out/Hello-Ethos-U/SSE-300-U65/Debug/Hello-Ethos-U.axf },
-          { tool: AC6, solution: Hello-Ethos-U85, target-type: SSE-320-U85, accelerator: ethos-u85-256, system: Ethos_U85_SYS_DRAM_Mid,      memory: Shared_Sram, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config.txt, image: out/Hello-Ethos-U/SSE-320-U85/Debug/Hello-Ethos-U.axf }
-        ]
+          - { tool: AC6, solution: Hello-Ethos-U55, target-type: SSE-300-U55, accelerator: ethos-u55-256, system: Ethos_U55_High_End_Embedded, memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config.txt, image: out/Hello-Ethos-U/SSE-300-U55/Debug/Hello-Ethos-U.axf }
+          - { tool: AC6, solution: Hello-Ethos-U65, target-type: SSE-300-U65, accelerator: ethos-u65-256, system: Ethos_U65_Embedded,          memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config.txt, image: out/Hello-Ethos-U/SSE-300-U65/Debug/Hello-Ethos-U.axf }
+          - { tool: AC6, solution: Hello-Ethos-U85, target-type: SSE-320-U85, accelerator: ethos-u85-256, system: Ethos_U85_SYS_DRAM_Mid,      memory: Shared_Sram, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config.txt, image: out/Hello-Ethos-U/SSE-320-U85/Debug/Hello-Ethos-U.axf }
 
     steps:
       - uses: actions/checkout@v7
@@ -62,25 +61,25 @@ jobs:
       - name: Compile models with Vela
         run: |
           python .github/scripts/compile_vela_models.py \
-            --accelerator-config "${{ matrix.context.accelerator }}" \
+            --accelerator-config "${{ matrix.accelerator }}" \
             --config Arm/vela.ini \
-            --system-config "${{ matrix.context.system }}" \
-            --memory-mode "${{ matrix.context.memory }}"
+            --system-config "${{ matrix.system }}" \
+            --memory-mode "${{ matrix.memory }}"
 
-      - name: Build Hello-Ethos-U.Debug+${{ matrix.context.target-type }}
+      - name: Build ${{ matrix.solution }} for ${{ matrix.target-type }}
         working-directory: ./examples/Hello-Ethos-U
         run: |
-          cbuild "${{ matrix.context.solution }}.csolution.yml" \
-            --context "Hello-Ethos-U.Debug+${{ matrix.context.target-type }}" \
-            --toolchain "${{ matrix.context.tool }}" \
+          cbuild "${{ matrix.solution }}.csolution.yml" \
+            --active "${{ matrix.target-type }}" \
+            --toolchain "${{ matrix.tool }}" \
             --packs
 
-      - name: Run ${{ matrix.context.target-type }} FVP
+      - name: Run ${{ matrix.target-type }} FVP
         working-directory: ./examples/Hello-Ethos-U
         run: |
-          "${{ matrix.context.fvp }}" \
-            -f "${{ matrix.context.fvp-config }}" \
-            -a "${{ matrix.context.image }}" \
+          "${{ matrix.fvp }}" \
+            -f "${{ matrix.fvp-config }}" \
+            -a "${{ matrix.image }}" \
             --simlimit 120 2>&1 | tee fvp.log
 
           grep -Fq "[PASS] hello_world" fvp.log
@@ -91,7 +90,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.context.solution }}
+          name: ${{ matrix.solution }}
           path: |
             ./examples/Hello-Ethos-U/out/Hello-Ethos-U
             ./examples/Hello-Ethos-U/fvp.log
