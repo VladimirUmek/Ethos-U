@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['budget_0',['Determine the memory budget',['../index.html#determine-the-memory-budget',1,'']]],
-  ['build_20configuration_1',['Driver build configuration',['../index.html#driver-build-configuration',1,'']]]
+  ['2_3a_20compile_20the_20ml_20model_0',['Step 2: Compile the ML model',['../index.html#step-2-compile-the-ml-model',1,'']]]
 ];

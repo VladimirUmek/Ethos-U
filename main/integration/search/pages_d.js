@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['physical_20target_20device_0',['Add physical target device',['../index.html#add-physical-target-device',1,'']]],
-  ['placement_20and_20the_20linker_20script_1',['Configure memory placement and the linker script',['../index.html#configure-memory-placement-and-the-linker-script',1,'']]],
-  ['point_2',['Starting point',['../index.html#starting-point',1,'']]],
-  ['prerequisites_3',['Prerequisites',['../index.html#prerequisites',1,'']]],
-  ['project_4',['Create the &lt;em&gt;csolution project&lt;/em&gt;',['../index.html#create-the-csolution-project',1,'']]]
+  ['inference_20that_20does_20not_20complete_0',['Troubleshoot an inference that does not complete',['../index.html#troubleshoot-an-inference-that-does-not-complete',1,'']]],
+  ['information_1',['MLOps information',['../index.html#mlops-information',1,'']]],
+  ['integration_2',['Integration',['../index.html',1,'']]],
+  ['integration_3',['integration',['../index.html#complete-application-integration',1,'Complete application integration'],['../index.html#step-4-complete-application-integration',1,'Step 4: Complete application integration']]],
+  ['integration_20guidance_4',['General integration guidance',['../index.html#general-integration-guidance',1,'']]],
+  ['integration_20workflow_5',['Integration workflow',['../index.html#integration-workflow',1,'']]]
 ];

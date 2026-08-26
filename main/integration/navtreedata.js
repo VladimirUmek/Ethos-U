@@ -28,7 +28,14 @@ var NAVTREE =
     [ "Starting point", "index.html#starting-point", [
       [ "Determine the memory budget", "index.html#determine-the-memory-budget", null ]
     ] ],
-    [ "Integration workflow", "index.html#integration-workflow", [
+    [ "Integration workflow", "index.html#integration-workflow", null ],
+    [ "Tutorial: Create an Ethos-U application", "index.html#tutorial-create-an-ethos-u-application", [
+      [ "Start with an example", "index.html#start-with-an-example", null ],
+      [ "Step 1: Select the MCU and create the project", "index.html#step-1-select-the-mcu-and-create-the-project", null ],
+      [ "Step 2: Compile the ML model", "index.html#step-2-compile-the-ml-model", null ],
+      [ "Step 3: Configure memory placement", "index.html#step-3-configure-memory-placement", null ],
+      [ "Step 4: Complete application integration", "index.html#step-4-complete-application-integration", null ],
+      [ "Step 5: Validate and tune", "index.html#step-5-validate-and-tune", null ],
       [ "General integration guidance", "index.html#general-integration-guidance", [
         [ "Example: Move the tensor arena from SRAM to external DRAM", "index.html#example-move-the-tensor-arena-from-sram-to-external-dram", null ]
       ] ],
@@ -44,13 +51,6 @@ var NAVTREE =
       [ "Troubleshoot an inference that does not complete", "index.html#troubleshoot-an-inference-that-does-not-complete", null ]
     ] ],
     [ "Validate and tune", "index.html#validate-and-tune", null ],
-    [ "Tutorial", "index.html#tutorial", [
-      [ "Prerequisites", "index.html#prerequisites", null ],
-      [ "Start development with an example", "index.html#start-development-with-an-example", null ],
-      [ "Add physical target device", "index.html#add-physical-target-device", null ],
-      [ "Integrate your model", "index.html#integrate-your-model", null ],
-      [ "Change system and/or memory mode", "index.html#change-system-andor-memory-mode", null ]
-    ] ],
     [ "Ethos-U configuration", "index.html#ethos-u-configuration", null ],
     [ "Linker configuration", "index.html#linker-configuration", null ],
     [ "Driver weak hooks", "index.html#driver-weak-hooks", null ],

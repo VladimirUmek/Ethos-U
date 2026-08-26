@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['u_20configuration_0',['Ethos-U configuration',['../index.html#ethos-u-configuration',1,'']]]
+  ['not_20complete_0',['Troubleshoot an inference that does not complete',['../index.html#troubleshoot-an-inference-that-does-not-complete',1,'']]]
 ];

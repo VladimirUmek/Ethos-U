@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['or_20memory_20mode_0',['Change system and/or memory mode',['../index.html#change-system-andor-memory-mode',1,'']]]
+  ['hooks_0',['Driver weak hooks',['../index.html#driver-weak-hooks',1,'']]]
 ];

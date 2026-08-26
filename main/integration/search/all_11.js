@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['validate_20and_20tune_0',['Validate and tune',['../index.html#validate-and-tune',1,'']]],
-  ['version_20control_1',['Add ML model and configuration to version control',['../index.html#add-ml-model-and-configuration-to-version-control',1,'']]],
-  ['version_5fmajor_2',['version_major',['../../driver/group__ethosu__driver__structs.html#ae6af13393bbb4dabcb65cc1d5f4e9cc8',1,'ethosu_id']]],
-  ['version_5fminor_3',['version_minor',['../../driver/group__ethosu__driver__structs.html#af8aaea86efd47147587131c90e22bf0e',1,'ethosu_id']]],
-  ['version_5fstatus_4',['version_status',['../../driver/group__ethosu__driver__structs.html#ab83e9ec3a92acc40bbf7f1313a743e79',1,'ethosu_id']]]
+  ['performance_20monitoring_20unit_20api_0',['Performance Monitoring Unit API',['../../driver/group__ethosu__pmu__api.html',1,'']]],
+  ['placement_1',['Step 3: Configure memory placement',['../index.html#step-3-configure-memory-placement',1,'']]],
+  ['placement_20and_20the_20linker_20script_2',['Configure memory placement and the linker script',['../index.html#configure-memory-placement-and-the-linker-script',1,'']]],
+  ['platform_20specific_20functions_3',['Platform-specific functions',['../../driver/group__ethosu__callback__api.html',1,'']]],
+  ['point_4',['Starting point',['../index.html#starting-point',1,'']]],
+  ['product_5fmajor_5',['product_major',['../../driver/group__ethosu__driver__structs.html#a16172a7c18f4f087e9f80857f53a2b82',1,'ethosu_id']]],
+  ['project_6',['project',['../index.html#create-the-csolution-project',1,'Create the &lt;em&gt;csolution project&lt;/em&gt;'],['../index.html#step-1-select-the-mcu-and-create-the-project',1,'Step 1: Select the MCU and create the project']]]
 ];

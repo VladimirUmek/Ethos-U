@@ -1,10 +1,12 @@
 var searchData=
 [
-  ['script_0',['Configure memory placement and the linker script',['../index.html#configure-memory-placement-and-the-linker-script',1,'']]],
-  ['specific_20functions_1',['Platform-specific functions',['../../driver/group__ethosu__callback__api.html',1,'']]],
-  ['sram_20to_20external_20dram_2',['Example: Move the tensor arena from SRAM to external DRAM',['../index.html#example-move-the-tensor-arena-from-sram-to-external-dram',1,'']]],
-  ['start_20development_20with_20an_20example_3',['Start development with an example',['../index.html#start-development-with-an-example',1,'']]],
-  ['starting_20point_4',['Starting point',['../index.html#starting-point',1,'']]],
-  ['structures_5',['Structures',['../../driver/group__ethosu__driver__structs.html',1,'']]],
-  ['system_20and_20or_20memory_20mode_6',['Change system and/or memory mode',['../index.html#change-system-andor-memory-mode',1,'']]]
+  ['layer_0',['Add ML model layer',['../index.html#add-ml-model-layer',1,'']]],
+  ['linker_20configuration_1',['Linker configuration',['../index.html#linker-configuration',1,'']]],
+  ['linker_20script_2',['Configure memory placement and the linker script',['../index.html#configure-memory-placement-and-the-linker-script',1,'']]],
+  ['log_3',['LOG',['../../driver/group__ethosu__log__api.html#ga684cbf16ece7e6e25cd49fdef621a475',1,]]],
+  ['log_5fdebug_4',['LOG_DEBUG',['../../driver/group__ethosu__log__api.html#ga4cfe278bc804bda9db3a59830b6fbfb8',1,]]],
+  ['log_5ferr_5',['LOG_ERR',['../../driver/group__ethosu__log__api.html#ga531b8a1a22e3fdd27811bfab52217e13',1,]]],
+  ['log_5finfo_6',['LOG_INFO',['../../driver/group__ethosu__log__api.html#ga0346634c15a318e68d86de21729d51c9',1,]]],
+  ['log_5fwarn_7',['LOG_WARN',['../../driver/group__ethosu__log__api.html#ga0ac9ed4ee5b005ba22993796a63fe4d5',1,]]],
+  ['logging_8',['Logging',['../../driver/group__ethosu__log__api.html',1,'']]]
 ];
