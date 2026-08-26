@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hooks_0',['Driver weak hooks',['../index.html#driver-weak-hooks',1,'']]]
+  ['linker_20placement_0',['Linker placement',['../index.html#linker-placement',1,'']]]
 ];

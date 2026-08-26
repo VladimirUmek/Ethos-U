@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['for_20the_20device_0',['Compile the ML model for the device',['../index.html#compile-the-ml-model-for-the-device',1,'']]],
-  ['from_20sram_20to_20external_20dram_1',['Example: Move the tensor arena from SRAM to external DRAM',['../index.html#example-move-the-tensor-arena-from-sram-to-external-dram',1,'']]]
+  ['fast_20memory_20on_20ethos_20u65_20and_20ethos_20u85_0',['Use separate scratch-fast memory on Ethos-U65 and Ethos-U85',['../index.html#use-separate-scratch-fast-memory-on-ethos-u65-and-ethos-u85',1,'']]],
+  ['for_20fvp_20simulation_1',['Configure 256 MACs for FVP simulation',['../index.html#configure-256-macs-for-fvp-simulation',1,'']]],
+  ['fvp_20simulation_2',['Configure 256 MACs for FVP simulation',['../index.html#configure-256-macs-for-fvp-simulation',1,'']]]
 ];
