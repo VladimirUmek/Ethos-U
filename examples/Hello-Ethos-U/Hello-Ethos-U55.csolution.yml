@@ -24,7 +24,7 @@ solution:
           debugger:
             name: Arm-FVP
             model: FVP_Corstone_SSE-300_Ethos-U55
-            config-file: ./Board/Corstone-300/fvp_config.txt
+            config-file: ./Board/Corstone-300/fvp_config_u55.txt
             args: ""
           images:
             - project-context: Hello-Ethos-U.Debug
@@ -45,12 +45,12 @@ solution:
     description: TinyCNN int8 image classifier for Ethos-U55
     npu:
       type: Ethos-U55
-      macs: 256
+      macs: 128
     vela:
       system: Ethos_U55_High_End_Embedded
       memory: Shared_Sram
     model:
-      clayer: ./Model/ML-TinyCNN.clayer.yml
+      clayer: ./Model/ML-MyModels.clayer.yml
       name: tiny_cnn
 #   simulator:
 #     target-type: SSE-300-U55

@@ -24,7 +24,7 @@ solution:
           debugger:
             name: Arm-FVP
             model: FVP_Corstone_SSE-300_Ethos-U65
-            config-file: ./Board/Corstone-300/fvp_config.txt
+            config-file: ./Board/Corstone-300/fvp_config_u65.txt
             args: ""
           images:
             - project-context: Hello-Ethos-U.Debug
@@ -50,7 +50,7 @@ solution:
       system: Ethos_U65_Embedded
       memory: Shared_Sram
     model:
-      clayer: ./Model/ML-TinyCNN.clayer.yml
+      clayer: ./Model/ML-MyModels.clayer.yml
       name: TinyCNN
 #    simulator:
 #      target-type: SSE-300-U65

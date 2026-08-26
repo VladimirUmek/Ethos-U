@@ -47,13 +47,12 @@ This is a list of the relevant files and directories.
 
 | File or directory | Description |
 |---|---|
-| [`ARM.CMSIS-Ethos-U.pdsc`](./ARM.CMSIS-Ethos-U.pdsc) | Open-CMSIS-Pack description and Ethos-U driver component definitions. |
-| [`source`](./source/) | Core-driver source, public headers, NPU configuration headers, CMake build files, and Zephyr module metadata. |
-| [`source/README.md`](./source/README.md) | Driver build instructions, API usage, cache-coherency requirements, and platform hooks. |
-| [`documentation`](./documentation/) | Doxygen source, generated HTML documentation, styles, and authoring guidance. |
-| [`overview`](./overview/) | Overview content included in the generated software pack. |
-| [`gen_pack.sh`](./gen_pack.sh) | Script that generates and validates the CMSIS software pack. |
-| [`.github/workflows`](./.github/workflows/) | GitHub Actions for building the pack and publishing its documentation. |
+| [`source`](./source/) | Core-driver source, public headers, single- and multi-variant NPU support, CMake build files, and Zephyr module metadata. |
+| [`interface`](./interface/) | CMSIS-RTOS2 and data-cache interface templates supplied by the driver components. |
+| [`examples`](./examples/Hello-Ethos-U/) | CMSIS-Toolbox example solutions for Ethos-U55, Ethos-U65, and Ethos-U85, including Corstone targets, TFLM models, and self-checking tests. |
+| [`documentation`](./documentation/) | Doxygen sources for the general, Vela, driver, integration, and Zephyr guides, plus generated web content, styles, and authoring guidance. |
+| [`overview`](./overview/) | Pack overview content and images displayed by CMSIS tooling. |
+| [`.github`](./.github/) | Workflows that test the example, build the pack, and publish documentation. |
 
 ## Building the Driver using CMake
 

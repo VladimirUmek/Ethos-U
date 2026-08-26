@@ -176,7 +176,7 @@ Memory configuration spans several description layers. Similar names at
 different layers do not refer to the same object:
 
 | Layer | Examples | Meaning |
-|---|---|---|
+| --- | --- | --- |
 | Physical memory | SRAM, Flash or MRAM, DRAM | Storage implemented by the device and connected through its interconnect. |
 | Vela memory type | `Sram`, `OnChipFlash`, `OffChipFlash`, `Dram` | Performance-model category used by a Vela system configuration. |
 | Vela logical alias | `Axi0`, `Axi1` | Logical memory domain used by a Vela memory mode. An alias does not necessarily represent one physical AXI port. |
@@ -205,29 +205,27 @@ performance. The selected system configuration maps each alias to a Vela memory
 type. These aliases are compiler labels, not necessarily the names or number of
 physical AXI ports implemented by the NPU.
 
-In a common Ethos-U55 integration, `Axi0` represents read/write SRAM and `Axi1`
-represents a read-only path to Flash. Do not apply that read-only restriction to
-the `Axi1` alias on every Ethos-U target. The device integration and its
-`vela.ini` file define the actual mapping.
+Ethos-U65 and Ethos-U85 provide two read/write AXI ports and support all the
+memory modes shown below. Ethos-U55 provides one read/write and one read-only
+AXI port and supports SRAM-only and Shared-SRAM modes. Dedicated-SRAM mode
+places the writable arena in other memory, normally DRAM, while reserving SRAM
+for fast staging. Both paths must be writable, so this mode is available on
+Ethos-U65 and Ethos-U85. Read-only Flash can hold constants but not the arena.
+Shared-SRAM is the typical mode on an Edge AI MCU because it stores the ML model
+constants in Flash while using SRAM for the writable arena.
 
-The following diagram compares the commonly used memory modes.
+The following diagram compares these memory modes.
 
 ![Comparison of Ethos-U memory modes](./images/memory-modes.png "Ethos-U memory modes")
 
-**SRAM-only mode**       | **Shared-SRAM mode**    | **Dedicated-SRAM mode** |
-:------------------------|:------------------------|:------------------------|
-All Vela-managed model storage is placed in SRAM. Constants and the writable arena remain separate logical areas, but both use the same physical memory type. This mode provides low access latency, but the complete compiled model and arena must fit in SRAM. | The writable arena is stored in SRAM. Read-only constants, such as encoded weights and scales, are stored in Flash, MRAM, or DRAM. This arrangement minimizes SRAM usage. | Constants and the writable arena are outside the fast SRAM, normally in DRAM. SRAM is dedicated to fast staging storage. Vela uses spilling to move selected data through this area and reduce external-memory traffic. |
-
-The diagram uses "Other Memory (Flash / DRAM)" as a compact label shared by
-the three examples. In Dedicated-SRAM mode, `arena_mem_area` requires writable
-memory, normally DRAM; read-only Flash can hold constants but not the arena. The
-common Dedicated-SRAM flow applies to Ethos-U65 and Ethos-U85. It is not a
-practical Ethos-U55 mode because the Ethos-U55 AXI1 hardware interface is
-read-only.
+|**SRAM-only mode**       | **Shared-SRAM mode**    | **Dedicated-SRAM mode** |
+|:------------------------|:------------------------|:------------------------|
+| All Vela-managed model storage is placed in SRAM. Constants and the writable arena remain separate logical areas, but both use the same physical memory type. This mode provides low access latency, but the complete compiled model and arena must fit in SRAM. | The writable arena is stored in SRAM. Read-only constants, such as encoded weights and scales, are stored in Flash, MRAM, or DRAM. This arrangement minimizes SRAM usage. | Constants and the writable arena are outside the fast SRAM, normally in DRAM. SRAM is dedicated to fast staging storage. Vela uses spilling to move selected data through this area and reduce external-memory traffic. |
 
 Vela maps to physical memory with the `system-config` and `memory-mode` options.
 The related performance parameters are obtained from the device-specific
-`vela.ini` file. See <a href="../vela/index.html">Vela</a> for command-line syntax and
+`vela.ini` file. See <a href="../vela/index.html#use-the-ethos-u-configuration">Use
+the Ethos-U configuration</a> for selecting and inspecting these settings, and
 <a href="../integration/index.html">Integration</a> for the corresponding linker sections,
 MPU/SAU attributes, cache policy, and driver region configuration.
 

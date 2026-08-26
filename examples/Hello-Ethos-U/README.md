@@ -39,12 +39,13 @@ The example is located in the `examples/Hello-Ethos-U` directory.
 
 ## Build and run from command line
 
-For example, run the Ethos-U85 configuration from the
+By default, the committed Vela models target Ethos-U55 with 128 MACs. Build and
+run this configuration from the
 `examples/Hello-Ethos-U` directory:
 
 ```console
-cbuild Hello-Ethos-U85.csolution.yml --active SSE-320-U85 --update-rte
-FVP_Corstone_SSE-320 -f Board/Corstone-320/fvp_config.txt -a out/Hello-Ethos-U/SSE-320-U85/Debug/Hello-Ethos-U.axf
+cbuild Hello-Ethos-U55.csolution.yml --active SSE-300-U55 --update-rte --packs
+FVP_Corstone_SSE-300_Ethos-U55 -f Board/Corstone-300/fvp_config_u55.txt -a out/Hello-Ethos-U/SSE-300-U55/Debug/Hello-Ethos-U.hex
 ```
 
 The test reports the detected NPU configuration followed by one result for each
@@ -57,6 +58,9 @@ model. A successful run ends with:
 2 of 2 checks passed
 TEST RESULT: PASS
 ```
+
+For instructions on using the example with the Keil Studio IDE, see
+[Tutorial: Create an Ethos-U application](https://arm-software.github.io/CMSIS_Ethos_U/latest/integration).
 
 ## Project structure
 
@@ -111,6 +115,12 @@ To retrain, quantize, and Vela-compile both models:
 python3 Model/hello_world/gen/generate.py
 ```
 
+To Vela-compile the committed quantized models without retraining:
+
+```console
+python3 Model/hello_world/gen/generate.py --compile
+```
+
 The full generation command updates each model's `.tflite`, generated C array,
 and Vela summary. It also prints new golden vectors ready to paste into
 `Source/test_main.cpp`. Training is not bit-reproducible; use `--check` when the
@@ -135,13 +145,13 @@ The shipped `arena_cache_size` is 384 KiB and must match
 memory-region mismatch can select the wrong NPU access path or cause the NPU to
 read outside the configured buffer.
 
-The `mps4_board.subsystem.ethosu.num_macs=256` setting in `fvp_config.txt` must
-match the `ethos-u85-256` accelerator selected in `Model/hello_world/gen/generate.py`.
-Otherwise, the models are compiled for an NPU configuration that differs from
-the simulated hardware.
+The committed Vela models use `ethos-u55-128` and match the
+`ethosu.num_macs=128` setting in `Board/Corstone-300/fvp_config_u55.txt`. The CI
+workflow recompiles the models for every tested target; its accelerator setting
+must match the MAC configuration in the corresponding FVP configuration file.
 
 ## Details
 
 For the general device-integration workflow, memory mapping rules, cache hooks,
 address remapping, and driver configuration, see 
-[Ethos-U Integration for Cortex-M](https://arm-software.github.io/CMSIS_Ethos_U/latest/integration/index.html).
+[Ethos-U Integration for Cortex-M](https://arm-software.github.io/CMSIS_Ethos_U/latest/integration).

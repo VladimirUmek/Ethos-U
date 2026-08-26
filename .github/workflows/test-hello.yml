@@ -22,9 +22,9 @@ jobs:
       matrix:
         include:
           # toolchain, solution, target-type, accelerator, system, memory, FVP, FVP config, image
-          - { tool: AC6, solution: Hello-Ethos-U55, target-type: SSE-300-U55, accelerator: ethos-u55-256, system: Ethos_U55_High_End_Embedded, memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config.txt, image: out/Hello-Ethos-U/SSE-300-U55/Debug/Hello-Ethos-U.axf }
-          - { tool: AC6, solution: Hello-Ethos-U65, target-type: SSE-300-U65, accelerator: ethos-u65-256, system: Ethos_U65_Embedded,          memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config.txt, image: out/Hello-Ethos-U/SSE-300-U65/Debug/Hello-Ethos-U.axf }
-          - { tool: AC6, solution: Hello-Ethos-U85, target-type: SSE-320-U85, accelerator: ethos-u85-256, system: Ethos_U85_SYS_DRAM_Mid,      memory: Shared_Sram, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config.txt, image: out/Hello-Ethos-U/SSE-320-U85/Debug/Hello-Ethos-U.axf }
+          - { tool: AC6, solution: Hello-Ethos-U55, target-type: SSE-300-U55, accelerator: ethos-u55-128, system: Ethos_U55_High_End_Embedded, memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config_u55.txt, image: out/Hello-Ethos-U/SSE-300-U55/Debug/Hello-Ethos-U.axf }
+          - { tool: AC6, solution: Hello-Ethos-U65, target-type: SSE-300-U65, accelerator: ethos-u65-256, system: Ethos_U65_Embedded,          memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config_u65.txt, image: out/Hello-Ethos-U/SSE-300-U65/Debug/Hello-Ethos-U.axf }
+          - { tool: AC6, solution: Hello-Ethos-U85, target-type: SSE-320-U85, accelerator: ethos-u85-256, system: Ethos_U85_SYS_DRAM_Mid,      memory: Shared_Sram, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config_u85.txt, image: out/Hello-Ethos-U/SSE-320-U85/Debug/Hello-Ethos-U.axf }
 
     steps:
       - uses: actions/checkout@v7

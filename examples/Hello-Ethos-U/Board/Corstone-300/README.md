@@ -41,4 +41,5 @@ interface for SDS data files using a [Virtual Streaming Interface](https://arm-s
 
 | File               | Description
 |:-------------------|:-------------
-| fvp_config.txt     | Corstone-300 FVP without Ethos-U or with Ethos-U55/U65
+| fvp_config_u65.txt | Corstone-300 FVP with an Ethos-U65-256
+| fvp_config_u55.txt | Corstone-300 FVP with an Ethos-U55-128

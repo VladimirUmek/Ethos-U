@@ -6,7 +6,7 @@
 Produces, for each model, under Model/<name>/:
 
     <name>_int8.tflite       fully int8-quantized model, kept for recompilation
-    <name>_int8_vela.tflite  Vela output for Ethos-U85, what the NPU runs
+    <name>_int8_vela.tflite  Vela output for Ethos-U55-128, what the NPU runs
     <name>_model.c           the Vela build as a C array in section "ethos_model"
     VELA_SUMMARY.md          the Vela report, committed for review
 
@@ -17,6 +17,7 @@ interpreter, so they are independent of the NPU under test.
 
 Usage:
     python3 generate.py            retrain, re-quantize, re-run Vela
+    python3 generate.py --compile  re-run Vela on the committed int8 models
     python3 generate.py --check    re-run Vela on the committed models and diff
 """
 
@@ -38,11 +39,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.dirname(os.path.dirname(HERE))
 VELA_INI = os.path.join(MODEL_DIR, "vela.ini")
 
-# Must match mps4_board.subsystem.ethosu.num_macs in Board/Corstone-320/fvp_config.txt.
-ACCELERATOR = "ethos-u85-256"
-SYSTEM_CONFIG = "Corstone_320"
-# Must match the NPU_QCONFIG / NPU_REGIONCFG_* defines in Hello-Ethos-U85.csolution.yml.
-MEMORY_MODE = "Dedicated_Sram_384KB"
+# Must match ethosu.num_macs in Board/Corstone-300/fvp_config_u55.txt.
+ACCELERATOR = "ethos-u55-128"
+SYSTEM_CONFIG = "Ethos_U55_High_End_Embedded"
+MEMORY_MODE = "Shared_Sram"
 
 SEED = 1
 NUM_VECTORS = 8
@@ -277,7 +277,7 @@ def emit_model_c(path, name, npu_bytes):
     # Placed in "ethos_model" (ROM2 = DDR4, reached over Axi1) and 16-byte aligned,
     # which both the flatbuffer accessors and the NPU command stream require.
     attrs = '\n    __attribute__((aligned(16), section("ethos_model")))'
-    with open(path, "w") as f:
+    with open(path, "w", newline="\n") as f:
         f.write(HEADER)
         f.write("#include <stdint.h>\n\n")
         f.write(c_bytes(f"uint8_t {name}_int8_vela_tflite", npu_bytes, attrs=attrs))
@@ -335,7 +335,7 @@ def generate(out_root):
                 raise SystemExit("reference interpreter misclassifies its own "
                                  "test vectors; regenerate or retrain")
 
-        with open(os.path.join(out_dir, "VELA_SUMMARY.md"), "w") as f:
+        with open(os.path.join(out_dir, "VELA_SUMMARY.md"), "w", newline="\n") as f:
             f.write(f"# Vela report: {name}\n\n")
             f.write(f"- accelerator: `{ACCELERATOR}`\n")
             f.write(f"- system config: `{SYSTEM_CONFIG}`\n")
@@ -344,6 +344,37 @@ def generate(out_root):
 
         print(f"  {len(cpu_bytes)} B int8 -> {len(npu_bytes)} B vela")
         print_vector_snippet(name, vectors)
+
+
+def compile_committed():
+    """Vela-compile the committed int8 models without retraining them."""
+    for name in MODELS:
+        print(f"[{name}]")
+        out_dir = os.path.join(MODEL_DIR, name)
+        cpu_path = os.path.join(out_dir, f"{name}_int8.tflite")
+        if not os.path.exists(cpu_path):
+            raise SystemExit(f"committed model is missing: {cpu_path}")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            report = run_vela(cpu_path, tmp)
+            vela_src = os.path.join(tmp, f"{name}_int8_vela.tflite")
+            npu_path = os.path.join(out_dir, f"{name}_int8_vela.tflite")
+            shutil.copy(vela_src, npu_path)
+
+        with open(npu_path, "rb") as f:
+            npu_bytes = f.read()
+        emit_model_c(os.path.join(out_dir, f"{name}_model.c"), name, npu_bytes)
+
+        with open(os.path.join(out_dir, "VELA_SUMMARY.md"), "w", newline="\n") as f:
+            f.write(f"# Vela report: {name}\n\n")
+            f.write(f"- accelerator: `{ACCELERATOR}`\n")
+            f.write(f"- system config: `{SYSTEM_CONFIG}`\n")
+            f.write(f"- memory mode: `{MEMORY_MODE}`\n\n")
+            f.write("```\n" + report.strip() + "\n```\n")
+
+        print(f"  generated {len(npu_bytes)} B Vela model and C array")
+
+    return 0
 
 
 def check():
@@ -403,10 +434,16 @@ def check():
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--compile", action="store_true",
+                        help="Vela-compile committed int8 models without retraining")
     parser.add_argument("--check", action="store_true",
                         help="re-run Vela on the committed .tflite files and diff")
     args = parser.parse_args()
 
+    if args.compile and args.check:
+        parser.error("--compile and --check are mutually exclusive")
+    if args.compile:
+        return compile_committed()
     if args.check:
         return check()
 

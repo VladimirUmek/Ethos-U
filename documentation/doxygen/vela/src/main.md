@@ -284,11 +284,11 @@ resolves to the same memory type as `arena_mem_area`, the fast-scratch memory re
 folded into `arena_mem_area`. `cache_mem_area` is a distinct area only when
 `arena_mem_area` is in a different memory type.
 
-The Ethos-U55 hardware AXI1 port is a read-only interface. Consequently,
-`Dedicated_Sram` is not a practical Ethos-U55 execution model when the writable
-feature-map arena would be placed on that interface. Do not infer the same
-read-only restriction for the logical `Axi1` alias in `vela.ini` on every
-Ethos-U target.
+Ethos-U55 provides one read/write and one read-only AXI port and supports
+`Sram_Only` and `Shared_Sram` modes. `Dedicated_Sram` places the writable arena
+in the memory selected for `Axi1` while reserving the `Axi0` memory for fast
+staging. Both paths must be writable, so the `Dedicated_Sram` mode is available
+on Ethos-U65 and Ethos-U85.
 
 ## Create device-specific vela.ini file
 
