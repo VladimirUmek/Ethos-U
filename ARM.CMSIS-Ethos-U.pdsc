@@ -13,8 +13,9 @@
   <repository type="git">https://github.com/VladimirUmek/Ethos-U.git</repository>
 
   <releases>
-    <release version="1.99.0-dev">
-      Active development...
+    <release version="1.0.0-dev">
+      Initial release
+      Ethos-U driver supports multi-variant Ethos-U systems
     </release>
   </releases>
 

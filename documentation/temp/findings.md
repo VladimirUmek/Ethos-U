@@ -30,51 +30,6 @@ Traceback (most recent call last):
 ethosu.vela.errors.ConfigOptionError: 'Error: Invalid configuration of arena_mem_area=OffChipFlash (must be Sram or Dram)'
 ```
 
-## Default vela.ini file
-
-Does not contain a config that enables spilling (cache) with Ethos-U55. I believe that cache is effectively impossible as Ethos-U55 AXI1 port is read-only.  If this is the case, we should mention this.
-
-## Usage of **Dedicated-SRAM mode on Cortex-M**
-
-A common Cortex-M system can have three relevant memory areas:
-
-- on-chip SRAM reserved as a fast NPU cache;
-- memory-mapped off-chip QSPI flash, which holds constants and is read-only
-  during inference; and
-- off-chip RAM, which holds the writable arena.
-
-The reference `Dedicated_Sram` mode cannot represent this topology. It assigns
-both `const_mem_area` and `arena_mem_area` to `Axi1`, while assigning
-`cache_mem_area` to `Axi0`:
-
-```ini
-[Memory_Mode.Dedicated_Sram]
-const_mem_area=Axi1
-arena_mem_area=Axi1
-cache_mem_area=Axi0
-```
-
-If `Axi1` maps to `OffChipFlash`, Vela rejects the configuration because the
-arena must be writable. If `Axi1` maps to `Dram`, compilation succeeds, but Vela
-models both constants and the arena in DRAM instead of modeling constants in
-QSPI flash. Consequently, constants in flash, the arena in off-chip RAM, and a
-cache in on-chip SRAM cannot be represented at the same time.
-
-The terminology in the report adds another problem. The configuration and
-documentation use `const_mem_area`, `arena_mem_area`, and `cache_mem_area`, but
-the summary CSV uses `weights_storage_area` and `feature_map_storage_area`. It
-has no corresponding cache-storage field and reports memory usage only as totals
-for each physical memory type. For example, when constants and the arena are in
-DRAM, `dram_memory_used` combines both. `total_npu_encoded_weights` covers only
-encoded weights and cannot be used to derive either the complete constant region
-or the arena size.
-
-This is more than a naming inconsistency. A user cannot describe the common
-three-memory topology or obtain separate const, arena, and cache requirements
-from the report. Vela either needs distinct mappings and report fields for these
-areas, or the limitation and the correspondence between the two terminologies
-must be documented clearly.
-
 ## max read/writes settings
 
 This are driver settings.
