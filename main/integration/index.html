@@ -189,24 +189,24 @@ Tutorial: Create an Ethos-U application</h1>
 <p>This tutorial uses <a href="https://marketplace.visualstudio.com/items?itemName=Arm.keil-studio-pack">Keil Studio for VS Code</a>, available from the VS Code Marketplace. Command-line users may use the <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/">CMSIS-Toolbox</a> with a similar workflow.</p>
 <h2 class="doxsection"><a class="anchor" id="start-with-an-example"></a>
 Start with an example</h2>
-<p>This tutorial applies the five-step workflow to the <span class="tt">Hello-Ethos-U</span> examples in the <span class="tt">ARM::CMSIS-Ethos-U</span> pack. The three examples have the same application structure and uses the same ML models. Each example targets a different Ethos-U variant.</p>
+<p>This tutorial applies the five-step workflow to the <span class="tt">Test-Ethos-U</span> examples in the <span class="tt">ARM::CMSIS-Ethos-U</span> pack. The three examples have the same application structure and uses the same ML models. Each example targets a different Ethos-U variant.</p>
 <p>In Keil Studio, use <b>Create a New Solution</b> as described in <a href="https://mdk-packs.github.io/vscode-cmsis-solution-docs/create_app.html">Work with CMSIS solutions</a>. From the table, select the target board and corresponding example that matches the Ethos-U variant in the target hardware. After creating the example, you can compile it and run it directly on the FVP simulation with the <a href="https://github.com/Open-CMSIS-Pack/vscode-cmsis-solution#action-buttons">action buttons</a> in the <a href="https://mdk-packs.github.io/vscode-cmsis-solution-docs/userinterface.html#2-main-area-of-the-cmsis-view">CMSIS view</a>. Keil Studio automatically downloads and installs the required tools and software packs. The initial setup may take some time.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">Target board  </th><th class="markdownTableHeadLeft">Example  </th><th class="markdownTableHeadLeft">NPU/MACs  </th><th class="markdownTableHeadLeft">FVP simulation model  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U55.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U55-128  </td><td class="markdownTableBodyLeft">Corstone-300  </td></tr>
+<td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td><td class="markdownTableBodyLeft"><span class="tt">Test-Ethos-U55.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U55-128  </td><td class="markdownTableBodyLeft">Corstone-300  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U65.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U65-256  </td><td class="markdownTableBodyLeft">Corstone-300  </td></tr>
+<td class="markdownTableBodyLeft">V2M-MPS3-SSE-300-FVP  </td><td class="markdownTableBodyLeft"><span class="tt">Test-Ethos-U65.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U65-256  </td><td class="markdownTableBodyLeft">Corstone-300  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">SSE-320  </td><td class="markdownTableBodyLeft"><span class="tt">Hello-Ethos-U85.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U85-256  </td><td class="markdownTableBodyLeft">Corstone-320  </td></tr>
+<td class="markdownTableBodyLeft">SSE-320  </td><td class="markdownTableBodyLeft"><span class="tt">Test-Ethos-U85.csolution.yml</span>  </td><td class="markdownTableBodyLeft">Ethos-U85-256  </td><td class="markdownTableBodyLeft">Corstone-320  </td></tr>
 </table>
-<p>Each example includes the <span class="tt">Hello-Ethos-U.cproject.yml</span> file and the software layers shown in this diagram:</p>
+<p>Each example includes the <span class="tt">Test-Ethos-U.cproject.yml</span> file and the software layers shown in this diagram:</p>
 <div class="mermaidgraph">
 <pre class="mermaid">
 flowchart TD
-    solution[&quot;NPU-specific solution&lt;br/&gt;Hello-Ethos-Uxx.csolution.yml&quot;] --&gt; target[&quot;Target configuration&lt;br/&gt;device, FVP, and Board-Uxx.clayer.yml&quot;]
-    solution --&gt; project[&quot;Application project&lt;br/&gt;Hello-Ethos-U.cproject.yml&quot;]
+    solution[&quot;NPU-specific solution&lt;br/&gt;Test-Ethos-Uxx.csolution.yml&quot;] --&gt; target[&quot;Target configuration&lt;br/&gt;device, FVP, and Board-Uxx.clayer.yml&quot;]
+    solution --&gt; project[&quot;Application project&lt;br/&gt;Test-Ethos-U.cproject.yml&quot;]
     project --&gt; sources[&quot;Application sources&lt;br/&gt;Source/test_main.cpp&quot;]
     project --&gt; model[&quot;Model layer&lt;br/&gt;ML-MyModels.clayer.yml&quot;]</pre>
 </div>
@@ -224,10 +224,10 @@ flowchart TD
 </dd></dl>
 <h2 class="doxsection"><a class="anchor" id="step-1-select-the-mcu-and-create-the-project"></a>
 Step 1: Select the MCU and create the project</h2>
-<p>For our application, we selected the Alif Semiconductor <a href="https://www.keil.arm.com/devices/alif-semiconductor-ae722f80f55d5ls/">Ensemble E7 (<span class="tt">AE722F80F55D5LS</span>)</a> device and the related <a href="https://www.keil.arm.com/boards/alif-semiconductor-appkit-e7-aiml-d1-34b5d51/">AppKit-E7-AIML</a> board. We target the Ethos-U55 NPU on this device and therefore start with <span class="tt">Hello-Ethos-U55.csolution.yml</span>.</p>
+<p>For our application, we selected the Alif Semiconductor <a href="https://www.keil.arm.com/devices/alif-semiconductor-ae722f80f55d5ls/">Ensemble E7 (<span class="tt">AE722F80F55D5LS</span>)</a> device and the related <a href="https://www.keil.arm.com/boards/alif-semiconductor-appkit-e7-aiml-d1-34b5d51/">AppKit-E7-AIML</a> board. We target the Ethos-U55 NPU on this device and therefore start with <span class="tt">Test-Ethos-U55.csolution.yml</span>.</p>
 <h3 class="doxsection"><a class="anchor" id="add-a-new-target-to-the-solution"></a>
 Add a new target to the solution</h3>
-<p>Open <span class="tt">Hello-Ethos-U55.csolution.yml</span> and add the DFP and BSP packs required by the selected device and board. Use the information in the <a href="https://www.keil.arm.com/packs/">CMSIS-Pack catalog</a> to identify these packs. Then add a hardware target to the <span class="tt">target-types:</span> node before the existing FVP target. For the E7 device and AppKit, the relevant parts of the solution are:</p>
+<p>Open <span class="tt">Test-Ethos-U55.csolution.yml</span> and add the DFP and BSP packs required by the selected device and board. Use the information in the <a href="https://www.keil.arm.com/packs/">CMSIS-Pack catalog</a> to identify these packs. Then add a hardware target to the <span class="tt">target-types:</span> node before the existing FVP target. For the E7 device and AppKit, the relevant parts of the solution are:</p>
 <div class="fragment"><div class="line">packs:</div>
 <div class="line">  - pack: AlifSemiconductor::Ensemble</div>
 <div class="line">  # Keep the existing packs</div>
@@ -254,14 +254,14 @@ Update MLOps information</h3>
 <p>The <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information"><span class="tt">mlops:</span> information in the <span class="tt">*.csolution.yml</span> file</a> describes the NPU, Vela configuration, model layer, and test targets used by an MLOps system. Update this information in two stages.</p>
 <h4 class="doxsection"><a class="anchor" id="stage-1-update-the-ethos-u-configuration"></a>
 Stage 1: Update the Ethos-U configuration</h4>
-<p>First select the NPU independently of its memory configuration. The Alif E7 <span class="tt">M55_HP</span> processor integrates an Ethos-U55 with 256 MACs, so change <span class="tt">macs:</span> from <span class="tt">128</span> to <span class="tt">256</span> in <span class="tt">Hello-Ethos-U55.csolution.yml</span>:</p>
+<p>First select the NPU independently of its memory configuration. The Alif E7 <span class="tt">M55_HP</span> processor integrates an Ethos-U55 with 256 MACs, so change <span class="tt">macs:</span> from <span class="tt">128</span> to <span class="tt">256</span> in <span class="tt">Test-Ethos-U55.csolution.yml</span>:</p>
 <div class="fragment"><div class="line">mlops:</div>
 <div class="line">  description: TinyCNN int8 image classifier for Ethos-U55</div>
 <div class="line">  npu:</div>
 <div class="line">    type: Ethos-U55</div>
 <div class="line">    macs: 256      # Must match the hardware target</div>
 </div><!-- fragment --><dl class="section note"><dt>Note</dt><dd>For the complete syntax of the <span class="tt">mlops:</span> node, see <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/YML-Input-Format/#mlops-management">MLOps Management</a> in the CMSIS-Toolbox manual.</dd></dl>
-<p>In Keil Studio, saving the solution runs <span class="tt">cbuild setup</span> and regenerates <span class="tt">Hello-Ethos-U55.cbuild-mlops.yml</span>. CMSIS-Toolbox combines the MLOps settings with the NPU and processor information published by the selected device and DFP.</p>
+<p>In Keil Studio, saving the solution runs <span class="tt">cbuild setup</span> and regenerates <span class="tt">Test-Ethos-U55.cbuild-mlops.yml</span>. CMSIS-Toolbox combines the MLOps settings with the NPU and processor information published by the selected device and DFP.</p>
 <h4 class="doxsection"><a class="anchor" id="stage-2-verify-and-update-the-vela-configuration"></a>
 Stage 2: Verify and update the Vela configuration</h4>
 <p>Inspect the <span class="tt">vela:</span> section of the generated <span class="tt">*.cbuild-mlops.yml</span> file. Its <span class="tt">ini:</span> entry identifies the device-specific <span class="tt">vela.ini</span> supplied by the DFP. For example:</p>
@@ -309,7 +309,7 @@ Configure 256 MACs for FVP simulation</h3>
 Step 2: Compile the ML model</h2>
 <h3 class="doxsection"><a class="anchor" id="update-ml-models-of-the-example"></a>
 Update ML models of the example</h3>
-<p>The example contains the original quantized TensorFlow Lite models and Vela output compiled for the original Ethos-U55-128 configuration. Recompile each quantized model for the Ethos-U55-256 configuration and the device-specific system and memory mode that is reported in the generated <span class="tt">Hello-Ethos-U55.cbuild-mlops.yml</span> file.</p>
+<p>The example contains the original quantized TensorFlow Lite models and Vela output compiled for the original Ethos-U55-128 configuration. Recompile each quantized model for the Ethos-U55-256 configuration and the device-specific system and memory mode that is reported in the generated <span class="tt">Test-Ethos-U55.cbuild-mlops.yml</span> file.</p>
 <p>These values can be directly applied to Vela. See <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps Information</a>.</p>
 <div class="fragment"><div class="line">vela Model/tiny_cnn/tiny_cnn_int8.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-256 \</div>
