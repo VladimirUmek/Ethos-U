@@ -30,7 +30,7 @@ solution:
             config-file: ./Board/Corstone-320/fvp_config_u85.txt
             args: ""
           images:
-            - project-context: Hello-Ethos-U.Debug
+            - project-context: Test-Ethos-U.Debug
 
   build-types:
     - type: Debug
@@ -42,7 +42,7 @@ solution:
       optimize: balanced
 
   projects:
-    - project: ./Hello-Ethos-U.cproject.yml
+    - project: ./Test-Ethos-U.cproject.yml
 
   # MLOps information: exported to cmsis-executorch-simple.cbuild-mlops.yml when
   # building with `cbuild ... --active SSE-320-U85`. Retarget the NPU here and

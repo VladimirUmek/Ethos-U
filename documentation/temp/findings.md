@@ -8,7 +8,7 @@ The relevant message is at the very end:
 ethosu.vela.errors.ConfigOptionError: 'Error: Invalid configuration of arena_mem_area=OffChipFlash (must be Sram or Dram)'
 
 ```
-C:\w\Test-Project\Hello-Ethos-U>vela Model\hello_world\hello_world_int8.tflite --accelerator-config ethos-u55-256 --system-config Ethos_U55_High_End_Embedded --memory-mode Dedicated_Sram_512KB --verbose-config
+C:\w\Test-Project\Test-Ethos-U>vela Model\hello_world\hello_world_int8.tflite --accelerator-config ethos-u55-256 --system-config Ethos_U55_High_End_Embedded --memory-mode Dedicated_Sram_512KB --verbose-config
 Warning: No configuration file specified. Using a default of ['c:\\users\\reikei01\\appdata\\roaming\\python\\python313\\site-packages\\ethosu\\config_files\\Arm\\vela.ini']. Compilation may be invalid or non-optimal.
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
@@ -38,4 +38,3 @@ AXI_LIMITx_MAX_OUTSTANDING_READS`, and `AXI_LIMITx_MAX_OUTSTANDING_WRITES`
 
 vela.ini uses similar settings. I assume that vela generated code will not use more then specified in the vela.ini file. 
 As a user, do I need to care about the driver settings?
-

@@ -49,7 +49,7 @@ This is a list of the relevant files and directories.
 |---|---|
 | [`source`](./source/) | Core-driver source, public headers, single- and multi-variant NPU support, CMake build files, and Zephyr module metadata. |
 | [`interface`](./interface/) | CMSIS-RTOS2 and data-cache interface templates supplied by the driver components. |
-| [`examples`](./examples/Hello-Ethos-U/) | CMSIS-Toolbox example solutions for Ethos-U55, Ethos-U65, and Ethos-U85, including Corstone targets, TFLM models, and self-checking tests. |
+| [`examples`](./examples/Test-Ethos-U/) | CMSIS-Toolbox integration-test solutions for Ethos-U55, Ethos-U65, and Ethos-U85, including Corstone targets, TFLM models, and self-checking tests. |
 | [`documentation`](./documentation/) | Doxygen sources for the general, Vela, driver, integration, and Zephyr guides, plus generated web content, styles, and authoring guidance. |
 | [`overview`](./overview/) | Pack overview content and images displayed by CMSIS tooling. |
 | [`.github`](./.github/) | Workflows that test the example, build the pack, and publish documentation. |

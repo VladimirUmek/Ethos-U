@@ -1,7 +1,7 @@
 # Copyright (c) 2026 Arm Limited (or its affiliates). All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-name: Test Hello-Ethos-U
+name: Test Ethos-U
 
 on:
   workflow_dispatch:
@@ -22,9 +22,9 @@ jobs:
       matrix:
         include:
           # toolchain, solution, target-type, accelerator, system, memory, FVP, FVP config, image
-          - { tool: AC6, solution: Hello-Ethos-U55, target-type: SSE-300-U55, accelerator: ethos-u55-128, system: Ethos_U55_High_End_Embedded, memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config_u55.txt, image: out/Hello-Ethos-U/SSE-300-U55/Debug/Hello-Ethos-U.axf }
-          - { tool: AC6, solution: Hello-Ethos-U65, target-type: SSE-300-U65, accelerator: ethos-u65-256, system: Ethos_U65_Embedded,          memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config_u65.txt, image: out/Hello-Ethos-U/SSE-300-U65/Debug/Hello-Ethos-U.axf }
-          - { tool: AC6, solution: Hello-Ethos-U85, target-type: SSE-320-U85, accelerator: ethos-u85-256, system: Ethos_U85_SYS_DRAM_Mid,      memory: Shared_Sram, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config_u85.txt, image: out/Hello-Ethos-U/SSE-320-U85/Debug/Hello-Ethos-U.axf }
+          - { tool: AC6, solution: Test-Ethos-U55, target-type: SSE-300-U55, accelerator: ethos-u55-128, system: Ethos_U55_High_End_Embedded, memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config_u55.txt, image: out/Test-Ethos-U/SSE-300-U55/Debug/Test-Ethos-U.axf }
+          - { tool: AC6, solution: Test-Ethos-U65, target-type: SSE-300-U65, accelerator: ethos-u65-256, system: Ethos_U65_Embedded,          memory: Shared_Sram, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config_u65.txt, image: out/Test-Ethos-U/SSE-300-U65/Debug/Test-Ethos-U.axf }
+          - { tool: AC6, solution: Test-Ethos-U85, target-type: SSE-320-U85, accelerator: ethos-u85-256, system: Ethos_U85_SYS_DRAM_Mid,      memory: Shared_Sram, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config_u85.txt, image: out/Test-Ethos-U/SSE-320-U85/Debug/Test-Ethos-U.axf }
 
     steps:
       - uses: actions/checkout@v7
@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-          cache-dependency-path: examples/Hello-Ethos-U/Model/hello_world/gen/requirements.txt
+          cache-dependency-path: examples/Test-Ethos-U/Model/hello_world/gen/requirements.txt
 
       - name: Install Vela
         run: |
@@ -44,8 +44,8 @@ jobs:
       - name: Activate vcpkg environment
         uses: ARM-software/cmsis-actions/vcpkg@v1
         with:
-          config: examples/Hello-Ethos-U/vcpkg-configuration.json
-          cache: Hello-Ethos-U
+          config: examples/Test-Ethos-U/vcpkg-configuration.json
+          cache: Test-Ethos-U
 
       - name: Activate Arm tool license
         uses: ARM-software/cmsis-actions/armlm@v1
@@ -67,7 +67,7 @@ jobs:
             --memory-mode "${{ matrix.memory }}"
 
       - name: Build ${{ matrix.solution }} for ${{ matrix.target-type }}
-        working-directory: ./examples/Hello-Ethos-U
+        working-directory: ./examples/Test-Ethos-U
         run: |
           cbuild "${{ matrix.solution }}.csolution.yml" \
             --active "${{ matrix.target-type }}" \
@@ -75,7 +75,7 @@ jobs:
             --packs
 
       - name: Run ${{ matrix.target-type }} FVP
-        working-directory: ./examples/Hello-Ethos-U
+        working-directory: ./examples/Test-Ethos-U
         run: |
           set -o pipefail
           "${{ matrix.fvp }}" \
@@ -93,6 +93,6 @@ jobs:
         with:
           name: ${{ matrix.solution }}
           path: |
-            ./examples/Hello-Ethos-U/out/Hello-Ethos-U
-            ./examples/Hello-Ethos-U/fvp.log
+            ./examples/Test-Ethos-U/out/Test-Ethos-U
+            ./examples/Test-Ethos-U/fvp.log
           if-no-files-found: warn

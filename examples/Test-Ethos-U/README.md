@@ -1,11 +1,11 @@
-# Hello-Ethos-U
+# Test-Ethos-U
 
-This CMSIS-Toolbox example provides target solutions for Arm Ethos-U55,
+This CMSIS-Toolbox integration test provides target solutions for Arm Ethos-U55,
 Ethos-U65, and Ethos-U85 NPUs. The shared project runs on the matching
 Corstone FVP simulation or hardware when used as a
 [reference application](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/).*
 
-The example demonstrates an end-to-end TensorFlow Lite Micro (TFLM) integration
+The test demonstrates an end-to-end TensorFlow Lite Micro (TFLM) integration
 for an Ethos-U85 system. It builds and runs two Vela-compiled models, supplies a
 golden input to each model, and compares the NPU output bit-for-bit with output
 captured from the host TensorFlow Lite reference interpreter.
@@ -26,7 +26,7 @@ Key features include:
 
 ## Usage with Keil Studio
 
-The example is located in the `examples/Hello-Ethos-U` directory.
+The integration test is located in the `examples/Test-Ethos-U` directory.
 
 - [vcpkg-configuration.json](vcpkg-configuration.json) lists the tool
   dependencies that can be installed with
@@ -41,11 +41,11 @@ The example is located in the `examples/Hello-Ethos-U` directory.
 
 By default, the committed Vela models target Ethos-U55 with 128 MACs. Build and
 run this configuration from the
-`examples/Hello-Ethos-U` directory:
+`examples/Test-Ethos-U` directory:
 
 ```console
-cbuild Hello-Ethos-U55.csolution.yml --active SSE-300-U55 --update-rte --packs
-FVP_Corstone_SSE-300_Ethos-U55 -f Board/Corstone-300/fvp_config_u55.txt -a out/Hello-Ethos-U/SSE-300-U55/Debug/Hello-Ethos-U.hex
+cbuild Test-Ethos-U55.csolution.yml --active SSE-300-U55 --update-rte --packs
+FVP_Corstone_SSE-300_Ethos-U55 -f Board/Corstone-300/fvp_config_u55.txt -a out/Test-Ethos-U/SSE-300-U55/Debug/Test-Ethos-U.hex
 ```
 
 The test reports the detected NPU configuration followed by one result for each
@@ -64,11 +64,11 @@ For instructions on using the example with the Keil Studio IDE, see
 
 ## Project structure
 
-The `Hello-Ethos-U55.csolution.yml`, `Hello-Ethos-U65.csolution.yml`, and
-`Hello-Ethos-U85.csolution.yml` files each contain one target and share one
+The `Test-Ethos-U55.csolution.yml`, `Test-Ethos-U65.csolution.yml`, and
+`Test-Ethos-U85.csolution.yml` files each contain one target and share one
 project assembled from these parts:
 
-- `Hello-Ethos-U.cproject.yml`: connects the layers and test application.
+- `Test-Ethos-U.cproject.yml`: connects the layers and test application.
 - `Board/Corstone-320/`: device startup, UART standard I/O, memory layout,
   Ethos-U85 driver, interrupt wiring, and FVP configuration.
 - `Model/`: TFLM components, tensor arena, original and Vela-compiled models,
@@ -135,7 +135,7 @@ consistent. When changing the configuration, review these together:
 - the `System_Config`, `Memory_Mode`, and `arena_cache_size` values in
   `Model/vela.ini`;
 - `NPU_QCONFIG` and `NPU_REGIONCFG_*` in
-  `Hello-Ethos-U85.csolution.yml`;
+  `Test-Ethos-U85.csolution.yml`;
 - the `ethos_model`, `ethos_arena`, and `ethos_cache` linker sections in
   the Board layer; and
 - the cache, security, and MPU/SAU attributes for those physical memories.

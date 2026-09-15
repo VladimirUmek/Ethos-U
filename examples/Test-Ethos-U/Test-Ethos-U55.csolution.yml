@@ -27,7 +27,7 @@ solution:
             config-file: ./Board/Corstone-300/fvp_config_u55.txt
             args: ""
           images:
-            - project-context: Hello-Ethos-U.Debug
+            - project-context: Test-Ethos-U.Debug
 
   build-types:
     - type: Debug
@@ -39,7 +39,7 @@ solution:
       optimize: balanced
 
   projects:
-    - project: ./Hello-Ethos-U.cproject.yml
+    - project: ./Test-Ethos-U.cproject.yml
 
   mlops:
     description: TinyCNN int8 image classifier for Ethos-U55
