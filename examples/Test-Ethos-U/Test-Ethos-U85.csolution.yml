@@ -44,12 +44,10 @@ solution:
   projects:
     - project: ./Test-Ethos-U.cproject.yml
 
-  # MLOps information: exported to cmsis-executorch-simple.cbuild-mlops.yml when
-  # building with `cbuild ... --active SSE-320-U85`. Retarget the NPU here and
-  # the export script (model/export_model.py) picks it up automatically.
+  # MLOps information for converting the LiteRT models with Vela.
   # https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information
   mlops:
-    description: TinyCNN int8 image classifier for Ethos-U85
+    description: LiteRT example models for Ethos-U85
     npu:
       type: Ethos-U85
       macs: 256
@@ -57,7 +55,7 @@ solution:
       system: Ethos_U85_SYS_DRAM_Mid # system-config from the Vela config
       memory: Shared_Sram # memory-mode from the Vela config
     model:
-      clayer: ./Model/ML-MyModels.clayer.yml
-      name: TinyCNN
+      dir: ./Model
+      list: models.yml
 #    simulator:
 #      target-type: SSE-320-U85

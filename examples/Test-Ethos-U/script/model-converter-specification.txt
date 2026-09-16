@@ -1,0 +1,227 @@
+CMSIS MLOps LiteRT model-converter specification
+================================================
+
+Purpose
+-------
+
+model-converter.py is a wrapper around the Ethos-U Vela compiler. It converts
+one or more quantized LiteRT models (TensorFlow Lite) and generates the related 
+integration files. The generated `*.cbuild-mlops.yml` provides input parameters
+such as model names, paths, or Vela configuration.
+
+
+Location
+--------
+
+  examples/Test-Ethos-U/script/model-converter.py
+
+
+Invocation
+----------
+
+  python script/model-converter.py <cbuild-mlops.yml>
+
+For experimentation, the only command-line options are:
+
+  --system <name>    Override the Vela system configuration.
+  --memory <name>    Override the Vela memory mode.
+  --misc <options>   Replace the miscellaneous Vela options.
+
+Examples:
+
+  python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml
+  python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml \
+      --system Ethos_U55_High_End_Embedded --memory Shared_Sram
+  python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml \
+      --misc="--verbose-all --timing"
+
+The MLOps file is a required positional argument. All three options are optional
+and may be used independently.
+
+
+Input from cbuild-mlops.yml
+---------------------------
+
+The script reads:
+
+  cbuild-mlops.vela.ini
+  cbuild-mlops.vela.options
+  cbuild-mlops.vela.misc
+  cbuild-mlops.model.dir
+  cbuild-mlops.model.name
+  cbuild-mlops.model.list
+
+Paths in the generated file are relative to the directory containing the
+*.cbuild-mlops.yml file.
+
+model.dir is the working directory for model conversion. It contains the input
+models and receives the Vela output.
+
+There are two alternative ways to select models:
+
+  * model.name selects one model.
+  * model.list names a YAML file containing multiple models.
+
+At least one of model.name and model.list shall be present. When model.list is
+present, it selects multiple-model operation and model.name is ignored. This
+allows a generated node to retain a single-model fallback while also providing
+a list.
+
+
+Multiple-model list
+-------------------
+
+The list file is resolved relative to model.dir. Its format is:
+
+  models:
+    - hello_world/hello_world_int8.tflite
+    - tiny_cnn/tiny_cnn_int8.tflite
+
+models shall be a non-empty list of model paths. Each path is relative to
+model.dir. The script shall process the models in list order.
+
+
+Vela settings and overrides
+---------------------------
+
+By default, the complete Vela configuration comes from
+cbuild-mlops.vela.options, cbuild-mlops.vela.misc, and cbuild-mlops.vela.ini.
+
+The script shall tokenize vela.options and vela.misc with shlex.split and invoke
+Vela with a subprocess argument list and shell=False. Miscellaneous Vela options
+shall be passed through unchanged and in their specified order.
+
+When --system is specified, it replaces the value of --system-config in
+vela.options. When --memory is specified, it replaces the value of --memory-mode
+in vela.options. Both the "--option value" and "--option=value" forms shall be
+handled. All other generated options, including miscellaneous options, remain
+unchanged.
+
+When --misc is specified, its complete value replaces cbuild-mlops.vela.misc
+for the current invocation; it is not appended to it. The replacement string is
+also tokenized with shlex.split. An explicitly empty value, --misc="", removes
+all miscellaneous Vela options for the invocation.
+
+The --system and --memory overrides are applied independently of --misc. A misc
+string shall not contain --system-config or --memory-mode; these settings belong
+to their dedicated fields and command-line options.
+
+If the option being overridden is absent from vela.options, the script shall
+append it:
+
+  --system-config <value>
+  --memory-mode <value>
+
+The script only changes the command used for the current invocation. It shall
+never modify the generated *.cbuild-mlops.yml file.
+
+
+Conversion
+----------
+
+For every selected model, the script invokes the equivalent of:
+
+  vela --config <vela.ini> <vela.options> <model> --output-dir <model-directory>
+
+The input model path is resolved below model.dir. The output directory is the
+input model's parent directory. For example:
+
+  Model/tiny_cnn/tiny_cnn_int8.tflite
+
+produces Vela output in:
+
+  Model/tiny_cnn
+
+The expected Vela output naming is:
+
+  <input-stem>_vela.tflite
+
+The script shall accept any .tflite filename; an _int8 suffix is not required.
+
+Before running Vela, the script shall validate the MLOps YAML, list YAML, Vela
+INI file, model directory, and every input model. It shall reject model paths
+that escape model.dir.
+
+The script shall stop and return a non-zero status when validation or any Vela
+invocation fails. Vela output shall remain visible so the user can diagnose a
+conversion failure.
+
+
+Generated files
+---------------
+
+For every input model, model-converter.py shall produce the same related files
+and conventions as the existing Test-Ethos-U tiny_cnn directory:
+
+  <input-stem>_vela.tflite
+  <model-name>_model.c
+  VELA_SUMMARY.md
+
+For tiny_cnn/tiny_cnn_int8.tflite these are:
+
+  tiny_cnn_int8_vela.tflite
+  tiny_cnn_model.c
+  VELA_SUMMARY.md
+
+model-name is input-stem with a trailing _int8 removed. Without that suffix,
+model-name is input-stem unchanged.
+
+The C source shall embed the Vela output using:
+
+  const uint8_t <input-stem>_vela_tflite[]
+  const uint32_t <input-stem>_vela_tflite_len
+
+The byte array shall be aligned to 16 bytes and placed in section
+"ethos_model":
+
+  __attribute__((aligned(16), section("ethos_model")))
+
+The source shall include <stdint.h>, use LF line endings, and contain a
+generated-file notice and Apache-2.0 SPDX identifier.
+
+VELA_SUMMARY.md shall contain the model name, effective accelerator, effective
+system configuration, effective memory mode, and Vela's textual report in a
+fenced code block. Effective values include --system and --memory overrides.
+
+Vela shall first write into temporary storage. Only after successful conversion
+and output generation shall the script replace the three destination files. A
+failure shall not leave a partial flatbuffer, C source, or summary.
+
+
+Dependencies
+------------
+
+The script requires Python 3.10 or newer, PyYAML, and a Vela executable on PATH.
+It shall work on Windows, Linux, and macOS and use pathlib for path handling.
+It does not import LiteRT/TensorFlow because it operates directly on existing
+quantized .tflite files.
+
+
+Test-Ethos-U example
+--------------------
+
+Test-Ethos-U55.csolution.yml illustrates the input that CMSIS-Toolbox copies to
+the generated *.cbuild-mlops.yml:
+
+  model:
+    dir: Model
+    list: models.yml
+
+The example uses list because it always converts both models. Other projects
+may use name instead when converting only one model.
+
+
+Acceptance criteria
+-------------------
+
+  * A model.name input converts one model.
+  * A model.list input converts every listed model in one invocation.
+  * Each model produces a Vela flatbuffer, C array, and Vela summary.
+  * Default Vela settings come entirely from cbuild-mlops.yml.
+  * --system and --memory override only their corresponding Vela settings.
+  * Miscellaneous Vela options are preserved by default.
+  * --misc replaces, rather than appends to, the miscellaneous Vela options.
+  * The generated cbuild-mlops.yml file is never modified.
+  * Relative paths work when invoked from a different working directory.
+  * Missing files, invalid YAML, unsafe paths, and Vela failures are reported
+    clearly and return a non-zero status.

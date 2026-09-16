@@ -1,0 +1,3 @@
+models:
+  - hello_world/hello_world_int8.tflite
+  - tiny_cnn/tiny_cnn_int8.tflite

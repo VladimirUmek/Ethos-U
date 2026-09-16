@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Convert LiteRT models",
+      "detail": "Run Vela for every model listed by the selected generated *.cbuild-mlops.yml file",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "script/model-converter.py",
+        "${input:cbuildMlopsFile}"
+      ],
+      "windows": {
+        "command": "python"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "cbuildMlopsFile",
+      "type": "pickString",
+      "description": "Select the generated MLOps configuration",
+      "options": [
+        "Test-Ethos-U55.cbuild-mlops.yml",
+        "Test-Ethos-U65.cbuild-mlops.yml",
+        "Test-Ethos-U85.cbuild-mlops.yml"
+      ],
+      "default": "Test-Ethos-U55.cbuild-mlops.yml"
+    }
+  ]
+}
