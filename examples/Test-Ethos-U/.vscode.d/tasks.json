@@ -3,7 +3,7 @@
   "tasks": [
     {
       "label": "Convert LiteRT models",
-      "detail": "Run Vela for every model listed by the selected generated *.cbuild-mlops.yml file",
+      "detail": "Run Vela for every model with options from *.cbuild-mlops.yml file",
       "type": "shell",
       "command": "python3",
       "args": [

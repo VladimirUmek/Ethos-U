@@ -145,7 +145,7 @@ void app_main_thread(void *arg) {
 
   RegisterDebugLogCallback(TflmDebugLog);
 
-  printf("\n%s TFLM integration test\n", ETHOS_U_VARIANT);
+  printf("\n%s LiteRT (TFLu) integration test\n", ETHOS_U_VARIANT);
 
   RunModel("hello_world", hello_world_int8_vela_tflite,
            hello_world_input, sizeof(hello_world_input),
