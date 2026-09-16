@@ -41,6 +41,8 @@ var NAVTREE =
       ] ],
       [ "Step 2: Compile the ML model", "index.html#step-2-compile-the-ml-model", [
         [ "Update ML models of the example", "index.html#update-ml-models-of-the-example", null ],
+        [ "Compile with an MLOps conversion script", "index.html#compile-with-an-mlops-conversion-script", null ],
+        [ "Compile manually with Vela", "index.html#compile-manually-with-vela", null ],
         [ "Add application ML model", "index.html#add-application-ml-model", null ]
       ] ],
       [ "Step 3: Configure memory placement", "index.html#step-3-configure-memory-placement", [

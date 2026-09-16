@@ -310,7 +310,16 @@ Step 2: Compile the ML model</h2>
 <h3 class="doxsection"><a class="anchor" id="update-ml-models-of-the-example"></a>
 Update ML models of the example</h3>
 <p>The example contains the original quantized TensorFlow Lite models and Vela output compiled for the original Ethos-U55-128 configuration. Recompile each quantized model for the Ethos-U55-256 configuration and the device-specific system and memory mode that is reported in the generated <span class="tt">Test-Ethos-U55.cbuild-mlops.yml</span> file.</p>
-<p>These values can be directly applied to Vela. See <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps Information</a>.</p>
+<p>The generated <span class="tt">*.cbuild-mlops.yml</span> file is the handoff point between CMSIS-Toolbox and the ML model compilation step. It contains the device-specific <span class="tt">vela.ini</span>, accelerator selection, system configuration, memory mode, optional Vela arguments, and model selection.</p>
+<h3 class="doxsection"><a class="anchor" id="compile-with-an-mlops-conversion-script"></a>
+Compile with an MLOps conversion script</h3>
+<p>The <span class="tt">Test-Ethos-U</span> example provides one conversion script that consumes the generated MLOps file:</p>
+<div class="fragment"><div class="line">python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml</div>
+</div><!-- fragment --><p>The script reads the generated MLOps file, runs Vela for the selected model or model list, emits the Vela-compiled <span class="tt">_vela.tflite</span> file, regenerates the C array used by the application, and writes <span class="tt">VELA_SUMMARY.md</span>.</p>
+<p>This script is example integration code, not the only supported MLOps flow. Projects may replace it with their own training, quantization, validation, artifact signing, packaging, or CI pipeline, provided that the pipeline consumes the same generated Vela settings and produces the model artifacts expected by the application.</p>
+<h3 class="doxsection"><a class="anchor" id="compile-manually-with-vela"></a>
+Compile manually with Vela</h3>
+<p>For debugging, CI bring-up, or custom MLOps integrations, the same values can be applied directly to Vela. Inspect <span class="tt">Test-Ethos-U55.cbuild-mlops.yml</span> and use its <span class="tt">vela.ini</span>, <span class="tt">vela.options</span>, and model path when constructing the command. See <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps Information</a>.</p>
 <div class="fragment"><div class="line">vela Model/tiny_cnn/tiny_cnn_int8.tflite \</div>
 <div class="line">  --accelerator-config ethos-u55-256 \</div>
 <div class="line">  --config .cmsis/ensemble_vela.ini \</div>
@@ -320,7 +329,7 @@ Update ML models of the example</h3>
 <div class="line">  --output-dir Model/tiny_cnn \</div>
 <div class="line">  --verbose-config</div>
 </div><!-- fragment --><p>See <a href="../vela/index.html">Vela</a> for details about command-line options. Options such as <span class="tt">--optimise Size</span> can be added with the <span class="tt">mlops.vela.misc:</span> control in the <span class="tt">*.csolution.yml</span> file.</p>
-<p>Repeat the command for every quantized model in the model layer. Replace the previous Vela output used by the application and regenerate its embedded C data if the project stores the model as a C array. Keep the original quantized <span class="tt">.tflite</span> file as the portable input; the <span class="tt">_vela.tflite</span> output is specific to the selected Ethos-U and memory configuration. For more information about this handoff, see <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps Information</a>.</p>
+<p>Whether using the example script or a custom/manual flow, repeat compilation for every quantized model in the model layer. Replace the previous Vela output used by the application and regenerate its embedded C data if the project stores the model as a C array. Keep the original quantized <span class="tt">.tflite</span> file as the portable input; the <span class="tt">_vela.tflite</span> output is specific to the selected Ethos-U and memory configuration. For more information about this handoff, see <a href="https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-information">MLOps Information</a>.</p>
 <h3 class="doxsection"><a class="anchor" id="add-application-ml-model"></a>
 Add application ML model</h3>
 <p>The supplied <span class="tt">ML-MyModels.clayer.yml</span> has the layer type <span class="tt">ML-Model</span>. It selects the TensorFlow Lite Micro and Ethos-U kernel components and adds the model files to the application. The layer contains:</p>

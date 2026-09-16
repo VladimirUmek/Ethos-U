@@ -2,8 +2,10 @@ var NAVTREEINDEX0 =
 {
 "index.html":[],
 "index.html#add-a-new-target-to-the-solution":[2,1,0],
-"index.html#add-application-ml-model":[2,2,1],
+"index.html#add-application-ml-model":[2,2,3],
 "index.html#advanced-topics":[4],
+"index.html#compile-manually-with-vela":[2,2,2],
+"index.html#compile-with-an-mlops-conversion-script":[2,2,1],
 "index.html#configure-256-macs-for-fvp-simulation":[2,1,2],
 "index.html#determine-the-memory-budget":[0,0],
 "index.html#driver-region-settings":[2,3,2],
