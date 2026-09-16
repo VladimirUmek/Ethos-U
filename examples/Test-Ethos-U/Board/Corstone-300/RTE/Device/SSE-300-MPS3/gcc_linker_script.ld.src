@@ -281,6 +281,14 @@ SECTIONS
     __noinit_end = .;
   } > RAM0
 
+  /* Ethos-U buffers in external DRAM */
+  .ethos_ram0 (NOLOAD) :
+  {
+    . = ALIGN(32);
+    /* *(*ethos_cache) */  /* Uncomment when Ethos-U cache resides in DRAM */
+    /* *(*ethos_arena) */  /* Uncomment when Ethos-U arena resides in DRAM */
+  } > RAM0
+
   .heap (NOLOAD) :
   {
     . = ALIGN(8);
@@ -318,20 +326,23 @@ SECTIONS
   .cache (NOLOAD):
   {
     . = ALIGN(32);
-    *(*ethos_cache_buf)  /* Ethos-U Cache Area */
-    *(*activation_buf)   /* NN Activation Tensor (activation buffer / tensor arena) */
+    /* *(*ethos_cache) */  /* Uncomment when Ethos-U cache resides in SRAM (fast RAM) */
+    *(*ethos_arena)        /* Uncomment when Ethos-U arena resides in SRAM */
   } > RAM1
 
   /* Initialized buffers in fast access RAM */
   /* Entry must exist in .copy.table        */
   .init_buf :
   {
-    /* Add objects that go into RAM1 */
+    . = ALIGN(16);
+    /* *(*ethos_model) */  /* Uncomment when Ethos-U command stream + constants reside in SRAM */
+    /* Add other initialized objects that go into RAM1 */
+    . = ALIGN(4);
   } > RAM1 AT > ROM1
 
   .rom2 :
   {
-    *(*nn_model)         /* NN Model Binary Representation */
+    *(*ethos_model)   /* Comment out when Ethos-U command stream + constants reside in SRAM */
   } > ROM2
 
   .rom3 :
