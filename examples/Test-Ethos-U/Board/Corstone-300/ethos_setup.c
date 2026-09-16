@@ -26,18 +26,18 @@
 
 #if defined(ETHOSU65) || defined(ETHOSU85)
 /* Define Ethos-U NPU cache buffer size */
-#ifndef ETHOS_CACHE_BUF_SIZE
-#define ETHOS_CACHE_BUF_SIZE        393216
+#ifndef ETHOS_CACHE_SIZE
+#define ETHOS_CACHE_SIZE            0
 #endif
 
 /* Define Ethos-U cache buffer alignment */
-#ifndef ETHOS_CACHE_BUF_ALIGNMENT
-#define ETHOS_CACHE_BUF_ALIGNMENT   32
+#ifndef ETHOS_CACHE_ALIGNMENT
+#define ETHOS_CACHE_ALIGNMENT       32
 #endif
 
 /* Define Ethos-U NPU cache buffer attributes */
-#ifndef ETHOS_CACHE_BUF_ATTRIBUTES
-#define ETHOS_CACHE_BUF_ATTRIBUTES  __attribute__((section("ethos_cache_buf"), aligned(ETHOS_CACHE_BUF_ALIGNMENT)))
+#ifndef ETHOS_CACHE_ATTRIBUTES
+#define ETHOS_CACHE_ATTRIBUTES  __attribute__((section("ethos_cache"), aligned(ETHOS_CACHE_ALIGNMENT)))
 #endif
 #endif
 
@@ -54,8 +54,10 @@
 /* Ethos NPU driver instance. */
 static struct ethosu_driver EthosDriver;
 
-#if defined(ETHOSU65) || defined(ETHOSU85)
-static uint8_t ethos_cache[ETHOS_CACHE_BUF_SIZE] ETHOS_CACHE_BUF_ATTRIBUTES;
+#if (defined(ETHOSU65) || defined(ETHOSU85)) && (ETHOS_CACHE_SIZE > 0)
+/* Register Ethos-U NPU cache buffer */
+/* Ethos-U NPU cache buffer */
+static uint8_t ethos_cache[ETHOS_CACHE_SIZE] ETHOS_CACHE_ATTRIBUTES;
 #endif
 
 /*
@@ -76,7 +78,7 @@ void ethos_setup (void) {
   /*  Initialize Ethos-U NPU driver. */
   rval = ethosu_init(&EthosDriver,            /* Ethos-U device driver */
                      ethos_base_addr,         /* Ethos-U base address  */
-                     #if defined(ETHOSU65) || defined(ETHOSU85)
+                     #if (defined(ETHOSU65) || defined(ETHOSU85)) && (ETHOS_CACHE_SIZE > 0)
                      ethos_cache,             /* Cache memory pointer  */
                      sizeof(ethos_cache),     /* Cache memory size     */
                      #else

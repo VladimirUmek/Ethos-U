@@ -55,6 +55,9 @@ LR_ROM1 __ROM1_BASE __ROM1_SIZE  {
   }
 
   RW_RAM0 AlignExpr(+0, 8) (__RAM0_SIZE - __HEAP_SIZE - __STACK_SIZE - __STACKSEAL_SIZE - AlignExpr(ImageLength(RW_NOINIT), 8)) {
+    ; Ethos-U Cache Area
+    ; *.o (*ethos_cache)          ; Uncomment when Ethos-U cache resides in DRAM
+
     *(+RW +ZI)
   }
 
@@ -73,11 +76,14 @@ LR_ROM1 __ROM1_BASE __ROM1_SIZE  {
 
 #if __RAM1_SIZE > 0
   RW_RAM1 __RAM1_BASE __RAM1_SIZE  {
-    ; Ethos-U Cache Area
-    *.o (*ethos_cache_buf)
+    ; NN Model Binary Representation
+    ; *.o (ethos_model)           ; Uncomment when Ethos-U command stream + constants reside in SRAM
 
-    ; NN Activation Tensor (activation buffer / tensor arena)
-    *.o (*activation_buf)
+    ; Ethos-U Cache Area
+    ; *.o (*ethos_cache)          ; Uncomment when Ethos-U cache resides in SRAM (fast RAM)
+
+    ; NN Activation Area (activation buffer / tensor arena)
+    *.o (*ethos_arena)          ; Uncomment when Ethos-U arena resides in SRAM
 
    .ANY (+RW +ZI)
   }
@@ -100,7 +106,7 @@ LR_ROM1 __ROM1_BASE __ROM1_SIZE  {
 LR_ROM2 __ROM2_BASE __ROM2_SIZE  {
   ER_ROM2 +0 __ROM2_SIZE {
     ; NN Model Binary Representation
-    *.o (nn_model)
+    *.o (ethos_model)           ; Uncomment when Ethos-U command stream + constants reside in ROM
 
    .ANY (+RO +XO)
   }

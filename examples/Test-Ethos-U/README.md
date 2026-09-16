@@ -141,7 +141,7 @@ consistent. When changing the configuration, review these together:
 - the cache, security, and MPU/SAU attributes for those physical memories.
 
 The shipped `arena_cache_size` is 384 KiB and must match
-`ETHOS_CACHE_BUF_SIZE` in `Board/Corstone-320/ethos_setup.c`. A cache-size or
+`ETHOS_CACHE_SIZE` in `Board/Corstone-320/ethos_setup.c`. A cache-size or
 memory-region mismatch can select the wrong NPU access path or cause the NPU to
 read outside the configured buffer.
 
