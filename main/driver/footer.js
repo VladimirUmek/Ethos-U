@@ -3,5 +3,5 @@ function writeHeader() {
 };
 
 function writeFooter()  {
-    document.write('Generated on Wed Sep 16 2026 14:58:32 for PROJECT_NAME           = Driver PROJECT_NUMBER         =. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Thu Sep 17 2026 06:44:34 for PROJECT_NAME           = Driver PROJECT_NUMBER         =. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };
