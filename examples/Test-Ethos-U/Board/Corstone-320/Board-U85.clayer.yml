@@ -49,9 +49,11 @@ layer:
   groups:
     - group: Board
       files:
-        - file: ./main.c
-        - file: ./main.h
-        - file: ./ethos_setup.c
+        - file: main.c
+        - file: main.h
+        - file: ethos_setup.c
+        - file: ethosu_os_rtos2.c
+        - file: ethosu_dcache.c
 
   linker:
-    - regions: ./RTE/Device/SSE-320-FVP/regions_SSE-320.h
+    - regions: RTE/Device/SSE-320-FVP/regions_SSE-320.h
