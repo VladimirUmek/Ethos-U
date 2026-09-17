@@ -19,6 +19,12 @@
 #include "ethosu_driver.h"
 #include "cmsis_os2.h"
 
+/* Maximum number of Ethos-U instances.                        */
+/* Used as maximum semaphore count in ethosu_semaphore_create. */
+#ifndef ETHOSU_MAX_INSTANCES
+#define ETHOSU_MAX_INSTANCES 2
+#endif
+
 /**
   \brief Create a mutex object.
   \return Pointer to a mutex object.
@@ -75,7 +81,6 @@ int ethosu_mutex_unlock(void *mutex) {
   return rval;
 }
 
-#if (ETHOSU_DRIVER_VERSION_MAJOR == 1) && (ETHOSU_DRIVER_VERSION_MINOR < 99)
 /**
   \brief Create a semaphore object.
   \return Pointer to a semaphore object.
@@ -83,24 +88,9 @@ int ethosu_mutex_unlock(void *mutex) {
 void *ethosu_semaphore_create(void) {
   osSemaphoreId_t sem_id;
 
-  sem_id = osSemaphoreNew(1, 0, NULL);
+  sem_id = osSemaphoreNew(ETHOSU_MAX_INSTANCES, 0U, NULL);
   return (void *) sem_id;
 }
-#endif
-
-#if (ETHOSU_DRIVER_VERSION_MAJOR == 1) && (ETHOSU_DRIVER_VERSION_MINOR >= 99)
-/**
-  \brief Create a semaphore object.
-  \return Pointer to a semaphore object.
-*/
-void *ethosu_semaphore_create(unsigned int max_count, unsigned int initial_count) {
-  osSemaphoreId_t sem_id;
-
-  sem_id = osSemaphoreNew(max_count, initial_count, NULL);
-  return (void *) sem_id;
-}
-#endif
-
 
 /**
   \brief Destroy a semaphore object.
