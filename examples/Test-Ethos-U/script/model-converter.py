@@ -211,7 +211,7 @@ def convert_model(
 
         print(f"Converting {model_path}")
         print(
-            "Executing: Vela with actual command-line parameters: "
+            "Executing: "
             f"{command_line(command)}"
         )
         try:
