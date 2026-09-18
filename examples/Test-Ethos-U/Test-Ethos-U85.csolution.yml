@@ -1,6 +1,5 @@
 solution:
-  description: TensorFlow Lite Micro on Ethos-U85, running as an integration test
-    on the Corstone-320 FVP
+  description: Integration test of LiteRT on Ethos-U85 using Corstone-320 FVP
   created-for: CMSIS-Toolbox@2.14.0
   cdefault:
 
@@ -56,6 +55,8 @@ solution:
       memory: Shared_Sram # memory-mode from the Vela config
     model:
       dir: ./Model
-      list: models.yml
-#    simulator:
-#      target-type: SSE-320-U85
+      name:
+        - hello_world/hello_world_int8.tflite
+        - tiny_cnn/tiny_cnn_int8.tflite
+    simulator:
+      target: SSE-320-U85

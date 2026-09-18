@@ -51,6 +51,8 @@ solution:
       memory: Shared_Sram
     model:
       dir: ./Model
-      list: models.yml
-#   simulator:
-#     target-type: SSE-300-U55
+      name:
+        - hello_world/hello_world_int8.tflite
+        - tiny_cnn/tiny_cnn_int8.tflite
+    simulator:
+      target: SSE-300-U55

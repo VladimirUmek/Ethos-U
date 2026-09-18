@@ -1,5 +1,5 @@
 solution:
-  description: TensorFlow Lite Micro on Ethos-U65, running as an integration test
+  description: TensorFlow Lite Micro on Ethos-U85, running as an integration test
     on the Corstone-300 FVP
   created-for: CMSIS-Toolbox@2.14.0
   cdefault:
@@ -51,6 +51,8 @@ solution:
       memory: Shared_Sram
     model:
       dir: ./Model
-      list: models.yml
-#    simulator:
-#      target-type: SSE-300-U65
+      name:
+        - hello_world/hello_world_int8.tflite
+        - tiny_cnn/tiny_cnn_int8.tflite
+    simulator:
+      target: SSE-300-U65

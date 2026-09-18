@@ -81,11 +81,11 @@ The converter uses from the `*.cbuild-mlops.yml` file the following nodes:
 - `vela.options` for generated Vela arguments;
 - `vela.misc` for optional additional Vela arguments;
 - `model.dir` as the model working directory; and
-- `model.name` or `model.list` to select input models.
+- `model.name` to select one or more input models.
 
 ## Converting one model
 
-Use `model.name` for a single model:
+Use a string-valued `model.name` for a single model:
 
 ```yaml
 model:
@@ -97,23 +97,17 @@ The model path is relative to `model.dir`.
 
 ## Converting multiple models
 
-Use `model.list` to name a YAML file:
+Use a sequence-valued `model.name` for multiple models:
 
 ```yaml
 model:
   dir: Model
-  list: models.yml
+  name:
+    - hello_world/hello_world_int8.tflite
+    - tiny_cnn/tiny_cnn_int8.tflite
 ```
 
-The `models.yml` list file is relative to `model.dir` and has this format:
-
-```yaml
-models:
-  - hello_world/hello_world_int8.tflite
-  - tiny_cnn/tiny_cnn_int8.tflite
-```
-
-Models are converted in list order and must be located below the below `model.dir`.
+Models are converted in declared order and must be located below `model.dir`.
 
 ## Overwrite MLOps settings
 
@@ -192,8 +186,7 @@ starting Vela. Common errors include:
 
 - Vela is missing from `PATH`;
 - `model.dir`, a model, or the Vela INI file does not exist;
-- neither `model.name` nor `model.list` is defined;
-- `models.yml` is empty or malformed; and
+- `model.name` is missing, empty, or malformed; and
 - a model path escapes `model.dir`.
 
 ## Running the tests

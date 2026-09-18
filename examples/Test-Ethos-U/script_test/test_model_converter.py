@@ -52,17 +52,12 @@ class ModelConverterTests(unittest.TestCase):
         _, models = converter.read_models(model, self.root, self.root / "input.yml")
         self.assertEqual(models, [expected.resolve()])
 
-    def test_model_list_takes_precedence(self) -> None:
+    def test_multiple_models(self) -> None:
         first = self.touch_model("one/a.tflite")
         second = self.touch_model("two/b.tflite")
-        self.write_yaml(
-            self.model_dir / "models.yml",
-            {"models": ["one/a.tflite", "two/b.tflite"]},
-        )
         model = {
             "dir": "Model",
-            "name": "ignored.tflite",
-            "list": "models.yml",
+            "name": ["one/a.tflite", "two/b.tflite"],
         }
         _, models = converter.read_models(model, self.root, self.root / "input.yml")
         self.assertEqual(models, [first.resolve(), second.resolve()])

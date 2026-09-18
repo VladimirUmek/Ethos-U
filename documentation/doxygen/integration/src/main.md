@@ -312,8 +312,8 @@ generated MLOps file:
 python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml
 ```
 
-The script reads the generated MLOps file, runs Vela for the selected model or
-model list, emits the Vela-compiled `_vela.tflite` file, regenerates the C array
+The script reads the generated MLOps file, runs Vela for each selected model,
+emits the Vela-compiled `_vela.tflite` file, regenerates the C array
 used by the application, and writes `VELA_SUMMARY.md`.
 
 This script is example integration code, not the only supported MLOps flow.

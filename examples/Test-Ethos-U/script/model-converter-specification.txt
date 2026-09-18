@@ -49,7 +49,6 @@ The script reads:
   cbuild-mlops.vela.misc
   cbuild-mlops.model.dir
   cbuild-mlops.model.name
-  cbuild-mlops.model.list
 
 Paths in the generated file are relative to the directory containing the
 *.cbuild-mlops.yml file.
@@ -57,29 +56,21 @@ Paths in the generated file are relative to the directory containing the
 model.dir is the working directory for model conversion. It contains the input
 models and receives the Vela output.
 
-There are two alternative ways to select models:
+model.name selects the models to convert. It supports two forms:
 
-  * model.name selects one model.
-  * model.list names a YAML file containing multiple models.
+  * A non-empty string selects one model.
+  * A non-empty list of strings selects multiple models.
 
-At least one of model.name and model.list shall be present. When model.list is
-present, it selects multiple-model operation and model.name is ignored. This
-allows a generated node to retain a single-model fallback while also providing
-a list.
+model.name shall be present and use one of these forms. Each path is relative
+to model.dir. The script shall process a list in its declared order.
 
 
-Multiple-model list
--------------------
+For example, multiple-model selection has this format:
 
-The list file is resolved relative to model.dir. Its format is:
-
-  models:
-    - hello_world/hello_world_int8.tflite
-    - tiny_cnn/tiny_cnn_int8.tflite
-
-models shall be a non-empty list of model paths. Each path is relative to
-model.dir. The script shall process the models in list order.
-
+  model:
+    name:
+      - hello_world/hello_world_int8.tflite
+      - tiny_cnn/tiny_cnn_int8.tflite
 
 Vela settings and overrides
 ---------------------------
@@ -138,8 +129,8 @@ The expected Vela output naming is:
 
 The script shall accept any .tflite filename; an _int8 suffix is not required.
 
-Before running Vela, the script shall validate the MLOps YAML, list YAML, Vela
-INI file, model directory, and every input model. It shall reject model paths
+Before running Vela, the script shall validate the MLOps YAML, Vela INI file,
+model directory, and every input model. It shall reject model paths
 that escape model.dir.
 
 The script shall stop and return a non-zero status when validation or any Vela
@@ -205,17 +196,19 @@ the generated *.cbuild-mlops.yml:
 
   model:
     dir: Model
-    list: models.yml
+    name:
+      - hello_world/hello_world_int8.tflite
+      - tiny_cnn/tiny_cnn_int8.tflite
 
-The example uses list because it always converts both models. Other projects
-may use name instead when converting only one model.
+The example uses a name sequence because it always converts both models. Other
+projects may use a string-valued name when converting only one model.
 
 
 Acceptance criteria
 -------------------
 
   * A model.name input converts one model.
-  * A model.list input converts every listed model in one invocation.
+  * A sequence-valued model.name converts every listed model in one invocation.
   * Each model produces a Vela flatbuffer, C array, and Vela summary.
   * Default Vela settings come entirely from cbuild-mlops.yml.
   * --system and --memory override only their corresponding Vela settings.

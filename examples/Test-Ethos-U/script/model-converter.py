@@ -70,33 +70,15 @@ def read_models(model: dict[str, Any], mlops_dir: Path, source: Path) -> tuple[P
     if not model_dir.is_dir():
         raise ConfigurationError(f"model.dir is not a directory: '{model_dir}'")
 
-    list_name = model.get("list")
-    single_name = model.get("name")
-    names: list[str]
-
-    if list_name is not None:
-        if not isinstance(list_name, str) or not list_name.strip():
-            raise ConfigurationError(f"'{source}': 'model.list' must be a non-empty string")
-        list_path = below(resolved(model_dir, list_name), model_dir, "model.list")
-        document = load_yaml(list_path)
-        unknown = set(document) - {"models"}
-        if unknown:
-            raise ConfigurationError(
-                f"'{list_path}': unknown key(s): {', '.join(sorted(unknown))}"
-            )
-        values = document.get("models")
-        if not isinstance(values, list) or not values:
-            raise ConfigurationError(f"'{list_path}': 'models' must be a non-empty list")
-        if any(not isinstance(item, str) or not item.strip() for item in values):
-            raise ConfigurationError(
-                f"'{list_path}': every 'models' entry must be a non-empty string"
-            )
-        names = values
-    elif isinstance(single_name, str) and single_name.strip():
-        names = [single_name]
+    value = model.get("name")
+    if isinstance(value, str) and value.strip():
+        names = [value]
+    elif (isinstance(value, list) and value
+          and all(isinstance(item, str) and item.strip() for item in value)):
+        names = value
     else:
         raise ConfigurationError(
-            f"'{source}': model requires a non-empty 'name' or 'list'"
+            f"'{source}': 'model.name' must be a non-empty string or list of strings"
         )
 
     paths: list[Path] = []
