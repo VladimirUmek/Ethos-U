@@ -5,10 +5,11 @@ Ethos-U65, and Ethos-U85 NPUs. The shared project runs on the matching
 Corstone FVP simulation or hardware when used as a
 [reference application](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/).*
 
-The test demonstrates an end-to-end TensorFlow Lite Micro (TFLM) integration
-for an Ethos-U85 system. It builds and runs two Vela-compiled models, supplies a
-golden input to each model, and compares the NPU output bit-for-bit with output
-captured from the host TensorFlow Lite reference interpreter.
+The test demonstrates end-to-end TensorFlow Lite Micro (TFLM) integration for
+Ethos-U55, Ethos-U65, and Ethos-U85 systems. It builds and runs two
+Vela-compiled models, supplies a golden input to each model, and compares the
+NPU output bit-for-bit with output captured from the host TensorFlow Lite
+reference interpreter.
 
 Key features include:
 
@@ -22,7 +23,7 @@ Key features include:
   Vela-generated models can be recompiled.
 - **Configurable integration:** the supplied `vela.ini` provides alternative
   memory modes, while the original models can be recompiled for other NPU
-  configurations by updating the related generator and platform settings.
+  configurations with the supplied model converter.
 
 ## Usage with Keil Studio
 
@@ -69,10 +70,11 @@ The `Test-Ethos-U55.csolution.yml`, `Test-Ethos-U65.csolution.yml`, and
 project assembled from these parts:
 
 - `Test-Ethos-U.cproject.yml`: connects the layers and test application.
-- `Board/Corstone-320/`: device startup, UART standard I/O, memory layout,
-  Ethos-U85 driver, interrupt wiring, and FVP configuration.
+- `Board/Corstone-300/` and `Board/Corstone-320/`: device startup, UART standard
+  I/O, memory layout, Ethos-U driver, interrupt wiring, and FVP configuration.
 - `Model/`: TFLM components, tensor arena, original and Vela-compiled models,
-  model generator, and Vela configuration.
+  and Vela configuration.
+- `script/`: model converter and its documentation.
 - `Source/test_main.cpp`: invokes both models and checks their output against
   the golden vectors.
 
@@ -91,40 +93,23 @@ NPU path works end to end.
 `tiny_cnn` was written for this example: a dense-only graph never touches
 the convolution, depthwise convolution, and pooling paths that real
 workloads depend on. It classifies synthetic 16x16 stripe patterns generated
-in-process, so retraining needs no dataset download.
+in-process, so the test needs no external dataset.
 
-Both models are trained, quantized, and Vela-compiled by
-`Model/hello_world/gen/generate.py`, and both compile to **zero CPU operators** — the whole
+Both supplied quantized models compile to **zero CPU operators** — the whole
 graph runs on the NPU. Only the Vela builds are linked into the firmware; the
-original `.tflite` files is provided so the models can be
-recompiled for a different NPU configuration or memory mode.
+original `.tflite` files are provided so the models can be recompiled for a
+different NPU configuration or memory mode.
 
-## Regenerate or check the models
+## Recompile the models
 
-The generator requires Python packages pinned in `Model/hello_world/gen/requirements.txt`.
-Install them and check that the committed Vela output is current:
-
-```console
-python3 -m pip install -r Model/hello_world/gen/requirements.txt
-python3 Model/hello_world/gen/generate.py --check
-```
-
-To retrain, quantize, and Vela-compile both models:
+The model converter reads the generated `*.cbuild-mlops.yml` file and recompiles
+the selected quantized models with the Vela settings for that solution. For
+prerequisites, command-line and VS Code usage, configuration overrides, and
+generated files, see the [LiteRT model converter documentation](script/README.md).
 
 ```console
-python3 Model/hello_world/gen/generate.py
+python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml
 ```
-
-To Vela-compile the committed quantized models without retraining:
-
-```console
-python3 Model/hello_world/gen/generate.py --compile
-```
-
-The full generation command updates each model's `.tflite`, generated C array,
-and Vela summary. It also prints new golden vectors ready to paste into
-`Source/test_main.cpp`. Training is not bit-reproducible; use `--check` when the
-goal is only to detect Vela output drift without retraining.
 
 ## Exploring Ethos-U configurations
 
