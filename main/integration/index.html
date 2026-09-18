@@ -315,7 +315,7 @@ Update ML models of the example</h3>
 Compile with an MLOps conversion script</h3>
 <p>The <span class="tt">Test-Ethos-U</span> example provides one conversion script that consumes the generated MLOps file:</p>
 <div class="fragment"><div class="line">python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml</div>
-</div><!-- fragment --><p>The script reads the generated MLOps file, runs Vela for the selected model or model list, emits the Vela-compiled <span class="tt">_vela.tflite</span> file, regenerates the C array used by the application, and writes <span class="tt">VELA_SUMMARY.md</span>.</p>
+</div><!-- fragment --><p>The script reads the generated MLOps file, runs Vela for each selected model, emits the Vela-compiled <span class="tt">_vela.tflite</span> file, regenerates the C array used by the application, and writes <span class="tt">VELA_SUMMARY.md</span>.</p>
 <p>This script is example integration code, not the only supported MLOps flow. Projects may replace it with their own training, quantization, validation, artifact signing, packaging, or CI pipeline, provided that the pipeline consumes the same generated Vela settings and produces the model artifacts expected by the application.</p>
 <h3 class="doxsection"><a class="anchor" id="compile-manually-with-vela"></a>
 Compile manually with Vela</h3>
