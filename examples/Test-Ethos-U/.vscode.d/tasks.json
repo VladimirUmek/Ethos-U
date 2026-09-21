@@ -8,7 +8,10 @@
       "command": "python3",
       "args": [
         "script/model-converter.py",
-        "${command:cmsis-csolution.getSolutionDir}/${command:cmsis-csolution.getSolutionName}.cbuild-mlops.yml"
+        {
+          "value": "${command:cmsis-csolution.getSolutionDir}/${command:cmsis-csolution.getSolutionName}.cbuild-mlops.yml",
+          "quoting": "strong"
+        }
       ],
       "windows": {
         "command": "python"
