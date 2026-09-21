@@ -8,7 +8,7 @@
       "command": "python3",
       "args": [
         "script/model-converter.py",
-        "${input:cbuildMlopsFile}"
+        "${command:cmsis-csolution.getSolutionDir}/${command:cmsis-csolution.getSolutionName}.cbuild-mlops.yml"
       ],
       "windows": {
         "command": "python"
@@ -17,19 +17,6 @@
         "cwd": "${workspaceFolder}"
       },
       "problemMatcher": []
-    }
-  ],
-  "inputs": [
-    {
-      "id": "cbuildMlopsFile",
-      "type": "pickString",
-      "description": "Select the generated MLOps configuration",
-      "options": [
-        "Test-Ethos-U55.cbuild-mlops.yml",
-        "Test-Ethos-U65.cbuild-mlops.yml",
-        "Test-Ethos-U85.cbuild-mlops.yml"
-      ],
-      "default": "Test-Ethos-U55.cbuild-mlops.yml"
     }
   ]
 }
