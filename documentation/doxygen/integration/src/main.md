@@ -44,27 +44,54 @@ measurements.
 
 ```mermaid
 flowchart TD
-    setup["Select MCU and DFP<br/>Check DFP resources<br/>Create CMSIS-Toolbox project"] --> compile["Compile ML model<br/>for device"]
-    compile --> configure["Configure memory placement and linker script"]
-    configure --> integrate["Complete application integration"]
-    integrate --> validate["Validate and tune"]
-    validate -. Iterate .-> compile
+    hardware["Characterize target hardware<br/>and create the project"] --> vela["Select and verify<br/>the Vela configuration"]
+    vela --> compile["Compile and inspect<br/>the ML model"]
+    compile --> configure["Configure linker, driver,<br/>memory attributes, and platform integration"]
+    configure --> validate["Validate and tune<br/>on target hardware"]
+    validate -. Iterate .-> vela
 ```
 
-1. <a href="#step-1-select-the-mcu-and-create-the-project"><strong>Select the MCU and create the project.</strong></a>
-   Install its [DFP](https://www.keil.arm.com/packs), check that it supplies the
-   required Vela and linker resources, and select the system configuration and
-   memory mode. Contact the device vendor if these resources are missing.
-2. <a href="#step-2-compile-the-ml-model"><strong>Compile the ML model.</strong></a>
-   Run Vela with the device-specific settings and check its memory and
-   performance estimates against the application requirements.
-3. <a href="#step-3-configure-memory-placement"><strong>Configure memory placement.</strong></a>
-   Keep the Vela memory mode, linker placement, and driver regions consistent.
-   Build the system and confirm the allocations in the linker map.
-4. <a href="#step-4-complete-application-integration"><strong>Complete application integration.</strong></a>
-   Add the required RTOS, power, timeout, cache, and fault handling.
+1. <a href="#step-1-characterize-the-target-hardware-and-create-the-project"><strong>Characterize the target hardware and create the project.</strong></a>
+   Identify the NPU configuration, NPU-accessible memories, access constraints,
+   and device resources before choosing a software configuration.
+2. <a href="#step-2-select-and-verify-the-vela-configuration"><strong>Select and verify the Vela configuration.</strong></a>
+   Confirm that the device-specific system configuration and memory mode model
+   the intended physical memories and match the NPU variant and MAC count.
+3. <a href="#step-3-compile-and-inspect-the-ml-model"><strong>Compile and inspect the ML model.</strong></a>
+   Run Vela with the verified settings and check its operator placement, memory
+   use, and performance estimates against the application requirements.
+4. <a href="#step-4-configure-the-platform-integration"><strong>Configure the platform integration.</strong></a>
+   Keep the linker placement, driver regions, MPU/SAU attributes, cache policy,
+   address mapping, and runtime integration consistent with the Vela configuration.
 5. <a href="#step-5-validate-and-tune"><strong>Validate and tune.</strong></a> Verify
    correctness, memory use, and performance on the target hardware.
+
+### Configuration consistency checklist
+
+An Ethos-U application describes the same memory system in several places.
+Vela uses a performance model and logical memory areas when it creates the
+command stream, while the linker, driver, and platform configuration implement
+those choices on physical hardware. A mismatch can produce inaccurate Vela
+estimates, inaccessible data, cache-coherency failures, or an inference that
+does not complete. Use this checklist whenever selecting a target, changing a
+memory mode, or replacing the ML model.
+
+| Check | Configuration source | Why and what to verify |
+|---|---|---|
+| <a href="#step-1-characterize-the-target-hardware-and-create-the-project">Target hardware</a> | Device documentation and DFP | Establish the NPU variant and MAC count, NPU-accessible memories and capacities, read/write restrictions, security attribution, and CPU cacheability before selecting compiler settings. |
+| <a href="../vela/index.html#create-device-specific-velaini-file">Vela system and memory configuration</a> | `System_Config` and `Memory_Mode` in the device-specific `vela.ini` | Confirm that the logical areas model the intended physical memories and their performance, and that constants, the writable arena, and optional fast scratch are assigned to suitable access paths. |
+| <a href="#step-3-compile-and-inspect-the-ml-model">Model compilation</a> | Generated `*.cbuild-mlops.yml` and Vela invocation | Confirm the accelerator, MAC count, `vela.ini`, system configuration, memory mode, and model input before treating the generated model as target-compatible. |
+| <a href="../vela/index.html#read-the-vela-reports">Vela report</a> | Vela summary and CSV reports | Check that allocations fit the available memories, the expected operators run on the NPU, and estimated bandwidth and performance are suitable for the application. |
+| <a href="#linker-placement">Linker placement</a> | Linker script and link map | Confirm that the compiled model, tensor arena, and optional fast-scratch buffer occupy the physical memories modeled by Vela, with sufficient size and alignment. |
+| <a href="../driver/index.html#configure-memory-access-with-npuqconfig-and-npuregioncfgx">Driver memory access</a> | `NPU_QCONFIG` and `NPU_REGIONCFG_x` | Ensure that command-stream and base-region accesses use the NPU paths and attributes that reach the linked physical memories. |
+| <a href="#mpusau-and-cache-attributes">Platform memory attributes</a> | MPU/SAU, cache policy, and address mapping | Ensure that the CPU and NPU have compatible security and access permissions, and provide address translation and cache maintenance where required. |
+| <a href="#step-5-validate-and-tune">Target validation</a> | Link map, functional tests, driver diagnostics, and PMU measurements | Verify correct results and stable execution, then compare actual memory use and performance with the compiler estimates. |
+
+> [!IMPORTANT]
+>
+> The Vela configuration, linker placement, driver memory-access selectors, and
+> MPU/SAU and cache attributes must all describe the same physical-memory
+> arrangement.
 
 ## Tutorial: Create an Ethos-U application
 
@@ -135,7 +162,7 @@ application-specific ML model.
 >   consistent in the solution MLOps information, Board layer, Vela command, and
 >   FVP configuration.
 
-### Step 1: Select the MCU and create the project
+### Step 1: Characterize the target hardware and create the project
 
 For our application, we selected the Alif Semiconductor
 [Ensemble E7 (`AE722F80F55D5LS`)](https://www.keil.arm.com/devices/alif-semiconductor-ae722f80f55d5ls/)
@@ -184,6 +211,8 @@ This example uses the `Board/AppKit-E7_M55_HP` layer.
 > board layer. This example requires standard output and the Ethos-U driver. See
 > [Board Layers](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/#board-layer)
 > in the CMSIS-Toolbox documentation.
+
+### Step 2: Select and verify the Vela configuration
 
 #### Update MLOps information
 
@@ -289,7 +318,7 @@ configuration as follows:
    ethosu.num_macs=256
    ```
 
-### Step 2: Compile the ML model
+### Step 3: Compile and inspect the ML model
 
 #### Update ML models of the example
 
@@ -368,7 +397,7 @@ To use an application-specific model, copy or modify this layer, add the new
 model files to its `groups:` node, and set `model.clayer` in the solution's
 `mlops:` node to the resulting layer.
 
-### Step 3: Configure memory placement
+### Step 4: Configure the platform integration
 
 Keep the Vela memory mode, linker placement, and driver regions consistent,
 then build the system and confirm the allocations in the linker map. The diagram
@@ -407,7 +436,7 @@ the related `<board>.clayer.yml` file so that the driver access paths match
 <a href="../vela/index.html#match-the-driver-configuration">Match the driver configuration</a>
 for the mapping.
 
-### Step 4: Complete application integration
+#### Complete application integration
 
 Review the driver's weak callbacks described in
 <a href="../driver/index.html#platform-specific-functions">Platform-specific functions</a>
