@@ -1,20 +1,20 @@
-/*---------------------------------------------------------------------------
- * Copyright (c) 2026 Arm Limited (or its affiliates). All rights reserved.
+/*
+ * Copyright 2026 Arm Limited and/or its affiliates.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
- *      Name:    test_main.cpp
- *      Purpose: Run each model on the Ethos-U85 and check its output
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Both models are Vela-compiled, so each is a single "ethos-u" custom operator
- * that the NPU executes. One golden input/output pair per model is embedded
- * below; the expected values come from the host TensorFlow reference
- * interpreter, so they are independent of the NPU being tested.
+ * www.apache.org/licenses/LICENSE-2.0
  *
- * Regenerate the models and these vectors with
- * Model/hello_world/gen/generate.py, which prints a ready-to-paste copy of the
- * arrays below.
- *---------------------------------------------------------------------------*/
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -99,6 +99,7 @@ static void check(const char *name, bool ok, const char *detail) {
   printf("[%s] %s (%s)\n", ok ? "PASS" : "FAIL", name, detail);
 }
 
+/* Run a model on the Ethos-U NPU and check its output against the expected values */
 static void RunModel(const char *name,
                      const uint8_t *model_data,
                      const int8_t *input,  size_t input_len,
@@ -141,6 +142,7 @@ static void RunModel(const char *name,
   check(name, worst == 0, detail);
 }
 
+/* Application main thread */
 void app_main_thread(void *arg) {
 
   RegisterDebugLogCallback(TflmDebugLog);

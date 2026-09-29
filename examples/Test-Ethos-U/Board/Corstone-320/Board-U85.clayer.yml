@@ -1,6 +1,6 @@
 layer:
   type: Board
-  description: Board setup for AI/ML with Ethos U85
+  description: Base configuration of SSE-320 FVP with Ethos U85
   for-board: ARM::SSE-320
   for-device: ARM::SSE-320-FVP
 
@@ -17,19 +17,18 @@ layer:
   define:
     - CMSIS_target_header: \"Corstone-320.h\"
     - ETHOSU_MACS: 256
-    - UART0_BASE_S_TMP
 
   packs:
     - pack: ARM::CMSIS
-    - pack: ARM::CMSIS-Compiler@^2.2.0
+    - pack: ARM::CMSIS-Compiler@^2.3.0
     - pack: ARM::CMSIS-Ethos-U@^1.0.0-0
-    - pack: ARM::SSE_320_BSP@1.1.0
+    - pack: ARM::SSE_320_BSP@^2.0.0
 
   components:
     - component: CMSIS:CORE
 
     - component: CMSIS Driver:USART
-    - component: CMSIS Driver:VIO
+    - component: CMSIS Driver:VIO:Virtual
 
     - component: CMSIS-Compiler:CORE
     - component: CMSIS-Compiler:STDERR:UART&CMSIS

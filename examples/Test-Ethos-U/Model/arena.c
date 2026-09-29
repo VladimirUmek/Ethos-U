@@ -1,5 +1,5 @@
-/*---------------------------------------------------------------------------
- * Copyright (c) 2026 Arm Limited (or its affiliates). All rights reserved.
+/*
+ * Copyright 2026 Arm Limited and/or its affiliates.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -14,20 +14,15 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- *      Name:    arena.c
- *      Purpose: TensorFlow Lite Micro tensor arena
- *
- *---------------------------------------------------------------------------*/
+ */
 
 #include "model_data.h"
 
 /*
   Tensor arena.
 
-  Placed in section "ethos_arena", which the board linker scripts map to RAM1
-  (SRAM_VM0_S @ 0x31000000). That region is reachable by the NPU, which is a
-  requirement: the Ethos-U reads and writes activations here directly.
+  Placed in section "ethos_arena". The selected board linker script must map
+  this section to memory that is directly reachable by both the CPU and NPU.
 
   16-byte aligned for the NPU's access requirements.
 

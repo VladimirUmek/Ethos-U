@@ -1,5 +1,5 @@
-/*---------------------------------------------------------------------------
- * Copyright (c) 2025 Arm Limited (or its affiliates). All rights reserved.
+/*
+ * Copyright 2025-2026 Arm Limited and/or its affiliates.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -14,7 +14,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *---------------------------------------------------------------------------*/
+ */
 
  #include <stdio.h>
 
@@ -55,15 +55,14 @@
 static struct ethosu_driver EthosDriver;
 
 #if (defined(ETHOSU65) || defined(ETHOSU85)) && (ETHOS_CACHE_SIZE > 0)
-/* Register Ethos-U NPU cache buffer */
 /* Ethos-U NPU cache buffer */
-static uint8_t ethos_cache[ETHOS_CACHE_SIZE] ETHOS_CACHE_ATTRIBUTES;
+static uint8_t ethos_cache_buf[ETHOS_CACHE_SIZE] ETHOS_CACHE_ATTRIBUTES;
 #endif
 
 /*
   Ethos NPU interrupt handler.
 */
-void NPU0_Handler(void) {
+void NPU0_Handler (void) {
   ethosu_irq_handler(&EthosDriver);
 }
 
@@ -79,8 +78,8 @@ void ethos_setup (void) {
   rval = ethosu_init(&EthosDriver,            /* Ethos-U device driver */
                      ethos_base_addr,         /* Ethos-U base address  */
                      #if (defined(ETHOSU65) || defined(ETHOSU85)) && (ETHOS_CACHE_SIZE > 0)
-                     ethos_cache,             /* Cache memory pointer  */
-                     sizeof(ethos_cache),     /* Cache memory size     */
+                     ethos_cache_buf,         /* Cache memory pointer  */
+                     sizeof(ethos_cache_buf), /* Cache memory size     */
                      #else
                      0,                       /* Cache memory pointer  */
                      0,                       /* Cache memory size     */

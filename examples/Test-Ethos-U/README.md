@@ -1,24 +1,22 @@
 # Test-Ethos-U
 
-This CMSIS-Toolbox integration test provides target solutions for Arm Ethos-U55,
-Ethos-U65, and Ethos-U85 NPUs. The shared project runs on the matching
-Corstone FVP simulation or hardware when used as a
-[reference application](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/).*
+This CMSIS-Toolbox integration test provides target solutions for
+Arm Ethos-U55, Ethos-U65, and Ethos-U85 NPUs. The project runs on
+the matching Corstone FVP simulation or hardware when used as a
+[reference application](https://open-cmsis-pack.github.io/cmsis-toolbox/ReferenceApplications/).
 
 The test demonstrates end-to-end TensorFlow Lite Micro (TFLM) integration for
-Ethos-U55, Ethos-U65, and Ethos-U85 systems. It builds and runs two
-Vela-compiled models, supplies a golden input to each model, and compares the
-NPU output bit-for-bit with output captured from the host TensorFlow Lite
-reference interpreter.
+Ethos-U systems. It builds and runs two Vela-compiled models, supplies a golden
+input to each model, and compares the NPU output bit-for-bit with output captured
+from the host TensorFlow Lite reference interpreter.
 
 Key features include:
 
-- **Full NPU offload:** both models contain zero CPU operators after Vela
-  compilation.
+- **Full NPU offload:** both models contain zero CPU operators after Vela compilation.
 - **Self-checking execution:** embedded host-reference vectors turn the example
   into an integration test with a clear `PASS` or `FAIL` result.
 - **Layered CMSIS solution:** target-specific code is in a `Board` layer and
-  TFLM, model, and tensor-arena content is in an `ML-Model` layer.
+  ML specific content is in an `ML-Model` layer.
 - **Model artifacts provided:** the original quantized `.tflite` files and the
   Vela-generated models can be recompiled.
 - **Configurable integration:** the supplied `vela.ini` provides alternative
@@ -27,30 +25,31 @@ Key features include:
 
 ## Usage with Keil Studio
 
-The integration test is located in the `examples/Test-Ethos-U` directory.
-
-- [vcpkg-configuration.json](vcpkg-configuration.json) lists the tool
-  dependencies that can be installed with
+- [vcpkg-configuration.json](vcpkg-configuration.json) lists the tool dependencies that can be installed with
   [Arm Tools Environment Manager](https://marketplace.visualstudio.com/items?itemName=Arm.environment-manager).
 - [Keil Studio for VS Code](https://marketplace.visualstudio.com/items?itemName=Arm.keil-studio-pack)
   can open the example. In the CMSIS view, use the
   [Action buttons](https://github.com/Open-CMSIS-Pack/vscode-cmsis-solution?tab=readme#action-buttons)
-  to configure and build the example. Run the FVP from the command line as
-  described below.
+  to configure and build the example. Run the FVP from the command line as described below.
 
 ## Build and run from command line
 
-By default, the committed Vela models target Ethos-U55 with 128 MACs. Build and
-run this configuration from the
-`examples/Test-Ethos-U` directory:
+By default, the committed Vela models target Ethos-U85 with 256 MACs.
 
-```console
-cbuild Test-Ethos-U55.csolution.yml --active SSE-300-U55 --update-rte --packs
-FVP_Corstone_SSE-300_Ethos-U55 -f Board/Corstone-300/fvp_config_u55.txt -a out/Test-Ethos-U/SSE-300-U55/Debug/Test-Ethos-U.hex
+To build this configuration execute:
+
+```sh
+cbuild Test-Ethos-U85.csolution.yml --active SSE-320-U85 --update-rte --packs
 ```
 
-The test reports the detected NPU configuration followed by one result for each
-model. A successful run ends with:
+Once the application image is available, run it using the following command:
+
+```sh
+FVP_Corstone_SSE-320 -f Board/Corstone-320/fvp_config_u85.txt -a out/Test-Ethos-U/SSE-320-U85/Debug/Test-Ethos-U.hex
+```
+
+The test reports the detected NPU configuration followed by one result for each model.
+A successful run ends with:
 
 ```text
 [PASS] hello_world (max delta 0 LSB)
@@ -65,25 +64,26 @@ For instructions on using the example with the Keil Studio IDE, see
 
 ## Project structure
 
-The `Test-Ethos-U55.csolution.yml`, `Test-Ethos-U65.csolution.yml`, and
-`Test-Ethos-U85.csolution.yml` files each contain one target and share one
-project assembled from these parts:
+Project consists of three solutions:
+
+- `Test-Ethos-U55.csolution.yml`: uses Cortex-M55 and Ethos-U55
+- `Test-Ethos-U65.csolution.yml`: uses Cortex-M55 and Ethos-U65
+- `Test-Ethos-U85.csolution.yml`: uses Cortex-M85 and Ethos-U85
+
+Each solution contains one target and share project assembled from:
 
 - `Test-Ethos-U.cproject.yml`: connects the layers and test application.
-- `Board/Corstone-300/` and `Board/Corstone-320/`: device startup, UART standard
-  I/O, memory layout, Ethos-U driver, interrupt wiring, and FVP configuration.
-- `Model/`: TFLM components, tensor arena, original and Vela-compiled models,
-  and Vela configuration.
+- `Board/Corstone-300/` and `Board/Corstone-320/`: board layers for SSE-300 and SSE-320 FVPs.
+- `Model/`: contains TFLM components, tensor arena, original and Vela-compiled models, Vela configuration.
 - `script/`: model converter and its documentation.
-- `Source/test_main.cpp`: invokes both models and checks their output against
-  the golden vectors.
+- `Source/test_main.cpp`: invokes both models and checks their output against the golden vectors.
 
 ## ML models
 
-| ML model | Purpose | Operators exercised | Vela result |
-| --- | --- | --- | --- |
-| `hello_world` | Approximates `sin(x)` with the classic TinyML dense network | `FULLY_CONNECTED` | 3 NPU, 0 CPU |
-| `tiny_cnn` | Classifies four types of synthetic 16 x 16 stripe patterns | `CONV_2D`, `DEPTHWISE_CONV_2D`, `MAX_POOL_2D`, `RESHAPE`, `FULLY_CONNECTED` | 6 NPU, 0 CPU |
+| ML model      | Purpose                                                     |
+| ------------- | ----------------------------------------------------------- |
+| `hello_world` | Approximates `sin(x)` with the classic TinyML dense network |
+| `tiny_cnn`    | Classifies four types of synthetic 16 x 16 stripe patterns  |
 
 `hello_world` is the classic TinyML "hello world" — the sine-approximation
 model from the TensorFlow Lite Micro examples, popularized by Pete Warden and
@@ -96,8 +96,14 @@ workloads depend on. It classifies synthetic 16x16 stripe patterns generated
 in-process, so the test needs no external dataset.
 
 Both supplied quantized models compile to **zero CPU operators** — the whole
-graph runs on the NPU. Only the Vela builds are linked into the firmware; the
-original `.tflite` files are provided so the models can be recompiled for a
+graph runs on the NPU:
+
+| ML model      | Operators exercised                                                         | Vela result  |
+| ------------- | --------------------------------------------------------------------------- | ------------ |
+| `hello_world` | `FULLY_CONNECTED`                                                           | 3 NPU, 0 CPU |
+| `tiny_cnn`    | `CONV_2D`, `DEPTHWISE_CONV_2D`, `MAX_POOL_2D`, `RESHAPE`, `FULLY_CONNECTED` | 6 NPU, 0 CPU |
+
+The original `.tflite` files are provided so the models can be recompiled for a
 different NPU configuration or memory mode.
 
 ## Recompile the models
@@ -108,7 +114,7 @@ prerequisites, command-line and VS Code usage, configuration overrides, and
 generated files, see the [LiteRT model converter documentation](script/README.md).
 
 ```console
-python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml
+python script/model-converter.py Test-Ethos-U85.cbuild-mlops.yml
 ```
 
 ## Exploring Ethos-U configurations
@@ -117,26 +123,19 @@ The Vela configuration, generated command stream, linker placement, and driver
 region configuration describe the same memory system and must remain
 consistent. When changing the configuration, review these together:
 
-- the `System_Config`, `Memory_Mode`, and `arena_cache_size` values in
-  `Model/vela.ini`;
-- `NPU_QCONFIG` and `NPU_REGIONCFG_*` in
-  `Test-Ethos-U85.csolution.yml`;
-- the `ethos_model`, `ethos_arena`, and `ethos_cache` linker sections in
-  the Board layer; and
+- the `System_Config`, `Memory_Mode`, and `arena_cache_size` values in `Model/vela.ini`;
+- `NPU_QCONFIG` and `NPU_REGIONCFG_*` in `Test-Ethos-U*.csolution.yml`;
+- the `ethos_model`, `ethos_arena`, and `ethos_cache` linker sections in the Board layer; and
 - the cache, security, and MPU/SAU attributes for those physical memories.
 
-The shipped `arena_cache_size` is 384 KiB and must match
-`ETHOS_CACHE_SIZE` in `Board/Corstone-320/ethos_setup.c`. A cache-size or
-memory-region mismatch can select the wrong NPU access path or cause the NPU to
-read outside the configured buffer.
+The default `arena_cache_size` is 384 KiB and must match `ETHOS_CACHE_SIZE`
+in boards layer `ethos_setup.c`.
 
-The committed Vela models use `ethos-u55-128` and match the
-`ethosu.num_macs=128` setting in `Board/Corstone-300/fvp_config_u55.txt`. The CI
-workflow recompiles the models for every tested target; its accelerator setting
-must match the MAC configuration in the corresponding FVP configuration file.
+See [Configuration-Table](./Configuration-Table.md) for various common configuration examples.
 
 ## Details
 
 For the general device-integration workflow, memory mapping rules, cache hooks,
-address remapping, and driver configuration, see 
-[Ethos-U Integration for Cortex-M](https://arm-software.github.io/CMSIS_Ethos_U/latest/integration).
+address remapping, and driver configuration, see:
+
+- [Ethos-U Integration for Cortex-M](https://arm-software.github.io/CMSIS_Ethos_U/latest/integration).

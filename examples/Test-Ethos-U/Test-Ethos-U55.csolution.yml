@@ -1,18 +1,19 @@
+# A solution is a collection of related projects that share same base configuration.
 solution:
-  description: TensorFlow Lite Micro on Ethos-U55, running as an integration test
-    on the Corstone-300 FVP
-  created-for: CMSIS-Toolbox@2.14.0
+  description: Integration test of LiteRT model execution on Arm Ethos-U55
+  created-for: CMSIS-Toolbox@2.15.0
   cdefault:
 
+  # Compilers that can be selected.
   select-compiler:
     - compiler: AC6
     - compiler: GCC
 
-  compiler: AC6
-
+  # List the packs that define the device and/or board.
   packs:
     - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
 
+  # List different hardware targets that are used to deploy the solution.
   target-types:
     - type: SSE-300-U55
       board: ARM::V2M-MPS3-SSE-300-FVP
@@ -29,24 +30,33 @@ solution:
           images:
             - project-context: Test-Ethos-U.Debug
 
+  # List of different build configurations.
   build-types:
     - type: Debug
       debug: on
       optimize: debug
+      misc:
+        - for-compiler: AC6
+          C:
+            - -funwind-tables
 
     - type: Release
       debug: off
       optimize: balanced
 
+  # List related projects.
   projects:
     - project: ./Test-Ethos-U.cproject.yml
 
+  # MLOps information for converting the LiteRT models with Vela.
+  # https://open-cmsis-pack.github.io/cmsis-toolbox/build-overview/#mlops-integration
   mlops:
     description: LiteRT example models for Ethos-U55
     npu:
       type: Ethos-U55
       macs: 128
     vela:
+      ini: Model/vela.ini
       system: Ethos_U55_High_End_Embedded
       memory: Shared_Sram
     model:
