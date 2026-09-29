@@ -1,7 +1,7 @@
 function writeHeader() {
-    document.write('Version 1.0.0-dev129');
+    document.write('Version 1.0.0-dev130');
 };
 
 function writeFooter()  {
-    document.write('Generated on Thu Sep 24 2026 06:44:43 for Ethos-U Integration for Cortex-M 1.0.0-dev129+g1d25c1b. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Tue Sep 29 2026 21:11:23 for Ethos-U Integration for Cortex-M 1.0.0-dev130+g8a92a29. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };
