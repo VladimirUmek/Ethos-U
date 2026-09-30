@@ -50,7 +50,6 @@ jobs:
           cache: Test-Ethos-U
 
       - name: Activate Arm tool license
-        if: matrix.toolchain == 'AC6'
         uses: ARM-software/cmsis-actions/armlm@v1
 
       - name: Initialize CMSIS pack root
