@@ -123,6 +123,10 @@ The Vela configuration, generated command stream, linker placement, and driver
 region configuration describe the same memory system and must remain
 consistent. When changing the configuration, review these together:
 
+See
+[Configure Ethos-U for FVP Simulation Models](https://arm-software.github.io/CMSIS_Ethos_U/latest/integration/fvp-ethos-setup.html)
+for the complete configuration procedure.
+
 - the `System_Config`, `Memory_Mode`, and `arena_cache_size` values in `Model/vela.ini`;
 - `NPU_QCONFIG` and `NPU_REGIONCFG_*` in `Test-Ethos-U*.csolution.yml`;
 - the `ethos_model`, `ethos_arena`, and `ethos_cache` linker sections in the Board layer; and

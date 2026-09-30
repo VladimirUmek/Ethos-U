@@ -66,6 +66,9 @@ flowchart TD
 5. <a href="#step-5-validate-and-tune"><strong>Validate and tune.</strong></a> Verify
    correctness, memory use, and performance on the target hardware.
 
+For a concise procedure focused on configuring the supplied FVP targets, see
+\ref fvp-ethos-setup "Configure Ethos-U for FVP Simulation Models".
+
 ### Configuration consistency checklist
 
 An Ethos-U application describes the same memory system in several places.

@@ -1,9 +1,15 @@
-# Ethos-U and ML model application setup
+# Configure Ethos-U for FVP Simulation Models {#fvp-ethos-setup}
 
-This guide explains how to configure Ethos-U application for an arbitrary target
-and an arbitrary ML model.
+This guide explains how to configure an Ethos-U application for an FVP target
+and an arbitrary ML model. It is the configuration-focused companion to the
+[Ethos-U integration workflow](index.html). Follow that workflow for complete
+project creation, model compilation, platform integration, and validation
+guidance.
 
 ## 1. Examine the target memory system
+
+This activity corresponds to
+[Step 1: Characterize the target hardware and create the project](index.html#step-1-characterize-the-target-hardware-and-create-the-project).
 
 Find physical memory that the NPU can access.
 
@@ -24,6 +30,9 @@ Other factors to consider:
 - Performance: does the memory performance make sense for intended use
 
 ## 2. Examine configuration file for Vela
+
+This activity corresponds to
+[Step 2: Select and verify the Vela configuration](index.html#step-2-select-and-verify-the-vela-configuration).
 
 Use existing configuration (provided by device vendor) or create your own.
 Existing configuration may be modified if it does not meet requirements.
@@ -60,7 +69,10 @@ arena_cache_size=<bytes>
 > are and model it according to axi0_port from System_Config.
 > - `arena_cache_size` is the size of cache buffer passed to the Ethos-U initialization function
 
-## 4. Compile the model for selected NPU and Vela configuration
+## 3. Compile the model for selected NPU and Vela configuration
+
+This activity corresponds to
+[Step 3: Compile and inspect the ML model](index.html#step-3-compile-and-inspect-the-ml-model).
 
 Set the Ethos-U type, MAC count, system configuration, and memory mode in CMSIS solution:
 
@@ -93,7 +105,10 @@ Check Vela summary and confirm:
 
 Vela summary also lists memory consumption.
 
-## 5. Configure memory routing
+## 4. Configure memory routing
+
+Memory routing is part of
+[Step 4: Configure the platform integration](index.html#step-4-configure-the-platform-integration).
 
 - `NPU_QCONFIG` routes command stream (read-only)
 - `NPU_REGIONCFG_0` routes the constants (read-only)
@@ -137,7 +152,10 @@ For U85, selector value is an index into `NPU_MEM_ATTR_n`:
 | `2`      | `AXI_EXT`  | `NPU_MEM_ATTR_2`  |
 | `3`      | `AXI_EXT`  | `NPU_MEM_ATTR_3`  |
 
-## 6. Configure memory placement via linker script
+## 5. Configure memory placement via linker script
+
+Memory placement is part of
+[Step 4: Configure the platform integration](index.html#step-4-configure-the-platform-integration).
 
 Each relevant Ethos-U defined memory section shall be placed into physical memory modeled by System_Config.
 
@@ -146,3 +164,10 @@ Each relevant Ethos-U defined memory section shall be placed into physical memor
 | `ethos_model`  | read-only  |
 | `ethos_arena`  | read/write |
 | `ethos_cache`  | read/write |
+
+## 6. Validate the integration
+
+Follow [Step 5: Validate and tune](index.html#step-5-validate-and-tune) to verify
+the FVP configuration, functional results, memory use, and performance. Confirm
+that the NPU configuration reported at runtime matches the Vela target and that
+inference results match the known-good reference output.
