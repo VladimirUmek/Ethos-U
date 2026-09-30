@@ -194,6 +194,7 @@ flowchart TD
 <li><a href="#step-4-configure-the-platform-integration"><b>Configure the platform integration.</b></a> Keep the linker placement, driver regions, MPU/SAU attributes, cache policy, address mapping, and runtime integration consistent with the Vela configuration.</li>
 <li><a href="#step-5-validate-and-tune"><b>Validate and tune.</b></a> Verify correctness, memory use, and performance on the target hardware.</li>
 </ol>
+<p>For a concise procedure focused on configuring the supplied FVP targets, see <a class="el" href="fvp-ethos-setup.html" title="Configure Ethos-U for FVP Simulation Models">Configure Ethos-U for FVP Simulation Models</a>.</p>
 <h2 class="doxsection"><a class="anchor" id="configuration-consistency-checklist"></a>
 Configuration consistency checklist</h2>
 <p>An Ethos-U application describes the same memory system in several places. Vela uses a performance model and logical memory areas when it creates the command stream, while the linker, driver, and platform configuration implement those choices on physical hardware. A mismatch can produce inaccurate Vela estimates, inaccessible data, cache-coherency failures, or an inference that does not complete. Use this checklist whenever selecting a target, changing a memory mode, or replacing the ML model.</p>

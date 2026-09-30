@@ -1,4 +1,25 @@
 var searchData=
 [
-  ['budget_0',['Determine the memory budget',['../index.html#determine-the-memory-budget',1,'']]]
+  ['a_20new_20target_20to_20the_20solution_0',['Add a new target to the solution',['../index.html#add-a-new-target-to-the-solution',1,'']]],
+  ['add_20a_20new_20target_20to_20the_20solution_1',['Add a new target to the solution',['../index.html#add-a-new-target-to-the-solution',1,'']]],
+  ['add_20application_20ml_20model_2',['Add application ML model',['../index.html#add-application-ml-model',1,'']]],
+  ['advanced_20topics_3',['Advanced topics',['../index.html#advanced-topics',1,'']]],
+  ['an_20ethos_20u_20application_4',['Tutorial: Create an Ethos-U application',['../index.html#tutorial-create-an-ethos-u-application',1,'']]],
+  ['an_20example_5',['Start with an example',['../index.html#start-with-an-example',1,'']]],
+  ['an_20inference_20that_20does_20not_20complete_6',['Troubleshooting an inference that does not complete',['../index.html#troubleshooting-an-inference-that-does-not-complete',1,'']]],
+  ['an_20mlops_20conversion_20script_7',['Compile with an MLOps conversion script',['../index.html#compile-with-an-mlops-conversion-script',1,'']]],
+  ['and_20cache_20attributes_8',['MPU/SAU and cache attributes',['../index.html#mpusau-and-cache-attributes',1,'']]],
+  ['and_20create_20the_20project_9',['Step 1: Characterize the target hardware and create the project',['../index.html#step-1-characterize-the-target-hardware-and-create-the-project',1,'']]],
+  ['and_20ethos_20u65_10',['Ethos-U55 and Ethos-U65',['../fvp-ethos-setup.html#ethos-u55-and-ethos-u65',1,'']]],
+  ['and_20ethos_20u85_11',['and Ethos U85',['../index.html#move-the-tensor-arena-to-external-dram-on-ethos-u65-and-ethos-u85',1,'Move the tensor arena to external DRAM on Ethos-U65 and Ethos-U85'],['../index.html#use-separate-scratch-fast-memory-on-ethos-u65-and-ethos-u85',1,'Use separate scratch-fast memory on Ethos-U65 and Ethos-U85']]],
+  ['and_20inspect_20the_20ml_20model_12',['Step 3: Compile and inspect the ML model',['../index.html#step-3-compile-and-inspect-the-ml-model',1,'']]],
+  ['and_20tune_13',['Step 5: Validate and tune',['../index.html#step-5-validate-and-tune',1,'']]],
+  ['and_20update_20the_20vela_20configuration_14',['Stage 2: Verify and update the Vela configuration',['../index.html#stage-2-verify-and-update-the-vela-configuration',1,'']]],
+  ['and_20vela_20configuration_15',['3. Compile the model for selected NPU and Vela configuration',['../fvp-ethos-setup.html#autotoc_md3-compile-the-model-for-selected-npu-and-vela-configuration',1,'']]],
+  ['and_20verify_20the_20vela_20configuration_16',['Step 2: Select and verify the Vela configuration',['../index.html#step-2-select-and-verify-the-vela-configuration',1,'']]],
+  ['application_17',['Tutorial: Create an Ethos-U application',['../index.html#tutorial-create-an-ethos-u-application',1,'']]],
+  ['application_20integration_18',['Complete application integration',['../index.html#complete-application-integration',1,'']]],
+  ['application_20ml_20model_19',['Add application ML model',['../index.html#add-application-ml-model',1,'']]],
+  ['arena_20to_20external_20dram_20on_20ethos_20u65_20and_20ethos_20u85_20',['Move the tensor arena to external DRAM on Ethos-U65 and Ethos-U85',['../index.html#move-the-tensor-arena-to-external-dram-on-ethos-u65-and-ethos-u85',1,'']]],
+  ['attributes_21',['MPU/SAU and cache attributes',['../index.html#mpusau-and-cache-attributes',1,'']]]
 ];

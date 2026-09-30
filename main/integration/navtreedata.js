@@ -25,13 +25,27 @@
 var NAVTREE =
 [
   [ "Ethos-U Integration for Cortex-M", "index.html", [
-    [ "Integration", "index.html", "index" ]
+    [ "Integration", "index.html", "index" ],
+    [ "Configure Ethos-U for FVP Simulation Models", "fvp-ethos-setup.html", [
+      [ "1. Examine the target memory system", "fvp-ethos-setup.html#autotoc_md1-examine-the-target-memory-system", null ],
+      [ "2. Examine configuration file for Vela", "fvp-ethos-setup.html#autotoc_md2-examine-configuration-file-for-vela", [
+        [ "Examine system configuration for Vela", "fvp-ethos-setup.html#examine-system-configuration-for-vela", null ],
+        [ "Examine memory mode configuration for Vela", "fvp-ethos-setup.html#examine-memory-mode-configuration-for-vela", null ]
+      ] ],
+      [ "3. Compile the model for selected NPU and Vela configuration", "fvp-ethos-setup.html#autotoc_md3-compile-the-model-for-selected-npu-and-vela-configuration", null ],
+      [ "4. Configure memory routing", "fvp-ethos-setup.html#autotoc_md4-configure-memory-routing", [
+        [ "Ethos-U55 and Ethos-U65", "fvp-ethos-setup.html#ethos-u55-and-ethos-u65", null ],
+        [ "Ethos-U85", "fvp-ethos-setup.html#ethos-u85", null ]
+      ] ],
+      [ "5. Configure memory placement via linker script", "fvp-ethos-setup.html#autotoc_md5-configure-memory-placement-via-linker-script", null ],
+      [ "6. Validate the integration", "fvp-ethos-setup.html#autotoc_md6-validate-the-integration", null ]
+    ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"index.html"
+"fvp-ethos-setup.html"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

@@ -1,5 +1,16 @@
 var NAVTREEINDEX0 =
 {
+"fvp-ethos-setup.html":[1],
+"fvp-ethos-setup.html#autotoc_md1-examine-the-target-memory-system":[1,0],
+"fvp-ethos-setup.html#autotoc_md2-examine-configuration-file-for-vela":[1,1],
+"fvp-ethos-setup.html#autotoc_md3-compile-the-model-for-selected-npu-and-vela-configuration":[1,2],
+"fvp-ethos-setup.html#autotoc_md4-configure-memory-routing":[1,3],
+"fvp-ethos-setup.html#autotoc_md5-configure-memory-placement-via-linker-script":[1,4],
+"fvp-ethos-setup.html#autotoc_md6-validate-the-integration":[1,5],
+"fvp-ethos-setup.html#ethos-u55-and-ethos-u65":[1,3,0],
+"fvp-ethos-setup.html#ethos-u85":[1,3,1],
+"fvp-ethos-setup.html#examine-memory-mode-configuration-for-vela":[1,1,1],
+"fvp-ethos-setup.html#examine-system-configuration-for-vela":[1,1,0],
 "index.html":[],
 "index.html":[0],
 "index.html#add-a-new-target-to-the-solution":[0,2,1,0],
