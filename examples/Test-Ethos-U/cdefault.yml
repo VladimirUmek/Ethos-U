@@ -25,6 +25,10 @@ default:
         - -fomit-frame-pointer
         - -ffunction-sections
         - -fdata-sections
+      CPP:
+        - -std=c++17
+        - -fno-exceptions
+        - -fno-rtti
       C:
         - -std=gnu11
       Link:

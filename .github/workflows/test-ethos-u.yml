@@ -21,12 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { solution: Test-Ethos-U55, target-type: SSE-300-U55, toolchain: AC6 }
-          - { solution: Test-Ethos-U55, target-type: SSE-300-U55, toolchain: GCC }
-          - { solution: Test-Ethos-U65, target-type: SSE-300-U65, toolchain: AC6 }
-          - { solution: Test-Ethos-U65, target-type: SSE-300-U65, toolchain: GCC }
-          - { solution: Test-Ethos-U85, target-type: SSE-320-U85, toolchain: AC6 }
-          - { solution: Test-Ethos-U85, target-type: SSE-320-U85, toolchain: GCC }
+          - { solution: Test-Ethos-U55, target-type: SSE-300-U55, toolchain: AC6, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config_u55.txt, image: out/Test-Ethos-U/SSE-300-U55/Debug/Test-Ethos-U.axf }
+          - { solution: Test-Ethos-U55, target-type: SSE-300-U55, toolchain: GCC, fvp: FVP_Corstone_SSE-300_Ethos-U55, fvp-config: Board/Corstone-300/fvp_config_u55.txt, image: out/Test-Ethos-U/SSE-300-U55/Debug/Test-Ethos-U.elf }
+          - { solution: Test-Ethos-U65, target-type: SSE-300-U65, toolchain: AC6, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config_u65.txt, image: out/Test-Ethos-U/SSE-300-U65/Debug/Test-Ethos-U.axf }
+          - { solution: Test-Ethos-U65, target-type: SSE-300-U65, toolchain: GCC, fvp: FVP_Corstone_SSE-300_Ethos-U65, fvp-config: Board/Corstone-300/fvp_config_u65.txt, image: out/Test-Ethos-U/SSE-300-U65/Debug/Test-Ethos-U.elf }
+          - { solution: Test-Ethos-U85, target-type: SSE-320-U85, toolchain: AC6, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config_u85.txt, image: out/Test-Ethos-U/SSE-320-U85/Debug/Test-Ethos-U.axf }
+          - { solution: Test-Ethos-U85, target-type: SSE-320-U85, toolchain: GCC, fvp: FVP_Corstone_SSE-320,           fvp-config: Board/Corstone-320/fvp_config_u85.txt, image: out/Test-Ethos-U/SSE-320-U85/Debug/Test-Ethos-U.elf }
 
     steps:
       - uses: actions/checkout@v7
@@ -79,9 +79,9 @@ jobs:
         working-directory: ./examples/Test-Ethos-U
         run: |
           set -o pipefail
-          "${{ steps.simulator.outputs.model }}" \
-            -f "${{ steps.simulator.outputs.config-file }}" \
-            -a "${{ steps.simulator.outputs.image }}" \
+          "${{ matrix.fvp }}" \
+            -f "${{ matrix.fvp-config }}" \
+            -a "${{ matrix.image }}" \
             --simlimit 120 2>&1 | tee fvp.log
 
           grep -Fq "[PASS] hello_world" fvp.log
