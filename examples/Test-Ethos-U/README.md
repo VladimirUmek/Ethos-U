@@ -121,11 +121,14 @@ python script/model-converter.py Test-Ethos-U85.cbuild-mlops.yml
 
 The Vela configuration, generated command stream, linker placement, and driver
 region configuration describe the same memory system and must remain
-consistent. When changing the configuration, review these together:
+consistent.
 
-See
+The
 [Configure Ethos-U for FVP Simulation Models](https://arm-software.github.io/CMSIS_Ethos_U/latest/integration/fvp-ethos-setup.html)
-for the complete configuration procedure.
+reference lists the supported configurations and their corresponding values.
+
+After selecting a configuration, apply the values from its table column and
+review these project settings together:
 
 - the `System_Config`, `Memory_Mode`, and `arena_cache_size` values in `Model/vela.ini`;
 - `NPU_QCONFIG` and `NPU_REGIONCFG_*` in `Test-Ethos-U*.csolution.yml`;
@@ -134,8 +137,6 @@ for the complete configuration procedure.
 
 The default `arena_cache_size` is 384 KiB and must match `ETHOS_CACHE_SIZE`
 in boards layer `ethos_setup.c`.
-
-See [Configuration-Table](./Configuration-Table.md) for various common configuration examples.
 
 ## Details
 

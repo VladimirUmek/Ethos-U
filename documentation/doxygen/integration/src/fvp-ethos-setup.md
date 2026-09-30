@@ -1,173 +1,91 @@
 # Configure Ethos-U for FVP Simulation Models {#fvp-ethos-setup}
 
-This guide explains how to configure an Ethos-U application for an FVP target
-and an arbitrary ML model. It is the configuration-focused companion to the
-[Ethos-U integration workflow](index.html). Follow that workflow for complete
-project creation, model compilation, platform integration, and validation
-guidance.
+Each column describes one supported combination of Corstone system, Ethos-U
+accelerator, and Vela memory mode for the `Test-Ethos-U` examples. For the
+complete process of adapting these settings to physical hardware, see the
+[Ethos-U integration workflow](index.html).
 
-## 1. Examine the target memory system
+## Ethos-U55
 
-This activity corresponds to
-[Step 1: Characterize the target hardware and create the project](index.html#step-1-characterize-the-target-hardware-and-create-the-project).
+| Setting            | SRAM only                     | Shared SRAM                   |
+|--------------------|-------------------------------|-------------------------------|
+| Target type        | `SSE-300-U55`                 | `SSE-300-U55`                 |
+| Solution           | `Test-Ethos-U55`              | `Test-Ethos-U55`              |
+| NPU                | U55, 128 MACs                 | U55, 128 MACs                 |
+| Vela INI           | `Model/vela.ini`              | `Model/vela.ini`              |
+| Vela `system`      | `Ethos_U55_High_End_Embedded` | `Ethos_U55_High_End_Embedded` |
+| Vela `memory`      | `Sram_Only`                   | `Shared_Sram`                 |
+| `NPU_QCONFIG`      | `1`                           | `2` (default)                 |
+| `NPU_REGIONCFG_0`  | `1`                           | `3` (default)                 |
+| `NPU_REGIONCFG_1`  | `0`                           | `0` (default)                 |
+| `NPU_REGIONCFG_2`  | Unused                        | Unused                        |
+| `ETHOS_CACHE_SIZE` | Not used                      | Not used                      |
+| `ethos_model`      | SRAM_VM0 / RAM1 via `AXI0`    | DDR4_3 / ROM2 via `AXI1`      |
+| `ethos_arena`      | SRAM_VM0 / RAM1 via `AXI0`    | SRAM_VM0 / RAM1 via `AXI0`    |
+| `ethos_cache`      | Unused                        | Unused                        |
 
-Find physical memory that the NPU can access.
+## Ethos-U65
 
-Determine the memory type, is it:
+| Setting            | SRAM only                     | Shared SRAM                   | Dedicated SRAM                |
+|--------------------|-------------------------------|-------------------------------|-------------------------------|
+| Target type        | `SSE-300-U65`                 | `SSE-300-U65`                 | `SSE-300-U65`                 |
+| Solution           | `Test-Ethos-U65`              | `Test-Ethos-U65`              | `Test-Ethos-U65`              |
+| NPU                | U65, 256 MACs                 | U65, 256 MACs                 | U65, 256 MACs                 |
+| Vela INI           | `Model/vela.ini`              | `Model/vela.ini`              | `Model/vela.ini`              |
+| Vela `system`      | `Ethos_U65_Embedded`          | `Ethos_U65_Embedded`          | `Ethos_U65_Mid_End`           |
+| Vela `memory`      | `Sram_Only`                   | `Shared_Sram`                 | `Dedicated_Sram_384KB`        |
+| `NPU_QCONFIG`      | `1`                           | `2` (default)                 | `2`                           |
+| `NPU_REGIONCFG_0`  | `1`                           | `3` (default)                 | `3`                           |
+| `NPU_REGIONCFG_1`  | `0`                           | `0` (default)                 | `2`                           |
+| `NPU_REGIONCFG_2`  | Unused                        | Unused                        | `1`                           |
+| `ETHOS_CACHE_SIZE` | Not used                      | Not used                      | `393216` bytes                |
+| `ethos_model`      | SRAM_VM0 / RAM1 via `AXI0`    | DDR4_3 / ROM2 via `AXI1`      | DDR4_3 / ROM2 via `AXI1`      |
+| `ethos_arena`      | SRAM_VM0 / RAM1 via `AXI0`    | SRAM_VM0 / RAM1 via `AXI0`    | DDR4_1 / RAM0 via `AXI1`      |
+| `ethos_cache`      | Unused                        | Unused                        | SRAM_VM0 / RAM1 via `AXI0`    |
 
-- Read-Only (Flash/MRAM), Read/Write (SRAM/DRAM)
+## Ethos-U85
 
-Note the size of accessible memory so that the memory requirements can be evaluated
-after Vela compiles the ML model.
+| Setting            | SRAM only                      | Shared SRAM                    | Dedicated SRAM                 |
+|--------------------|--------------------------------|--------------------------------|--------------------------------|
+| Target type        | `SSE-320-U85`                  | `SSE-320-U85`                  | `SSE-320-U85`                  |
+| Solution           | `Test-Ethos-U85`               | `Test-Ethos-U85`               | `Test-Ethos-U85`               |
+| NPU                | U85, 256 MACs                  | U85, 256 MACs                  | U85, 256 MACs                  |
+| Vela INI           | `Model/vela.ini`               | `Model/vela.ini`               | `Model/vela.ini`               |
+| Vela `system`      | `Ethos_U85_SYS_DRAM_Mid`       | `Ethos_U85_SYS_DRAM_Mid`       | `Ethos_U85_SYS_DRAM_Mid`       |
+| Vela `memory`      | `Sram_Only`                    | `Shared_Sram`                  | `Dedicated_Sram_384KB`         |
+| `NPU_QCONFIG`      | `1`                            | `2` (default)                  | `2`                            |
+| `NPU_REGIONCFG_0`  | `1`                            | `3` (default)                  | `3`                            |
+| `NPU_REGIONCFG_1`  | `0`                            | `0` (default)                  | `2`                            |
+| `NPU_REGIONCFG_2`  | Unused                         | Unused                         | `1`                            |
+| `ETHOS_CACHE_SIZE` | Not used                       | Not used                       | `393216` bytes                 |
+| `ethos_model`      | SRAM_VM0 / RAM1 via `AXI_SRAM` | DDR4_3 / ROM2 via `AXI_EXT`    | DDR4_3 / ROM2 via `AXI_EXT`    |
+| `ethos_arena`      | SRAM_VM0 / RAM1 via `AXI_SRAM` | SRAM_VM0 / RAM1 via `AXI_SRAM` | DDR4_1 / RAM0 via `AXI_EXT`    |
+| `ethos_cache`      | Unused                         | Unused                         | SRAM_VM0 / RAM1 via `AXI_SRAM` |
 
-Other factors to consider:
+The values marked **default** are supplied by the selected Generic Ethos-U
+driver configuration when the board layer does not override them. The
+SRAM-only U55 configuration must override the shared-SRAM defaults.
 
-- Check how the NPU can access that memory, for
-  - U55/U65: which memory can be accessed via `AXI0` or `AXI1`
-  - U85: which memory can be accessed via `AXI_SRAM` or `AXI_EXT`
-- Security: secure/non-secure attribution and NPU access permission
-- CPU cacheability: are explicit clean/invalidate operations required
-- Performance: does the memory performance make sense for intended use
+After selecting a column, regenerate the solution's `*.cbuild-mlops.yml` file
+and convert both models before building:
 
-## 2. Examine configuration file for Vela
+| NPU | Conversion command |
+|-----|--------------------|
+| U55 | `python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml` |
+| U65 | `python script/model-converter.py Test-Ethos-U65.cbuild-mlops.yml` |
+| U85 | `python script/model-converter.py Test-Ethos-U85.cbuild-mlops.yml` |
 
-This activity corresponds to
-[Step 2: Select and verify the Vela configuration](index.html#step-2-select-and-verify-the-vela-configuration).
-
-Use existing configuration (provided by device vendor) or create your own.
-Existing configuration may be modified if it does not meet requirements.
-
-### Examine system configuration for Vela
-
-Listed System_Config is a model of physical memories. Vela understands types:
-
-- `Sram`, `OnChipFlash`, `OffChipFlash`, and `Dram`
-
-This are only names used to model the performance of different physical memory types.
-
-Select System_Config that models physical memories you want to use.
-
-### Examine memory mode configuration for Vela
-
-Select appropriate Memory_Mode:
-
-```ini
-[Memory_Mode.<memory_mode-name>]
-const_mem_area=<Axi0-or-Axi1>
-arena_mem_area=<Axi0-or-Axi1>
-cache_mem_area=<Axi0-or-Axi1>
-arena_cache_size=<bytes>
-```
-
-> NOTE
+> NOTES
 >
-> - `const_mem_area=Axi0` tells Vela to allocate constants to the logical Axi0 memory area
-> and model them according to axi0_port from System_Config.
-> - `arena_mem_area=Axi0` tells Vela to allocate working tensors to the logical Axi0 memory area
-> and model them according to axi0_port from System_Config.
-> - `cache_mem_area=Axi0` tells Vela to allocate optional fast scratch memory to the logical Axi0 memory
-> are and model it according to axi0_port from System_Config.
-> - `arena_cache_size` is the size of cache buffer passed to the Ethos-U initialization function
-
-## 3. Compile the model for selected NPU and Vela configuration
-
-This activity corresponds to
-[Step 3: Compile and inspect the ML model](index.html#step-3-compile-and-inspect-the-ml-model).
-
-Set the Ethos-U type, MAC count, system configuration, and memory mode in CMSIS solution:
-
-```yml
-mlops:
-  npu:
-    type: <Ethos-U55-or-Ethos-U65-or-Ethos-U85>
-    macs: <implemented-MAC-count>
-  vela:
-    system: <system_config-name>
-    memory: <memory_mode-name>
-```
-
-Regenerated `*.cbuild-mlops.yml` shall reflect the selected configuration.
-
-Recompile the model.
-
-For the example in the Ethos-U pack:
-
-```sh
-python script/model-converter.py <solution>.cbuild-mlops.yml
-```
-
-Check Vela summary and confirm:
-
-- the accelerator and MAC count match the hardware;
-- the expected system configuration and memory mode were selected;
-- SRAM and external-memory use fit the available physical regions; and
-- the expected operators were delegated to the NPU.
-
-Vela summary also lists memory consumption.
-
-## 4. Configure memory routing
-
-Memory routing is part of
-[Step 4: Configure the platform integration](index.html#step-4-configure-the-platform-integration).
-
-- `NPU_QCONFIG` routes command stream (read-only)
-- `NPU_REGIONCFG_0` routes the constants (read-only)
-- `NPU_REGIONCFG_1` routes arena tensors (read/write)
-- `NPU_REGIONCFG_2` routes optional cache (read/write)
-
-Use defines and value selectors to route the access to the physical memory:
-
-```yml
-define:
-  - NPU_QCONFIG: <selector-for-command-stream>
-  - NPU_REGIONCFG_0: <selector-for-constants>
-  - NPU_REGIONCFG_1: <selector-for-arena>
-  - NPU_REGIONCFG_2: <selector-for-fast-cache>
-```
-
-Selector value are explained below, depending on Ethos-U type.
-
-### Ethos-U55 and Ethos-U65
-
-For Ethos-U55/U65 selector values choose both the AXI port and an AXI limit/counter profile:
-
-| Selector | NPU path | Profile      |
-|----------|----------|--------------|
-| `0`      | `AXI0`   | `AXI_LIMIT0` |
-| `1`      | `AXI0`   | `AXI_LIMIT1` |
-| `2`      | `AXI1`   | `AXI_LIMIT2` |
-| `3`      | `AXI1`   | `AXI_LIMIT3` |
-
-Different profiles are used so a platform can independently tune the bus traffic. For example,
-command-stream and constant-data traffic use different profile due to potential performance tuning.
-
-### Ethos-U85
-
-For U85, selector value is an index into `NPU_MEM_ATTR_n`:
-
-| Selector | NPU path   | Memory attributes |
-|----------|------------|-------------------|
-| `0`      | `AXI_SRAM` | `NPU_MEM_ATTR_0`  |
-| `1`      | `AXI_SRAM` | `NPU_MEM_ATTR_1`  |
-| `2`      | `AXI_EXT`  | `NPU_MEM_ATTR_2`  |
-| `3`      | `AXI_EXT`  | `NPU_MEM_ATTR_3`  |
-
-## 5. Configure memory placement via linker script
-
-Memory placement is part of
-[Step 4: Configure the platform integration](index.html#step-4-configure-the-platform-integration).
-
-Each relevant Ethos-U defined memory section shall be placed into physical memory modeled by System_Config.
-
-| Linker section | NPU access |
-|----------------|------------|
-| `ethos_model`  | read-only  |
-| `ethos_arena`  | read/write |
-| `ethos_cache`  | read/write |
-
-## 6. Validate the integration
-
-Follow [Step 5: Validate and tune](index.html#step-5-validate-and-tune) to verify
-the FVP configuration, functional results, memory use, and performance. Confirm
-that the NPU configuration reported at runtime matches the Vela target and that
-inference results match the known-good reference output.
+> - The generated files under `Model/` are shared by all solutions. Always
+>   reconvert them after changing the target or Vela configuration.
+> - `ROM2` is a read-only linker execution region backed by DDR4_3; it is not
+>   physical ROM.
+> - `Shared_Sram` places the command stream and constants in external memory
+>   and the writable tensor arena in SRAM. It does not use a dedicated Vela
+>   arena cache.
+> - `Dedicated_Sram_384KB` places the model and writable arena in external
+>   DDR4 and reserves 384 KiB of SRAM as the Vela arena cache.
+>   `ETHOS_CACHE_SIZE` must equal Vela's `arena_cache_size` of 393216 bytes.
+> - Ethos-U55 does not use `Dedicated_Sram` because its AXI1 interface is
+>   read-only, while that mode requires a writable arena on Axi1.
