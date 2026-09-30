@@ -237,8 +237,9 @@ Build in Arm Keil Studio for VS Code</h1>
 <div class="line">  - west:</div>
 <div class="line">      app-path: ./my-zephyr-application</div>
 </div><!-- fragment --><p>Do not add a <span class="tt">cproject.yml</span> for the Zephyr application. The <span class="tt">west</span> entry owns that build. See <a href="https://mdk-packs.github.io/vscode-cmsis-solution-docs/zephyr.html">Work with Zephyr applications</a> for the current extension setup and build/debug workflow.</p>
-<h1 class="doxsection"><a class="anchor" id="corstone-300-fvp-example"></a>
-Corstone-300 FVP example</h1>
+<h1 class="doxsection"><a class="anchor" id="corstone-300-fvp-examples"></a>
+Corstone-300 FVP examples</h1>
+<p><a href="https://github.com/Arm-Examples/CMSIS-Ethos-Zephyr">CMSIS-Ethos-Zephyr</a> ports the <span class="tt">Test-Ethos-U55</span> example to Zephyr. It retains the example's ML models and CMSIS MLOps workflow while using Zephyr-native implementations for the application runtime and Ethos-U integration.</p>
 <p>The <a href="https://github.com/Arm-Examples/Arm-Ethos-Zephyr-Playground">Arm Ethos Zephyr Playground</a> contains an animal-classification application for the <span class="tt">mps3/corstone300/fvp</span> board. It includes both a standard TFLM model and a Vela-compiled model, and enables NPU acceleration with <span class="tt">CONFIG_ETHOS_U=y</span>.</p>
 <p>After installing the Corstone-300 FVP and enabling the TFLM west module, clone and build the example from the Zephyr tree:</p>
 <div class="fragment"><div class="line">cd &quot;$ZEPHYR_BASE/samples/modules/tflite-micro&quot;</div>
