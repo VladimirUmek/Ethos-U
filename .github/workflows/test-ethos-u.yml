@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-          cache-dependency-path: examples/Test-Ethos-U/Model/hello_world/gen/requirements.txt
+          cache-dependency-path: examples/Test-Ethos-U/script/requirements.txt
 
       - name: Install Vela
         run: |
