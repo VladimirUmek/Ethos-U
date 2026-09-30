@@ -1,25 +1,7 @@
 var searchData=
 [
-  ['cache_20attributes_0',['MPU/SAU and cache attributes',['../index.html#mpusau-and-cache-attributes',1,'']]],
-  ['characterize_20the_20target_20hardware_20and_20create_20the_20project_1',['Step 1: Characterize the target hardware and create the project',['../index.html#step-1-characterize-the-target-hardware-and-create-the-project',1,'']]],
-  ['checklist_2',['Configuration consistency checklist',['../index.html#configuration-consistency-checklist',1,'']]],
-  ['compile_20and_20inspect_20the_20ml_20model_3',['Step 3: Compile and inspect the ML model',['../index.html#step-3-compile-and-inspect-the-ml-model',1,'']]],
-  ['compile_20manually_20with_20vela_4',['Compile manually with Vela',['../index.html#compile-manually-with-vela',1,'']]],
-  ['compile_20the_20model_20for_20selected_20npu_20and_20vela_20configuration_5',['3. Compile the model for selected NPU and Vela configuration',['../fvp-ethos-setup.html#autotoc_md3-compile-the-model-for-selected-npu-and-vela-configuration',1,'']]],
-  ['compile_20with_20an_20mlops_20conversion_20script_6',['Compile with an MLOps conversion script',['../index.html#compile-with-an-mlops-conversion-script',1,'']]],
-  ['complete_7',['Troubleshooting an inference that does not complete',['../index.html#troubleshooting-an-inference-that-does-not-complete',1,'']]],
-  ['complete_20application_20integration_8',['Complete application integration',['../index.html#complete-application-integration',1,'']]],
-  ['configuration_9',['configuration',['../fvp-ethos-setup.html#autotoc_md3-compile-the-model-for-selected-npu-and-vela-configuration',1,'3. Compile the model for selected NPU and Vela configuration'],['../index.html#stage-1-update-the-ethos-u-configuration',1,'Stage 1: Update the Ethos-U configuration'],['../index.html#stage-2-verify-and-update-the-vela-configuration',1,'Stage 2: Verify and update the Vela configuration'],['../index.html#step-2-select-and-verify-the-vela-configuration',1,'Step 2: Select and verify the Vela configuration']]],
-  ['configuration_20consistency_20checklist_10',['Configuration consistency checklist',['../index.html#configuration-consistency-checklist',1,'']]],
-  ['configuration_20file_20for_20vela_11',['2. Examine configuration file for Vela',['../fvp-ethos-setup.html#autotoc_md2-examine-configuration-file-for-vela',1,'']]],
-  ['configuration_20for_20vela_12',['configuration for Vela',['../fvp-ethos-setup.html#examine-memory-mode-configuration-for-vela',1,'Examine memory mode configuration for Vela'],['../fvp-ethos-setup.html#examine-system-configuration-for-vela',1,'Examine system configuration for Vela']]],
-  ['configure_20256_20macs_20for_20fvp_20simulation_13',['Configure 256 MACs for FVP simulation',['../index.html#configure-256-macs-for-fvp-simulation',1,'']]],
-  ['configure_20ethos_20u_20for_20fvp_20simulation_20models_14',['Configure Ethos-U for FVP Simulation Models',['../fvp-ethos-setup.html',1,'']]],
-  ['configure_20memory_20placement_20via_20linker_20script_15',['5. Configure memory placement via linker script',['../fvp-ethos-setup.html#autotoc_md5-configure-memory-placement-via-linker-script',1,'']]],
-  ['configure_20memory_20routing_16',['4. Configure memory routing',['../fvp-ethos-setup.html#autotoc_md4-configure-memory-routing',1,'']]],
-  ['configure_20the_20platform_20integration_17',['Step 4: Configure the platform integration',['../index.html#step-4-configure-the-platform-integration',1,'']]],
-  ['consistency_20checklist_18',['Configuration consistency checklist',['../index.html#configuration-consistency-checklist',1,'']]],
-  ['conversion_20script_19',['Compile with an MLOps conversion script',['../index.html#compile-with-an-mlops-conversion-script',1,'']]],
-  ['create_20an_20ethos_20u_20application_20',['Tutorial: Create an Ethos-U application',['../index.html#tutorial-create-an-ethos-u-application',1,'']]],
-  ['create_20the_20project_21',['Step 1: Characterize the target hardware and create the project',['../index.html#step-1-characterize-the-target-hardware-and-create-the-project',1,'']]]
+  ['determine_20the_20memory_20budget_0',['Determine the memory budget',['../index.html#determine-the-memory-budget',1,'']]],
+  ['does_20not_20complete_1',['Troubleshooting an inference that does not complete',['../index.html#troubleshooting-an-inference-that-does-not-complete',1,'']]],
+  ['dram_20on_20ethos_20u65_20and_20ethos_20u85_2',['Move the tensor arena to external DRAM on Ethos-U65 and Ethos-U85',['../index.html#move-the-tensor-arena-to-external-dram-on-ethos-u65-and-ethos-u85',1,'']]],
+  ['driver_20region_20settings_3',['Driver region settings',['../index.html#driver-region-settings',1,'']]]
 ];

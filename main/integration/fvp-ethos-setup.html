@@ -161,143 +161,131 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('fvp-ethos-setu
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_src_2fvp-ethos-setup"></a></p>
-<p>This guide explains how to configure an Ethos-U application for an FVP target and an arbitrary ML model. It is the configuration-focused companion to the Ethos-U integration workflow. Follow that workflow for complete project creation, model compilation, platform integration, and validation guidance.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md1-examine-the-target-memory-system"></a>
-1. Examine the target memory system</h1>
-<p>This activity corresponds to <a class="el" href="index.html#step-1-characterize-the-target-hardware-and-create-the-project" title="Step 1: Characterize the target hardware and create the project">Step 1: Characterize the target hardware and create the project</a>.</p>
-<p>Find physical memory that the NPU can access.</p>
-<p>Determine the memory type, is it:</p>
+<p>Each column describes one supported combination of Corstone system, Ethos-U accelerator, and Vela memory mode for the <span class="tt">Test-Ethos-U</span> examples. For the complete process of adapting these settings to physical hardware, see the Ethos-U integration workflow.</p>
+<h1 class="doxsection"><a class="anchor" id="ethos-u55"></a>
+Ethos-U55</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Setting  </th><th class="markdownTableHeadNone">SRAM only  </th><th class="markdownTableHeadNone">Shared SRAM  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Target type  </td><td class="markdownTableBodyNone"><span class="tt">SSE-300-U55</span>  </td><td class="markdownTableBodyNone"><span class="tt">SSE-300-U55</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Solution  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U55</span>  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U55</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">NPU  </td><td class="markdownTableBodyNone">U55, 128 MACs  </td><td class="markdownTableBodyNone">U55, 128 MACs  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Vela INI  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Vela <span class="tt">system</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U55_High_End_Embedded</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U55_High_End_Embedded</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Vela <span class="tt">memory</span>  </td><td class="markdownTableBodyNone"><span class="tt">Sram_Only</span>  </td><td class="markdownTableBodyNone"><span class="tt">Shared_Sram</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">2</span> (default)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_0</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">3</span> (default)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_1</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span> (default)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_2</span>  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">Unused  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ETHOS_CACHE_SIZE</span>  </td><td class="markdownTableBodyNone">Not used  </td><td class="markdownTableBodyNone">Not used  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ethos_model</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone">DDR4_3 / ROM2 via <span class="tt">AXI1</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ethos_arena</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI0</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ethos_cache</span>  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">Unused  </td></tr>
+</table>
+<h1 class="doxsection"><a class="anchor" id="ethos-u65"></a>
+Ethos-U65</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Setting  </th><th class="markdownTableHeadNone">SRAM only  </th><th class="markdownTableHeadNone">Shared SRAM  </th><th class="markdownTableHeadNone">Dedicated SRAM  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Target type  </td><td class="markdownTableBodyNone"><span class="tt">SSE-300-U65</span>  </td><td class="markdownTableBodyNone"><span class="tt">SSE-300-U65</span>  </td><td class="markdownTableBodyNone"><span class="tt">SSE-300-U65</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Solution  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U65</span>  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U65</span>  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U65</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">NPU  </td><td class="markdownTableBodyNone">U65, 256 MACs  </td><td class="markdownTableBodyNone">U65, 256 MACs  </td><td class="markdownTableBodyNone">U65, 256 MACs  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Vela INI  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Vela <span class="tt">system</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U65_Embedded</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U65_Embedded</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U65_Mid_End</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Vela <span class="tt">memory</span>  </td><td class="markdownTableBodyNone"><span class="tt">Sram_Only</span>  </td><td class="markdownTableBodyNone"><span class="tt">Shared_Sram</span>  </td><td class="markdownTableBodyNone"><span class="tt">Dedicated_Sram_384KB</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">2</span> (default)  </td><td class="markdownTableBodyNone"><span class="tt">2</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_0</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">3</span> (default)  </td><td class="markdownTableBodyNone"><span class="tt">3</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_1</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span> (default)  </td><td class="markdownTableBodyNone"><span class="tt">2</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_2</span>  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ETHOS_CACHE_SIZE</span>  </td><td class="markdownTableBodyNone">Not used  </td><td class="markdownTableBodyNone">Not used  </td><td class="markdownTableBodyNone"><span class="tt">393216</span> bytes  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ethos_model</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone">DDR4_3 / ROM2 via <span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone">DDR4_3 / ROM2 via <span class="tt">AXI1</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ethos_arena</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone">DDR4_1 / RAM0 via <span class="tt">AXI1</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ethos_cache</span>  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI0</span>  </td></tr>
+</table>
+<h1 class="doxsection"><a class="anchor" id="ethos-u85"></a>
+Ethos-U85</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Setting  </th><th class="markdownTableHeadNone">SRAM only  </th><th class="markdownTableHeadNone">Shared SRAM  </th><th class="markdownTableHeadNone">Dedicated SRAM  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Target type  </td><td class="markdownTableBodyNone"><span class="tt">SSE-320-U85</span>  </td><td class="markdownTableBodyNone"><span class="tt">SSE-320-U85</span>  </td><td class="markdownTableBodyNone"><span class="tt">SSE-320-U85</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Solution  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U85</span>  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U85</span>  </td><td class="markdownTableBodyNone"><span class="tt">Test-Ethos-U85</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">NPU  </td><td class="markdownTableBodyNone">U85, 256 MACs  </td><td class="markdownTableBodyNone">U85, 256 MACs  </td><td class="markdownTableBodyNone">U85, 256 MACs  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Vela INI  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td><td class="markdownTableBodyNone"><span class="tt">Model/vela.ini</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Vela <span class="tt">system</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U85_SYS_DRAM_Mid</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U85_SYS_DRAM_Mid</span>  </td><td class="markdownTableBodyNone"><span class="tt">Ethos_U85_SYS_DRAM_Mid</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Vela <span class="tt">memory</span>  </td><td class="markdownTableBodyNone"><span class="tt">Sram_Only</span>  </td><td class="markdownTableBodyNone"><span class="tt">Shared_Sram</span>  </td><td class="markdownTableBodyNone"><span class="tt">Dedicated_Sram_384KB</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">NPU_QCONFIG</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">2</span> (default)  </td><td class="markdownTableBodyNone"><span class="tt">2</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_0</span>  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">3</span> (default)  </td><td class="markdownTableBodyNone"><span class="tt">3</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_1</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span>  </td><td class="markdownTableBodyNone"><span class="tt">0</span> (default)  </td><td class="markdownTableBodyNone"><span class="tt">2</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">NPU_REGIONCFG_2</span>  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone"><span class="tt">1</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ETHOS_CACHE_SIZE</span>  </td><td class="markdownTableBodyNone">Not used  </td><td class="markdownTableBodyNone">Not used  </td><td class="markdownTableBodyNone"><span class="tt">393216</span> bytes  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ethos_model</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI_SRAM</span>  </td><td class="markdownTableBodyNone">DDR4_3 / ROM2 via <span class="tt">AXI_EXT</span>  </td><td class="markdownTableBodyNone">DDR4_3 / ROM2 via <span class="tt">AXI_EXT</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ethos_arena</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI_SRAM</span>  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI_SRAM</span>  </td><td class="markdownTableBodyNone">DDR4_1 / RAM0 via <span class="tt">AXI_EXT</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ethos_cache</span>  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">Unused  </td><td class="markdownTableBodyNone">SRAM_VM0 / RAM1 via <span class="tt">AXI_SRAM</span>  </td></tr>
+</table>
+<p>The values marked <b>default</b> are supplied by the selected Generic Ethos-U driver configuration when the board layer does not override them. The SRAM-only U55 configuration must override the shared-SRAM defaults.</p>
+<p>After selecting a column, regenerate the solution's <span class="tt">*.cbuild-mlops.yml</span> file and convert both models before building:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">NPU  </th><th class="markdownTableHeadNone">Conversion command  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">U55  </td><td class="markdownTableBodyNone"><span class="tt">python script/model-converter.py Test-Ethos-U55.cbuild-mlops.yml</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">U65  </td><td class="markdownTableBodyNone"><span class="tt">python script/model-converter.py Test-Ethos-U65.cbuild-mlops.yml</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">U85  </td><td class="markdownTableBodyNone"><span class="tt">python script/model-converter.py Test-Ethos-U85.cbuild-mlops.yml</span>  </td></tr>
+</table>
+<blockquote class="doxtable">
+<p>NOTES</p>
 <ul>
-<li>Read-Only (Flash/MRAM), Read/Write (SRAM/DRAM)</li>
-</ul>
-<p>Note the size of accessible memory so that the memory requirements can be evaluated after Vela compiles the ML model.</p>
-<p>Other factors to consider:</p>
-<ul>
-<li>Check how the NPU can access that memory, for<ul>
-<li>U55/U65: which memory can be accessed via <span class="tt">AXI0</span> or <span class="tt">AXI1</span></li>
-<li>U85: which memory can be accessed via <span class="tt">AXI_SRAM</span> or <span class="tt">AXI_EXT</span></li>
-</ul>
-</li>
-<li>Security: secure/non-secure attribution and NPU access permission</li>
-<li>CPU cacheability: are explicit clean/invalidate operations required</li>
-<li>Performance: does the memory performance make sense for intended use</li>
-</ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md2-examine-configuration-file-for-vela"></a>
-2. Examine configuration file for Vela</h1>
-<p>This activity corresponds to <a class="el" href="index.html#step-2-select-and-verify-the-vela-configuration" title="Step 2: Select and verify the Vela configuration">Step 2: Select and verify the Vela configuration</a>.</p>
-<p>Use existing configuration (provided by device vendor) or create your own. Existing configuration may be modified if it does not meet requirements.</p>
-<h2 class="doxsection"><a class="anchor" id="examine-system-configuration-for-vela"></a>
-Examine system configuration for Vela</h2>
-<p>Listed System_Config is a model of physical memories. Vela understands types:</p>
-<ul>
-<li><span class="tt">Sram</span>, <span class="tt">OnChipFlash</span>, <span class="tt">OffChipFlash</span>, and <span class="tt">Dram</span></li>
-</ul>
-<p>This are only names used to model the performance of different physical memory types.</p>
-<p>Select System_Config that models physical memories you want to use.</p>
-<h2 class="doxsection"><a class="anchor" id="examine-memory-mode-configuration-for-vela"></a>
-Examine memory mode configuration for Vela</h2>
-<p>Select appropriate Memory_Mode:</p>
-<div class="fragment"><div class="line">[Memory_Mode.&lt;memory_mode-name&gt;]</div>
-<div class="line">const_mem_area=&lt;Axi0-or-Axi1&gt;</div>
-<div class="line">arena_mem_area=&lt;Axi0-or-Axi1&gt;</div>
-<div class="line">cache_mem_area=&lt;Axi0-or-Axi1&gt;</div>
-<div class="line">arena_cache_size=&lt;bytes&gt;</div>
-</div><!-- fragment --><blockquote class="doxtable">
-<p>NOTE</p>
-<ul>
-<li><span class="tt">const_mem_area=Axi0</span> tells Vela to allocate constants to the logical Axi0 memory area and model them according to axi0_port from System_Config.</li>
-<li><span class="tt">arena_mem_area=Axi0</span> tells Vela to allocate working tensors to the logical Axi0 memory area and model them according to axi0_port from System_Config.</li>
-<li><span class="tt">cache_mem_area=Axi0</span> tells Vela to allocate optional fast scratch memory to the logical Axi0 memory are and model it according to axi0_port from System_Config.</li>
-<li><span class="tt">arena_cache_size</span> is the size of cache buffer passed to the Ethos-U initialization function </li>
+<li>The generated files under <span class="tt">Model/</span> are shared by all solutions. Always reconvert them after changing the target or Vela configuration.</li>
+<li><span class="tt">ROM2</span> is a read-only linker execution region backed by DDR4_3; it is not physical ROM.</li>
+<li><span class="tt">Shared_Sram</span> places the command stream and constants in external memory and the writable tensor arena in SRAM. It does not use a dedicated Vela arena cache.</li>
+<li><span class="tt">Dedicated_Sram_384KB</span> places the model and writable arena in external DDR4 and reserves 384 KiB of SRAM as the Vela arena cache. <span class="tt">ETHOS_CACHE_SIZE</span> must equal Vela's <span class="tt">arena_cache_size</span> of 393216 bytes.</li>
+<li>Ethos-U55 does not use <span class="tt">Dedicated_Sram</span> because its AXI1 interface is read-only, while that mode requires a writable arena on Axi1. </li>
 </ul>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md3-compile-the-model-for-selected-npu-and-vela-configuration"></a>
-3. Compile the model for selected NPU and Vela configuration</h1>
-<p>This activity corresponds to <a class="el" href="index.html#step-3-compile-and-inspect-the-ml-model" title="Step 3: Compile and inspect the ML model">Step 3: Compile and inspect the ML model</a>.</p>
-<p>Set the Ethos-U type, MAC count, system configuration, and memory mode in CMSIS solution:</p>
-<div class="fragment"><div class="line">mlops:</div>
-<div class="line">  npu:</div>
-<div class="line">    type: &lt;Ethos-U55-or-Ethos-U65-or-Ethos-U85&gt;</div>
-<div class="line">    macs: &lt;implemented-MAC-count&gt;</div>
-<div class="line">  vela:</div>
-<div class="line">    system: &lt;system_config-name&gt;</div>
-<div class="line">    memory: &lt;memory_mode-name&gt;</div>
-</div><!-- fragment --><p>Regenerated <span class="tt">*.cbuild-mlops.yml</span> shall reflect the selected configuration.</p>
-<p>Recompile the model.</p>
-<p>For the example in the Ethos-U pack:</p>
-<div class="fragment"><div class="line">python script/model-converter.py &lt;solution&gt;.cbuild-mlops.yml</div>
-</div><!-- fragment --><p>Check Vela summary and confirm:</p>
-<ul>
-<li>the accelerator and MAC count match the hardware;</li>
-<li>the expected system configuration and memory mode were selected;</li>
-<li>SRAM and external-memory use fit the available physical regions; and</li>
-<li>the expected operators were delegated to the NPU.</li>
-</ul>
-<p>Vela summary also lists memory consumption.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md4-configure-memory-routing"></a>
-4. Configure memory routing</h1>
-<p>Memory routing is part of <a class="el" href="index.html#step-4-configure-the-platform-integration" title="Step 4: Configure the platform integration">Step 4: Configure the platform integration</a>.</p>
-<ul>
-<li><span class="tt">NPU_QCONFIG</span> routes command stream (read-only)</li>
-<li><span class="tt">NPU_REGIONCFG_0</span> routes the constants (read-only)</li>
-<li><span class="tt">NPU_REGIONCFG_1</span> routes arena tensors (read/write)</li>
-<li><span class="tt">NPU_REGIONCFG_2</span> routes optional cache (read/write)</li>
-</ul>
-<p>Use defines and value selectors to route the access to the physical memory:</p>
-<div class="fragment"><div class="line">define:</div>
-<div class="line">  - NPU_QCONFIG: &lt;selector-for-command-stream&gt;</div>
-<div class="line">  - NPU_REGIONCFG_0: &lt;selector-for-constants&gt;</div>
-<div class="line">  - NPU_REGIONCFG_1: &lt;selector-for-arena&gt;</div>
-<div class="line">  - NPU_REGIONCFG_2: &lt;selector-for-fast-cache&gt;</div>
-</div><!-- fragment --><p>Selector value are explained below, depending on Ethos-U type.</p>
-<h2 class="doxsection"><a class="anchor" id="ethos-u55-and-ethos-u65"></a>
-Ethos-U55 and Ethos-U65</h2>
-<p>For Ethos-U55/U65 selector values choose both the AXI port and an AXI limit/counter profile:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Selector  </th><th class="markdownTableHeadNone">NPU path  </th><th class="markdownTableHeadNone">Profile  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">0</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT0</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI0</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT1</span>  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">2</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT2</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">3</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI1</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_LIMIT3</span>  </td></tr>
-</table>
-<p>Different profiles are used so a platform can independently tune the bus traffic. For example, command-stream and constant-data traffic use different profile due to potential performance tuning.</p>
-<h2 class="doxsection"><a class="anchor" id="ethos-u85"></a>
-Ethos-U85</h2>
-<p>For U85, selector value is an index into <span class="tt">NPU_MEM_ATTR_n</span>:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Selector  </th><th class="markdownTableHeadNone">NPU path  </th><th class="markdownTableHeadNone">Memory attributes  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">0</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_SRAM</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_MEM_ATTR_0</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">1</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_SRAM</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_MEM_ATTR_1</span>  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">2</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_EXT</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_MEM_ATTR_2</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">3</span>  </td><td class="markdownTableBodyNone"><span class="tt">AXI_EXT</span>  </td><td class="markdownTableBodyNone"><span class="tt">NPU_MEM_ATTR_3</span>  </td></tr>
-</table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md5-configure-memory-placement-via-linker-script"></a>
-5. Configure memory placement via linker script</h1>
-<p>Memory placement is part of <a class="el" href="index.html#step-4-configure-the-platform-integration" title="Step 4: Configure the platform integration">Step 4: Configure the platform integration</a>.</p>
-<p>Each relevant Ethos-U defined memory section shall be placed into physical memory modeled by System_Config.</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Linker section  </th><th class="markdownTableHeadNone">NPU access  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ethos_model</span>  </td><td class="markdownTableBodyNone">read-only  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ethos_arena</span>  </td><td class="markdownTableBodyNone">read/write  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ethos_cache</span>  </td><td class="markdownTableBodyNone">read/write  </td></tr>
-</table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md6-validate-the-integration"></a>
-6. Validate the integration</h1>
-<p>Follow <a class="el" href="index.html#step-5-validate-and-tune" title="Step 5: Validate and tune">Step 5: Validate and tune</a> to verify the FVP configuration, functional results, memory use, and performance. Confirm that the NPU configuration reported at runtime matches the Vela target and that inference results match the known-good reference output. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
