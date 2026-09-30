@@ -15,15 +15,18 @@ concurrency:
 
 jobs:
   test:
-    name: ${{ matrix.target-type }} Debug on FVP
+    name: ${{ matrix.target-type }} Debug (${{ matrix.toolchain }}) on FVP
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { solution: Test-Ethos-U55, target-type: SSE-300-U55 }
-          - { solution: Test-Ethos-U65, target-type: SSE-300-U65 }
-          - { solution: Test-Ethos-U85, target-type: SSE-320-U85 }
+          - { solution: Test-Ethos-U55, target-type: SSE-300-U55, toolchain: AC6 }
+          - { solution: Test-Ethos-U55, target-type: SSE-300-U55, toolchain: GCC }
+          - { solution: Test-Ethos-U65, target-type: SSE-300-U65, toolchain: AC6 }
+          - { solution: Test-Ethos-U65, target-type: SSE-300-U65, toolchain: GCC }
+          - { solution: Test-Ethos-U85, target-type: SSE-320-U85, toolchain: AC6 }
+          - { solution: Test-Ethos-U85, target-type: SSE-320-U85, toolchain: GCC }
 
     steps:
       - uses: actions/checkout@v7
@@ -47,6 +50,7 @@ jobs:
           cache: Test-Ethos-U
 
       - name: Activate Arm tool license
+        if: matrix.toolchain == 'AC6'
         uses: ARM-software/cmsis-actions/armlm@v1
 
       - name: Initialize CMSIS pack root
@@ -60,7 +64,7 @@ jobs:
       - name: Generate MLOps build information
         working-directory: ./examples/Test-Ethos-U
         run: >-
-          cbuild setup "${{ matrix.solution }}.csolution.yml" --active "${{ matrix.target-type }}" --packs
+          cbuild setup "${{ matrix.solution }}.csolution.yml" --active "${{ matrix.target-type }}" --toolchain "${{ matrix.toolchain }}" --packs
 
       - name: Compile models with Vela
         working-directory: ./examples/Test-Ethos-U
@@ -69,7 +73,7 @@ jobs:
       - name: Build ${{ matrix.solution }} for ${{ matrix.target-type }}
         working-directory: ./examples/Test-Ethos-U
         run: >-
-          cbuild "${{ matrix.solution }}.csolution.yml" --active "${{ matrix.target-type }}"
+          cbuild "${{ matrix.solution }}.csolution.yml" --active "${{ matrix.target-type }}" --toolchain "${{ matrix.toolchain }}"
 
       - name: Run ${{ matrix.target-type }} FVP
         working-directory: ./examples/Test-Ethos-U
@@ -88,7 +92,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.solution }}
+          name: ${{ matrix.solution }}-${{ matrix.toolchain }}
           path: |
             ./examples/Test-Ethos-U/out/Test-Ethos-U
             ./examples/Test-Ethos-U/fvp.log
