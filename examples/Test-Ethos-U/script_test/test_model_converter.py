@@ -156,7 +156,7 @@ class ModelConverterTests(unittest.TestCase):
             return subprocess.CompletedProcess(command, 0, "Vela report\n", "")
 
         with mock.patch.object(converter.subprocess, "run", side_effect=fake_run):
-            converter.convert_model(source, None, options)
+            converter.convert_model(source, None, options, None)
 
         self.assertEqual(
             (self.model_dir / "tiny_cnn_int8_vela.tflite").read_bytes(), b"VELA"
@@ -169,12 +169,29 @@ class ModelConverterTests(unittest.TestCase):
         self.assertIn("test-system", summary)
         self.assertIn("Vela report", summary)
 
+    def test_out_dir_redirects_only_c_source(self) -> None:
+        source = self.touch_model("one/network.tflite")
+        out_dir = self.root / "generated" / "model"
+
+        def fake_run(command: list[str], **_: object) -> subprocess.CompletedProcess[str]:
+            vela_out = Path(command[command.index("--output-dir") + 1])
+            (vela_out / "network_vela.tflite").write_bytes(b"VELA")
+            return subprocess.CompletedProcess(command, 0, "Vela report\n", "")
+
+        with mock.patch.object(converter.subprocess, "run", side_effect=fake_run):
+            converter.convert_model(source, None, [], out_dir)
+
+        self.assertTrue((out_dir / "network_model.c").is_file())
+        self.assertFalse((source.parent / "network_model.c").exists())
+        self.assertTrue((source.parent / "network_vela.tflite").is_file())
+        self.assertTrue((source.parent / "VELA_SUMMARY.md").is_file())
+
     def test_failed_vela_does_not_create_outputs(self) -> None:
         source = self.touch_model("network.tflite")
         failed = subprocess.CompletedProcess(["vela"], 1, "", "failure")
         with mock.patch.object(converter.subprocess, "run", return_value=failed):
             with self.assertRaisesRegex(RuntimeError, "Vela failed"):
-                converter.convert_model(source, None, [])
+                converter.convert_model(source, None, [], None)
         self.assertFalse((self.model_dir / "network_vela.tflite").exists())
         self.assertFalse((self.model_dir / "network_model.c").exists())
         self.assertFalse((self.model_dir / "VELA_SUMMARY.md").exists())
@@ -198,6 +215,7 @@ class ModelConverterTests(unittest.TestCase):
                 "--memory-mode",
                 "Shared_Sram",
             ],
+            None,
         )
 
         self.assertTrue((self.model_dir / "tiny_cnn_int8_vela.tflite").is_file())

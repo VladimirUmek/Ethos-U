@@ -56,6 +56,11 @@ validate the system integration. Select the example that matches the target NPU:
 | `Test-Ethos-U65` | Ethos-U65 | V2M-MPS3-SSE-300 FVP |
 | `Test-Ethos-U85` | Ethos-U85 | SSE-320 FVP |
 
+### Related examples
+
+- [CMSIS-Ethos-Integration](https://github.com/Arm-Examples/CMSIS-Ethos-Integration) applies the integration workflow to a real-world device.
+- [CMSIS-Ethos-Zephyr](https://github.com/Arm-Examples/CMSIS-Ethos-Zephyr) is the `Test-Ethos-U55` example ported to Zephyr.
+
 ## Zephyr
 
 Zephyr applications use the Ethos-U driver to execute Vela-compiled ML models.

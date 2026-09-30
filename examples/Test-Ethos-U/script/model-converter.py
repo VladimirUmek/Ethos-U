@@ -195,11 +195,12 @@ def convert_model(
     model_path: Path,
     vela_ini: Path | None,
     options: list[str],
+    out_dir: Path | None,
 ) -> None:
     input_stem = model_path.stem
     model_name = input_stem[:-5] if input_stem.endswith("_int8") else input_stem
     symbol = c_identifier(input_stem + "_vela_tflite")
-    output_dir = model_path.parent
+    model_output_dir = model_path.parent
 
     with tempfile.TemporaryDirectory(prefix="model-converter-") as temporary:
         stage = Path(temporary)
@@ -243,9 +244,13 @@ def convert_model(
             newline="\n",
         )
 
-        replace_file(vela_model, output_dir / vela_model.name)
-        replace_file(c_file, output_dir / c_file.name)
-        replace_file(summary, output_dir / summary.name)
+        replace_file(vela_model, model_output_dir / vela_model.name)
+        replace_file(
+            c_file,
+            (out_dir if out_dir is not None else model_output_dir)
+            / c_file.name,
+        )
+        replace_file(summary, model_output_dir / summary.name)
 
 
 def parse_args() -> argparse.Namespace:
@@ -256,6 +261,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--system", help="override the Vela system configuration")
     parser.add_argument("--memory", help="override the Vela memory mode")
     parser.add_argument("--misc", help="replace miscellaneous Vela options")
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        help="explicit path for generated C source files",
+    )
     return parser.parse_args()
 
 
@@ -295,8 +305,25 @@ def main() -> int:
             raise ConfigurationError(f"Vela INI file does not exist: '{vela_ini}'")
 
     _, models = read_models(model, source.parent, source)
+    out_dir = None
+    if args.out_dir is not None:
+        out_dir = resolved(source.parent, os.fspath(args.out_dir))
+
+        output_names = []
+        for model_path in models:
+            stem = model_path.stem
+            model_name = stem[:-5] if stem.endswith("_int8") else stem
+            output_names.append(f"{model_name}_model.c")
+        duplicates = sorted(
+            name for name in set(output_names) if output_names.count(name) > 1
+        )
+        if duplicates:
+            raise ConfigurationError(
+                "models produce duplicate C output names: " + ", ".join(duplicates)
+            )
+
     for model_path in models:
-        convert_model(model_path, vela_ini, options)
+        convert_model(model_path, vela_ini, options, out_dir)
     return 0
 
 

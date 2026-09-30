@@ -117,11 +117,15 @@ in the
 Keil Studio automatically downloads and installs the required tools and
 software packs. The initial setup may take some time.
 
-Target board                 | Example                         | NPU/MACs      | FVP simulation model
-:----------------------------|:--------------------------------|:--------------|:-------------------
+Target board                 | Example                        | NPU/MACs      | FVP simulation model
+:----------------------------|:-------------------------------|:--------------|:-------------------
 V2M-MPS3-SSE-300-FVP         | `Test-Ethos-U55.csolution.yml` | Ethos-U55-128 | Corstone-300
 V2M-MPS3-SSE-300-FVP         | `Test-Ethos-U65.csolution.yml` | Ethos-U65-256 | Corstone-300
 SSE-320                      | `Test-Ethos-U85.csolution.yml` | Ethos-U85-256 | Corstone-320
+
+For a complete implementation on physical hardware, see
+[CMSIS-Ethos-Integration](https://github.com/Arm-Examples/CMSIS-Ethos-Integration).
+It applies this integration workflow to a real-world device.
 
 Each example includes the `Test-Ethos-U.cproject.yml` file and the
 software layers shown in this diagram:
